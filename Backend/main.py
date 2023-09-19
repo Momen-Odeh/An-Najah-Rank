@@ -1,6 +1,6 @@
 from flask import Flask, request, jsonify
 from codeCompilationAndRun.java import compileAndRunJavaCode
-
+from codeCompilationAndRun.c import compileAndRunCCode
 app = Flask(__name__)
 
 
@@ -16,6 +16,12 @@ def applayJava():
     else:
         return jsonify({"error": "Request body must contain JSON data"}), 400
 
+@app.route('/c', methods=['POST'])
+def compile_and_run_c():
+    c_code = request.json.get('c_code')
+    if not c_code:
+        return jsonify({"error": "Missing 'c_code' parameter"}), 400
+    return compileAndRunCCode(c_code)
 
 
 if __name__ == "__main__":
