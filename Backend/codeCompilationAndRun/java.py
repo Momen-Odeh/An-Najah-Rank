@@ -30,7 +30,7 @@ def runJavaCode(folderPath,java_class_name):
 
 def compileAndRunJavaCode(code):
     try:
-        codePath = saveCodeToFile("javaTest","java",code)
+        codePath = saveCodeToFile("javaTest","java","code/Momen",code)
         folderPath = os.path.dirname(codePath)
         success,std = compileJavaCode(codePath)
         # *********************

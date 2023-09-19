@@ -1,5 +1,6 @@
 from flask import Flask, request, jsonify
 from codeCompilationAndRun.java import compileAndRunJavaCode
+from codeCompilationAndRun.python import runPythonCode
 
 app = Flask(__name__)
 
@@ -11,6 +12,18 @@ def applayJava():
             data = request.get_json()
             code = data.get('code')
             return compileAndRunJavaCode(code)
+        except Exception as e:
+            return jsonify({"error": "Invalid JSON data"}), 400
+    else:
+        return jsonify({"error": "Request body must contain JSON data"}), 400
+
+@app.route('/python', methods=['POST'])
+def applayPython():
+    if request.is_json:
+        try:
+            data = request.get_json()
+            code = data.get('code')
+            return runPythonCode(code)
         except Exception as e:
             return jsonify({"error": "Invalid JSON data"}), 400
     else:

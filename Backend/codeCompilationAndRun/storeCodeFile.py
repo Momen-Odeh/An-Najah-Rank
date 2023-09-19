@@ -1,7 +1,6 @@
 import os
-def saveCodeToFile(fileName,extention,code):
+def saveCodeToFile(fileName,extention,relativePath,code):
     try:
-        relativePath = "code/Momen"  # Change this to your relative path
         fullPath = os.path.abspath(os.path.join(relativePath, f"{fileName}.{extention}"))
         print(f"Full path: {fullPath}")
         with open(fullPath,"w",encoding="utf-8") as file:
