@@ -33,7 +33,7 @@ def runCCode(folderPath):
 
 def compileAndRunCCode(code):
     try:
-        codePath = saveCodeToFile("cTest", "c", code)
+        codePath = saveCodeToFile("cTest", "c","code/Momen", code)
         folderPath = os.path.dirname(codePath)
         folderPath+="/output";
         success, std = compileCCode(codePath,folderPath)

@@ -1,1 +1,1 @@
-console.log(5+2)
+print(55)
