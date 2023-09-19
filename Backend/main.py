@@ -1,6 +1,7 @@
 from flask import Flask, request, jsonify
 from codeCompilationAndRun.java import compileAndRunJavaCode
 from codeCompilationAndRun.c import compileAndRunCCode
+from codeCompilationAndRun.python import runPythonCode
 app = Flask(__name__)
 
 
@@ -22,6 +23,19 @@ def compile_and_run_c():
     if not c_code:
         return jsonify({"error": "Missing 'c_code' parameter"}), 400
     return compileAndRunCCode(c_code)
+
+@app.route('/python', methods=['POST'])
+def applayPython():
+    if request.is_json:
+        try:
+            data = request.get_json()
+            code = data.get('code')
+            return runPythonCode(code)
+        except Exception as e:
+            return jsonify({"error": "Invalid JSON data"}), 400
+    else:
+        return jsonify({"error": "Request body must contain JSON data"}), 400
+
 
 
 if __name__ == "__main__":
