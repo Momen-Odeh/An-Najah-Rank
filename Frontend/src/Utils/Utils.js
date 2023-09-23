@@ -2,6 +2,7 @@ import { lazy } from "react";
 import { Route } from "react-router-dom";
 import LogIn from "../Pages/LogIn";
 import SignUp from "../Pages/SignUp";
+import ForgetPassword from "../Pages/ForgetPassword";
 
 // const AboutUs = lazy(() => import("../Pages/AboutUs/SubComponents/AboutUs"))
 
@@ -9,7 +10,7 @@ export const routeNames = {
   HOME: "Home",
   SIGN_UP: "Sign Up",
   LOG_IN: "Log In",
-  FORGET_PASSWORD: "Forget Pass",
+  FORGET_PASSWORD: "Forget Password",
   AUTHENTICATION_EMAIL: "Auth Email",
 };
 export const routes = [
@@ -29,9 +30,9 @@ export const routes = [
     component: <LogIn />,
   },
   {
-    path: "/forget-pass",
+    path: "/forget-password",
     title: routeNames.FORGET_PASSWORD,
-    component: <h3>forget password page</h3>,
+    component: <ForgetPassword />,
   },
   {
     path: "/authentication-email",
