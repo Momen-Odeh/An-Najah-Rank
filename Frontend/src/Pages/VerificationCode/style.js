@@ -1,10 +1,5 @@
 import { createUseStyles } from "react-jss";
 const useStyles = createUseStyles({
-  Link: {
-    "&:hover": {
-      textDecoration: "none",
-    },
-  },
   Container: {
     boxSizing: "border-box",
     width: "480px",
@@ -22,6 +17,22 @@ const useStyles = createUseStyles({
   },
   center: {
     margin: "15px",
+  },
+  AuthCode: {
+    // backgroundColor: "red",
+    display: "flex",
+    justifyContent: "center",
+    columnGap: "10px",
+  },
+  AuthCodeCell: {
+    width: "50px",
+    height: "50px",
+    fontFamily: "'Poppins', sans-serif",
+    fontWeight: "400",
+    fontSize: "16px",
+    lineHeight: "24px",
+    color: "#000000",
+    textAlign: "center",
   },
 });
 

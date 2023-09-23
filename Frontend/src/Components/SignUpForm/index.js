@@ -109,7 +109,7 @@ const SignUpForm = () => {
 
       <Row>
         <Col>
-          <ButtonRegister text="Register" />
+          <ButtonRegister text="Register" to={"/verification-code"} />
         </Col>
       </Row>
     </Container>

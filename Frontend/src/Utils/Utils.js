@@ -3,6 +3,7 @@ import { Route } from "react-router-dom";
 import LogIn from "../Pages/LogIn";
 import SignUp from "../Pages/SignUp";
 import ForgetPassword from "../Pages/ForgetPassword";
+import VerificationCode from "../Pages/VerificationCode";
 
 // const AboutUs = lazy(() => import("../Pages/AboutUs/SubComponents/AboutUs"))
 
@@ -11,6 +12,7 @@ export const routeNames = {
   SIGN_UP: "Sign Up",
   LOG_IN: "Log In",
   FORGET_PASSWORD: "Forget Password",
+  VERIFICATION_CODE: "VErification Code",
   AUTHENTICATION_EMAIL: "Auth Email",
 };
 export const routes = [
@@ -33,6 +35,11 @@ export const routes = [
     path: "/forget-password",
     title: routeNames.FORGET_PASSWORD,
     component: <ForgetPassword />,
+  },
+  {
+    path: "/verification-code",
+    title: routeNames.VERIFICATION_CODE,
+    component: <VerificationCode />,
   },
   {
     path: "/authentication-email",
