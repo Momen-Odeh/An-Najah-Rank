@@ -4,7 +4,7 @@ const useStyles = createUseStyles({
     // backgroundColor: "red",
     // border: "2px solid green",
     margin: "10px 0",
-    height: "96vh",
+    // height: "100vh",
   },
   ColLeft: {
     // backgroundColor: "blue",

@@ -2,21 +2,24 @@ import React from "react";
 import useStyles from "./style";
 import { Col, Container, Row } from "react-bootstrap";
 import TextRegister from "../TextRegister";
-import code from "./images/code.png";
 
-const RegistrationShow = () => {
+const RegistrationShow = ({ img, title, subTitle, SignUp }) => {
   const classes = useStyles();
   return (
     <Container fluid={true} className={classes.Container}>
       <Row className="mb-5">
-        <Col>
-          <img className={classes.imgBG} src={code} alt="Background" />
+        <Col className={classes.ColImg}>
+          <img
+            className={SignUp ? classes.imgBG : classes.imgLogIn}
+            src={img}
+            alt="Background"
+          />
         </Col>
       </Row>
       <Row className="mb-0">
         <Col>
           <TextRegister
-            text={"Sign in to An-Najah Rank"}
+            text={title}
             color="#FFFFFF"
             height="60px"
             size="40px"
@@ -27,7 +30,7 @@ const RegistrationShow = () => {
       <Row>
         <Col>
           <TextRegister
-            text={"make your future"}
+            text={subTitle}
             color="#FFFFFF"
             height="30px"
             size="20px"
