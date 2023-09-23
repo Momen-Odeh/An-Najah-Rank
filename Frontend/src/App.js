@@ -1,11 +1,26 @@
-import LogIn from "./Pages/LogIn";
-import SignUp from "./Pages/SignUp";
-
+import './App.css';
+import {
+  RouterProvider,
+  Route,
+  createBrowserRouter,
+  createRoutesFromElements,
+} from "react-router-dom"
+import { Suspense} from "react"
+import PageLayout from './Layout/PageLayout';
+import { routes, generateRoutes } from "./Utils/Utils"
 function App() {
+  const router = createBrowserRouter(
+    createRoutesFromElements(
+      <Route element={<PageLayout/>} errorElement={<>Not Found</>}>
+        {generateRoutes(routes)}
+      </Route>
+    )
+  )
+
   return (
-    <div className="App">
-      <LogIn />
-    </div>
+      <Suspense fallback={<>Loading</>}>
+        <RouterProvider router={router} />
+      </Suspense>
   );
 }
 
