@@ -1,7 +1,7 @@
-import { lazy } from "react"
-import {
-  Route
-} from "react-router-dom"
+import { lazy } from "react";
+import { Route } from "react-router-dom";
+import LogIn from "../Pages/LogIn";
+import SignUp from "../Pages/SignUp";
 
 // const AboutUs = lazy(() => import("../Pages/AboutUs/SubComponents/AboutUs"))
 
@@ -10,8 +10,8 @@ export const routeNames = {
   SIGN_UP: "Sign Up",
   LOG_IN: "Log In",
   FORGET_PASSWORD: "Forget Pass",
-  AUTHENTICATION_EMAIL: "Auth Email"
-}
+  AUTHENTICATION_EMAIL: "Auth Email",
+};
 export const routes = [
   {
     path: "/",
@@ -21,12 +21,12 @@ export const routes = [
   {
     path: "/sign-up",
     title: routeNames.SIGN_UP,
-    component: <h3>sign up page</h3>,
+    component: <SignUp />,
   },
   {
     path: "/log-in",
     title: routeNames.LOG_IN,
-    component: <h3>log in page</h3>,
+    component: <LogIn />,
   },
   {
     path: "/forget-pass",
@@ -37,8 +37,8 @@ export const routes = [
     path: "/authentication-email",
     title: routeNames.AUTHENTICATION_EMAIL,
     component: <h3>authentication email page</h3>,
-  }
-]
+  },
+];
 
 export const generateRoutes = (routes) => {
   let _routes = routes.map((route, idx) => {
