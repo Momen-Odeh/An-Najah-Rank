@@ -47,7 +47,7 @@ const VarificationCode = () => {
         </Row>
         <Row className={`${classes.Row} mb-2 `}>
           <Col className={classes.Col}>
-            <ButtonRegister text="Verify" />
+            <ButtonRegister text="Verify" to={"/new-password"} />
           </Col>
         </Row>
         <Row className={`${classes.Row} `}>
