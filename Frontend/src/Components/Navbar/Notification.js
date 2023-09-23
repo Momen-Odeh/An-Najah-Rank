@@ -26,11 +26,10 @@ const Notification = () => {
   return (
     <Navbar.Collapse className="justify-content-end">
       <Nav.Item ref={ref}>
-        <Nav.Link onClick={handlePopoverToggle}>
-            <FaBell size={24} color='white'/>
-            <i className="fas fa-bell"></i>
+        <Nav.Link>
+            <FaBell size={24} color='white' onClick={handlePopoverToggle}/>
             {notifications.length > 0 && (
-                <Badge pill variant="" style={{ fontSize: '10px', padding:'3px 5px'}}>
+                <Badge pill variant="" style={{ fontSize: '10px', padding:'3px 5px'}} >
                 {notifications.length}
                 </Badge>
             )}
@@ -51,8 +50,8 @@ const Notification = () => {
                 <div className={classes.OverlayContent}>
                     {notifications.map((notification) => (
                         <div key={notification.id} className={classes.notificationItem}>
-                        <span className={classes.notificationText}>{notification.text}</span>
-                        <span className={classes.notificationTime}>{notification.time}</span>
+                          <span className={classes.notificationText}>{notification.text}</span>
+                          <span className={classes.notificationTime}>{notification.time}</span>
                         </div>
                     ))}
                     <hr className={classes.line}></hr>
