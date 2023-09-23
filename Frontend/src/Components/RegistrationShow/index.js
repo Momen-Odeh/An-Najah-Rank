@@ -24,7 +24,7 @@ const RegistrationShow = () => {
           />
         </Col>
       </Row>
-      <Row className="mb-5 ">
+      <Row>
         <Col>
           <TextRegister
             text={"make your future"}

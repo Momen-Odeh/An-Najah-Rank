@@ -5,11 +5,12 @@ import InputFiledRegister from "../InputFiledRegister";
 import { Col, Container, Row } from "react-bootstrap";
 import TextRegister from "../TextRegister";
 import ButtonRegister from "../ButtonRegister";
-import { Link } from "react-router-dom";
+import useStyles from "./style";
 
 const LogInForm = () => {
+  const classes = useStyles();
   return (
-    <Container fluid={true}>
+    <Container className={`${classes.Container} `} fluid={true}>
       <Row className="mb-3">
         <Col>
           <TextRegister
@@ -32,7 +33,7 @@ const LogInForm = () => {
           />
         </Col>
       </Row>
-      <Row className="mb-4">
+      <Row className="mb-5">
         <Col>
           <TextRegister
             text={"You can "}
@@ -51,7 +52,7 @@ const LogInForm = () => {
           />
         </Col>
       </Row>
-      <Row className="mb-3">
+      <Row className="mb-4">
         <Col>
           <InputFiledRegister
             label="Email"
@@ -71,7 +72,7 @@ const LogInForm = () => {
           />
         </Col>
       </Row>
-      <Row className="mb-4">
+      <Row className="mb-5">
         <Col className="text-right">
           <TextRegister
             text={"Forgot Password ?"}

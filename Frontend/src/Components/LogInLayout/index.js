@@ -8,14 +8,18 @@ import RegistrationShow from "../RegistrationShow";
 const RegistrationLayout = () => {
   const classes = useStyles();
   return (
-    <Row className={classes.Row}>
-      <Col xs={6} className={classes.ColLeft}>
-        <LogInForm />
-      </Col>
-      <Col xs={6} className={classes.ColRight}>
-        <RegistrationShow />
-      </Col>
-    </Row>
+    <Container fluid className={classes.Container}>
+      <Row
+        className={`${classes.Row} align-items-center justify-content-center`}
+      >
+        <Col xs={12} md={6} className={classes.ColLeft}>
+          <LogInForm />
+        </Col>
+        <Col xs={3} md={6} className={`${classes.ColRight}`}>
+          <RegistrationShow />
+        </Col>
+      </Row>
+    </Container>
   );
 };
 

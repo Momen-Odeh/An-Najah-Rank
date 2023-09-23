@@ -22,8 +22,8 @@ const useStyles = createUseStyles({
     marginRight: "10px",
   },
   iconPassword: {
-    width: "20px",
-    height: "20px",
+    width: "25px",
+    height: "25px",
     color: "#999999",
     marginLeft: "10px",
   },
@@ -35,8 +35,8 @@ const useStyles = createUseStyles({
     borderBottom: "solid 2px #999999",
     borderRadius: "0",
     paddingBottom: "5px",
-    "&:active ": {
-      borderBottom: "solid 2px #000842 !important",
+    "&:hover ": {
+      borderBottom: "solid 2px #000842",
     },
   },
   InputFiled: {
