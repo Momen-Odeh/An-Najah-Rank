@@ -1,10 +1,10 @@
 import React, { useState, useRef } from 'react';
 import { Nav, Badge, Overlay } from 'react-bootstrap';
 import { FaComment } from 'react-icons/fa';
-import Style from './Style';
+import useStyle from './Style';
 
 const Messages = () => {
-  const classes = Style();
+  const classes = useStyle();
   const [showMessages, setShowMessages] = useState(false);
   const [messages, setMessages] = useState([
     { id: 1, sender: 'John france', time: '2 min ago', content: 'Hello!' },

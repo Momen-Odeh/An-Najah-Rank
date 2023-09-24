@@ -1,6 +1,6 @@
 import { createUseStyles } from "react-jss";
 
-const Style = createUseStyles({
+const useStyle = createUseStyles({
     navContainer:{
         backgroundColor:'#0e141e'
     },
@@ -199,4 +199,4 @@ const Style = createUseStyles({
       }
 
 })
-export default Style
+export default useStyle

@@ -1,9 +1,9 @@
 import React, { useState, useRef} from 'react';
 import { Nav, Badge, Overlay } from 'react-bootstrap';
 import { FaBell } from 'react-icons/fa';
-import Style from './Style';
+import useStyle from './Style';
 const Notification = () => {
-  const classes = Style()
+  const classes = useStyle()
   const [showNotification, setShowNotification] = useState(false);
   const [notifications, setNotifications] = useState([
     { id: 1, text: 'Notification 1', time:'2 min ago' },

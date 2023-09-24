@@ -3,10 +3,10 @@ import { Nav, Overlay } from 'react-bootstrap';
 import { AiOutlineUser } from 'react-icons/ai'
 import { SlArrowDown } from 'react-icons/sl'
 import { Link } from 'react-router-dom';
-import Style from './Style';
+import useStyle from './Style';
 
 const UserChoices = ({userChoices}) => {
-  const classes = Style();
+  const classes = useStyle();
   const [showChoices, setShowChoices] = useState(false);
   const ref = useRef(null);
   const handleUserChoices = (event) => {
