@@ -5,7 +5,6 @@ import Style from './Style';
 const Notification = () => {
   const classes = Style()
   const [showNotification, setShowNotification] = useState(false);
-  const [target, setTarget] = useState(null);
   const [notifications, setNotifications] = useState([
     { id: 1, text: 'Notification 1', time:'2 min ago' },
     { id: 2, text: 'Notification 2', time:'2 hours ago' },
@@ -15,7 +14,6 @@ const Notification = () => {
 
   const handlePopoverToggle = (event) => {
     event.preventDefault();
-    setTarget(event.target);
     setShowNotification(!showNotification);
   };
 
@@ -25,9 +23,9 @@ const Notification = () => {
 
   return (
     <Navbar.Collapse className="justify-content-end">
-      <Nav.Item ref={ref}>
-        <Nav.Link>
-            <FaBell size={24} color='white' onClick={handlePopoverToggle}/>
+      <Nav.Item>
+        <Nav.Link ref={ref} onClick={handlePopoverToggle}>
+            <FaBell size={24} className={classes.hoveringColor} color={showNotification?'white':''}/>
             {notifications.length > 0 && (
                 <Badge pill variant="" style={{ fontSize: '10px', padding:'3px 5px'}} >
                 {notifications.length}
@@ -38,7 +36,7 @@ const Notification = () => {
         <Overlay
           show={showNotification}
           containerPadding={100}
-          target={target}
+          target={ref}
           placement="bottom-end"
           rootClose={true}
           onHide={closePopover}

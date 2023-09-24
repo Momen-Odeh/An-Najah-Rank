@@ -21,7 +21,7 @@ const Style = createUseStyles({
           },
     },
     customInputGroup: {
-        maxWidth: '300px', // Set the maximum width to 400 pixels
+        maxWidth: '300px',
       },
     burgerBtn:{
         backgroundColor:'white'
@@ -79,6 +79,86 @@ const Style = createUseStyles({
         '&:hover':{
             fontWeight: 'bold',
             textDecoration: 'underline',
+        }
+      },
+      messageItem: {
+        padding: '12px',
+        backgroundColor: '#ffffff',
+        marginBottom: '12px',
+        borderRadius: '8px',
+        boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
+        display: 'flex',
+        alignItems: 'center',
+        width:'100%'
+      },
+      messageCircle: {
+        width: '48px',
+        height: '48px',
+        borderRadius: '50%',
+        backgroundColor: '#e4e4e4',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        color: '#333',
+        fontWeight: 'bold',
+        fontSize: '1.2rem',
+        marginRight: '12px',
+      },
+      messageSender: {
+        fontWeight: 'bold',
+        color: '#333',
+        fontSize: '1.1rem',
+      },
+      messageTime: {
+        marginLeft:'10px',
+        color: '#777',
+        fontSize: '0.9rem',
+      },
+      messageContent: {
+        marginTop: '8px',
+        fontSize: '1rem',
+        width:'100%'
+      },
+      iconContainer:{
+        width: '36px',
+        height: '36px',
+        backgroundColor: '#e7eeef',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: '50%',
+        marginRight: '8px',
+      },
+      userChoicesContainer:{
+        minWidth:'200px',
+        maxWidth:'200px',
+        backgroundColor: 'white',
+        padding:'15px 10px',
+        marginTop:'15px',
+        display:'flex',
+        flexDirection:'column',
+        alignContent:'center',
+        boxShadow: '-2px 2px 4px 6px rgba(0, 0, 0, 0.1)',
+      },
+      choiceItem: {
+        backgroundColor: '#ffffff',
+        borderRadius: '12px',
+        width:'100%'
+      },
+      choiceLink:{
+        margin:'10px 20px !important',
+        textDecoration:'none',
+        fontSize:'1.1rem',
+        color:'#576871',
+        '&:hover':{
+            fontWeight: 'bold',
+        }
+      },
+      hoveringColor:{
+        fontSize:'1.1rem',
+        color:'#b2b8bc',
+        '&:hover':{
+            color: 'white',
         }
       },
 })

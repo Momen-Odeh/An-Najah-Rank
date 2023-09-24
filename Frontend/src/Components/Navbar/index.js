@@ -1,11 +1,12 @@
 import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
-import { InputGroup, FormControl,NavDropdown, Badge } from 'react-bootstrap';
-import { FaBell } from 'react-icons/fa'; 
+import { InputGroup, FormControl } from 'react-bootstrap';
 import { AiOutlineSearch } from 'react-icons/ai';
 import Style from "./Style"
 import Notification from './Notification';
+import Messages from './Messages';
+import UserChoices from './UserChoices';
 function index() {
   const classes = Style()
   return (
@@ -23,8 +24,8 @@ function index() {
         <Navbar.Toggle aria-controls="responsive-navbar-nav" className={classes.burgerBtn} />
         <Navbar.Collapse id="responsive-navbar-nav">
           <Nav className="me-auto">
-            <Nav.Link href="#features" className={classes.textColor}>Features</Nav.Link>
-            <Nav.Link href="#pricing" className={classes.textColor}>Pricing</Nav.Link>
+            <Nav.Link href="#courses" className={`${classes.hoveringColor}`}>Courses</Nav.Link>
+            <Nav.Link href="#pricing" className={`${classes.hoveringColor}`}>Pricing</Nav.Link>
           </Nav>
           <InputGroup className={classes.customInputGroup}>
             <InputGroup.Text id="basic-addon2" className={classes.search}>
@@ -37,14 +38,12 @@ function index() {
               aria-describedby="basic-addon2"
             />
           </InputGroup>
-          <Nav>
+          <Nav >
+            <Messages/>
             <Notification/>
           </Nav>
           <Nav>
-            <Nav.Link href="#deets" className={classes.textColor}>More deets</Nav.Link>
-            <Nav.Link eventKey={2} href="#memes" className={classes.textColor}>
-              Dank memes
-            </Nav.Link>
+          <UserChoices />
           </Nav>
         </Navbar.Collapse>
       </Container>

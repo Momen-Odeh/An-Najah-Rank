@@ -36,3 +36,18 @@
     transform: rotate(360deg);
   }
 }
+
+.navbar-nav .nav-link.active, .navbar-nav .nav-link.show {
+  color: white !important;
+}
+
+.navbar-nav .nav-link.active::after,
+.navbar-nav .nav-link.show::after {
+  content: "";
+  display: block;
+  height: 3px;
+  background-color: green;
+  margin-top: 6px;
+  margin-bottom:0px;
+  padding-bottom: 0px;
+}
