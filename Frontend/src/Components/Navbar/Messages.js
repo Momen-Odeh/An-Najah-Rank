@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
-import { Navbar, Nav, Badge, Overlay, Popover } from 'react-bootstrap';
-import { FaComment } from 'react-icons/fa'; // Import the message icon
+import { Nav, Badge, Overlay } from 'react-bootstrap';
+import { FaComment } from 'react-icons/fa';
 import Style from './Style';
 
 const Messages = () => {
@@ -13,20 +13,20 @@ const Messages = () => {
   ]);
   const ref = useRef(null);
 
-  const handlePopoverToggle = (event) => {
+  const handleMessagesPanel = (event) => {
     event.preventDefault();
     setShowMessages(!showMessages);
   };
 
-  const closePopover = () => {
+  const closeMessagesPanel = () => {
     setShowMessages(false);
   };
   
   return (
       <Nav.Item>
         <Nav.Link 
-        onClick={handlePopoverToggle} ref={ref}>
-          <FaComment size={24} className={classes.hoveringColor} color={showMessages?'white':''}  />
+        onClick={handleMessagesPanel} ref={ref}>
+          <FaComment size={20} className={classes.hoveringColor} color={showMessages?'white':''}  />
           <Badge pill variant="" style={{ fontSize: '10px', padding: '3px 5px', margin:'0px 2px' }}>
             {messages.length}
           </Badge>
@@ -34,19 +34,19 @@ const Messages = () => {
 
         <Overlay
           show={showMessages}
-          containerPadding={100}
+          containerPadding={-0.5}
           target={ref}
           placement="bottom-end"
           rootClose={true}
-          onHide={closePopover}
+          onHide={closeMessagesPanel}
         >
-          <div className={`messages-panel ${classes.Overlay}`}>
+          <div className={classes.Overlay}>
             <div className={classes.OverlayTitle}>
               <h5>Messages</h5>
             </div>
             <div className={classes.OverlayContent}>
               {messages.map((message) => (
-                <div key={message.id} className={`message-item ${classes.messageItem}`}>
+                <div key={message.id} className={classes.messageItem}>
                     <div className="d-flex align-items-center">
                     <img src='./images/N-messages.png' alt='msg' className={classes.messageCircle}></img>
                     <div>

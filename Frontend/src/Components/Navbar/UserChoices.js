@@ -1,35 +1,25 @@
 import React, { useState, useRef } from 'react';
-import { Navbar, Nav, Overlay } from 'react-bootstrap';
+import { Nav, Overlay } from 'react-bootstrap';
 import { AiOutlineUser } from 'react-icons/ai'
 import { SlArrowDown } from 'react-icons/sl'
 import { Link } from 'react-router-dom';
 import Style from './Style';
 
-const UserChoices = () => {
+const UserChoices = ({userChoices}) => {
   const classes = Style();
   const [showChoices, setShowChoices] = useState(false);
-  const [userChoices, setUserChoices] = useState([
-    { id: 1, title: 'Profile', link:'#Profile'},
-    { id: 2, title: 'Settings', link:'#Settings'},
-    { id: 3, title: 'Submissions', link:'#Submissions'},
-    { id: 4, title: 'Administration', link:'#Administration'},
-    { id: 5, title: 'Logout', link:'#Logout'},
-  ]);
   const ref = useRef(null);
-
-  const handlePopoverToggle = (event) => {
+  const handleUserChoices = (event) => {
     event.preventDefault();
     setShowChoices(!showChoices);
   };
-
-  const closePopover = () => {
+  const closeUserChoices = () => {
     setShowChoices(false);
   };
 
   return (
-    <Navbar.Collapse className="justify-content-end" >
       <Nav.Item>
-        <Nav.Link className='d-flex align-items-center' ref={ref} onClick={handlePopoverToggle}>
+        <Nav.Link className='d-flex align-items-center' ref={ref} onClick={handleUserChoices}>
           <div className={classes.iconContainer}>
               <AiOutlineUser size={24} color="#576871"/>
           </div> 
@@ -42,7 +32,7 @@ const UserChoices = () => {
           target={ref}
           placement="bottom-start"
           rootClose={true}
-          onHide={closePopover}
+          onHide={closeUserChoices}
         >
           <div className={classes.userChoicesContainer}>
             {userChoices.map((userChoice) => (
@@ -54,7 +44,6 @@ const UserChoices = () => {
           </div>
         </Overlay>
       </Nav.Item>
-    </Navbar.Collapse>
   );
 };
 

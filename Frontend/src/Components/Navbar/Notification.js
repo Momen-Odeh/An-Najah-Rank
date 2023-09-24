@@ -1,5 +1,5 @@
-import React, { useState, useRef, useEffect} from 'react';
-import { Navbar, Nav, Badge, Overlay, Popover } from 'react-bootstrap';
+import React, { useState, useRef} from 'react';
+import { Nav, Badge, Overlay } from 'react-bootstrap';
 import { FaBell } from 'react-icons/fa';
 import Style from './Style';
 const Notification = () => {
@@ -12,20 +12,19 @@ const Notification = () => {
   ]);
   const ref = useRef(null);
 
-  const handlePopoverToggle = (event) => {
+  const handleNotificationPanel = (event) => {
     event.preventDefault();
     setShowNotification(!showNotification);
   };
 
-  const closePopover = () => {
+  const closeNotificationPanel = () => {
     setShowNotification(false);
   };
 
   return (
-    <Navbar.Collapse className="justify-content-end">
       <Nav.Item>
-        <Nav.Link ref={ref} onClick={handlePopoverToggle}>
-            <FaBell size={24} className={classes.hoveringColor} color={showNotification?'white':''}/>
+        <Nav.Link ref={ref} onClick={handleNotificationPanel}>
+            <FaBell size={20} className={classes.hoveringColor} color={showNotification?'white':''}/>
             {notifications.length > 0 && (
                 <Badge pill variant="" style={{ fontSize: '10px', padding:'3px 5px'}} >
                 {notifications.length}
@@ -35,13 +34,13 @@ const Notification = () => {
 
         <Overlay
           show={showNotification}
-          containerPadding={100}
+          containerPadding={-0.5}
           target={ref}
           placement="bottom-end"
           rootClose={true}
-          onHide={closePopover}
+          onHide={closeNotificationPanel}
         >
-            <div className={`notification-panel ${classes.Overlay}`}>
+            <div className={classes.Overlay}>
                 <div className={classes.OverlayTitle}>
                     <h5>Notifications</h5>
                 </div>
@@ -59,7 +58,6 @@ const Notification = () => {
         </Overlay>
 
       </Nav.Item>
-    </Navbar.Collapse>
   );
 };
 

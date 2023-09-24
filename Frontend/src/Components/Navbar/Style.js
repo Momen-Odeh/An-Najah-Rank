@@ -7,36 +7,21 @@ const Style = createUseStyles({
     textColor:{
         color:'white !important'
     },
-    search:{
-        backgroundColor:'#39424e',
-        color:'white !important',
-        border:'none',
-        '&::placeholder': {
-            color:'white',
-        },
-          '&:focus': {
-            backgroundColor:'#39424e',
-            outline: 'none !important',
-            boxShadow: 'none !important',
-          },
-    },
-    customInputGroup: {
-        maxWidth: '300px',
-      },
     burgerBtn:{
-        backgroundColor:'white'
+        backgroundColor:'white',
+        order:'-2',
+        fontSize: '18px'
     },
     Overlay:{
-        marginTop:'10px',
         paddingTop:'10px',
         boxShadow: '2px 2px 4px 2px rgba(0, 0, 0, 0.2)',
-        backgroundColor:'#0e141e'
     },
     OverlayTitle:{
         backgroundColor:'#0e141e',
         minWidth:'350px',
         color:'white',
-        padding:'3px 10px'
+        padding:'10px 10px',
+        textAlign:'center'
     },
     OverlayContent:{
         minWidth:'350px',
@@ -161,5 +146,57 @@ const Style = createUseStyles({
             color: 'white',
         }
       },
+      '@media (max-width: 600px)': {
+        Overlay:{
+          boxShadow:'none',
+          position: 'fixed',
+          width: '100%',
+          height: '100%',
+          maxWidth:'100%',
+          minWidth:'100%',
+          zIndex: 1000,
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+        },
+        OverlayContent:{
+          position: 'fixed',
+          top: 50,
+          maxWidth:'100%',
+          minWidth:'100%',
+          width: '100%',
+          height: '100%',
+        },
+        OverlayTitle:{
+          position: 'fixed',
+          maxWidth:'100%',
+          minWidth:'100%',
+          width: '100%',
+          height: '100%',
+        },
+      },
+
+      userChoiceLarge:{
+        display:'block'
+      },
+
+      userChoicesSmall:{
+        display:'none'
+      },
+      customInputGroup: {
+        display:'block'
+      },
+      '@media (max-width: 991px)':{
+        userChoicesSmall:{
+          display:'block'
+        },
+        userChoiceLarge:{
+          display:'none'
+        },
+        customInputGroup:{
+          display:'none'
+        },
+      }
+
 })
 export default Style
