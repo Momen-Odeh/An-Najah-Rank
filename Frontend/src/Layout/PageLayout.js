@@ -1,12 +1,16 @@
-import { Outlet } from "react-router-dom";
+import React, { useState, useEffect } from "react"
+import { Outlet } from "react-router-dom"
+import MainNavbar from "../Components/Navbar"
+import Footer from "../Components/Footer"
+import { routeNames } from "../Utils/Utils"
 function PageLayout() {
   return (
     <div>
-      <h1>Header</h1>
-      <Outlet />
-      <h1>Footer</h1>
+        <MainNavbar/>
+          <Outlet />
+        <Footer/>
     </div>
-  );
+  )
 }
 
-export default PageLayout;
+export default PageLayout
