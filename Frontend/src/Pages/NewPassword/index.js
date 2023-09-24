@@ -3,10 +3,10 @@ import useStyles from "./style";
 import { Col, Container, Row } from "react-bootstrap";
 import TextRegister from "../../Components/TextRegister";
 import InputFiledRegister from "../../Components/InputFiledRegister";
-import { TfiEmail } from "react-icons/tfi";
+import { TfiLock } from "react-icons/tfi";
 import ButtonRegister from "../../Components/ButtonRegister";
 import { Link } from "react-router-dom";
-const ForgetPassword = () => {
+const NewPassword = () => {
   const classes = useStyles();
   return (
     <div className={classes.center}>
@@ -14,7 +14,7 @@ const ForgetPassword = () => {
         <Row className={`${classes.Row}  mb-4`}>
           <Col className={classes.Col}>
             <TextRegister
-              text={"Forget Password"}
+              text={"New Password"}
               color="#000000"
               height="45px"
               size="30px"
@@ -26,7 +26,7 @@ const ForgetPassword = () => {
           <Col className={classes.Col}>
             <TextRegister
               text={
-                "No Problem! Enter your email below and we will send you an Code with instruction to reset your password."
+                "Set the new password for your account so you can login and access all featuress."
               }
               color="#000000"
               height="24px"
@@ -38,36 +38,26 @@ const ForgetPassword = () => {
         <Row className={`${classes.Row} mb-4`}>
           <Col>
             <InputFiledRegister
-              // label="Email: "
-              Icon={TfiEmail}
-              placeHolder="Enter your Email"
-              type="Email"
+              label="New Password"
+              Icon={TfiLock}
+              placeHolder="Enter New Password"
+              type="password"
+            />
+          </Col>
+        </Row>
+        <Row className={`${classes.Row} mb-4`}>
+          <Col>
+            <InputFiledRegister
+              label="Confirm Password"
+              Icon={TfiLock}
+              placeHolder="Enter Confirm Password"
+              type="password"
             />
           </Col>
         </Row>
         <Row className={`${classes.Row} mb-2 `}>
           <Col className={classes.Col}>
-            <ButtonRegister text="Reset Password" to={"/verification-code"} />
-          </Col>
-        </Row>
-        <Row className={`${classes.Row} `}>
-          <Col className={classes.Col}>
-            <TextRegister
-              text={"Back to "}
-              color="#000000"
-              height="24px"
-              size="16px"
-              wegiht="400"
-            />
-            <Link to={"/log-in"} className={classes.Link}>
-              <TextRegister
-                text={"Login"}
-                color="#0C21C1"
-                height="24px"
-                size="16px"
-                wegiht="400"
-              />
-            </Link>
+            <ButtonRegister text="PASSWORD UPDATE" to={"/log-in"} />
           </Col>
         </Row>
       </Container>
@@ -75,4 +65,4 @@ const ForgetPassword = () => {
   );
 };
 
-export default ForgetPassword;
+export default NewPassword;

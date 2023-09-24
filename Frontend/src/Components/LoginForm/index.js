@@ -76,7 +76,7 @@ const LogInForm = () => {
       </Row>
       <Row className="mb-5">
         <Col className="text-right">
-          <Link to={"/sign-up"} className={classes.Link}>
+          <Link to={"/forget-password"} className={classes.Link}>
             <TextRegister
               text={"Forgot Password ?"}
               color="#4D4D4D"
