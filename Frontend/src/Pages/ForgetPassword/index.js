@@ -1,7 +1,7 @@
 import React from "react";
 import useStyles from "./style";
 import { Col, Container, Row } from "react-bootstrap";
-import TextRegister from "../../Components/TextRegister";
+import TextRegister from "../../Components/Text";
 import InputFiledRegister from "../../Components/InputFiledRegister";
 import { TfiEmail } from "react-icons/tfi";
 import ButtonRegister from "../../Components/ButtonRegister";

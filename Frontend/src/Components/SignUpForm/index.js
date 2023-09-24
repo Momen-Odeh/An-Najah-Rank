@@ -5,7 +5,7 @@ import { FiUser } from "react-icons/fi";
 import { AiOutlineNumber } from "react-icons/ai";
 import InputFiledRegister from "../InputFiledRegister";
 import { Col, Container, Row } from "react-bootstrap";
-import TextRegister from "../TextRegister";
+import TextRegister from "../Text";
 import ButtonRegister from "../ButtonRegister";
 import useStyles from "./style";
 import { Link } from "react-router-dom";
