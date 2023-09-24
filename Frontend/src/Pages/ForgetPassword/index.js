@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import useStyles from "./style";
 import { Col, Container, Row } from "react-bootstrap";
 import TextRegister from "../../Components/TextRegister";
@@ -6,8 +6,14 @@ import InputFiledRegister from "../../Components/InputFiledRegister";
 import { TfiEmail } from "react-icons/tfi";
 import ButtonRegister from "../../Components/ButtonRegister";
 import { Link } from "react-router-dom";
+import { useOutletContext } from "react-router-dom";
+import { routeNames } from "../../Utils/Utils";
 const ForgetPassword = () => {
   const classes = useStyles();
+  const setActiveTab = useOutletContext();
+  useEffect(() => {
+    setActiveTab(routeNames.CONTACT_Us);
+  }, []);
   return (
     <div className={classes.center}>
       <Container className={`${classes.Container}`}>

@@ -5,7 +5,8 @@ import SearchBox from '../SearchBox'
 import Notification from './Notification'
 import Messages from './Messages'
 import UserChoices from './UserChoices'
-const Header = () =>{
+import { routeNames, routes } from '../../Utils/Utils'
+const Header = ( { activeTab }) =>{
   const classes = useStyle()
   const [userChoicesData, setUserChoicesData] = useState([
     { id: 1, title: 'Profile', link:'#Profile'},
@@ -14,6 +15,8 @@ const Header = () =>{
     { id: 4, title: 'Administration', link:'#Administration'},
     { id: 5, title: 'Logout', link:'#Logout'},
   ]);
+  const signInPath = routes.filter((item)=>item.title===routeNames.LOG_IN)[0].path
+  const homePath = routes.filter((item)=>item.title===routeNames.HOME)[0].path
   return (
     <Navbar collapseOnSelect expand="lg" className={classes.navContainer}>
       <Container fluid >
@@ -29,8 +32,8 @@ const Header = () =>{
         <Navbar.Toggle aria-controls="responsive-navbar-nav" className={classes.burgerBtn}/>
         <Navbar.Collapse id="responsive-navbar-nav">
           <Nav className="me-auto">
-            <Nav.Link href="#courses" className={`${classes.hoveringColor}`}>Courses</Nav.Link>
-            <Nav.Link href="#sign-in" className={`${classes.hoveringColor}`}>Sign in</Nav.Link>
+            <Nav.Link href={homePath} className={`${classes.hoveringColor} ${activeTab===routeNames.HOME?classes.activeTab:''}`}  onClick={(e)=>e.preventDefault}>Courses</Nav.Link>
+            <Nav.Link href={signInPath} className={`${classes.hoveringColor} ${activeTab===routeNames.LOG_IN?classes.activeTab:''}`} onClick={(e)=>e.preventDefault}>Sign in</Nav.Link>
             <div className={classes.userChoicesSmall}>
               {
                 userChoicesData.map((choice)=>

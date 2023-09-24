@@ -196,7 +196,19 @@ const useStyle = createUseStyles({
         customInputGroup:{
           display:'none'
         },
-      }
+      },
+      activeTab:{
+        color: 'white !important',
+        '&::after':
+        {
+          content: '""',
+        display: 'block',
+        height: '3px',
+        backgroundColor: 'green',
+        marginTop: '6px',
+        marginBottom: '0',
+        paddingBottom: '0',}
+      },
 
 })
 export default useStyle

@@ -1,11 +1,17 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import useStyles from "./style";
 import { Col, Container, Row } from "react-bootstrap";
 import TextRegister from "../../Components/TextRegister";
 import ButtonRegister from "../../Components/ButtonRegister";
 import AuthCode from "react-auth-code-input";
+import { useOutletContext } from "react-router-dom";
+import { routeNames } from "../../Utils/Utils";
 const VarificationCode = () => {
   const classes = useStyles();
+  const setActiveTab = useOutletContext();
+  useEffect(() => {
+    setActiveTab(routeNames.LOG_IN);
+  }, []);
   const [code, setCode] = useState(null);
   const changeCode = (res) => {
     setCode(res);
