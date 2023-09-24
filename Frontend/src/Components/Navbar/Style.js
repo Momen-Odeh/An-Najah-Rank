@@ -141,7 +141,7 @@ const useStyle = createUseStyles({
       },
       hoveringColor:{
         fontSize:'1.1rem',
-        color:'#b2b8bc',
+        color:'#b2b8bc !important',
         '&:hover':{
             color: 'white',
         }
