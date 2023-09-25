@@ -12,7 +12,7 @@ const ForgetPassword = () => {
   const classes = useStyles();
   const setActiveTab = useOutletContext();
   useEffect(() => {
-    setActiveTab(routeNames.CONTACT_Us);
+    setActiveTab(routeNames.LOG_IN);
   }, []);
   return (
     <div className={classes.center}>

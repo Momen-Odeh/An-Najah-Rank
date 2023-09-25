@@ -5,6 +5,7 @@ import SignUp from "../Pages/SignUp";
 import ForgetPassword from "../Pages/ForgetPassword";
 import VerificationCode from "../Pages/VerificationCode";
 import NewPassword from "../Pages/NewPassword";
+import Home from "../Pages/Home";
 
 // const AboutUs = lazy(() => import("../Pages/AboutUs/SubComponents/AboutUs"))
 
@@ -21,7 +22,7 @@ export const routes = [
   {
     path: "/",
     title: routeNames.HOME,
-    component: <h3>Home Page</h3>,
+    component: <Home/>,
   },
   {
     path: "/sign-up",
