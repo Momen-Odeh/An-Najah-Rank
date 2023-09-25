@@ -46,6 +46,11 @@ const ProblemValue = () => {
           />
         </Col>
       </Row>
+      <Row>
+        <Col className={classes.Col}>
+          <hr />
+        </Col>
+      </Row>
     </Container>
   );
 };

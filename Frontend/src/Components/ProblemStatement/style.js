@@ -1,13 +1,18 @@
 import { createUseStyles } from "react-jss";
 const useStyles = createUseStyles({
-  Row: {
-    justifyContent: "space-between",
+  Col: {
+    padding: "0",
+    margin: "0",
   },
-  Col1: {
-    border: "1px solid red",
+  descrition: {
+    fontSize: "18px",
+    color: " #39424E",
+    padding: "0",
+    margin: "0",
   },
-  Col2: {
-    border: "1px solid blue",
+  sample: {
+    backgroundColor: "#f4faff",
+    padding: "15px",
   },
 });
 

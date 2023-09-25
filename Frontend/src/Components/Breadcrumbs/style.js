@@ -14,6 +14,7 @@ const useStyles = createUseStyles({
     color: "#979faf",
   },
   Link: {
+    textDecoration: "none",
     "&:hover": {
       textDecoration: "none",
       color: "#000",

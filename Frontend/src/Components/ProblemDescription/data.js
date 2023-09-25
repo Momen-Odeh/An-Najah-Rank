@@ -11,5 +11,14 @@ Your job is to help Sarutobi collect the maximum number of bananas. Print this v
   inputFormat: `N (number of rows/cols for the grid) values of the grid cells row-wise seperated by commas`,
   Constraints: `No constraints`,
   outputFormat: "Max_Sum (maximum possible number of collected bananas)",
-  //   sample Input
+  sampleInput: [
+    `4 
+ 5,-80,-5,12
+ 6,14,-5,19
+ -8,-2,11,12
+ 9,-4,16,2`,
+  ],
+  sampleOutput: ["53"],
 };
+
+export default Data;
