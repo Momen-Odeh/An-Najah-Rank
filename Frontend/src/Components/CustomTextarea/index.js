@@ -2,15 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { Container, Row, Col, Form } from 'react-bootstrap';
 import useStyles from './Style';
 
-const LineNumberedTextarea = () => {
+const LineNumberedTextarea = ({name, text, handleChange}) => {
   const classes = useStyles();
-  const [text, setText] = useState('');
   const [textareaHeight, setTextareaHeight] = useState('100px');
-
-  const handleTextChange = (e) => {
-    setText(e.target.value);
-  };
-
   useEffect(() => {
     const lines = text.split('\n').length;
     const newHeight = Math.max(100, lines * 30);
@@ -18,7 +12,6 @@ const LineNumberedTextarea = () => {
   }, [text]);
 
   return (
-    <Container fluid className='m-3'>
       <Row>
         <Col>
           <div className={classes.textAreaContainer}>
@@ -33,8 +26,9 @@ const LineNumberedTextarea = () => {
               <Form.Control
                 as="textarea"
                 rows={1}
+                name={name}
                 value={text}
-                onChange={handleTextChange}
+                onChange={handleChange}
                 style={{ height: textareaHeight }}
                 className={classes.textarea}
               />
@@ -42,7 +36,6 @@ const LineNumberedTextarea = () => {
           </div>
         </Col>
       </Row>
-    </Container>
   );
 };
 

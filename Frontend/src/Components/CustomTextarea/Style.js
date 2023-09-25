@@ -2,7 +2,6 @@ import { createUseStyles } from "react-jss";
 
 const useStyles = createUseStyles({
     textAreaContainer: {
-      maxWidth:'90%',
       display: 'grid',
       gridTemplateColumns: 'auto 1fr',
       alignItems: 'start',
