@@ -1,7 +1,7 @@
 import React from "react";
 import useStyles from "./style";
 import { Col, Container, Row } from "react-bootstrap";
-import TextRegister from "../TextRegister";
+import TextRegister from "../Text";
 
 const RegistrationShow = ({ img, title, subTitle, SignUp }) => {
   const classes = useStyles();

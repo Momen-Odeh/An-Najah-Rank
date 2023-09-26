@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Container, Nav, Navbar} from 'react-bootstrap'
+import { useNavigate } from 'react-router-dom';
 import useStyle from "./Style"
 import SearchBox from '../SearchBox'
 import Notification from './Notification'
@@ -8,6 +9,7 @@ import UserChoices from './UserChoices'
 import { routeNames, routes } from '../../Utils/Utils'
 const Header = ( { activeTab }) =>{
   const classes = useStyle()
+  const navigate = useNavigate()
   const [userChoicesData, setUserChoicesData] = useState([
     { id: 1, title: 'Profile', link:'#Profile'},
     { id: 2, title: 'Settings', link:'#Settings'},
@@ -20,24 +22,24 @@ const Header = ( { activeTab }) =>{
   return (
     <Navbar collapseOnSelect expand="lg" className={`${classes.navContainer} p-2`}>
       <Container fluid >
-        <Navbar.Brand href="/">        
+        <Navbar.Brand onClick={()=>navigate('/')}>        
           <img
             src='./images/logo.jpg'
             alt="Logo"
             width="60"
             height="40"
           />
-          <span className={`m-1 ${classes.textColor}`}>An-Najah Rank</span>
+          <span className={`m-1 ${classes.textColor}`} style={{ userSelect: 'none'}}>An-Najah Rank</span>
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="responsive-navbar-nav" className={classes.burgerBtn}/>
         <Navbar.Collapse id="responsive-navbar-nav">
           <Nav className="me-auto">
-            <Nav.Link href={homePath} className={`${classes.hoveringColor} ${activeTab===routeNames.HOME?classes.activeTab:''}`}  onClick={(e)=>e.preventDefault}>Courses</Nav.Link>
-            <Nav.Link href={signInPath} className={`${classes.hoveringColor} ${activeTab===routeNames.LOG_IN?classes.activeTab:''}`} onClick={(e)=>e.preventDefault}>Sign in</Nav.Link>
+            <Nav.Link className={`${classes.hoveringColor} ${activeTab===routeNames.HOME?classes.activeTab:''}`}  onClick={()=>navigate(homePath)}>Courses</Nav.Link>
+            <Nav.Link className={`${classes.hoveringColor} ${activeTab===routeNames.LOG_IN?classes.activeTab:''}`} onClick={()=>navigate(signInPath)}>Sign in</Nav.Link>
             <div className={classes.userChoicesSmall}>
               {
                 userChoicesData.map((choice)=>
-                  <Nav.Link key={choice.id} href={choice.link} className={`${classes.hoveringColor}`}>{choice.title}</Nav.Link>
+                  <Nav.Link key={choice.id} className={`${classes.hoveringColor}`} onClick={()=>navigate(choice.link)}>{choice.title}</Nav.Link>
                 )
               }
             </div>

@@ -3,7 +3,7 @@ import { TfiEmail } from "react-icons/tfi";
 import { TfiLock } from "react-icons/tfi";
 import InputFiledRegister from "../InputFiledRegister";
 import { Col, Container, Row } from "react-bootstrap";
-import TextRegister from "../TextRegister";
+import TextRegister from "../Text";
 import ButtonRegister from "../ButtonRegister";
 import useStyles from "./style";
 import { Link } from "react-router-dom";

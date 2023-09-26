@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import useStyles from "./style";
 import { Col, Container, Row } from "react-bootstrap";
-import TextRegister from "../../Components/TextRegister";
+import TextRegister from "../../Components/Text";
 import InputFiledRegister from "../../Components/InputFiledRegister";
 import { TfiEmail } from "react-icons/tfi";
 import ButtonRegister from "../../Components/ButtonRegister";
@@ -12,7 +12,7 @@ const ForgetPassword = () => {
   const classes = useStyles();
   const setActiveTab = useOutletContext();
   useEffect(() => {
-    setActiveTab(routeNames.CONTACT_Us);
+    setActiveTab(routeNames.LOG_IN);
   }, []);
   return (
     <div className={classes.center}>
