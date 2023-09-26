@@ -24,7 +24,7 @@ const Notification = () => {
   return (
       <Nav.Item>
         <Nav.Link ref={ref} onClick={handleNotificationPanel}>
-            <FaBell size={20} className={classes.hoveringColor} color={showNotification?'white':''}/>
+            <FaBell size={20} className={`${classes.hoveringColor} ${showNotification?classes.clickedBtn:''}`}/>
             {notifications.length > 0 && (
                 <Badge pill variant="" style={{ fontSize: '10px', padding:'3px 5px'}} >
                 {notifications.length}
