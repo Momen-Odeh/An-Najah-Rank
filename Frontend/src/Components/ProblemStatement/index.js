@@ -2,6 +2,7 @@ import React from "react";
 import { Col, Container, Row } from "react-bootstrap";
 import useStyles from "./style";
 import Text from "../Text";
+import SampleContainer from "../SampleContainer";
 
 const ProblemStatement = ({ data }) => {
   const classes = useStyles();
@@ -50,8 +51,8 @@ const ProblemStatement = ({ data }) => {
             </Col>
           </Row>
           <Row className="mb-4">
-            <Col className={`${classes.Col} ${classes.sample}`}>
-              <pre className={classes.descrition}> {item}</pre>
+            <Col className={`${classes.Col} `}>
+              <SampleContainer data={item} />
             </Col>
           </Row>
         </div>
@@ -64,8 +65,8 @@ const ProblemStatement = ({ data }) => {
             </Col>
           </Row>
           <Row className="mb-4">
-            <Col className={`${classes.Col} ${classes.sample}`}>
-              <pre className={classes.descrition}> {item}</pre>
+            <Col className={`${classes.Col} `}>
+              <SampleContainer data={item} />
             </Col>
           </Row>
         </div>
