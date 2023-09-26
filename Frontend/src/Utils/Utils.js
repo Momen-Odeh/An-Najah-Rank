@@ -7,6 +7,7 @@ import VerificationCode from "../Pages/VerificationCode";
 import NewPassword from "../Pages/NewPassword";
 import Challenge from "../Pages/Challenge";
 import Home from "../Pages/Home";
+import CreateChallenge from "../Pages/CreateChallenge";
 
 // const AboutUs = lazy(() => import("../Pages/AboutUs/SubComponents/AboutUs"))
 
@@ -18,6 +19,7 @@ export const routeNames = {
   VERIFICATION_CODE: "VErification Code",
   NEW_PASSWORD: "New Password",
   CHALLENGE: "Challenge",
+  CREATE_CHALLENGE: "Create Challenge",
 };
 export const routes = [
   {
@@ -54,6 +56,11 @@ export const routes = [
     path: "/challenge",
     title: routeNames.CHALLENGE,
     component: <Challenge />,
+  },
+  {
+    path: "/create-challenge",
+    title: routeNames.CREATE_CHALLENGE,
+    component: <CreateChallenge />,
   },
 ];
 

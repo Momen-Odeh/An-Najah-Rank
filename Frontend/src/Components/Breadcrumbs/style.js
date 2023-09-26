@@ -2,8 +2,8 @@ import { createUseStyles } from "react-jss";
 const useStyles = createUseStyles({
   Breadcrumb: {
     background: "#fff",
-    borderBottom: "1px solid #e0e4e8",
-    padding: "25px 0",
+    padding: "8px 0",
+    paddingTop: '15px',
     margin: "0",
   },
   item: {

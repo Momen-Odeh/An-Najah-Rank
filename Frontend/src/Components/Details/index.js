@@ -5,34 +5,11 @@ import TextEditor from '../TextEditor';
 import CustomButton from '../CustomButton';
 import Tags from '../Tags';
 
-const Details = () => {
-  const [details, setDetails] = useState({
-    difficulty: '',
-    name: '',
-    description: '',
-    problemStatement: '',
-    inputFormat: '',
-    constraints: '',
-    outputFormat: '',
-    tags: [],
-  });
-
-  const handleChange = (e, nameVal=null, val = null) => {
-    if(e){
-      const { name, value } = e.target;
-      console.log(value)
-      setDetails({ ...details, [name]: value });
-    }
-    else{
-      setDetails({ ...details, [nameVal]: val });
-      console.log(val)
-    }
-  };
-
+const Details = ({details, handleChange}) => {
   return (
-    <Container className='m-3'>
+    <Container fluid>
 
-      <Row className='m-3'>
+      <Row className='mb-3'>
         <Col md={2}>
           <Text fontFamily='Open Sans' text={'Challenge Difficulty'} height={'40px'} wegiht={'600'}/>
         </Col>
@@ -53,7 +30,7 @@ const Details = () => {
         </Col>
       </Row>
 
-      <Row className='m-3'>
+      <Row className='mb-3'>
         <Col md={2}>
           <Text fontFamily='Open Sans' text={'Challenge Name'} height={'40px'} wegiht={'600'}/>
         </Col>
@@ -70,7 +47,7 @@ const Details = () => {
         </Col>
       </Row>
 
-      <Row className='m-3'>
+      <Row className='mb-3'>
         <Col md={2}>
           <Text fontFamily='Open Sans' text={'Description'} height={'40px'} wegiht={'600'}/>
         </Col>
@@ -88,7 +65,7 @@ const Details = () => {
         </Col>
       </Row>
 
-      <Row className='m-3'>
+      <Row className='mb-3'>
         <Col md={2}>
           <Text fontFamily='Open Sans' text={'Problem Statement'} height={'40px'} wegiht={'600'}/>
         </Col>
@@ -97,7 +74,7 @@ const Details = () => {
         </Col>
       </Row>
 
-      <Row className='m-3'>
+      <Row className='mb-3'>
         <Col md={2}>
           <Text fontFamily='Open Sans' text={'Input Format'} height={'40px'} wegiht={'600'}/>
         </Col>
@@ -106,7 +83,7 @@ const Details = () => {
         </Col>
       </Row>
 
-      <Row className='m-3'>
+      <Row className='mb-3'>
         <Col md={2}>
           <Text fontFamily='Open Sans' text={'Constraints'} height={'40px'} wegiht={'600'}/>
         </Col>
@@ -115,7 +92,7 @@ const Details = () => {
         </Col>
       </Row>
 
-      <Row className='m-3'>
+      <Row className='mb-3'>
         <Col md={2}>
           <Text fontFamily='Open Sans' text={'Output Format'} height={'40px'} wegiht={'600'}/>
         </Col>
@@ -124,7 +101,7 @@ const Details = () => {
         </Col>
       </Row>
 
-      <Row className='m-3'>
+      <Row className='mb-3'>
         <Col md={2}>
           <Text fontFamily='Open Sans' text={'Tags'} height={'40px'} wegiht={'600'}/>
         </Col>
@@ -133,8 +110,6 @@ const Details = () => {
         </Col>
       </Row>
 
-      <CustomButton text='Save Changes' />
-      <CustomButton text='Preview Challenges' backgroundColor='#e4e4e4'/>
     </Container>
   );
 };
