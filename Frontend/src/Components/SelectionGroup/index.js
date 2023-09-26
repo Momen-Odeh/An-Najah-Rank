@@ -11,9 +11,9 @@ const SelectionGroup = ({ choices, language }) => {
         language.setValue(e.target.value);
       }}
     >
-      <Form.Select>
+      <Form.Select className={classes.Select}>
         {choices.map((item, index) => (
-          <option key={index} value={item.value}>
+          <option key={index} value={item.value} className={classes.Option}>
             {item.title}
           </option>
         ))}

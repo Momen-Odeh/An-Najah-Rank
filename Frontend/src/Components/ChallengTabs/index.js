@@ -1,9 +1,8 @@
 import React from "react";
 import useStyles from "./style";
 import { Tab, Tabs } from "react-bootstrap";
-
-const ChallengeTabs = ({ ListTabs }) => {
-  const classes = useStyles();
+const ChallengeTabs = ({ ListTabs, PaddingTop = "30px" }) => {
+  const classes = useStyles({ PaddingTop });
   return (
     <Tabs className={classes.Tabs}>
       {ListTabs.map((item, index) => (

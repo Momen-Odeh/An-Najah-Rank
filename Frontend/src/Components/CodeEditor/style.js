@@ -17,6 +17,12 @@ const useStyles = createUseStyles({
     margin: "0",
     padding: "0",
   },
+  Buttons: {
+    borderTop: "1.5px solid #c2c7d0",
+  },
+  RowSelect: {
+    borderBottom: "1.5px solid #c2c7d0",
+  },
 });
 
 export default useStyles;

@@ -26,7 +26,7 @@ const useStyles = createUseStyles({
     },
   },
   InnerTab: {
-    paddingTop: "30px",
+    paddingTop: ({ PaddingTop }) => PaddingTop,
   },
 });
 
