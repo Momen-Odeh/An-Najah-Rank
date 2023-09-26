@@ -5,6 +5,7 @@ import SignUp from "../Pages/SignUp";
 import ForgetPassword from "../Pages/ForgetPassword";
 import VerificationCode from "../Pages/VerificationCode";
 import NewPassword from "../Pages/NewPassword";
+import Challenge from "../Pages/Challenge";
 import Home from "../Pages/Home";
 
 // const AboutUs = lazy(() => import("../Pages/AboutUs/SubComponents/AboutUs"))
@@ -15,8 +16,8 @@ export const routeNames = {
   LOG_IN: "Log In",
   FORGET_PASSWORD: "Forget Password",
   VERIFICATION_CODE: "VErification Code",
-  AUTHENTICATION_EMAIL: "Auth Email",
   NEW_PASSWORD: "New Password",
+  CHALLENGE: "Challenge",
 };
 export const routes = [
   {
@@ -50,9 +51,9 @@ export const routes = [
     component: <NewPassword />,
   },
   {
-    path: "/authentication-email",
-    title: routeNames.AUTHENTICATION_EMAIL,
-    component: <h3>authentication email page</h3>,
+    path: "/challenge",
+    title: routeNames.CHALLENGE,
+    component: <Challenge />,
   },
 ];
 

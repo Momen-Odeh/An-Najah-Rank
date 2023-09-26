@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import useStyles from "./style";
 import { Col, Container, Row } from "react-bootstrap";
-import TextRegister from "../../Components/TextRegister";
+import TextRegister from "../../Components/Text";
 import ButtonRegister from "../../Components/ButtonRegister";
 import AuthCode from "react-auth-code-input";
 import { useOutletContext } from "react-router-dom";
