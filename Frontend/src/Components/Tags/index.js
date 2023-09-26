@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { InputGroup, Form, Button } from 'react-bootstrap';
 import useStyle from './Style';
 
-const Tags = ({tags, handleChange}) => {
+const Tags = ({tags, handleChange, name}) => {
     const classes = useStyle()
   const [newTag, setNewTag] = useState('');
 
@@ -12,14 +12,14 @@ const Tags = ({tags, handleChange}) => {
 
   const handleAddTag = () => {
     if (newTag.trim() !== '') {
-        handleChange(null,[...tags, newTag.trim()]);
+        handleChange(null, 'tags',[...tags, newTag.trim()]);
         setNewTag('');
     }
   };
 
   const handleRemoveTag = (tagToRemove) => {
     const updatedTags = tags.filter((tag) => tag !== tagToRemove);
-    handleChange(null, updatedTags);
+    handleChange(null, 'tags', updatedTags);
   };
 
   return (

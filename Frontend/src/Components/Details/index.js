@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Container, Row, Col, Form } from 'react-bootstrap';
 import Text from '../Text';
-import CustomTextarea from '../CustomTextarea';
+import TextEditor from '../TextEditor';
 import CustomButton from '../CustomButton';
 import Tags from '../Tags';
 
@@ -17,23 +17,22 @@ const Details = () => {
     tags: [],
   });
 
-  // Handler for input changes (for both difficulty and name)
-  const handleChange = (e,Array = null) => {
-    if(!Array){
+  const handleChange = (e, nameVal=null, val = null) => {
+    if(e){
       const { name, value } = e.target;
       console.log(value)
       setDetails({ ...details, [name]: value });
     }
     else{
-      setDetails({ ...details, tags: Array });
-      console.log(Array)
+      setDetails({ ...details, [nameVal]: val });
+      console.log(val)
     }
   };
 
   return (
     <Container className='m-3'>
 
-      <Row className='m-2'>
+      <Row className='m-3'>
         <Col md={2}>
           <Text fontFamily='Open Sans' text={'Challenge Difficulty'} height={'40px'} wegiht={'600'}/>
         </Col>
@@ -54,7 +53,7 @@ const Details = () => {
         </Col>
       </Row>
 
-      <Row className='m-2'>
+      <Row className='m-3'>
         <Col md={2}>
           <Text fontFamily='Open Sans' text={'Challenge Name'} height={'40px'} wegiht={'600'}/>
         </Col>
@@ -71,7 +70,7 @@ const Details = () => {
         </Col>
       </Row>
 
-      <Row className='m-2'>
+      <Row className='m-3'>
         <Col md={2}>
           <Text fontFamily='Open Sans' text={'Description'} height={'40px'} wegiht={'600'}/>
         </Col>
@@ -89,43 +88,43 @@ const Details = () => {
         </Col>
       </Row>
 
-      <Row className='m-2'>
+      <Row className='m-3'>
         <Col md={2}>
           <Text fontFamily='Open Sans' text={'Problem Statement'} height={'40px'} wegiht={'600'}/>
         </Col>
         <Col md={8}>
-          <CustomTextarea  name={'problemStatement'} text={details.problemStatement} handleChange={handleChange}/>
+          <TextEditor  name={'problemStatement'} text={details.problemStatement} handleChange={handleChange}/>
         </Col>
       </Row>
 
-      <Row className='m-2'>
+      <Row className='m-3'>
         <Col md={2}>
           <Text fontFamily='Open Sans' text={'Input Format'} height={'40px'} wegiht={'600'}/>
         </Col>
         <Col md={8}>
-          <CustomTextarea  name={'inputFormat'} text={details.inputFormat} handleChange={handleChange}/>
+          <TextEditor  name={'inputFormat'} text={details.inputFormat} handleChange={handleChange}/>
         </Col>
       </Row>
 
-      <Row className='m-2'>
+      <Row className='m-3'>
         <Col md={2}>
           <Text fontFamily='Open Sans' text={'Constraints'} height={'40px'} wegiht={'600'}/>
         </Col>
         <Col md={8}>
-          <CustomTextarea  name={'constraints'} text={details.constraints} handleChange={handleChange}/>
+          <TextEditor  name={'constraints'} text={details.constraints} handleChange={handleChange}/>
         </Col>
       </Row>
 
-      <Row className='m-2'>
+      <Row className='m-3'>
         <Col md={2}>
           <Text fontFamily='Open Sans' text={'Output Format'} height={'40px'} wegiht={'600'}/>
         </Col>
         <Col md={8}>
-          <CustomTextarea  name={'outputFormat'} text={details.outputFormat} handleChange={handleChange}/>
+          <TextEditor  name={'outputFormat'} text={details.outputFormat} handleChange={handleChange}/>
         </Col>
       </Row>
 
-      <Row className='m-2'>
+      <Row className='m-3'>
         <Col md={2}>
           <Text fontFamily='Open Sans' text={'Tags'} height={'40px'} wegiht={'600'}/>
         </Col>
