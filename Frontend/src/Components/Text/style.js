@@ -1,7 +1,7 @@
 import { createUseStyles } from "react-jss";
 const useStyles = createUseStyles({
   Text: {
-    fontFamily: "'Poppins', sans-serif",
+    fontFamily:({fontFamily})=> ` '${fontFamily}', sans-serif `,
     fontWeight: ({ wegiht }) => wegiht,
     fontSize: ({ size }) => size,
     lineHeight: ({ height }) => height,
