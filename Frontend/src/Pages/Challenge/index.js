@@ -6,6 +6,8 @@ import Breadcrumbs from "../../Components/Breadcrumbs";
 import TextRegister from "../../Components/Text";
 import ChallengeTabs from "../../Components/ChallengTabs";
 import ProblemDescription from "../../Components/ProblemDescription";
+import SubmitionTab from "../../Components/SubmitionTab";
+import LeadboardTab from "../../Components/LeadboardTab";
 const path = [
   {
     title: "All Contests",
@@ -30,12 +32,12 @@ const tabContent = [
   {
     eventKey: "Submissions",
     title: "Submissions",
-    TabComponent: <h1>Tab2</h1>,
+    TabComponent: <SubmitionTab />,
   },
   {
     eventKey: "Leaderboard",
     title: "Leaderboard",
-    TabComponent: <h1>Tab3</h1>,
+    TabComponent: <LeadboardTab />,
   },
   {
     eventKey: "Discussions",
@@ -49,7 +51,7 @@ const Challenge = ({}) => {
       <Container fluid>
         <Row className="mt-2">
           <Col>
-            <Breadcrumbs path={path}/>    
+            <Breadcrumbs path={path} />
           </Col>
         </Row>
       </Container>
