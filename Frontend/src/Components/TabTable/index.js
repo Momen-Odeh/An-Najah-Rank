@@ -14,7 +14,7 @@ const TabTable = ({ TableHeader, submitions }) => {
     <Container fluid className={classes.Container}>
       <Row className={classes.Row}>
         {TableHeader.map((item, index) => (
-          <Col key={index}>
+          <Col key={index} className="d-flex align-items-center justify-content-center">
             <Text text={item} color="#39424E" />
           </Col>
         ))}
@@ -23,7 +23,7 @@ const TabTable = ({ TableHeader, submitions }) => {
         <Row className={classes.Row} key={index}>
           {setValues(Object.values(item))}
           {values.map((val, index) => (
-            <Col key={index}>{val}</Col>
+            <Col key={index} className="d-flex align-items-center justify-content-center">{val}</Col>
           ))}
         </Row>
       ))}
