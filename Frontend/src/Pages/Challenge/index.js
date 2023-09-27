@@ -45,28 +45,33 @@ const tabContent = [
 ];
 const Challenge = ({}) => {
   return (
-    <Container fluid>
-      <Row className="mb-4">
-        <Col>
-          <Breadcrumbs path={path} />
-        </Col>
-      </Row>
-      <Row className="mb-4">
-        <Col>
-          <TextRegister
-            text={"DAQ-Spring-2021-Q2"}
-            size="36px"
-            wegiht="500"
-            height="40px"
-          />
-        </Col>
-      </Row>
-      <Row className="mb-4">
-        <Col>
-          <ChallengeTabs ListTabs={tabContent} />
-        </Col>
-      </Row>
-    </Container>
+    <>
+      <Container fluid>
+        <Row className="mt-2">
+          <Col>
+            <Breadcrumbs path={path}/>    
+          </Col>
+        </Row>
+      </Container>
+      <hr></hr>
+      <Container fluid>
+        <Row className="mb-4">
+          <Col>
+            <TextRegister
+              text={"DAQ-Spring-2021-Q2"}
+              size="36px"
+              wegiht="500"
+              height="40px"
+            />
+          </Col>
+        </Row>
+        <Row className="mb-4">
+          <Col>
+            <ChallengeTabs ListTabs={tabContent} />
+          </Col>
+        </Row>
+      </Container>
+    </>
   );
 };
 
