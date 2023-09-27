@@ -23,7 +23,7 @@ const UserChoices = ({userChoices}) => {
           <div className={classes.iconContainer}>
               <AiOutlineUser size={24} color="#576871"/>
           </div> 
-          <SlArrowDown size={20} className={classes.hoveringColor} color={showChoices?'white':''} />
+          <SlArrowDown size={20} className={`${classes.hoveringColor} ${showChoices?classes.clickedBtn:''}`}/>
         </Nav.Link>
 
         <Overlay

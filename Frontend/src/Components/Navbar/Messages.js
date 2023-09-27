@@ -26,7 +26,7 @@ const Messages = () => {
       <Nav.Item>
         <Nav.Link 
         onClick={handleMessagesPanel} ref={ref}>
-          <FaComment size={20} className={classes.hoveringColor} color={showMessages?'white':''}  />
+          <FaComment size={20} className={`${classes.hoveringColor} ${showMessages?classes.clickedBtn:''}`}  />
           <Badge pill variant="" style={{ fontSize: '10px', padding: '3px 5px', margin:'0px 2px' }}>
             {messages.length}
           </Badge>

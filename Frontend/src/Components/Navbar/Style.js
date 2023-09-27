@@ -143,8 +143,11 @@ const useStyle = createUseStyles({
         fontSize:'1.1rem',
         color:'#b2b8bc !important',
         '&:hover':{
-            color: 'white',
+            color: 'white !important',
         }
+      },
+      clickedBtn:{
+        color: 'white !important',
       },
       '@media (max-width: 600px)': {
         Overlay:{

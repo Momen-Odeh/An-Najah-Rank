@@ -20,7 +20,7 @@ const Header = ( { activeTab }) =>{
   const signInPath = routes.filter((item)=>item.title===routeNames.LOG_IN)[0].path
   const homePath = routes.filter((item)=>item.title===routeNames.HOME)[0].path
   return (
-    <Navbar collapseOnSelect expand="lg" className={classes.navContainer}>
+    <Navbar collapseOnSelect expand="lg" className={`${classes.navContainer} p-2`}>
       <Container fluid >
         <Navbar.Brand onClick={()=>navigate('/')}>        
           <img
