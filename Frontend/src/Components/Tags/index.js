@@ -1,19 +1,12 @@
-import React, { useState } from 'react';
-import { InputGroup, Form, Button } from 'react-bootstrap';
+import React from 'react';
+import CustomInputGroup from '../CustomInputGroup';
 import useStyle from './Style';
 
 const Tags = ({tags, handleChange, name}) => {
-    const classes = useStyle()
-  const [newTag, setNewTag] = useState('');
-
-  const handleTagInputChange = (e) => {
-    setNewTag(e.target.value);
-  };
-
-  const handleAddTag = () => {
-    if (newTag.trim() !== '') {
-        handleChange(null, 'tags',[...tags, newTag.trim()]);
-        setNewTag('');
+  const classes = useStyle()
+  const handleAdd = (val) => {
+    if (val.trim() !== '') {
+        handleChange(null, 'tags',[...tags, val.trim()]);
     }
   };
 
@@ -24,18 +17,11 @@ const Tags = ({tags, handleChange, name}) => {
 
   return (
     <div>
-      <InputGroup className="mb-3">
-        <Form.Control
-          type="text"
-          placeholder="Add a tag"
-          value={newTag}
-          onChange={handleTagInputChange}
-          className={classes.inputTags}
+      <CustomInputGroup 
+        BtnText={'Add'}
+        handleBtnClick={handleAdd}
+        placeholder={"Add a tag"}
         />
-        <Button variant="success" onClick={handleAddTag}>
-          Add
-        </Button>
-      </InputGroup>
       <div>
         {tags.map((tag) => (
           <span key={tag} className={`badge  bg-secondary m-1 p-1 ${classes.tabContent}`}>

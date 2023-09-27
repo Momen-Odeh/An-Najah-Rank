@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import Details from '../../Components/Details'
+import Moderators from '../../Components/Moderators'
 import ChallengeTabs from '../../Components/ChallengTabs'
 import Breadcrumbs from '../../Components/Breadcrumbs'
 import Text from '../../Components/Text';
@@ -28,7 +29,10 @@ const CreateChallenge = () => {
         }
       };
 
-    const tabs=[{title:'Details', eventKey: 'Details', TabComponent: <Details details={details} handleChange={handleChange}/>}]
+    const tabs=[
+      {title:'Details', eventKey: 'Details', TabComponent: <Details details={details} handleChange={handleChange}/>},
+      {title:'Moderators', eventKey: 'Moderators', TabComponent: <Moderators Owner={'NoorAldeen AbuShehadeh'}/>}
+    ]
     const path=[{title:'Manage Challenges',url:'#manage challenges'}, {title:details.name,url:'#'}]
     return (
         <>
