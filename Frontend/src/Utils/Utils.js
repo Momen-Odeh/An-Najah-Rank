@@ -10,6 +10,7 @@ import Home from "../Pages/Home";
 import CreateChallenge from "../Pages/CreateChallenge";
 import CreateContest from "../Pages/CreateContest";
 import CreateCourse from "../Pages/CreateCourse";
+import ContestView from "../Pages/ContestView";
 
 // const AboutUs = lazy(() => import("../Pages/AboutUs/SubComponents/AboutUs"))
 
@@ -24,6 +25,7 @@ export const routeNames = {
   CREATE_CHALLENGE: "Create Challenge",
   CREATE_CONTEST: "Create Contest",
   CREATE_COURSE:"Create Course",
+  CONTEST_VIEW: "Contest View"
 };
 export const routes = [
   {
@@ -75,6 +77,11 @@ export const routes = [
     path: "/create-course",
     title: routeNames.CREATE_COURSE,
     component: <CreateCourse />,
+  },
+  {
+    path: "/contest-view",
+    title: routeNames.CONTEST_VIEW,
+    component: <ContestView />,
   },
 ];
 

@@ -1,30 +1,32 @@
 import React from "react";
 import { Container, Row, Col } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import ButtonRank from "../ButtonRank";
 import Text from "../Text";
 import useStyle from "./Style";
 import { BiCheckCircle } from "react-icons/bi";
-const ContestChallenge = ({
+const ChallengeInContest = ({
   solved,
   challengeName,
   successRate,
   maxScore,
   difficulty,
+  challengeUrl
 }) => {
   const classes = useStyle();
+  const navigate = useNavigate();
   return (
     <Container fluid className={`${classes.Container} m-0`}>
       <Row className="m-2 mt-3">
         <Col className="d-flex  align-items-center">
           {solved && <BiCheckCircle size={26} color="green" className="m-1" />}
-          <Link className={classes.Link} to={"#challenge"}>
+          <Link className={classes.Link} to={challengeUrl}>
             <Text
               text={challengeName}
               size={"24px"}
               fontFamily={"OpenSans"}
               color={solved ? "#82dea3" : "#2ec866"}
-              wegiht={solved ? "400" : "550"}
+              wegiht={solved ? "400" : "400"}
             />
           </Link>
         </Col>
@@ -52,6 +54,7 @@ const ContestChallenge = ({
             text={solved ? "Try Again" : "Solve Challenge"}
             backgroundColor={solved ? "#f0f0f4" : "#1cb557"}
             hoverBackgroundColor={solved ? "#1cb557" : "green"}
+            onClick={()=>navigate(challengeUrl)}
           />
         </div>
       </div>
@@ -59,4 +62,4 @@ const ContestChallenge = ({
   );
 };
 
-export default ContestChallenge;
+export default ChallengeInContest;
