@@ -29,6 +29,7 @@ const TestCase = ({
       const newValue =
         type === "checkbox" ? checked : type === "file" ? files[0] : value;
       setCurrentTestCase({ ...currentTestCase, [name]: newValue });
+      if(name==='sample') setCurrentTestCase({ ...currentTestCase,[name]: newValue, 'strength':newValue?0:10  });
     } else {
       setCurrentTestCase({ ...currentTestCase, [optionName]: val });
     }

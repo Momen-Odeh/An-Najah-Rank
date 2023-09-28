@@ -1,10 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import TestCase from "../TestCase";
-import { Container, Row, Col, Form } from "react-bootstrap";
+import { Container, Row, Col } from "react-bootstrap";
 import ButtonRank from "../ButtonRank";
 import TabTable from "../TabTable";
 import { HiPencil } from "react-icons/hi";
-import { BiTrash } from "react-icons/bi";
+import { BiCheckbox, BiCheckCircle, BiTrash } from "react-icons/bi";
 import useStyle from "./Style";
 
 const TestCases = () => {
@@ -17,7 +17,7 @@ const TestCases = () => {
     input: "",
     output: "",
     sample: false,
-    strength: "",
+    strength: 10,
     explanation: "",
     isSelected: false
   });
@@ -42,6 +42,7 @@ const TestCases = () => {
     if (name === "all") updatedTestCases[testCase.order] = testCase;
     else
       updatedTestCases[index] = { ...updatedTestCases[index], [name]: newData };
+    if(name==='sample') updatedTestCases[index] = { ...updatedTestCases[index], 'strength':updatedTestCases[index].sample?0:10  };
     setTestCases(updatedTestCases);
     setTestCase('')
     setShowAddModal(false);
@@ -66,7 +67,7 @@ const TestCases = () => {
       Input: "",
       Output: "",
       Sample: "",
-      Strength: "",
+      Strength: 0,
       Select: "",
       update: (
         <>
@@ -79,26 +80,43 @@ const TestCases = () => {
     data[i].Input = typeof testCases[i].input ==='string'?testCases[i].input:'input'+i+'file'
     data[i].Output = typeof testCases[i].output ==='string'?testCases[i].input:'output'+i+'file'
     data[i].Sample = (
-      <Form.Group>
-        <Form.Check
-          type="checkbox"
-          name="sample"
-          checked={testCases[i].sample}
-          onChange={(e) => handleUpdateTestCase(i, "sample", e.target.checked)}
-        />
-      </Form.Group>
+      <div onClick={()=>handleUpdateTestCase(i, "sample", !testCases[i].sample)}>
+      {testCases[i].sample ? (
+        <BiCheckCircle size={24} color="green" />
+      ) : (
+        <BiCheckbox size={24} color="#949494" />
+      )}
+    </div>
     );
     data[i].Strength = testCases[i].strength;
     data[i].Select = (
-      <Form.Group>
-        <Form.Check type="checkbox" name="isSelected"
-        checked={testCases[i].isSelected}
-        onChange={(e) => handleUpdateTestCase(i, "isSelected", e.target.checked)}
-        />
-      </Form.Group>
+      <div onClick={() => handleUpdateTestCase(i, "isSelected",!testCases[i].isSelected )}>
+      {testCases[i].isSelected ? (
+        <BiCheckCircle size={24} color="green" />
+      ) : (
+        <BiCheckbox size={24} color="#949494" />
+      )}
+    </div>
     );
   }
 
+/**********************************************************calculate percent ************************************/
+const [percentage, setPercentage] = useState(0);
+  useEffect(() => {
+    const selectedTestCases = testCases.filter((testCase) => testCase.isSelected);
+    const sumSelectedStrength = selectedTestCases.reduce(
+      (sum, testCase) => sum + parseInt(testCase.strength, 10),
+      0
+    );
+    const sumTotalStrength = testCases.reduce(
+      (sum, testCase) => sum + parseInt(testCase.strength, 10),
+      0
+    );
+    const calculatedPercentage =
+      sumTotalStrength === 0 ? 0 : (sumSelectedStrength / sumTotalStrength) * 100;
+    setPercentage(calculatedPercentage);
+  }, [testCases, testCase.isSelected]);
+/**********************************************************************************************************/
   return (
     <Container fluid className="p-0">
       <TestCase
@@ -115,8 +133,16 @@ const TestCases = () => {
           <ButtonRank
             text={"Add Test Case"}
             onClick={() => {
+              setTestCase({
+                order: "",
+                input: "",
+                output: "",
+                sample: false,
+                strength: 10,
+                explanation: "",
+                isSelected: false
+              })
                 setAction("add")
-                setTestCase('')
                 setShowAddModal(true)
             }}
             backgroundColor="#1cb557"
@@ -128,9 +154,15 @@ const TestCases = () => {
       <Row>
         <TabTable TableHeader={header} submitions={data} />
       </Row>
-      {/* <Row>
-        <p style={{fontSize:'18px', marginTop:'24px'}}>You will get <span style={{backgroundColor:'yellow'}}>{'0.00%'}</span> of the maximum score if you pass the selected test cases.</p>
-      </Row> */}
+      <Row>
+        <p style={{ fontSize: "18px", marginTop: "24px" }}>
+          You will get{" "}
+          <span style={{ backgroundColor: "yellow" }}>
+            {percentage.toFixed(2)}%
+          </span>{" "}
+          of the maximum score if you pass the selected test cases.
+        </p>
+      </Row>
     </Container>
   );
 };
