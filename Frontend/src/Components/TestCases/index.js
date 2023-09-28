@@ -60,45 +60,37 @@ const TestCases = () => {
     setShowAddModal(true);
   }
 
-  let data = [];
-  for (let i = 0; i < testCases.length; i++) {
-    data[i] = {
-      Order: "",
-      Input: "",
-      Output: "",
-      Sample: "",
-      Strength: 0,
-      Select: "",
-      update: (
-        <>
-          <HiPencil size={30} color="#949494" className={classes.iconColor} onClick={()=>handleUpdateClick(i)}/>
-          <BiTrash size={30} color="#949494" className={classes.iconColor} onClick={()=>removeItem(i)}/>
-        </>
-      ),
-    };
-    data[i].Order = testCases[i].order;
-    data[i].Input = typeof testCases[i].input ==='string'?testCases[i].input:'input'+i+'file'
-    data[i].Output = typeof testCases[i].output ==='string'?testCases[i].input:'output'+i+'file'
-    data[i].Sample = (
-      <div onClick={()=>handleUpdateTestCase(i, "sample", !testCases[i].sample)}>
-      {testCases[i].sample ? (
-        <BiCheckCircle size={24} color="green" />
-      ) : (
-        <BiCheckbox size={24} color="#949494" />
-      )}
-    </div>
-    );
-    data[i].Strength = testCases[i].strength;
-    data[i].Select = (
-      <div onClick={() => handleUpdateTestCase(i, "isSelected",!testCases[i].isSelected )}>
-      {testCases[i].isSelected ? (
-        <BiCheckCircle size={24} color="green" />
-      ) : (
-        <BiCheckbox size={24} color="#949494" />
-      )}
-    </div>
-    );
-  }
+  const data = testCases.map((item, i) => ({
+    Order: item.order,
+    Input: typeof item.input === 'string' ? item.input : 'input' + i + 'file',
+    Output: typeof item.output === 'string' ? item.output : 'output' + i + 'file',
+    Sample: (
+      <div onClick={() => handleUpdateTestCase(i, "sample", !item.sample)}>
+        {item.sample ? (
+          <BiCheckCircle size={24} color="green" />
+        ) : (
+          <BiCheckbox size={24} color="#949494" />
+        )}
+      </div>
+    ),
+    Strength: item.strength,
+    Select: (
+      <div onClick={() => handleUpdateTestCase(i, "isSelected", !item.isSelected)}>
+        {item.isSelected ? (
+          <BiCheckCircle size={24} color="green" />
+        ) : (
+          <BiCheckbox size={24} color="#949494" />
+        )}
+      </div>
+    ),
+    update: (
+      <>
+        <HiPencil size={30} color="#949494" className={classes.iconColor} onClick={() => handleUpdateClick(i)} />
+        <BiTrash size={30} color="#949494" className={classes.iconColor} onClick={() => removeItem(i)} />
+      </>
+    ),
+  }));
+  
 
 /**********************************************************calculate percent ************************************/
 const [percentage, setPercentage] = useState(0);
@@ -152,7 +144,7 @@ const [percentage, setPercentage] = useState(0);
         </Col>
       </Row>
       <Row>
-        <TabTable TableHeader={header} submitions={data} />
+        <TabTable TableHeader={header} TableData={data} />
       </Row>
       <Row>
         <p style={{ fontSize: "18px", marginTop: "24px" }}>
