@@ -4,7 +4,14 @@ import useStyles from "./stayle";
 import { AiOutlineEyeInvisible } from "react-icons/ai";
 import { AiOutlineEye } from "react-icons/ai";
 import { InputGroup } from "react-bootstrap";
-const InputFiledRegister = ({ label, Icon, placeHolder, type }) => {
+const InputFiledRegister = ({
+  label,
+  Icon,
+  placeHolder,
+  type,
+  onChange,
+  name,
+}) => {
   const classes = useStyles();
   const [showPassword, setShowPassword] = useState(false);
   const changePasswordState = () => {
@@ -23,6 +30,8 @@ const InputFiledRegister = ({ label, Icon, placeHolder, type }) => {
             type={type === "password" && showPassword ? "text" : type}
             placeholder={placeHolder}
             className={classes.InputFiled}
+            onChange={onChange}
+            name={name}
           />
           {type === "password" &&
             (showPassword ? (

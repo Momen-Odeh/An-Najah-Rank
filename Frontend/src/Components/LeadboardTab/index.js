@@ -49,7 +49,7 @@ const LeadboardTab = () => {
       </Row>
       <Row>
         <Col>
-          <TabTable submitions={submitions} TableHeader={TableHeader} />
+          <TabTable TableData={submitions} TableHeader={TableHeader} />
         </Col>
       </Row>
     </Container>

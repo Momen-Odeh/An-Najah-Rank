@@ -4,7 +4,7 @@ import { Col, Container, Row } from "react-bootstrap";
 import Text from "../Text";
 import { FaCheck } from "react-icons/fa";
 import ButtonRank from "../ButtonRank";
-const TabTable = ({ TableHeader, submitions }) => {
+const TabTable = ({ TableHeader, TableData }) => {
   const classes = useStyles();
   let values;
   const setValues = (e) => {
@@ -19,7 +19,7 @@ const TabTable = ({ TableHeader, submitions }) => {
           </Col>
         ))}
       </Row>
-      {submitions.map((item, index) => (
+      {TableData.map((item, index) => (
         <Row className={classes.Row} key={index}>
           {setValues(Object.values(item))}
           {values.map((val, index) => (

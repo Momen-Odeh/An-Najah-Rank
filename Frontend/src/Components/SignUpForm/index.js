@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { TfiEmail } from "react-icons/tfi";
 import { TfiLock } from "react-icons/tfi";
 import { FiUser } from "react-icons/fi";
@@ -9,9 +9,20 @@ import TextRegister from "../Text";
 import ButtonRegister from "../ButtonRegister";
 import useStyles from "./style";
 import { Link } from "react-router-dom";
+import handelStateChanges from "../../Utils/handelStateChanges";
 
 const SignUpForm = () => {
   const classes = useStyles();
+  const [signupValue, setSignupValue] = useState({
+    email: "",
+    fullName: "",
+    universityNumber: "",
+    password: "",
+    confirmPassword: "",
+  });
+  const handelSignUpButton = () => {
+    console.log(signupValue);
+  };
   return (
     <Container className={`${classes.Container} `} fluid={true}>
       <Row className="mb-3">
@@ -63,6 +74,8 @@ const SignUpForm = () => {
             Icon={TfiEmail}
             placeHolder="Enter your email address"
             type="email"
+            name={"email"}
+            onChange={(e) => handelStateChanges(e, signupValue, setSignupValue)}
           />
         </Col>
       </Row>
@@ -73,6 +86,8 @@ const SignUpForm = () => {
             Icon={FiUser}
             placeHolder="Enter your Full Name"
             type="text"
+            name={"fullName"}
+            onChange={(e) => handelStateChanges(e, signupValue, setSignupValue)}
           />
         </Col>
       </Row>
@@ -83,6 +98,8 @@ const SignUpForm = () => {
             Icon={AiOutlineNumber}
             placeHolder="Enter your University Number"
             type="text"
+            name={"universityNumber"}
+            onChange={(e) => handelStateChanges(e, signupValue, setSignupValue)}
           />
         </Col>
       </Row>
@@ -93,6 +110,8 @@ const SignUpForm = () => {
             Icon={TfiLock}
             placeHolder="Enter your Password"
             type="password"
+            name={"password"}
+            onChange={(e) => handelStateChanges(e, signupValue, setSignupValue)}
           />
         </Col>
       </Row>
@@ -103,13 +122,19 @@ const SignUpForm = () => {
             Icon={TfiLock}
             placeHolder="Confirm your Password"
             type="password"
+            name={"confirmPassword"}
+            onChange={(e) => handelStateChanges(e, signupValue, setSignupValue)}
           />
         </Col>
       </Row>
 
       <Row>
         <Col>
-          <ButtonRegister text="Register" to={"/verification-code"} />
+          <ButtonRegister
+            text="Register"
+            // to={"/verification-code"}
+            onClick={handelSignUpButton}
+          />
         </Col>
       </Row>
     </Container>
