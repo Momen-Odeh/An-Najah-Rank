@@ -1,8 +1,7 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Container, Row, Col, Form } from 'react-bootstrap';
 import Text from '../Text';
 import TextEditor from '../TextEditor';
-import CustomButton from '../CustomButton';
 import Tags from '../Tags';
 
 const Details = ({details, handleChange}) => {
