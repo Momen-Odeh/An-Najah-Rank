@@ -6,6 +6,7 @@ import Breadcrumbs from '../../Components/Breadcrumbs'
 import Text from '../../Components/Text';
 import { Container, Row } from 'react-bootstrap';
 import TestCases from '../../Components/TestCases'
+import CreateChallengeFooter from '../../Components/CreateChallengeFooter'
 const CreateChallenge = () => {
     const [details, setDetails] = useState({
         difficulty: '',
@@ -52,6 +53,7 @@ const CreateChallenge = () => {
                     <ChallengeTabs ListTabs={tabs}/>
                 </Row>
             </Container>
+            <CreateChallengeFooter />
         
         </>
   )
