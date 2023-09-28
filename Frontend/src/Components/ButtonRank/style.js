@@ -14,6 +14,11 @@ const useStyles = createUseStyles({
     "&:focus": {
       boxShadow: "none",
     },
+    '&:disabled': {
+      backgroundColor: '#f0f0f4',
+      color: "#39424E",
+      border:'none'
+    },
   },
 });
 

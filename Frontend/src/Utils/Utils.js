@@ -8,6 +8,7 @@ import NewPassword from "../Pages/NewPassword";
 import Challenge from "../Pages/Challenge";
 import Home from "../Pages/Home";
 import CreateChallenge from "../Pages/CreateChallenge";
+import CreateCourse from "../Pages/CreateCourse";
 
 // const AboutUs = lazy(() => import("../Pages/AboutUs/SubComponents/AboutUs"))
 
@@ -20,6 +21,7 @@ export const routeNames = {
   NEW_PASSWORD: "New Password",
   CHALLENGE: "Challenge",
   CREATE_CHALLENGE: "Create Challenge",
+  CREATE_COURSE:"Create Course",
 };
 export const routes = [
   {
@@ -61,6 +63,11 @@ export const routes = [
     path: "/create-challenge",
     title: routeNames.CREATE_CHALLENGE,
     component: <CreateChallenge />,
+  },
+  {
+    path: "/create-course",
+    title: routeNames.CREATE_COURSE,
+    component: <CreateCourse />,
   },
 ];
 
