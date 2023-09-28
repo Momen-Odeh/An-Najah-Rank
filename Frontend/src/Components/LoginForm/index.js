@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { TfiEmail } from "react-icons/tfi";
 import { TfiLock } from "react-icons/tfi";
 import InputFiledRegister from "../InputFiledRegister";
@@ -7,8 +7,13 @@ import TextRegister from "../Text";
 import ButtonRegister from "../ButtonRegister";
 import useStyles from "./style";
 import { Link } from "react-router-dom";
+import handelStateChanges from "../../Utils/handelStateChanges";
 
 const LogInForm = () => {
+  const [loginValue, setLoginValue] = useState({ email: "", password: "" });
+  const handelLoginButton = () => {
+    console.log(loginValue);
+  };
   const classes = useStyles();
   return (
     <Container className={`${classes.Container} `} fluid={true}>
@@ -61,6 +66,10 @@ const LogInForm = () => {
             Icon={TfiEmail}
             placeHolder="Enter your email address"
             type="email"
+            name={"email"}
+            onChange={(event) =>
+              handelStateChanges(event, loginValue, setLoginValue)
+            }
           />
         </Col>
       </Row>
@@ -71,6 +80,10 @@ const LogInForm = () => {
             Icon={TfiLock}
             placeHolder="Enter your Password"
             type="password"
+            name={"password"}
+            onChange={(event) =>
+              handelStateChanges(event, loginValue, setLoginValue)
+            }
           />
         </Col>
       </Row>
@@ -89,7 +102,7 @@ const LogInForm = () => {
       </Row>
       <Row>
         <Col>
-          <ButtonRegister text="Login" />
+          <ButtonRegister text="Login" onClick={handelLoginButton} />
         </Col>
       </Row>
     </Container>

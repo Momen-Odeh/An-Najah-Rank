@@ -15,7 +15,7 @@ const useStyles = createUseStyles({
     backgroundColor: "red",
   },
   smallWidth: {
-    width: "60px",
+    width: "50px",
   },
 });
 export default useStyles;

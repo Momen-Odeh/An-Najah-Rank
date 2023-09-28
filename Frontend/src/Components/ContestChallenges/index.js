@@ -5,10 +5,79 @@ import Text from "../Text";
 import { Link } from "react-router-dom";
 import ButtonRank from "../ButtonRank";
 import TabTable from "../TabTable";
-import { AiOutlineEdit, AiOutlineDelete } from "react-icons/ai";
+import { BiTrash } from "react-icons/bi";
+import { HiPencil } from "react-icons/hi";
+import handelStateChanges from "../../Utils/handelStateChanges";
 const ContestChallenges = () => {
   const classes = useStyles();
-  const [showCreateChallenge, SetShowCreateChallenge] = useState(false);
+  const TableHeader = ["No.", "Name", "Max Score", ""];
+  const [showCreateChallenge, SetShowCreateChallenge] = useState({
+    value: false,
+    mode: "add",
+  });
+  const [newChallenge, SetNewChallenge] = useState({
+    name: "",
+    maxScore: "",
+  });
+  const [TableData, setTableData] = useState([]);
+  const handelAddNewChallenge = () => {
+    setTableData([...TableData, newChallenge]);
+    SetNewChallenge({
+      name: "",
+      maxScore: "",
+    });
+    SetShowCreateChallenge({
+      ...showCreateChallenge,
+      value: false,
+    });
+  };
+
+  const handleEditTableData = (index) => {
+    SetShowCreateChallenge({
+      ...showCreateChallenge,
+      value: true,
+      mode: "edit",
+      index: index,
+    });
+    SetNewChallenge({
+      name: TableData[index].name,
+      maxScore: TableData[index].maxScore,
+    });
+  };
+  const handleRemoveTableData = (indexEx) => {
+    setTableData(TableData.filter((element, index) => index !== indexEx));
+  };
+  const handleAplayEditTableData = () => {
+    TableData[showCreateChallenge.index].name = newChallenge.name;
+    TableData[showCreateChallenge.index].maxScore = newChallenge.maxScore;
+    setTableData(TableData);
+    SetShowCreateChallenge({
+      value: false,
+      mode: "add",
+    });
+  };
+  const Data = TableData.map((item, index) => {
+    return {
+      NO: index,
+      ...item,
+      action: (
+        <span>
+          <HiPencil
+            size={30}
+            color="#949494"
+            className={classes.iconColor}
+            onClick={() => handleEditTableData(index)}
+          />
+          <BiTrash
+            size={30}
+            color="#949494"
+            className={classes.iconColor}
+            onClick={() => handleRemoveTableData(index)}
+          />
+        </span>
+      ),
+    };
+  });
   return (
     <Container fluid className={classes.Container}>
       <Row className="mb-2">
@@ -48,13 +117,21 @@ const ContestChallenges = () => {
           <ButtonRank
             text={"Add Challenge"}
             onClick={() => {
-              SetShowCreateChallenge(true);
+              SetShowCreateChallenge({ ...showCreateChallenge, value: true });
             }}
           />
           <Modal
-            show={showCreateChallenge}
+            show={showCreateChallenge.value}
             onHide={() => {
-              SetShowCreateChallenge(false);
+              SetShowCreateChallenge({
+                ...showCreateChallenge,
+                value: false,
+                mode: "add",
+              });
+              SetNewChallenge({
+                name: "",
+                maxScore: "",
+              });
             }}
             dialogClassName={classes.customModal}
             scrollable
@@ -62,27 +139,49 @@ const ContestChallenges = () => {
             backdrop="static"
           >
             <Modal.Header closeButton>
-              <Modal.Title>Add Challenge</Modal.Title>
+              <Modal.Title>
+                {showCreateChallenge.mode == "edit" ? "Edit" : "Add"} Challenge
+              </Modal.Title>
             </Modal.Header>
             <Modal.Body>
               <div className="mb-3">
-                You can add a challenge from our public library, a challenge
-                that you have created, or a challenge that you have moderator
-                access to.
+                You can {showCreateChallenge.mode == "edit" ? "edit" : "add"} a
+                challenge from our public library, a challenge that you have
+                created, or a challenge that you have moderator access to.
               </div>
               <div className={"Modal mb-3"}>
                 <Text text={"Name"} />
-                <Form.Control type="text" className={classes.Form} />
+                <Form.Control
+                  type="text"
+                  className={classes.Form}
+                  name="name"
+                  value={newChallenge.name}
+                  onChange={(e) => {
+                    handelStateChanges(e, newChallenge, SetNewChallenge);
+                  }}
+                />
               </div>
               <div className={`${Modal} mb-3`}>
                 <Text text={"Max Score"} />
-                <Form.Control type="number" className={classes.Form} />
+                <Form.Control
+                  type="number"
+                  className={classes.Form}
+                  name="maxScore"
+                  value={newChallenge.maxScore}
+                  onChange={(e) => {
+                    handelStateChanges(e, newChallenge, SetNewChallenge);
+                  }}
+                />
               </div>
               <ButtonRank
-                text={"Add Challenge"}
-                onClick={() => {
-                  SetShowCreateChallenge(false);
-                }}
+                text={`${
+                  showCreateChallenge.mode == "edit" ? "Edit" : "Add"
+                } Challenge`}
+                onClick={
+                  showCreateChallenge.mode == "edit"
+                    ? handleAplayEditTableData
+                    : handelAddNewChallenge
+                }
               />
             </Modal.Body>
           </Modal>
@@ -90,26 +189,7 @@ const ContestChallenges = () => {
       </Row>
       <Row className="mb-2">
         <Col>
-          <TabTable
-            TableHeader={["No.", "Name", "Max Score", ""]}
-            TableData={[
-              {
-                NO: "1",
-                Name: "The Sums of Powers",
-                maxScore: (
-                  <Form.Control
-                    type="text"
-                    className={`${classes.Form} ${classes.smallWidth}`}
-                  />
-                ),
-                action: (
-                  <span>
-                    <AiOutlineEdit /> <AiOutlineDelete />
-                  </span>
-                ),
-              },
-            ]}
-          />
+          <TabTable TableHeader={TableHeader} TableData={Data} />
         </Col>
       </Row>
     </Container>

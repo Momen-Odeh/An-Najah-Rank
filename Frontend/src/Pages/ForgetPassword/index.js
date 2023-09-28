@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import useStyles from "./style";
 import { Col, Container, Row } from "react-bootstrap";
 import TextRegister from "../../Components/Text";
@@ -8,12 +8,17 @@ import ButtonRegister from "../../Components/ButtonRegister";
 import { Link } from "react-router-dom";
 import { useOutletContext } from "react-router-dom";
 import { routeNames } from "../../Utils/Utils";
+import handelStateChanges from "../../Utils/handelStateChanges";
 const ForgetPassword = () => {
   const classes = useStyles();
   const setActiveTab = useOutletContext();
   useEffect(() => {
     setActiveTab(routeNames.LOG_IN);
   }, []);
+  const [email, setEmail] = useState({ value: "" });
+  const handelResetPasswordButton = () => {
+    console.log(email);
+  };
   return (
     <div className={classes.center}>
       <Container className={`${classes.Container}`}>
@@ -48,12 +53,18 @@ const ForgetPassword = () => {
               Icon={TfiEmail}
               placeHolder="Enter your Email"
               type="Email"
+              name={"value"}
+              onChange={(e) => handelStateChanges(e, email, setEmail)}
             />
           </Col>
         </Row>
         <Row className={`${classes.Row} mb-2 `}>
           <Col className={classes.Col}>
-            <ButtonRegister text="Reset Password" to={"/verification-code"} />
+            <ButtonRegister
+              text="Reset Password"
+              to={"/verification-code"}
+              onClick={handelResetPasswordButton}
+            />
           </Col>
         </Row>
         <Row className={`${classes.Row} `}>

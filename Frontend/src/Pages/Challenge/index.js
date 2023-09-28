@@ -8,6 +8,7 @@ import ChallengeTabs from "../../Components/ChallengTabs";
 import ProblemDescription from "../../Components/ProblemDescription";
 import SubmitionTab from "../../Components/SubmitionTab";
 import LeadboardTab from "../../Components/LeadboardTab";
+import useStyles from "./style";
 const path = [
   {
     title: "All Contests",
@@ -46,18 +47,19 @@ const tabContent = [
   },
 ];
 const Challenge = ({}) => {
+  const clasess = useStyles();
   return (
     <>
-      <Container fluid>
-        <Row className="mt-2">
+      <Container fluid className={clasess.Container}>
+        <Row className={`mt-2 ${clasess.maxWidth}`}>
           <Col>
             <Breadcrumbs path={path} />
           </Col>
         </Row>
       </Container>
       <hr></hr>
-      <Container fluid>
-        <Row className="mb-4">
+      <Container fluid className={clasess.Container}>
+        <Row className={`mb-4 ${clasess.maxWidth}`}>
           <Col>
             <TextRegister
               text={"DAQ-Spring-2021-Q2"}
@@ -67,7 +69,7 @@ const Challenge = ({}) => {
             />
           </Col>
         </Row>
-        <Row className="mb-4">
+        <Row className={`mb-4 ${clasess.maxWidth}`}>
           <Col>
             <ChallengeTabs ListTabs={tabContent} />
           </Col>

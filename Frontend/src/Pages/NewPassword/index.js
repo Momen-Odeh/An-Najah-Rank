@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import useStyles from "./style";
 import { Col, Container, Row } from "react-bootstrap";
 import TextRegister from "../../Components/Text";
@@ -8,12 +8,20 @@ import ButtonRegister from "../../Components/ButtonRegister";
 import { Link } from "react-router-dom";
 import { routeNames } from "../../Utils/Utils";
 import { useOutletContext } from "react-router-dom";
+import handelStateChanges from "../../Utils/handelStateChanges";
 const NewPassword = () => {
   const classes = useStyles();
   const setActiveTab = useOutletContext();
   useEffect(() => {
     setActiveTab(routeNames.LOG_IN);
   }, []);
+  const [newPassword, setNewPassword] = useState({
+    newPassword: "",
+    confirmPassword: "",
+  });
+  const handelPasswordUpdateButton = () => {
+    console.log(newPassword);
+  };
   return (
     <div className={classes.center}>
       <Container className={`${classes.Container}`}>
@@ -48,6 +56,10 @@ const NewPassword = () => {
               Icon={TfiLock}
               placeHolder="Enter New Password"
               type="password"
+              name={"newPassword"}
+              onChange={(e) =>
+                handelStateChanges(e, newPassword, setNewPassword)
+              }
             />
           </Col>
         </Row>
@@ -58,12 +70,20 @@ const NewPassword = () => {
               Icon={TfiLock}
               placeHolder="Enter Confirm Password"
               type="password"
+              name={"confirmPassword"}
+              onChange={(e) =>
+                handelStateChanges(e, newPassword, setNewPassword)
+              }
             />
           </Col>
         </Row>
         <Row className={`${classes.Row} mb-2 `}>
           <Col className={classes.Col}>
-            <ButtonRegister text="PASSWORD UPDATE" to={"/log-in"} />
+            <ButtonRegister
+              text="PASSWORD UPDATE"
+              to={"/log-in"}
+              onClick={handelPasswordUpdateButton}
+            />
           </Col>
         </Row>
       </Container>

@@ -16,6 +16,9 @@ const VarificationCode = () => {
   const changeCode = (res) => {
     setCode(res);
   };
+  const handelVerifyBtn = () => {
+    console.log(code);
+  };
   return (
     <div className={classes.center}>
       <Container className={`${classes.Container}`}>
@@ -53,7 +56,11 @@ const VarificationCode = () => {
         </Row>
         <Row className={`${classes.Row} mb-2 `}>
           <Col className={classes.Col}>
-            <ButtonRegister text="Verify" to={"/new-password"} />
+            <ButtonRegister
+              text="Verify"
+              to={"/new-password"}
+              onClick={handelVerifyBtn}
+            />
           </Col>
         </Row>
         <Row className={`${classes.Row} `}>

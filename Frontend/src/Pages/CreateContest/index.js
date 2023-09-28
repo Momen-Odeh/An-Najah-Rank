@@ -5,6 +5,7 @@ import Text from "../../Components/Text";
 import ChallengeTabs from "../../Components/ChallengTabs";
 import ContestsDetalis from "../../Components/ContestDetails";
 import ContestChallenges from "../../Components/ContestChallenges";
+import useStyles from "./style";
 const path = [
   {
     title: "Manage Contests",
@@ -29,23 +30,24 @@ const tabContent = [
   },
 ];
 const CreateContest = () => {
+  const clasess = useStyles();
   return (
     <>
-      <Container fluid>
-        <Row className="mt-2">
+      <Container fluid className={clasess.Container}>
+        <Row className={`mt-2 ${clasess.maxWidth}`}>
           <Col>
             <Breadcrumbs path={path} />
           </Col>
         </Row>
       </Container>
       <hr></hr>
-      <Container fluid>
-        <Row className="mb-4">
+      <Container fluid className={clasess.Container}>
+        <Row className={`mb-4 ${clasess.maxWidth}`}>
           <Col>
             <Text text={"Momen Test"} size="36px" wegiht="500" height="40px" />
           </Col>
         </Row>
-        <Row className="mb-4">
+        <Row className={`mb-4 ${clasess.maxWidth}`}>
           <Col>
             <ChallengeTabs ListTabs={tabContent} />
           </Col>

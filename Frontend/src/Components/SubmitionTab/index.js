@@ -47,7 +47,7 @@ const SubmitionTab = () => {
     },
   ];
 
-  return <TabTable submitions={submitions} TableHeader={TableHeader} />;
+  return <TabTable TableData={submitions} TableHeader={TableHeader} />;
 };
 
 export default SubmitionTab;
