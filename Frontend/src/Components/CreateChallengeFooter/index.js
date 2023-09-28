@@ -9,6 +9,7 @@ const CreateChallengeFooter = () => {
       <div className={classes.fixedContainer}>
         <Col className="d-flex justify-content-end">
           <ButtonRank text={"Cancel Changes"} />
+          <span className="m-2"></span>
           <ButtonRank
             text={"Save Changes"}
             backgroundColor="#1cb557"
