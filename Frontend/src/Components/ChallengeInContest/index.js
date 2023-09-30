@@ -15,21 +15,11 @@ const ChallengeInContest = ({
 }) => {
   const classes = useStyle();
   const navigate = useNavigate();
-  const [isCompleted, setIsCompleted] = useState(false);
   return (
     <Container fluid className={`${classes.Container} m-0`}>
-      <Row className="m-2 mt-3">
+      <Row className="mt-3">
         <Col className="d-flex  align-items-center">
           {solved && <BiCheckCircle size={26} color="green" className="m-1" />}
-          {isCompleted ? (
-            <Text
-              text={challengeName}
-              size={"24px"}
-              fontFamily={"OpenSans"}
-              color={solved ? "#82dea3" : "#2ec866"}
-              wegiht={solved ? "400" : "400"}
-            />
-          ) : (
             <Link className={classes.Link} to={challengeUrl}>
               <Text
                 text={challengeName}
@@ -39,11 +29,10 @@ const ChallengeInContest = ({
                 wegiht={solved ? "400" : "400"}
               />
             </Link>
-          )}
         </Col>
         {endDate && (
           <Col className="d-flex  align-items-center justify-content-end">
-            <CountDown endDate={endDate} setIsCompleted={setIsCompleted} />
+            <CountDown endDate={endDate}/>
           </Col>
         )}
       </Row>
@@ -65,7 +54,6 @@ const ChallengeInContest = ({
             backgroundColor={solved ? "#f0f0f4" : "#1cb557"}
             hoverBackgroundColor={solved ? "#1cb557" : "green"}
             onClick={() => navigate(challengeUrl)}
-            disabled={isCompleted}
           />
         </div>
       </div>
