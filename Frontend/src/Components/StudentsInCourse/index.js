@@ -83,6 +83,7 @@ const StudentsInCourse = ({ students, setStudents }) => {
             setStudent("");
           }}
           scrollable
+          centered
           backdrop="static"
         >
           <Modal.Header closeButton>

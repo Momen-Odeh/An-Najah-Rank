@@ -54,6 +54,7 @@ const ContestsInCourse = ({contests, isAdmin, handleAddContest}) => {
             setContest('')
           }}
           scrollable
+          centered
           backdrop="static"
         >
           <Modal.Header closeButton>
