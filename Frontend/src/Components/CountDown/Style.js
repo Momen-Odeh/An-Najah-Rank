@@ -17,10 +17,16 @@ const useStyle = createUseStyles({
     borderRadius: "5px",
     width:'70px'
   },
+  '@media (max-width: 600px)': {
+    countdownContainer: {
+      flexWrap:'wrap',
+    },
+  },
   messageContainer: {
     fontSize: "14px",
     fontWeight:'600',
-    margin: "10px",
+    marginBottom:'10px',
+    marginTop:'10px',
     display: "flex",
     flexDirection: "column",
     justifyContent: "center",

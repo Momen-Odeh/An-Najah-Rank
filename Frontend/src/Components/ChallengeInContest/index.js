@@ -17,13 +17,13 @@ const ChallengeInContest = ({
   const navigate = useNavigate();
   return (
     <Container fluid className={`${classes.Container} m-0`}>
-      <Row className="mt-3">
-        <Col className="d-flex  align-items-center">
+      <Row className="mt-3 ms-2">
+        <Col className="d-flex  align-items-center" md={6}>
           {solved && <BiCheckCircle size={26} color="green" className="m-1" />}
             <Link className={classes.Link} to={challengeUrl}>
               <Text
                 text={challengeName}
-                size={"24px"}
+                size={"20px"}
                 fontFamily={"OpenSans"}
                 color={solved ? "#82dea3" : "#2ec866"}
                 wegiht={solved ? "400" : "400"}
@@ -36,18 +36,18 @@ const ChallengeInContest = ({
           </Col>
         )}
       </Row>
-      <div className="d-flex justify-content-between align-items-center m-2">
-        <div>
-          <div className="d-flex align-items-start">
-            {Statistics.map((item) => (
-              <div className="m-2">
+      <Row className="d-flex justify-content-between align-items-center mb-2">
+        <Col md={9}>
+          <Col className="d-flex align-items-start">
+            {Statistics.map((item,index) => (
+              <div className='m-2'>
                 <Text text={item.key} wegiht={400} color={"#979faf"} />
                 <Text wegiht={400} color={"#39424e"} text={item.val} />
               </div>
             ))}
-          </div>
-        </div>
-        <div>
+          </Col>
+        </Col>
+        <Col className="d-flex justify-content-end">
           <ButtonRank
             color={solved ? "#39424E" : "white"}
             text={solved ? "Try Again" : "Solve Challenge"}
@@ -55,8 +55,8 @@ const ChallengeInContest = ({
             hoverBackgroundColor={solved ? "#1cb557" : "green"}
             onClick={() => navigate(challengeUrl)}
           />
-        </div>
-      </div>
+        </Col>
+      </Row>
     </Container>
   );
 };
