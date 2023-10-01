@@ -11,6 +11,7 @@ import CreateChallenge from "../Pages/CreateChallenge";
 import CreateContest from "../Pages/CreateContest";
 import CreateCourse from "../Pages/CreateCourse";
 import ContestView from "../Pages/ContestView";
+import EnrollStudent from "../Pages/EnrollStudent";
 import CourseView from "../Pages/CourseView";
 import Administration from "../Pages/Administration";
 
@@ -30,6 +31,7 @@ export const routeNames = {
   CONTEST_VIEW: "Contest View",
   COURSE_VIEW: "Course View",
   ADMINISTRATION: "Administration",
+  ENROLL_STUDENT: "Enroll Student",
 };
 export const routes = [
   {
@@ -121,6 +123,16 @@ export const routes = [
     path: "/contest-view",
     title: routeNames.CONTEST_VIEW,
     component: <ContestView />,
+  },
+  {
+    path: "/enroll-student",
+    title: routeNames.ENROLL_STUDENT,
+    component: <EnrollStudent />,
+  },
+  {
+    path: "/enroll-student",
+    title: routeNames.ENROLL_STUDENT,
+    component: <EnrollStudent />,
   },
   {
     path: "/course-view/course",
