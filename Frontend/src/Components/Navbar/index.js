@@ -7,6 +7,7 @@ import Notification from './Notification'
 import Messages from './Messages'
 import UserChoices from './UserChoices'
 import { routeNames, routes } from '../../Utils/Utils'
+import Logo from './images/logo.jpg'
 const Header = ( { activeTab }) =>{
   const classes = useStyle()
   const navigate = useNavigate()
@@ -24,7 +25,7 @@ const Header = ( { activeTab }) =>{
       <Container fluid >
         <Navbar.Brand onClick={()=>navigate('/')}>        
           <img
-            src='./images/logo.jpg'
+            src={Logo}
             alt="Logo"
             width="60"
             height="40"

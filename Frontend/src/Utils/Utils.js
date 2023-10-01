@@ -63,22 +63,57 @@ export const routes = [
     component: <NewPassword />,
   },
   {
-    path: "/challenge",
+    path: "/challenge/problem",
     title: routeNames.CHALLENGE,
     component: <Challenge />,
   },
   {
-    path: "/create-challenge",
+    path: "/challenge/submissions",
+    title: routeNames.CHALLENGE,
+    component: <Challenge />,
+  },
+  {
+    path: "/challenge/leaderboard",
+    title: routeNames.CHALLENGE,
+    component: <Challenge />,
+  },
+  {
+    path: "/challenge/discussions",
+    title: routeNames.CHALLENGE,
+    component: <Challenge />,
+  },
+  {
+    path: "/create-challenge/details",
     title: routeNames.CREATE_CHALLENGE,
     component: <CreateChallenge />,
   },
   {
-    path: "/create-contest",
+    path: "/create-challenge/moderators",
+    title: routeNames.CREATE_CHALLENGE,
+    component: <CreateChallenge />,
+  },
+  {
+    path: "/create-challenge/test-cases",
+    title: routeNames.CREATE_CHALLENGE,
+    component: <CreateChallenge />,
+  },
+  {
+    path: "/create-contest/details",
     title: routeNames.CREATE_CONTEST,
     component: <CreateContest />,
   },
   {
-    path: "/create-course",
+    path: "/create-contest/challenges",
+    title: routeNames.CREATE_CONTEST,
+    component: <CreateContest />,
+  },
+  {
+    path: "/create-course/details",
+    title: routeNames.CREATE_COURSE,
+    component: <CreateCourse />,
+  },
+  {
+    path: "/create-course/moderators",
     title: routeNames.CREATE_COURSE,
     component: <CreateCourse />,
   },
@@ -88,12 +123,27 @@ export const routes = [
     component: <ContestView />,
   },
   {
-    path: "/course-view",
+    path: "/course-view/course",
     title: routeNames.COURSE_VIEW,
     component: <CourseView />,
   },
   {
-    path: "/Administration",
+    path: "/course-view/members",
+    title: routeNames.COURSE_VIEW,
+    component: <CourseView />,
+  },
+  {
+    path: "/administration/courses",
+    title: routeNames.ADMINISTRATION,
+    component: <Administration />,
+  },
+  {
+    path: "/administration/contests",
+    title: routeNames.ADMINISTRATION,
+    component: <Administration />,
+  },
+  {
+    path: "/administration/challenges",
     title: routeNames.ADMINISTRATION,
     component: <Administration />,
   }

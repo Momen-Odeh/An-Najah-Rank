@@ -1,12 +1,13 @@
 import React from 'react'
 import Text from '../Text';
 import useStyle from './Style'
+import MessageLogo from './images/N-messages.png'
 const UserLimitAccess = ({userName, access}) => {
     const classes = useStyle();
   return (
         <div className='d-flex m-3'>
             <div className='me-3'>
-                <img src='./images/N-messages.png' alt='userLogo' className={classes.image}></img>
+                <img src={MessageLogo} alt='userLogo' className={classes.image}></img>
             </div>
             <div>
                 <div>

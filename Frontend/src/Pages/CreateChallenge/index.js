@@ -32,9 +32,9 @@ const CreateChallenge = () => {
       };
 
     const tabs=[
-      {title:'Details', eventKey: 'Details', TabComponent: <Details details={details} handleChange={handleChange}/>},
-      {title:'Moderators', eventKey: 'Moderators', TabComponent: <Moderators Owner={'NoorAldeen AbuShehadeh'}/>},
-      {title:'TestCases', eventKey: 'TestCases', TabComponent:<TestCases />}
+      {title:'Details', eventKey: 'Details', TabComponent: <Details details={details} handleChange={handleChange}/>, urlPattern:'/create-challenge/details'},
+      {title:'Moderators', eventKey: 'Moderators', TabComponent: <Moderators Owner={'NoorAldeen AbuShehadeh'}/>, urlPattern:'/create-challenge/moderators'},
+      {title:'TestCases', eventKey: 'TestCases', TabComponent:<TestCases />, urlPattern:'/create-challenge/test-cases'}
     ]
     const path=[{title:'Manage Challenges',url:'#manage challenges'}, {title:details.name,url:'#'}]
     return (

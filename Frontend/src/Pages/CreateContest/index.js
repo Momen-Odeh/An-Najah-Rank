@@ -22,11 +22,13 @@ const tabContent = [
     eventKey: "Details",
     title: "Details",
     TabComponent: <ContestsDetalis />,
+    urlPattern:'/create-contest/details'
   },
   {
     eventKey: "ContestChallenges",
     title: "Challenges",
     TabComponent: <ContestChallenges />,
+    urlPattern:'/create-contest/challenges'
   },
 ];
 const CreateContest = () => {

@@ -31,11 +31,13 @@ const CreateCourse = () => {
       TabComponent: (
         <CourseDetails details={details} handleChange={handleChange} />
       ),
+      urlPattern:'/create-course/details'
     },
     {
       title: "Moderators",
       eventKey: "Moderators",
       TabComponent: <Moderators Owner={"NoorAldeen AbuShehadeh"} />,
+      urlPattern:'/create-course/moderators'
     },
   ];
   const path = [

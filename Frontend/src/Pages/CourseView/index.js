@@ -66,8 +66,8 @@ const CourseView = () => {
     { title: course.name, url: "#" },
   ];
   const tabs=[
-    {title:'Course', eventKey: 'Course', TabComponent: <ContestsInCourse contests={course.contests} isAdmin={isAdmin} handleAddContest={handleAddContest}/>},
-    {title:'Course Students', eventKey: 'Course Students', TabComponent:<StudentsInCourse students={students} setStudents={setStudents}/>},
+    {title:'Course', eventKey: 'Course', TabComponent: <ContestsInCourse contests={course.contests} isAdmin={isAdmin} handleAddContest={handleAddContest}/>, urlPattern:'/course-view/course'},
+    {title:'Course Students', eventKey: 'Course Students', TabComponent:<StudentsInCourse students={students} setStudents={setStudents}/>, urlPattern:'/course-view/members'},
   ]
   const toggleDescription = () => {
     setShowDescription(!showDescription);

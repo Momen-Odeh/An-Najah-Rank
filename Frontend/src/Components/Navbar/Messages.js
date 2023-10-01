@@ -2,7 +2,7 @@ import React, { useState, useRef } from 'react';
 import { Nav, Badge, Overlay } from 'react-bootstrap';
 import { FaComment } from 'react-icons/fa';
 import useStyle from './Style';
-
+import MessagesLogo from './images/N-messages.png'
 const Messages = () => {
   const classes = useStyle();
   const [showMessages, setShowMessages] = useState(false);
@@ -48,7 +48,7 @@ const Messages = () => {
               {messages.map((message) => (
                 <div key={message.id} className={classes.messageItem}>
                     <div className="d-flex align-items-center">
-                    <img src='./images/N-messages.png' alt='msg' className={classes.messageCircle}></img>
+                    <img src={MessagesLogo} alt='msg' className={classes.messageCircle}></img>
                     <div>
                         <div className="d-flex justify-content-between align-items-center">
                             <span className={classes.messageSender}>

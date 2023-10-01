@@ -29,21 +29,25 @@ const tabContent = [
     eventKey: "Problem",
     title: "Problem",
     TabComponent: <ProblemDescription />,
+    urlPattern:'/challenge/problem'
   },
   {
     eventKey: "Submissions",
     title: "Submissions",
     TabComponent: <SubmitionTab />,
+    urlPattern:'/challenge/submissions'
   },
   {
     eventKey: "Leaderboard",
     title: "Leaderboard",
     TabComponent: <LeadboardTab />,
+    urlPattern:'/challenge/leaderboard'
   },
   {
     eventKey: "Discussions",
     title: "Discussions",
     TabComponent: <h1>Tab4</h1>,
+    urlPattern:'/challenge/discussions'
   },
 ];
 const Challenge = ({}) => {
