@@ -53,6 +53,7 @@ const TestCase = ({
           setCurrentTestCase("");
         }}
         scrollable
+        centered
         backdrop="static"
       >
         <Modal.Header closeButton>

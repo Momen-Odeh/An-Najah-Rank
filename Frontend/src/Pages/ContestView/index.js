@@ -10,17 +10,21 @@ const ContestView = () => {
       {
         challengeName: "An-Najah Rank test1",
         solved: true,
-        difficulty: "Medium",
-        successRate: "80%",
-        maxScore: 100,
+        statistics:[
+          {key:"Difficulty: ",val: "Medium"},
+          {key:"Success Rate: ",val:"80%"},
+          {key:"Max Score: ",val:100}
+        ],
         url:'#test1'
       },
       {
         challengeName: "An-Najah Rank test2",
         solved: false,
-        difficulty: "Medium",
-        successRate: "100%",
-        maxScore: 100,
+        statistics:[
+          {key:"Difficulty: ",val: "Medium"},
+          {key:"Success Rate: ",val:"100%"},
+          {key:"Max Score: ",val:100}
+        ],
         url:'#test2'
       },
     ],
@@ -64,9 +68,7 @@ const ContestView = () => {
             <ChallengeInContest
               challengeName={item.challengeName}
               solved={item.solved}
-              difficulty={item.difficulty}
-              successRate={item.successRate}
-              maxScore={item.maxScore}
+              Statistics={item.statistics}
               challengeUrl={item.url}
             />
           </Col>
