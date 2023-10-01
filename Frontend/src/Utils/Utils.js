@@ -130,11 +130,6 @@ export const routes = [
     component: <EnrollStudent />,
   },
   {
-    path: "/enroll-student",
-    title: routeNames.ENROLL_STUDENT,
-    component: <EnrollStudent />,
-  },
-  {
     path: "/course-view/course",
     title: routeNames.COURSE_VIEW,
     component: <CourseView />,
