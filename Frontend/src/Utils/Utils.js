@@ -12,6 +12,7 @@ import CreateContest from "../Pages/CreateContest";
 import CreateCourse from "../Pages/CreateCourse";
 import ContestView from "../Pages/ContestView";
 import CourseView from "../Pages/CourseView";
+import Administration from "../Pages/Administration";
 
 // const AboutUs = lazy(() => import("../Pages/AboutUs/SubComponents/AboutUs"))
 
@@ -27,7 +28,8 @@ export const routeNames = {
   CREATE_CONTEST: "Create Contest",
   CREATE_COURSE:"Create Course",
   CONTEST_VIEW: "Contest View",
-  COURSE_VIEW: "Course View"
+  COURSE_VIEW: "Course View",
+  ADMINISTRATION: "Administration",
 };
 export const routes = [
   {
@@ -90,6 +92,11 @@ export const routes = [
     title: routeNames.COURSE_VIEW,
     component: <CourseView />,
   },
+  {
+    path: "/Administration",
+    title: routeNames.ADMINISTRATION,
+    component: <Administration />,
+  }
 ];
 
 export const generateRoutes = (routes) => {

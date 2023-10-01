@@ -22,6 +22,14 @@ const useStyles = createUseStyles({
   IconFail: {
     color: "red",
   },
+  link:{
+    textDecoration:'none',
+    color: 'inherit',
+    '&:hover':{
+      textDecoration:'none',
+      color: 'inherit',
+    }
+  },
 });
 
 export default useStyles;
