@@ -1,12 +1,11 @@
 from flask import request, jsonify
 from EmailAuth.emailConnection import sendEmail
 from FlaskSetUp import app
-from MySQL_SetUp import connection
+from APIs.registration import register_user
 
 @app.route('/register', methods=['POST'])
 def register():
-    request_data = request.json
-    return register_user(connection, request_data)
+    return register_user()
 
 @app.route('/sendEmail', methods=['POST'])
 def mailAPI():
