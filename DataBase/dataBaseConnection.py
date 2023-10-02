@@ -25,18 +25,18 @@ def fetch_results(cursor):
         print(f"Error: {e}")
         return None
 
-# insert_data(connection, 'my_table', ['name', 'age'], ('John', 30))
 def insert_data(connection, table_name, column_names, values):
     try:
         cursor = connection.cursor()
-        query = f"INSERT INTO {table_name} ({', '.join(column_names)}) VALUES ({', '.join(['%s'] * len(values))})"
+        placeholders = ', '.join(['%s'] * len(column_names))
+        query = f"INSERT INTO {table_name} ({', '.join(column_names)}) VALUES ({placeholders})"
+        print(query)
         cursor.execute(query, values)
         connection.commit()
         print("Data inserted successfully.")
     except pymysql.Error as e:
         print(f"Error: {e}")
 
-# update_data(connection, 'my_table', ['name', 'age'], ('NewName', 35), 'id = 1')
 def update_data(connection, table_name, column_names, new_values, condition):
     try:
         cursor = connection.cursor()
@@ -47,7 +47,7 @@ def update_data(connection, table_name, column_names, new_values, condition):
     except pymysql.Error as e:
         print(f"Error: {e}")
 
-# delete_data(connection, 'my_table', 'id = 1')
+
 def delete_data(connection, table_name, condition):
     try:
         cursor = connection.cursor()
