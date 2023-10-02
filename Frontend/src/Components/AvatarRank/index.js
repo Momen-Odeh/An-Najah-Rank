@@ -1,7 +1,7 @@
 import React from "react";
 import useStyles from "./style";
-import Avatar from "react-avatar";
 import Text from "../Text";
+import Avatar from "react-avatar";
 
 const AvatarRank = ({ users }) => {
   const classes = useStyles();

@@ -1,11 +1,9 @@
 import React from "react";
 import useStyles from "./style";
 import { Col, Container, Row } from "react-bootstrap";
-import ButtonRank from "../../Components/ButtonRank";
 import Text from "../../Components/Text";
 import EnrollStudentHero from "../../Components/EnrollStudentHero";
 import EnrollStudentCaption from "../../Components/EnrollStudentCaption";
-import Avatar from "react-avatar";
 import AvatarRank from "../../Components/AvatarRank";
 
 const EnrollStudent = () => {

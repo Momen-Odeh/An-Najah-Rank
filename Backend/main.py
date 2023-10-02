@@ -5,7 +5,6 @@ from codeCompilationAndRun.python import runPythonCode
 from codeCompilationAndRun.javaScript import runJsCode
 app = Flask(__name__)
 
-
 @app.route('/java', methods=['POST'])
 def applayJava():
     if request.is_json:
