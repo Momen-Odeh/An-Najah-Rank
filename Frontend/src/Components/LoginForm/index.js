@@ -2,17 +2,53 @@ import React, { useState } from "react";
 import { TfiEmail } from "react-icons/tfi";
 import { TfiLock } from "react-icons/tfi";
 import InputFiledRegister from "../InputFiledRegister";
-import { Col, Container, Row } from "react-bootstrap";
+import { Alert, Col, Container, Row } from "react-bootstrap";
 import TextRegister from "../Text";
 import ButtonRegister from "../ButtonRegister";
 import useStyles from "./style";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import handelStateChanges from "../../Utils/handelStateChanges";
-
+import Swal from "sweetalert2";
+import Axios from "axios";
+import { useCookies } from 'react-cookie';
 const LogInForm = () => {
+  const navigate = useNavigate()
+  const [cookies, setCookie, removeCookie] = useCookies(['token'])
   const [loginValue, setLoginValue] = useState({ email: "", password: "" });
-  const handelLoginButton = () => {
-    console.log(loginValue);
+  const [showAlert, setShowAlert] = useState(false)
+  const [alertMessage,setAlertMessage] = useState('')
+  const handelLoginButton = async (e) => {
+    e.preventDefault();
+    let thereError=false;
+    try{
+      setShowAlert(false)
+      if(!loginValue.email){
+        throw new Error("should enter your email")
+      }else if(!loginValue.password){
+        throw new Error("should enter your password")
+      }
+    }catch(error){
+      setAlertMessage(error.message)
+      setShowAlert(true)
+      thereError=true;
+    }
+    if(!thereError){
+    try {
+      const response = await Axios.get("http://localhost:5000/login", {
+        params: {
+          email: loginValue.email,
+          password: loginValue.password,
+        },
+      });
+      setCookie('token',response.data.token)
+      navigate('/')
+    } catch (error) {
+      Swal.fire({
+        icon: 'info',
+        title: 'Info',
+        text: error.response.data.message,
+      })
+    }}
   };
   const classes = useStyles();
   return (
@@ -98,6 +134,14 @@ const LogInForm = () => {
               wegiht="300"
             />
           </Link>
+        </Col>
+      </Row>
+      <Row>
+        <Col>
+        {showAlert&&
+        <Alert key={'warning'} variant={'warning'} className={classes.alert}>
+          {alertMessage}
+        </Alert>}
         </Col>
       </Row>
       <Row>

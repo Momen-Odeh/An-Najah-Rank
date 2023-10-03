@@ -1,5 +1,6 @@
 import "./App.css";
 import "bootstrap/dist/css/bootstrap.css";
+import 'sweetalert2/dist/sweetalert2.min.css'
 import {
   RouterProvider,
   Route,
