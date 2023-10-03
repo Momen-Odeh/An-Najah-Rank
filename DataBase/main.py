@@ -2,10 +2,23 @@ from flask import request, jsonify
 from EmailAuth.emailConnection import sendEmail
 from FlaskSetUp import app
 from APIs.registration import register_user
+from APIs.login import login_user
+from authentication import is_token_valid
+from flask_cors import CORS
+
+CORS(app)
 
 @app.route('/register', methods=['POST'])
 def register():
     return register_user()
+
+@app.route('/login',methods=['GET'])
+def login():
+    return login_user()
+
+@app.route('/checktoken',methods=['GET'])
+def check_token():
+    return jsonify({"result": is_token_valid(request.args.get('token'))}),200
 
 @app.route('/sendEmail', methods=['POST'])
 def mailAPI():
