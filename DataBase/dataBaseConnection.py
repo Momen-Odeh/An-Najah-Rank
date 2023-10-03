@@ -34,9 +34,10 @@ def insert_data(connection, table_name, column_names, values):
         cursor.execute(query, values)
         connection.commit()
         print("Data inserted successfully.")
+        return 1
     except pymysql.Error as e:
         print(f"Error: {e}")
-
+        return 0
 def update_data(connection, table_name, column_names, new_values, condition):
     try:
         cursor = connection.cursor()
