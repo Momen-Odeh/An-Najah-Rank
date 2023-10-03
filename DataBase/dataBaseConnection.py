@@ -1,4 +1,5 @@
 import pymysql
+from flask import jsonify
 
 def connect_to_database(host, user, password, database):
     try:
@@ -33,9 +34,10 @@ def insert_data(connection, table_name, column_names, values):
         print(query)
         cursor.execute(query, values)
         connection.commit()
-        print("Data inserted successfully.")
+        return jsonify({'message': 'data inserted successfully'}), 201
     except pymysql.Error as e:
         print(f"Error: {e}")
+        return jsonify({'message': f"Error: {e}" }), 409
 
 def update_data(connection, table_name, column_names, new_values, condition):
     try:
@@ -43,9 +45,9 @@ def update_data(connection, table_name, column_names, new_values, condition):
         query = f"UPDATE {table_name} SET {', '.join([f'{col} = %s' for col in column_names])} WHERE {condition}"
         cursor.execute(query, new_values)
         connection.commit()
-        print("Data updated successfully.")
+        return jsonify({'message':"Data updated successfully."})
     except pymysql.Error as e:
-        print(f"Error: {e}")
+        return jsonify({'message': f"Error: {e}" }), 409
 
 
 def delete_data(connection, table_name, condition):
@@ -54,13 +56,13 @@ def delete_data(connection, table_name, condition):
         query = f"DELETE FROM {table_name} WHERE {condition}"
         cursor.execute(query)
         connection.commit()
-        print("Data deleted successfully.")
+        return jsonify({'message':"Data deleted successfully."})
     except pymysql.Error as e:
-        print(f"Error: {e}")
+        return jsonify({'message': f"Error: {e}" }), 409
 
 def close_connection(connection, cursor):
     try:
         cursor.close()
         connection.close()
     except pymysql.Error as e:
-        print(f"Error: {e}")
+        return jsonify({'message': f"Error: {e}" }), 409
