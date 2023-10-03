@@ -11,9 +11,12 @@ def register_user():
     role = request_data.get('role')
     try:
         hashed_password = generate_password_hash(password)
-        insert_data(connection,'user',['universityNumber','email','fullName','role','status','password'],
+        result = insert_data(connection,'user', ['universityNumber','email','fullName','role','status','password'],
                     (universityNumber,email,fullName,role,'pending',hashed_password))
-        return jsonify({'message': 'User registered successfully'}), 201
+        if(result):
+            return jsonify({'message': 'User registered successfully'}), 201
+        else:
+            return jsonify({'message': 'user already registered'}), 409
     except Exception as e:
         print(f"Error while registering user: {e}")
         return jsonify({'error': 'An error occurred saving the user to the database'}), 500
