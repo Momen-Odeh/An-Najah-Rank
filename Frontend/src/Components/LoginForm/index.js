@@ -2,14 +2,14 @@ import React, { useState } from "react";
 import { TfiEmail } from "react-icons/tfi";
 import { TfiLock } from "react-icons/tfi";
 import InputFiledRegister from "../InputFiledRegister";
-import { Alert, Col, Container, Row } from "react-bootstrap";
+import { Col, Container, Row } from "react-bootstrap";
 import TextRegister from "../Text";
 import ButtonRegister from "../ButtonRegister";
 import useStyles from "./style";
 import { Link, useNavigate } from "react-router-dom";
 import handelStateChanges from "../../Utils/handelStateChanges";
-import Swal from "sweetalert2";
 import Axios from "axios";
+import Alert from "../Alert";
 import { useCookies } from 'react-cookie';
 const LogInForm = () => {
   const navigate = useNavigate()
@@ -17,6 +17,7 @@ const LogInForm = () => {
   const [loginValue, setLoginValue] = useState({ email: "", password: "" });
   const [showAlert, setShowAlert] = useState(false)
   const [alertMessage,setAlertMessage] = useState('')
+  const [variant, setVariant] = useState('warning')
   const handelLoginButton = async (e) => {
     e.preventDefault();
     let thereError=false;
@@ -29,6 +30,7 @@ const LogInForm = () => {
       }
     }catch(error){
       setAlertMessage(error.message)
+      setVariant('warning')
       setShowAlert(true)
       thereError=true;
     }
@@ -43,11 +45,9 @@ const LogInForm = () => {
       setCookie('token',response.data.token)
       navigate('/')
     } catch (error) {
-      Swal.fire({
-        icon: 'info',
-        title: 'Info',
-        text: error.response.data.message,
-      })
+      setAlertMessage(error.response.data.message)
+      setVariant('danger')
+      setShowAlert(true)
     }}
   };
   const classes = useStyles();
@@ -139,9 +139,8 @@ const LogInForm = () => {
       <Row>
         <Col>
         {showAlert&&
-        <Alert key={'warning'} variant={'warning'} className={classes.alert}>
-          {alertMessage}
-        </Alert>}
+        <Alert message={alertMessage} variant={variant}/>
+        }
         </Col>
       </Row>
       <Row>

@@ -5,9 +5,6 @@ const useStyles = createUseStyles({
       textDecoration: "none",
     },
   },
-  alert:{
-    textAlign:'center',
-  },
   Container: {
     padding: "0 12%",
     "@media (max-width: 1024px)": {

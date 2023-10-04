@@ -4,7 +4,7 @@ import { TfiLock } from "react-icons/tfi";
 import { FiUser } from "react-icons/fi";
 import { AiOutlineNumber } from "react-icons/ai";
 import InputFiledRegister from "../InputFiledRegister";
-import { Alert, Col, Container, Form, Row } from "react-bootstrap";
+import { Col, Container, Form, Row } from "react-bootstrap";
 import TextRegister from "../Text";
 import ButtonRegister from "../ButtonRegister";
 import useStyles from "./style";
@@ -12,12 +12,14 @@ import { Link, useNavigate } from "react-router-dom";
 import handelStateChanges from "../../Utils/handelStateChanges";
 import Text from "../Text";
 import Swal from 'sweetalert2'
+import Alert from "../Alert";
 import Axios from 'axios';
 const SignUpForm = () => {
   const classes = useStyles();
   const navigate = useNavigate();
   const [showAlert, setShowAlert] = useState(false)
   const [alertMessage,setAlertMessage] = useState('')
+  const [variant, setVariant] = useState('warning')
   const [signupValue, setSignupValue] = useState({
     email: "",
     fullName: "",
@@ -52,6 +54,7 @@ const SignUpForm = () => {
       }
     }catch(error){
       setAlertMessage(error.message)
+      setVariant('warning')
       setShowAlert(true)
       thereError=true;
     }
@@ -69,11 +72,9 @@ const SignUpForm = () => {
       const response = await Axios.post('http://localhost:5000/register', data);
       navigate("/verification-code")
     } catch (error) {
-      Swal.fire({
-        icon: 'info',
-        title: 'Info',
-        text: error.response.data.message ,
-      })
+      setAlertMessage(error.response.data.message)
+      setVariant('danger')
+      setShowAlert(true)
     }
   }
     
@@ -199,9 +200,8 @@ const SignUpForm = () => {
       <Row>
         <Col>
         {showAlert&&
-        <Alert key={'warning'} variant={'warning'} className={classes.alert}>
-          {alertMessage}
-        </Alert>}
+        <Alert
+          message={alertMessage} variant={variant}/>}
         </Col>
       </Row>
       <Row>

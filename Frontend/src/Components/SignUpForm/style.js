@@ -3,9 +3,6 @@ const useStyles = createUseStyles({
   labelForm:{
     userSelect: 'none',
   },
-  alert:{
-    textAlign:'center',
-  },
   Link: {
     "&:hover": {
       textDecoration: "none",
