@@ -5,13 +5,17 @@ import TextRegister from "../../Components/Text";
 import InputFiledRegister from "../../Components/InputFiledRegister";
 import { TfiLock } from "react-icons/tfi";
 import ButtonRegister from "../../Components/ButtonRegister";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { routeNames } from "../../Utils/Utils";
 import { useOutletContext } from "react-router-dom";
 import handelStateChanges from "../../Utils/handelStateChanges";
+import AlertComponent from "../../Components/Alert";
+import axios from "axios";
 const NewPassword = () => {
   const classes = useStyles();
+  const [alert, setAlert] = useState({ msg: "", value: false });
   const setActiveTab = useOutletContext();
+  const navigate = useNavigate();
   useEffect(() => {
     setActiveTab(routeNames.LOG_IN);
   }, []);
@@ -21,6 +25,25 @@ const NewPassword = () => {
   });
   const handelPasswordUpdateButton = () => {
     console.log(newPassword);
+    axios
+      .put("http://127.0.0.1:5000/updatePassword", {
+        email: sessionStorage.getItem("email"),
+        newPassword: newPassword.newPassword,
+        confirmPassword: newPassword.confirmPassword,
+      })
+      .then((resp) => {
+        if (resp.status == 200) {
+          sessionStorage.clear();
+          navigate("/log-in");
+        }
+      })
+      .catch((err) => {
+        if (err.response.data.msg === "miss match passwords") {
+          setAlert({ value: true, msg: "miss match passwords" });
+        } else {
+          setAlert({ value: true, msg: "" + err });
+        }
+      });
   };
   return (
     <div className={classes.center}>
@@ -81,8 +104,17 @@ const NewPassword = () => {
           <Col className={classes.Col}>
             <ButtonRegister
               text="PASSWORD UPDATE"
-              to={"/log-in"}
+              // to={"/log-in"}
               onClick={handelPasswordUpdateButton}
+            />
+          </Col>
+        </Row>
+        <Row className={`${classes.Row} `}>
+          <Col className={classes.Col}>
+            <AlertComponent
+              message={alert.msg}
+              variant="warning"
+              show={alert.value}
             />
           </Col>
         </Row>

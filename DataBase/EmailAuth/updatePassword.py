@@ -2,6 +2,7 @@ from flask import request, jsonify
 from FlaskSetUp import app
 from MySQL_SetUp import connection
 from dataBaseConnection import update_data
+from werkzeug.security import generate_password_hash
 @app.route('/updatePassword', methods=['PUT'])
 def updatePassword():
     if request.is_json:
@@ -11,8 +12,7 @@ def updatePassword():
             newPassword = data.get('newPassword')
             confirmPassword = data.get('confirmPassword')
             if(newPassword == confirmPassword):
-                print()
-                update_data(connection, 'user', ["password"], (newPassword), f"(email = '{email}')")
+                update_data(connection, 'user', ["password"], (generate_password_hash(newPassword)), f"(email = '{email}')")
                 return jsonify({"msg": f"update sucessfully"}), 200
             else:
                 return jsonify({"msg": f"miss match passwords"}), 422

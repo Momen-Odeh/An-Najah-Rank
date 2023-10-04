@@ -1,7 +1,8 @@
 import { createUseStyles } from "react-jss";
 const useStyle = createUseStyles({
-    alert:{
-        textAlign:'center',
-      },
-})
-export default useStyle
+  alert: {
+    textAlign: "center",
+    margin: "0",
+  },
+});
+export default useStyle;
