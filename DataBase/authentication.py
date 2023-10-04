@@ -1,5 +1,4 @@
 import jwt
-import datetime
 
 SECRET_KEY = 'Noor_Aldeen_$%!~_@2002@_^&*'
 

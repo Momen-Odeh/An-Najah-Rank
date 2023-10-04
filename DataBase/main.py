@@ -11,18 +11,6 @@ from EmailAuth.updatePassword import updatePassword
 
 CORS(app)
 
-@app.route('/register', methods=['POST'])
-def register():
-    return register_user()
-
-@app.route('/login',methods=['GET'])
-def login():
-    return login_user()
-
-@app.route('/checktoken',methods=['GET'])
-def check_token():
-    return jsonify({"result": get_Data_from_token(request.args.get('token'))}),200
-
 @app.route('/sendEmail', methods=['POST'])
 def mailAPI():
     if request.is_json:
