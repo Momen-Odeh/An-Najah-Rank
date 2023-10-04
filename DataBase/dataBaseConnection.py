@@ -1,5 +1,5 @@
 import pymysql
-
+from flask import jsonify
 def connect_to_database(host, user, password, database):
     try:
         connection = pymysql.connect(host=host, user=user, password=password, database=database)
@@ -33,9 +33,10 @@ def insert_data(connection, table_name, column_names, values):
         print(query)
         cursor.execute(query, values)
         connection.commit()
-        print("Data inserted successfully.")
+        return jsonify({'message': 'data inserted successfully'}), 201
     except pymysql.Error as e:
         print(f"Error: {e}")
+        return jsonify({'message': f"Error: {e}" }), 409
 
 def update_data(connection, table_name, column_names, new_values, condition):
     try:
