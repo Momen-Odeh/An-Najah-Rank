@@ -15,13 +15,13 @@ def login_user():
             stored_password_hash = user_data[0][5]
             if check_password_hash(stored_password_hash, password):
                 if user_data[0][4] == "approved":
-                    token = generate_token(email, password, 20)
+                    token = generate_token(user_data[0][1], user_data[0][2], user_data[0][3])
                     return jsonify({'message': "Login successful", "token": token}), 200
                 else:
                     if user_data[0][3] == "student":
                         return jsonify({'message': "your account not verified"}), 401
                     elif user_data[0][3] == "professor":
-                        return jsonify({'message': "your request is pending"}), 401
+                        return jsonify({'message': "Your request is pending approval by the admin"}), 401
             else:
                 return jsonify({'message': "Incorrect password"}), 401
         else:

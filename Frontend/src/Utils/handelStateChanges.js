@@ -1,9 +1,8 @@
 const handelStateChanges = (event, state, setState) => {
   if (typeof state === "object") {
-    setState({
-      ...state,
-      [event.target.name]: event.target.value,
-    });
+    const { name, value, type, checked, files } = event.target;
+    const newValue = type === 'checkbox' ? checked : type === 'file' ? files[0] : value;
+    setState({ ...state, [name]: newValue });
   }
 };
 export default handelStateChanges;

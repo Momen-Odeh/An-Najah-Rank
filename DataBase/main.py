@@ -3,7 +3,7 @@ from EmailAuth.emailConnection import sendEmail
 from FlaskSetUp import app
 from APIs.registration import register_user
 from APIs.login import login_user
-from authentication import is_token_valid
+from authentication import get_Data_from_token
 from flask_cors import CORS
 from EmailAuth.createVerificationCode import createVerificationCode
 from EmailAuth.verifyCode import verifyCode
@@ -21,7 +21,7 @@ def login():
 
 @app.route('/checktoken',methods=['GET'])
 def check_token():
-    return jsonify({"result": is_token_valid(request.args.get('token'))}),200
+    return jsonify({"result": get_Data_from_token(request.args.get('token'))}),200
 
 @app.route('/sendEmail', methods=['POST'])
 def mailAPI():
