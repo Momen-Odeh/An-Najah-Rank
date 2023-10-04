@@ -2,6 +2,8 @@ from werkzeug.security import generate_password_hash
 from flask import jsonify, request
 from dataBaseConnection import insert_data
 from MySQL_SetUp import connection
+from EmailAuth.createVerificationCode import createVerificationCode
+
 def register_user():
     request_data = request.json
     email = request_data.get('email')
@@ -11,8 +13,11 @@ def register_user():
     role = request_data.get('role')
     try:
         hashed_password = generate_password_hash(password)
-        return insert_data(connection,'user', ['universityNumber','email','fullName','role','status','password'],
+        result= insert_data(connection,'user', ['universityNumber','email','fullName','role','status','password'],
                     (universityNumber,email,fullName,role,'pending',hashed_password))
+        if(result):
+            createVerificationCode(email)
+        return result
     except Exception as e:
         print(f"Error while registering user: {e}")
         return jsonify({'error': 'An error occurred saving the user to the database'}), 500
