@@ -5,6 +5,9 @@ from APIs.registration import register_user
 from APIs.login import login_user
 from authentication import get_Data_from_token
 from flask_cors import CORS
+from EmailAuth.createVerificationCode import createVerificationCode
+from EmailAuth.verifyCode import verifyCode
+from EmailAuth.updatePassword import updatePassword
 
 CORS(app)
 
@@ -33,6 +36,12 @@ def mailAPI():
             return jsonify({"error": "Invalid JSON data"}), 400
     else:
         return jsonify({"error": "Request body must contain JSON data"}), 400
+
+@app.route('/checkCode', methods=['POST'])  # Not Need to API called after register
+def create():
+    return createVerificationCode("momen.odeh74@gmail.com")
+
+
 
 if __name__ == "__main__":
     app.run(debug=True)
