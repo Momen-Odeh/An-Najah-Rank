@@ -3,7 +3,9 @@ from flask import jsonify, request
 from dataBaseConnection import insert_data
 from MySQL_SetUp import connection
 from EmailAuth.createVerificationCode import createVerificationCode
+from FlaskSetUp import app
 
+@app.route('/register', methods=['POST'])
 def register_user():
     request_data = request.json
     email = request_data.get('email')

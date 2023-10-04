@@ -3,7 +3,9 @@ from dataBaseConnection import execute_query, fetch_results
 from MySQL_SetUp import connection
 from flask import request, jsonify
 from authentication import generate_token
+from FlaskSetUp import app
 
+@app.route('/login',methods=['GET'])
 def login_user():
     email = request.args.get('email')
     password = request.args.get('password')
