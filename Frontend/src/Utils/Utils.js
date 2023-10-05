@@ -27,7 +27,7 @@ export const routeNames = {
   CHALLENGE: "Challenge",
   CREATE_CHALLENGE: "Create Challenge",
   CREATE_CONTEST: "Create Contest",
-  CREATE_COURSE:"Create Course",
+  CREATE_COURSE: "Create Course",
   CONTEST_VIEW: "Contest View",
   COURSE_VIEW: "Course View",
   ADMINISTRATION: "Administration",
@@ -153,7 +153,7 @@ export const routes = [
     path: "/administration/challenges",
     title: routeNames.ADMINISTRATION,
     component:  <IsLoggedIn moveTo={'log-in'}><Administration /></IsLoggedIn>,
-  }
+  },
 ];
 
 export const generateRoutes = (routes) => {

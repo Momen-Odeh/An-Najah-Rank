@@ -6,8 +6,9 @@ from APIs.login import login_user
 from authentication import get_Data_from_token
 from flask_cors import CORS
 from EmailAuth.createVerificationCode import createVerificationCode
-from EmailAuth.verifyCode import verifyCode
+from EmailAuth.verifyCode import verifyCode,deleteCode,updateUserStatusAuth
 from EmailAuth.updatePassword import updatePassword
+from EmailAuth.forgetPassword import forgetPassword
 
 CORS(app)
 

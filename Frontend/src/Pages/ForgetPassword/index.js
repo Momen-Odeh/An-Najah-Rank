@@ -9,15 +9,36 @@ import { Link } from "react-router-dom";
 import { useOutletContext } from "react-router-dom";
 import { routeNames } from "../../Utils/Utils";
 import handelStateChanges from "../../Utils/handelStateChanges";
+import axios from "axios";
+import AlertComponent from "../../Components/Alert";
+import { useNavigate } from "react-router-dom";
 const ForgetPassword = () => {
   const classes = useStyles();
+  const navigate = useNavigate();
   const setActiveTab = useOutletContext();
   useEffect(() => {
     setActiveTab(routeNames.LOG_IN);
   }, []);
   const [email, setEmail] = useState({ value: "" });
+  const [alert, setAlert] = useState({ msg: "", value: false });
   const handelResetPasswordButton = () => {
     console.log(email);
+    axios
+      .post("http://127.0.0.1:5000/forgetPassword", {
+        email: email.value,
+      })
+      .then((resp) => {
+        console.log(resp.status);
+        if (resp.status === 200) {
+          sessionStorage.setItem("email", email.value);
+          sessionStorage.setItem("event", "forget Password");
+          navigate("/verification-code");
+        }
+      })
+      .catch((err) => {
+        console.log("Error:", err);
+        setAlert({ value: true, msg: "Not found email please try again" });
+      });
   };
   return (
     <div className={classes.center}>
@@ -62,12 +83,12 @@ const ForgetPassword = () => {
           <Col className={classes.Col}>
             <ButtonRegister
               text="Reset Password"
-              to={"/verification-code"}
+              // to={"/verification-code"}
               onClick={handelResetPasswordButton}
             />
           </Col>
         </Row>
-        <Row className={`${classes.Row} `}>
+        <Row className={`${classes.Row} mb-2 `}>
           <Col className={classes.Col}>
             <TextRegister
               text={"Back to "}
@@ -85,6 +106,15 @@ const ForgetPassword = () => {
                 wegiht="400"
               />
             </Link>
+          </Col>
+        </Row>
+        <Row className={`${classes.Row} `}>
+          <Col className={classes.Col}>
+            <AlertComponent
+              message={alert.msg}
+              variant="warning"
+              show={alert.value}
+            />
           </Col>
         </Row>
       </Container>

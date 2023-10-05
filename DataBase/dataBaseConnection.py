@@ -56,7 +56,7 @@ def delete_data(connection, table_name, condition):
         query = f"DELETE FROM {table_name} WHERE {condition}"
         cursor.execute(query)
         connection.commit()
-        return jsonify({'message':"Data deleted successfully."})
+        return jsonify({'message':"Data deleted successfully."}),200
     except pymysql.Error as e:
         return jsonify({'message': f"Error: {e}" }), 409
 
