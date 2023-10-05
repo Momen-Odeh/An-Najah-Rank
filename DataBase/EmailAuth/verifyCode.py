@@ -1,11 +1,10 @@
 from flask import request, jsonify
 from FlaskSetUp import app
 from MySQL_SetUp import connection
-from dataBaseConnection import execute_query,fetch_results
+from dataBaseConnection import execute_query,fetch_results,delete_data,update_data
 import datetime
 @app.route('/verfiyCode', methods=['POST'])
 def verifyCode ():
-    if request.is_json:
         try:
             data = request.get_json()
             email = data.get('email')
@@ -15,16 +14,39 @@ def verifyCode ():
                 desiredCode = result[0][0]
                 TTL = result[0][1]
                 current_datetime = datetime.datetime.now()
-                if(current_datetime < TTL):
-                    if(desiredCode == expectCode):
+                if (desiredCode == expectCode):
+                    if (current_datetime < TTL):
                         return jsonify({"msg": f"Valid access"}), 200
                     else:
-                        return jsonify({"msg": f"invalid access"}), 422
+                        return jsonify({"msg": f"invalid TTL"}), 422
                 else:
-                    return jsonify({"msg": f"invalid TTL"}), 422
+                    return jsonify({"msg": f"invalid access"}), 422
+
 
             return jsonify({"msg": f"Not found email"}), 404
         except Exception as e:
-            return jsonify({"error": "Invalid JSON data"}), 400
-    else:
-        return jsonify({"error": "Request body must contain JSON data"}), 400
+            return jsonify({"error": f"{e}"}), 400
+
+@app.route('/emailCodeVerification', methods=['POST'])
+def deleteCode ():
+    try:
+        val = request.get_json()
+        email = val.get('email')
+        print(email)
+        return delete_data(connection,"code_verification",f"email = '{email}'"),200
+    except Exception as e:
+        return jsonify({"error": f"{e}"}), 400
+@app.route('/userStatusAuth', methods=['PUT'])
+def updateUserStatusAuth ():
+    try:
+        val = request.get_json()
+        email = val.get('email')
+        res = execute_query(connection, f"select role from user where email = '{email}'")
+        if(fetch_results(res)[0][0] == "student"):
+            return update_data(connection,'user',['status'],("active"),f"email = '{email}'")
+        elif (fetch_results(res)[0][0] == "professor") :
+            return update_data(connection, 'user', ['status'], ("pending for adminstrator"), f"email = '{email}'")
+
+    except Exception as e:
+        return jsonify({"error": f"{e}"}), 400
+

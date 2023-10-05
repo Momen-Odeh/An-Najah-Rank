@@ -11,15 +11,15 @@ import useStyles from "./style";
 import { Link, useNavigate } from "react-router-dom";
 import handelStateChanges from "../../Utils/handelStateChanges";
 import Text from "../Text";
-import Swal from 'sweetalert2'
+import Swal from "sweetalert2";
 import Alert from "../Alert";
-import Axios from 'axios';
+import Axios from "axios";
 const SignUpForm = () => {
   const classes = useStyles();
   const navigate = useNavigate();
-  const [showAlert, setShowAlert] = useState(false)
-  const [alertMessage,setAlertMessage] = useState('')
-  const [variant, setVariant] = useState('warning')
+  const [showAlert, setShowAlert] = useState(false);
+  const [alertMessage, setAlertMessage] = useState("");
+  const [variant, setVariant] = useState("warning");
   const [signupValue, setSignupValue] = useState({
     email: "",
     fullName: "",
@@ -29,55 +29,59 @@ const SignUpForm = () => {
     isProfessor: false,
   });
 
-  const handelSignUpButton = async(e) => {
+  const handelSignUpButton = async (e) => {
     e.preventDefault();
-    let thereError=false;
-    try{
-      setShowAlert(false)
-      if(!signupValue.email){
-        throw new Error("should enter your email")
-      }else if(!signupValue.universityNumber){
-        throw new Error("should enter your university number")
-      }else if(!signupValue.fullName){
-        throw new Error("should enter your full name")
-      }else if(!signupValue.password){
-        throw new Error("should enter your password")
-      }else if(!signupValue.email){
-        throw new Error("should enter your confirmation password")
-      }else if(signupValue.password !== signupValue.confirmPassword){
-        throw new Error("password not the same of confirm password")
-      }else if(signupValue.isProfessor){
+    let thereError = false;
+    try {
+      setShowAlert(false);
+      if (!signupValue.email) {
+        throw new Error("should enter your email");
+      } else if (!signupValue.universityNumber) {
+        throw new Error("should enter your university number");
+      } else if (!signupValue.fullName) {
+        throw new Error("should enter your full name");
+      } else if (!signupValue.password) {
+        throw new Error("should enter your password");
+      } else if (!signupValue.email) {
+        throw new Error("should enter your confirmation password");
+      } else if (signupValue.password !== signupValue.confirmPassword) {
+        throw new Error("password not the same of confirm password");
+      } else if (signupValue.isProfessor) {
         if (signupValue.email.endsWith("@najah.edu"));
-        else{
-          throw new Error("You are not a professor")
+        else {
+          throw new Error("You are not a professor");
         }
       }
-    }catch(error){
-      setAlertMessage(error.message)
-      setVariant('warning')
-      setShowAlert(true)
-      thereError=true;
-    }
-    if(!thereError){
-    try {
-      console.log(signupValue)
-      const data = {
-        universityNumber: signupValue.universityNumber,
-        email: signupValue.email,
-        fullName: signupValue.fullName,
-        password: signupValue.password,
-        role: signupValue.isProfessor ? "professor" : "student",
-      };
-      console.log(data);
-      const response = await Axios.post('http://localhost:5000/register', data);
-      navigate("/verification-code")
     } catch (error) {
-      setAlertMessage(error.response.data.message)
-      setVariant('danger')
-      setShowAlert(true)
+      setAlertMessage(error.message);
+      setVariant("warning");
+      setShowAlert(true);
+      thereError = true;
     }
-  }
-    
+    if (!thereError) {
+      try {
+        console.log(signupValue);
+        const data = {
+          universityNumber: signupValue.universityNumber,
+          email: signupValue.email,
+          fullName: signupValue.fullName,
+          password: signupValue.password,
+          role: signupValue.isProfessor ? "professor" : "student",
+        };
+        console.log(data);
+        const response = await Axios.post(
+          "http://localhost:5000/register",
+          data
+        );
+        sessionStorage.setItem("email", data.email);
+        sessionStorage.setItem("event", "register");
+        navigate("/verification-code");
+      } catch (error) {
+        setAlertMessage(error.response.data.message);
+        setVariant("danger");
+        setShowAlert(true);
+      }
+    }
   };
   return (
     <Container className={`${classes.Container} `} fluid={true}>
@@ -185,31 +189,31 @@ const SignUpForm = () => {
       </Row>
       <Row className="mb-5 ms-2">
         <Col>
-        <Form.Group controlId="isProfessor">
-          <Form.Check
-            type="checkbox"
-            size={'lg'}
-            name="isProfessor"
-            checked={signupValue.isProfessor}
-            onChange={(e) => handelStateChanges(e, signupValue, setSignupValue)}
-          />
-          <Form.Label className={classes.labelForm}> <Text text={'Sign up as professor'} color='#595c5f'/></Form.Label>
-           </Form.Group>
+          <Form.Group controlId="isProfessor">
+            <Form.Check
+              type="checkbox"
+              size={"lg"}
+              name="isProfessor"
+              checked={signupValue.isProfessor}
+              onChange={(e) =>
+                handelStateChanges(e, signupValue, setSignupValue)
+              }
+            />
+            <Form.Label className={classes.labelForm}>
+              {" "}
+              <Text text={"Sign up as professor"} color="#595c5f" />
+            </Form.Label>
+          </Form.Group>
         </Col>
       </Row>
       <Row>
         <Col>
-        {showAlert&&
-        <Alert
-          message={alertMessage} variant={variant}/>}
+          {showAlert && <Alert message={alertMessage} variant={variant} />}
         </Col>
       </Row>
       <Row>
         <Col>
-          <ButtonRegister
-            text="Register"
-            onClick={handelSignUpButton}
-          />
+          <ButtonRegister text="Register" onClick={handelSignUpButton} />
         </Col>
       </Row>
     </Container>
