@@ -14,7 +14,7 @@ import ContestView from "../Pages/ContestView";
 import EnrollStudent from "../Pages/EnrollStudent";
 import CourseView from "../Pages/CourseView";
 import Administration from "../Pages/Administration";
-
+import IsLoggedIn from "../Components/Authorization/IsLoggedIn";
 // const AboutUs = lazy(() => import("../Pages/AboutUs/SubComponents/AboutUs"))
 
 export const routeNames = {
@@ -37,7 +37,7 @@ export const routes = [
   {
     path: "/",
     title: routeNames.HOME,
-    component: <Home />,
+    component: <IsLoggedIn moveTo={'log-in'}> <Home /> </IsLoggedIn>,
   },
   {
     path: "/sign-up",
@@ -67,92 +67,92 @@ export const routes = [
   {
     path: "/challenge/problem",
     title: routeNames.CHALLENGE,
-    component: <Challenge />,
+    component: <IsLoggedIn moveTo={'log-in'}> <Challenge /> </IsLoggedIn>,
   },
   {
     path: "/challenge/submissions",
     title: routeNames.CHALLENGE,
-    component: <Challenge />,
+    component: <IsLoggedIn moveTo={'log-in'}><Challenge /></IsLoggedIn>,
   },
   {
     path: "/challenge/leaderboard",
     title: routeNames.CHALLENGE,
-    component: <Challenge />,
+    component: <IsLoggedIn moveTo={'log-in'}><Challenge /></IsLoggedIn>,
   },
   {
     path: "/challenge/discussions",
     title: routeNames.CHALLENGE,
-    component: <Challenge />,
+    component: <IsLoggedIn moveTo={'log-in'}><Challenge /></IsLoggedIn>,
   },
   {
     path: "/create-challenge/details",
     title: routeNames.CREATE_CHALLENGE,
-    component: <CreateChallenge />,
+    component: <IsLoggedIn moveTo={'log-in'}><CreateChallenge /></IsLoggedIn>,
   },
   {
     path: "/create-challenge/moderators",
     title: routeNames.CREATE_CHALLENGE,
-    component: <CreateChallenge />,
+    component: <IsLoggedIn moveTo={'log-in'}><CreateChallenge /></IsLoggedIn>,
   },
   {
     path: "/create-challenge/test-cases",
     title: routeNames.CREATE_CHALLENGE,
-    component: <CreateChallenge />,
+    component: <IsLoggedIn moveTo={'log-in'}><CreateChallenge /></IsLoggedIn>,
   },
   {
     path: "/create-contest/details",
     title: routeNames.CREATE_CONTEST,
-    component: <CreateContest />,
+    component: <IsLoggedIn moveTo={'log-in'}><CreateContest /></IsLoggedIn>,
   },
   {
     path: "/create-contest/challenges",
     title: routeNames.CREATE_CONTEST,
-    component: <CreateContest />,
+    component: <IsLoggedIn moveTo={'log-in'}><CreateContest /></IsLoggedIn>,
   },
   {
     path: "/create-course/details",
     title: routeNames.CREATE_COURSE,
-    component: <CreateCourse />,
+    component: <IsLoggedIn moveTo={'log-in'}><CreateCourse /></IsLoggedIn>,
   },
   {
     path: "/create-course/moderators",
     title: routeNames.CREATE_COURSE,
-    component: <CreateCourse />,
+    component: <IsLoggedIn moveTo={'log-in'}><CreateCourse /></IsLoggedIn>,
   },
   {
     path: "/contest-view",
     title: routeNames.CONTEST_VIEW,
-    component: <ContestView />,
+    component: <IsLoggedIn moveTo={'log-in'}><ContestView /></IsLoggedIn>,
   },
   {
     path: "/enroll-student",
     title: routeNames.ENROLL_STUDENT,
-    component: <EnrollStudent />,
+    component: <IsLoggedIn moveTo={'log-in'}><EnrollStudent /></IsLoggedIn>,
   },
   {
     path: "/course-view/course",
     title: routeNames.COURSE_VIEW,
-    component: <CourseView />,
+    component: <IsLoggedIn moveTo={'log-in'}><CourseView /></IsLoggedIn>,
   },
   {
     path: "/course-view/members",
     title: routeNames.COURSE_VIEW,
-    component: <CourseView />,
+    component: <IsLoggedIn moveTo={'log-in'}><CourseView /></IsLoggedIn>,
   },
   {
     path: "/administration/courses",
     title: routeNames.ADMINISTRATION,
-    component: <Administration />,
+    component: <IsLoggedIn moveTo={'log-in'}><Administration /></IsLoggedIn>,
   },
   {
     path: "/administration/contests",
     title: routeNames.ADMINISTRATION,
-    component: <Administration />,
+    component:  <IsLoggedIn moveTo={'log-in'}><Administration /></IsLoggedIn>,
   },
   {
     path: "/administration/challenges",
     title: routeNames.ADMINISTRATION,
-    component: <Administration />,
+    component:  <IsLoggedIn moveTo={'log-in'}><Administration /></IsLoggedIn>,
   }
 ];
 

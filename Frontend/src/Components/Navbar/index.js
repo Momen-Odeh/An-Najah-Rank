@@ -15,7 +15,7 @@ const Header = ( { activeTab }) =>{
     { id: 1, title: 'Profile', link:'#Profile'},
     { id: 2, title: 'Settings', link:'#Settings'},
     { id: 3, title: 'Submissions', link:'#Submissions'},
-    { id: 4, title: 'Administration', link:'#Administration'},
+    { id: 4, title: 'Administration', link:'/administration/courses'},
     { id: 5, title: 'Logout', link:'#Logout'},
   ]);
   const signInPath = routes.filter((item)=>item.title===routeNames.LOG_IN)[0].path
