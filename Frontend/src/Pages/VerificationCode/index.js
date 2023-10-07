@@ -4,7 +4,7 @@ import { Col, Container, Row } from "react-bootstrap";
 import TextRegister from "../../Components/Text";
 import ButtonRegister from "../../Components/ButtonRegister";
 import AuthCode from "react-auth-code-input";
-import { useOutletContext } from "react-router-dom";
+import { Navigate, useOutletContext } from "react-router-dom";
 import { routeNames } from "../../Utils/Utils";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
@@ -44,7 +44,7 @@ const VarificationCode = () => {
           //       msg: "there is error:" + err,
           //     });
           //   });
-          if (sessionStorage.getItem("event") === "forget password")
+          if (sessionStorage.getItem("event") === "forget Password")
             navigate("/new-password");
           else if (sessionStorage.getItem("event") === "register") {
             axios
@@ -78,7 +78,7 @@ const VarificationCode = () => {
         }
       });
   };
-  return (
+  return sessionStorage?.event ? ( //Gard for the Verification code
     <div className={classes.center}>
       <Container className={`${classes.Container}`}>
         <Row className={`${classes.Row}  mb-4`}>
@@ -151,6 +151,8 @@ const VarificationCode = () => {
         </Row>
       </Container>
     </div>
+  ) : (
+    <Navigate to={"/log-in"} />
   );
 };
 
