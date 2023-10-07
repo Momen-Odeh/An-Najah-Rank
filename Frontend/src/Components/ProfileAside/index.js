@@ -46,7 +46,7 @@ const ProfileAside = () => {
               />
             </Col>
           </Row>
-          <Row>
+          <Row className="mb-4">
             <Col className={`${clasess.Col} ${clasess.IconContainer}`}>
               <TfiEmail className={clasess.Icon} />
               <Text
@@ -54,6 +54,15 @@ const ProfileAside = () => {
                 fontFamily="Open Sans"
                 size="14px"
                 wegiht="600"
+              />
+            </Col>
+          </Row>
+          <Row>
+            <Col className={`${clasess.Col} ${clasess.IconContainer}`}>
+              <ButtonRank
+                text={"Edit Profile"}
+                hoverBackgroundColor="#0e141e"
+                width={"100%"}
               />
             </Col>
           </Row>

@@ -17,7 +17,8 @@ const useStyles = createUseStyles({
   },
   Aside: {
     boxShadow: "0 3px 10px 0 rgba(0,0,0,.1)",
-    paddingTop: "25px",
+    padding: "25px 0px",
+    height: "100%",
   },
   main: {
     // border: "1px solid black",

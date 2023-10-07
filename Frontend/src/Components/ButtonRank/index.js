@@ -10,7 +10,8 @@ const ButtonRank = ({
   border = "1px solid #c2c7d0",
   hoverBackgroundColor = "#1cb557",
   onClick,
-  disabled=false,
+  disabled = false,
+  width,
 }) => {
   const classes = useStyles({
     backgroundColor,
@@ -18,8 +19,13 @@ const ButtonRank = ({
     size,
     border,
     hoverBackgroundColor,
+    width,
   });
-  return <Button className={classes.Button} onClick={onClick} disabled={disabled} >{text}</Button>;
+  return (
+    <Button className={classes.Button} onClick={onClick} disabled={disabled}>
+      {text}
+    </Button>
+  );
 };
 
 export default ButtonRank;

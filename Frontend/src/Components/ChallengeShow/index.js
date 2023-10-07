@@ -31,6 +31,7 @@ const ChallengeShow = ({ challengeName, solved, statistics, url }) => {
                 fontFamily="Open Sans"
                 size="14px"
                 wegiht="600"
+                color="#979faf"
               />
               <Text
                 text={item.val}
@@ -41,7 +42,7 @@ const ChallengeShow = ({ challengeName, solved, statistics, url }) => {
             </Col>
           ))}
           <Col className={clasess.ButtonTry}>
-            <ButtonRank text={"Try Again"} />
+            <ButtonRank text={"Try Again"} hoverBackgroundColor="#0e141e" />
           </Col>
         </Row>
       </Row>

@@ -13,7 +13,7 @@ const useStyles = createUseStyles({
   Icon: {
     width: "20px",
     height: "20px",
-    color: "#000842",
+    color: "#0e141e",
     marginRight: "10px",
   },
   IconContainer: {
