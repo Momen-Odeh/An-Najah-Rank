@@ -4,7 +4,7 @@ import TextRegister from "../Text";
 import { Link } from "react-router-dom";
 import useStyles from "./style";
 
-const ProblemValue = () => {
+const ProblemValue = ({ data }) => {
   const classes = useStyles();
   return (
     <Container fluid>
@@ -27,7 +27,7 @@ const ProblemValue = () => {
             wegiht="400"
             color="#979FAF"
           />
-          <TextRegister text={"30"} size="16px" wegiht="100" color="#39424E" />
+          <TextRegister text={"35"} size="16px" wegiht="100" color="#39424E" />
         </Col>
       </Row>
       <Row>
@@ -39,7 +39,7 @@ const ProblemValue = () => {
             color="#979FAF"
           />
           <TextRegister
-            text={"Medium"}
+            text={data.difficulty}
             size="16px"
             wegiht="100"
             color="#39424E"

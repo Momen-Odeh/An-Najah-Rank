@@ -9,6 +9,7 @@ from EmailAuth.createVerificationCode import createVerificationCode
 from EmailAuth.verifyCode import verifyCode,deleteCode,updateUserStatusAuth
 from EmailAuth.updatePassword import updatePassword
 from EmailAuth.forgetPassword import forgetPassword
+from APIs.challengeInfo import getChallenge
 
 CORS(app)
 

@@ -3,14 +3,13 @@ import { Col, Container, Row } from "react-bootstrap";
 import useStyles from "./style";
 import ProblemStatement from "../ProblemStatement";
 import ProblemValue from "../ProblemValue";
-import data from "./data";
 import CodeEditor from "../CodeEditor";
 import ChallengeTabs from "../ChallengTabs";
 import { FaCheck } from "react-icons/fa";
 import { ImCross } from "react-icons/im";
 import TestCaseProblem from "../TestCaseProblem";
 
-const ProblemDescription = () => {
+const ProblemDescription = ({ challengeData }) => {
   const classes = useStyles({});
   const tabContent = [
     {
@@ -38,10 +37,10 @@ const ProblemDescription = () => {
     <Container fluid>
       <Row className={classes.Row}>
         <Col xs={8} className={classes.Col}>
-          <ProblemStatement data={data} />
+          <ProblemStatement data={challengeData} />
         </Col>
         <Col xs={3} className={classes.Col}>
-          <ProblemValue />
+          <ProblemValue data={challengeData} />
         </Col>
       </Row>
       <Row className="mb-5">
