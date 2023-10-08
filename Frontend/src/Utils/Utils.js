@@ -15,6 +15,7 @@ import EnrollStudent from "../Pages/EnrollStudent";
 import CourseView from "../Pages/CourseView";
 import Administration from "../Pages/Administration";
 import IsLoggedIn from "../Components/Authorization/IsLoggedIn";
+import Profile from "../Pages/Profile";
 // const AboutUs = lazy(() => import("../Pages/AboutUs/SubComponents/AboutUs"))
 
 export const routeNames = {
@@ -32,6 +33,7 @@ export const routeNames = {
   COURSE_VIEW: "Course View",
   ADMINISTRATION: "Administration",
   ENROLL_STUDENT: "Enroll Student",
+  PROFILE: "Profile",
 };
 export const routes = [
   {
@@ -43,6 +45,11 @@ export const routes = [
         <Home />{" "}
       </IsLoggedIn>
     ),
+  },
+  {
+    path: "/profile",
+    title: routeNames.PROFILE,
+    component: <Profile />,
   },
   {
     path: "/sign-up",

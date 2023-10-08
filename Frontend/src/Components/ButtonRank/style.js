@@ -7,6 +7,7 @@ const useStyles = createUseStyles({
     fontSize: ({ size }) => size,
     border: ({ border }) => border,
     padding: "10px 15px",
+    width: ({ width }) => width,
     "&:hover": {
       backgroundColor: ({ hoverBackgroundColor }) => hoverBackgroundColor,
       border: ({ border }) => border,
@@ -14,10 +15,10 @@ const useStyles = createUseStyles({
     "&:focus": {
       boxShadow: "none",
     },
-    '&:disabled': {
-      backgroundColor: '#f0f0f4',
+    "&:disabled": {
+      backgroundColor: "#f0f0f4",
       color: "#39424E",
-      border:'none'
+      border: "none",
     },
   },
 });
