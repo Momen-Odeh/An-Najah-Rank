@@ -1,10 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Editor } from "@monaco-editor/react";
 import useStyles from "./style";
 import { Col, Container, Form, Row } from "react-bootstrap";
 import SelectionGroup from "../SelectionGroup";
 import Switch from "react-switch";
 import ButtonRank from "../ButtonRank";
+import ChallengeContext from "../../Utils/ChallengeContext";
+import axios from "axios";
 const defaultLang = {
   java: `  import java.io.*;
   import java.util.*;
@@ -69,12 +71,25 @@ const CodeEditor = () => {
   const [language, setLanguage] = useState("java");
   const [textHeight, setTextHeight] = useState("400px");
   const [textCode, setTextCode] = useState("");
-
+  const context = useContext(ChallengeContext);
   // useEffect(() => {
   //   const lines = textCode.split("\n").length;
   //   const newHeight = Math.max(200, lines * 30);
   //   setTextHeight(`${newHeight}px`);
   // }, [textCode]);
+  const handleRunCode = async () => {
+    console.log("Send Request");
+    const codeResult = await axios.post("http://127.0.0.1:5001/java", {
+      code: "class Main {  public static void main(String[] args) { System.out.println(5555);} }",
+    });
+    console.log("Get Result", codeResult.data);
+    context.testCases.setVal({
+      ...context.testCases.val,
+      show: true, //!context.testCases.val.show,
+    });
+    // console.log(codeResult);
+  };
+  const handleSubmitCode = async () => {};
   return (
     <Container fluid className={classes.Container}>
       <Row className={`${classes.Row} ${classes.RowSelect}`}>
@@ -114,11 +129,12 @@ const CodeEditor = () => {
       </Row>
       <Row className={`${classes.Row} ${classes.Buttons}`}>
         <Col className={`${classes.Col} ${classes.ColSelect}`}>
-          <ButtonRank text={"Run Code"} />
+          <ButtonRank text={"Run Code"} onClick={handleRunCode} />
           <ButtonRank
             text={"Submit Code"}
             backgroundColor="#2ec866"
             color="#F0F0F4"
+            onClick={handleSubmitCode}
           />
         </Col>
       </Row>

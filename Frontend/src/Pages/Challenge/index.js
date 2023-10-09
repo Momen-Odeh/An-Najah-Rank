@@ -11,6 +11,10 @@ import LeadboardTab from "../../Components/LeadboardTab";
 import useStyles from "./style";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
+import ChallengeContext from "../../Utils/ChallengeContext";
+import { FaCheck } from "react-icons/fa";
+import { ImCross } from "react-icons/im";
+import TestCaseProblem from "../../Components/TestCaseProblem";
 const path = [
   {
     title: "All Contests",
@@ -25,17 +29,20 @@ const path = [
     url: "",
   },
 ];
-
 const Challenge = ({}) => {
   const clasess = useStyles();
   const { id } = useParams();
   const navigate = useNavigate();
   const [challengeData, setChallengeData] = useState({});
+  const [testCases, setTestCases] = useState({
+    show: false,
+    tabContent: [],
+  });
   const tabContent = [
     {
       eventKey: "Problem",
       title: "Problem",
-      TabComponent: <ProblemDescription challengeData={challengeData} />,
+      TabComponent: <ProblemDescription />,
       urlPattern: "/challenge/" + id + "/problem",
     },
     {
@@ -63,6 +70,30 @@ const Challenge = ({}) => {
       .then((res) => {
         setChallengeData(res.data);
         console.log(res);
+        const ArrTest = res.data.testCases.map((item, index) => {
+          return {
+            eventKey: "TestCase " + index,
+            title: (
+              <span>
+                TestCase {index}{" "}
+                {/* <FaCheck className={`${clasess.Icon} ${clasess.IconPass}`} /> */}
+              </span>
+            ),
+            TabComponent: (
+              <TestCaseProblem
+                input={item.input_data}
+                outputExpect={item.output_data}
+                outputReal={50}
+                compilerMsg={"Correct Answer"}
+              />
+            ),
+          };
+        });
+        console.log(ArrTest);
+        setTestCases({
+          ...testCases,
+          tabContent: ArrTest,
+        });
       })
       .catch((e) => {
         console.log(e.response);
@@ -70,7 +101,12 @@ const Challenge = ({}) => {
       });
   }, []);
   return (
-    <>
+    <ChallengeContext.Provider
+      value={{
+        challengeData: challengeData,
+        testCases: { val: testCases, setVal: setTestCases },
+      }}
+    >
       <Container fluid className={clasess.Container}>
         <Row className={`mt-2 ${clasess.maxWidth}`}>
           <Col>
@@ -96,7 +132,7 @@ const Challenge = ({}) => {
           </Col>
         </Row>
       </Container>
-    </>
+    </ChallengeContext.Provider>
   );
 };
 

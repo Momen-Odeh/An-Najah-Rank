@@ -1,17 +1,22 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Col, Container, Row } from "react-bootstrap";
 import useStyles from "./style";
 import Text from "../Text";
 import SampleContainer from "../SampleContainer";
-const ProblemStatement = ({ data }) => {
+import ChallengeContext from "../../Utils/ChallengeContext";
+
+const ProblemStatement = () => {
   const classes = useStyles();
+  const context = useContext(ChallengeContext);
   return (
     <Container fluid>
       <Row className="mb-4">
         <Col className={classes.Col}>
           <span
             className={classes.descrition}
-            dangerouslySetInnerHTML={{ __html: data.description }}
+            dangerouslySetInnerHTML={{
+              __html: context.challengeData.description,
+            }}
           />
         </Col>
       </Row>
@@ -24,7 +29,9 @@ const ProblemStatement = ({ data }) => {
         <Col className={classes.Col}>
           <span
             className={classes.descrition}
-            dangerouslySetInnerHTML={{ __html: data.inputFormat }}
+            dangerouslySetInnerHTML={{
+              __html: context.challengeData.inputFormat,
+            }}
           />
         </Col>
       </Row>
@@ -37,7 +44,9 @@ const ProblemStatement = ({ data }) => {
         <Col className={classes.Col}>
           <span
             className={classes.descrition}
-            dangerouslySetInnerHTML={{ __html: data.constraints }}
+            dangerouslySetInnerHTML={{
+              __html: context.challengeData.constraints,
+            }}
           />
         </Col>
       </Row>
@@ -50,12 +59,14 @@ const ProblemStatement = ({ data }) => {
         <Col className={classes.Col}>
           <span
             className={classes.descrition}
-            dangerouslySetInnerHTML={{ __html: data.outputFormat }}
+            dangerouslySetInnerHTML={{
+              __html: context.challengeData.outputFormat,
+            }}
           />
         </Col>
       </Row>
-      {console.log(data.testCases)}
-      {data?.testCases?.map((itemData, index) => (
+      {/* {console.log(context.challengeData.testCases)} */}
+      {context.challengeData?.testCases?.map((itemData, index) => (
         <div key={index}>
           <Row className="mb-1">
             <Col className={classes.Col}>

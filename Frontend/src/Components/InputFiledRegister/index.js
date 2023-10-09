@@ -11,6 +11,7 @@ const InputFiledRegister = ({
   type,
   onChange,
   name,
+  onClick,
 }) => {
   const classes = useStyles();
   const [showPassword, setShowPassword] = useState(false);
@@ -18,10 +19,11 @@ const InputFiledRegister = ({
     setShowPassword(!showPassword);
   };
   return (
-    <Form className={classes.form}>
+    <Form
+      className={classes.form} // controlId="formGroupEmail"
+    >
       <Form.Group
         className={`${classes.Group} `} //mb-4
-        // controlId="formGroupEmail"
       >
         <Form.Label className={classes.label}>{label}</Form.Label>
         <InputGroup.Text className={classes.InputGroup}>

@@ -11,7 +11,7 @@ const sample = {
  9,-4,16,2`,
   output: "53",
 };
-const TestCaseProblem = () => {
+const TestCaseProblem = ({ input, outputExpect, outputReal, compilerMsg }) => {
   const classes = useStyles();
   return (
     <Container fluid className={classes.Container}>
@@ -32,7 +32,7 @@ const TestCaseProblem = () => {
       <Row>
         <Col>
           <SampleContainer
-            data={sample.input}
+            data={input}
             backgroundColor="#efefef"
             border={"1px solid #c2c7d0"}
           />
@@ -46,7 +46,7 @@ const TestCaseProblem = () => {
       <Row>
         <Col>
           <SampleContainer
-            data={sample.output}
+            data={outputReal}
             backgroundColor="#efefef"
             border={"1px solid #c2c7d0"}
           />
@@ -60,7 +60,7 @@ const TestCaseProblem = () => {
       <Row>
         <Col>
           <SampleContainer
-            data={sample.output}
+            data={outputExpect}
             backgroundColor="#efefef"
             border={"1px solid #c2c7d0"}
           />
@@ -74,7 +74,7 @@ const TestCaseProblem = () => {
       <Row>
         <Col>
           <SampleContainer
-            data={"Good answer"}
+            data={compilerMsg}
             backgroundColor="#efefef"
             border={"1px solid #c2c7d0"}
           />
