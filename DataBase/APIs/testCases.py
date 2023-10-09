@@ -17,7 +17,7 @@ def add_test_case():
         return {'message': str(e)}, 409
 
 @app.route('/test_cases', methods=['GET'])
-def get_testCase():
+def get_testCase_id():
     try:
         sql_query = """ 
             SELECT id

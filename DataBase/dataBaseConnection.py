@@ -31,7 +31,7 @@ def insert_data(connection, table_name, column_names, values):
         cursor = connection.cursor()
         placeholders = ', '.join(['%s'] * len(column_names))
         query = f"INSERT INTO {table_name} ({', '.join(column_names)}) VALUES ({placeholders})"
-        print(query)
+        print(query, values)
         cursor.execute(query, values)
         connection.commit()
         return jsonify({'message': 'data inserted successfully'}), 201
