@@ -74,11 +74,11 @@ def get_challenge_details():
                 'outputFormat': result[7],
                 'tags': json.loads(result[8])
             }
-            return response
+            return jsonify({'message': response}), 200
         else:
             return jsonify({'message': 'Challenge not found'}), 404
     except Exception as e:
-        return jsonify({'message': str(e)}), 409
+        return jsonify({'message': e}), 409
 
 @app.route('/challenges/<int:id>', methods=['PUT'])
 def update_challenge(id):
