@@ -6,10 +6,11 @@ from APIs.login import login_user
 from authentication import get_Data_from_token
 from flask_cors import CORS
 from EmailAuth.createVerificationCode import createVerificationCode
-from EmailAuth.verifyCode import verifyCode,deleteCode,updateUserStatusAuth
+from EmailAuth.verifyCode import verifyCode, deleteCode, updateUserStatusAuth
 from EmailAuth.updatePassword import updatePassword
 from EmailAuth.forgetPassword import forgetPassword
-
+from APIs.challenge import add_challenge, get_challenge_id, update_challenge, delete_challenge, get_challenge_details
+from APIs.testCases import add_test_case, get_testCase_id, get_testCases, delete_test_case, update_test_case
 CORS(app)
 
 @app.route('/sendEmail', methods=['POST'])

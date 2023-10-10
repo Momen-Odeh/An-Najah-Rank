@@ -11,7 +11,6 @@ import useStyles from "./style";
 import { Link, useNavigate } from "react-router-dom";
 import handelStateChanges from "../../Utils/handelStateChanges";
 import Text from "../Text";
-import Swal from "sweetalert2";
 import Alert from "../Alert";
 import Axios from "axios";
 const SignUpForm = () => {

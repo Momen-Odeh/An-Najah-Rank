@@ -15,6 +15,8 @@ import EnrollStudent from "../Pages/EnrollStudent";
 import CourseView from "../Pages/CourseView";
 import Administration from "../Pages/Administration";
 import IsLoggedIn from "../Components/Authorization/IsLoggedIn";
+import Challenges from "../Pages/Challenges";
+import MoveToPath from '../Components/MoveToPath'
 import Profile from "../Pages/Profile";
 // const AboutUs = lazy(() => import("../Pages/AboutUs/SubComponents/AboutUs"))
 
@@ -27,6 +29,7 @@ export const routeNames = {
   NEW_PASSWORD: "New Password",
   CHALLENGE: "Challenge",
   CREATE_CHALLENGE: "Create Challenge",
+  CHALLENGES: "Challenges",
   CREATE_CONTEST: "Create Contest",
   CREATE_COURSE: "Create Course",
   CONTEST_VIEW: "Contest View",
@@ -131,14 +134,34 @@ export const routes = [
         component: <CreateChallenge />,
       },
       {
-        title: "moderators",
-        path: "moderators",
+        title: "test-cases",
+        path: "test-cases",
         component: <CreateChallenge />,
+      },
+    ],
+  },
+  {
+    path: "/challenges/:id",
+    title: routeNames.CHALLENGES,
+    component: (
+      <IsLoggedIn moveTo={"log-in"}>
+        <Outlet />
+      </IsLoggedIn>
+    ),
+    subRoutes: [
+      {
+        index: true,
+        component: <MoveToPath startPath="challenges" endPath="details"/>,
+      },
+      {
+        title: "details",
+        path: "details",
+        component: <Challenges />,
       },
       {
         title: "test-cases",
         path: "test-cases",
-        component: <CreateChallenge />,
+        component: <Challenges />,
       },
     ],
   },

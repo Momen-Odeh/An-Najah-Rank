@@ -1,10 +1,72 @@
-import React from 'react';
-import { Container, Row, Col, Form } from 'react-bootstrap';
-import Text from '../Text';
-import TextEditor from '../TextEditor';
-import Tags from '../Tags';
+import React, { useState } from "react";
+import { Container, Row, Col, Form } from "react-bootstrap";
+import Text from "../Text";
+import TextEditor from "../TextEditor";
+import Tags from "../Tags";
+import ButtonRank from "../ButtonRank";
+import Axios from "axios";
+import AlertComponent from "../Alert";
+import { useNavigate, useParams } from "react-router-dom";
+const Details = ({ operation, details, handleChange }) => {
+  const { id } = useParams();
+  const [showAlert, setShowAlert] = useState(false);
+  const [alertData, setAlertData] = useState({message:"", variant:"warning"});
+  const navigate = useNavigate();
+  const handleClick = async () => {
+    setShowAlert(false);
+    let thereError = false;
+    let challenge = {
+      difficulty: details.difficulty,
+      name: details.name,
+      description: details.description,
+      problem_statement: details.problemStatement,
+      input_format: details.inputFormat,
+      constraints: details.constraints,
+      output_format: details.outputFormat,
+      tags: details.tags.length === 0 ? null : details.tags,
+    };
+    try {
+      if (!details.name) throw new Error("should fill the name");
+      else if (!details.description)
+        throw new Error("should fill the description");
+      else if (!details.problemStatement)
+        throw new Error("should fill the problem statement");
+    } catch (error) {
+      setAlertData({message: error.message, variant: "warning"});
+      setShowAlert(true);
+      thereError = true;
+    }
+    if (!thereError) {
+      try {
+        if (operation === "create") {
+          const response = await Axios.post(
+            "http://localhost:5000/challenges",
+            challenge
+          );
+          challenge = {
+            ...challenge,
+            tags: details.tags.length === 0 ? null : JSON.stringify(details.tags),
+          };
+          const params = new URLSearchParams(challenge);
+          const res = await Axios.get(
+            "http://localhost:5000/challenge_id?" + params.toString()
+          );
+          navigate(`/challenges/${res.data.message}/test-cases`);
+        } else {
+          const response = await Axios.put(
+            `http://localhost:5000/challenges/${id}`,
+            challenge
+          );
+          navigate(`/challenges/${id}/test-cases`);
+        }
+        console.log(challenge);
+      } catch (error) {
+        setAlertData({message: error.response.data.message, variant: "danger"});
+        setShowAlert(true);
+      }
+    }
+  };
 
-const Details = ({ details, handleChange }) => {
   return (
     <Container fluid>
       <Row className="mb-3">
@@ -161,6 +223,28 @@ const Details = ({ details, handleChange }) => {
         </Col>
         <Col md={8}>
           <Tags tags={details.tags} handleChange={handleChange} />
+        </Col>
+      </Row>
+      <Row>
+        <Col md={2}></Col>
+        <Col md={8}>
+          {showAlert && (
+            <AlertComponent message={alertData.message} variant={alertData.variant} />
+          )}
+        </Col>
+      </Row>
+      <Row className="mb-3">
+        <Col md={2}></Col>
+        <Col md={8} className="d-flex justify-content-end">
+          <ButtonRank text={"Cancel Changes"} />
+          <span className="m-1"></span>
+          <ButtonRank
+            onClick={handleClick}
+            text={"Save Changes"}
+            backgroundColor="#1cb557"
+            hoverBackgroundColor="green"
+            color="white"
+          />
         </Col>
       </Row>
     </Container>
