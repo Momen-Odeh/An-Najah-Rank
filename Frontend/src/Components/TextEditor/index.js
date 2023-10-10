@@ -1,7 +1,6 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
-import { Container } from 'react-bootstrap';
 import useStyle from './Style';
 
 const TextEditor = ({name, text, handleChange}) => {
@@ -22,7 +21,15 @@ const TextEditor = ({name, text, handleChange}) => {
     'list', 'bullet', 'indent',
     'link', 'image'
   ];
-
+  const [isLoaded, setIsLoaded] = useState(false);
+  useEffect(() => {
+    setIsLoaded(true);
+  }, []);
+  const handleEditorChange = (value) => {
+    if (isLoaded) {
+      handleChange(null, name, value);
+    }
+  };
   return (
     <div className={classes.editorContainer}>
       <ReactQuill
@@ -30,7 +37,7 @@ const TextEditor = ({name, text, handleChange}) => {
         modules={modules}
         formats={formats}
         theme="snow"
-        onChange={(value)=>handleChange(null,name,value)}
+        onChange={handleEditorChange}
         className={classes.editor}
       />
       </div>

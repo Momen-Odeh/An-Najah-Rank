@@ -5,6 +5,7 @@ import TextEditor from "../TextEditor";
 import useStyle from "./Style";
 import DataTypes from "../DataTypes";
 import ButtonRank from "../ButtonRank";
+import AlertComponent from "../Alert";
 const TestCase = ({
   showAddModal,
   setShowAddModal,
@@ -22,14 +23,23 @@ const TestCase = ({
 
   const [selectedOptionInput, setSelectedOptionInput] = useState(inputType);
   const [selectedOptionOutput, setSelectedOptionOutput] = useState(outputType);
-
+  const [showAlert, setShowAlert] = useState(false);
+  const [alertData, setAlertData] = useState({
+    message: "",
+    variant: "warning",
+  });
   const handleInputChange = (e, optionName, val) => {
     if (e) {
       const { name, value, type, checked, files } = e.target;
       const newValue =
         type === "checkbox" ? checked : type === "file" ? files[0] : value;
       setCurrentTestCase({ ...currentTestCase, [name]: newValue });
-      if(name==='sample') setCurrentTestCase({ ...currentTestCase,[name]: newValue, 'strength':newValue?0:10  });
+      if (name === "sample")
+        setCurrentTestCase({
+          ...currentTestCase,
+          [name]: newValue,
+          strength: newValue ? 0 : 10,
+        });
     } else {
       setCurrentTestCase({ ...currentTestCase, [optionName]: val });
     }
@@ -41,6 +51,21 @@ const TestCase = ({
 
   const handleRadioChangeOutput = (event) => {
     setSelectedOptionOutput(event.target.value);
+  };
+
+  const handleClick = () => {
+    setShowAlert(false);
+    try {
+      if (!currentTestCase.input) {
+        throw new Error("should fill the input");
+      } else if (!currentTestCase.output) {
+        throw new Error("should fill the input");
+      }
+      return true;
+    } catch (error) {
+      setAlertData({ message: error.message, variant: "warning" });
+      setShowAlert(true);
+    }
   };
 
   return (
@@ -119,26 +144,45 @@ const TestCase = ({
                 />
               </Row>
             )}
+            <Row>
+              <Col md={2}></Col>
+              <Col md={8}>
+                {showAlert && (
+                  <AlertComponent
+                    message={alertData.message}
+                    variant={alertData.variant}
+                  />
+                )}
+              </Col>
+            </Row>
           </Container>
         </Modal.Body>
         <Modal.Footer>
           <Container>
             <Row>
               <Col className="d-flex justify-content-center">
-              {action === "add" && (<ButtonRank
-                  text={"Save"}
-                  onClick={handleAdd}
-                  backgroundColor="#1cb557"
-                  hoverBackgroundColor="green"
-                  color="white"
-                />)}
-                {action !== "add" && (<ButtonRank
-                  text={"Update"}
-                  onClick={()=>handleUpdate(null,"all",null)}
-                  backgroundColor="#1cb557"
-                  hoverBackgroundColor="green"
-                  color="white"
-                />)}
+                {action === "add" && (
+                  <ButtonRank
+                    text={"Save"}
+                    onClick={() => {
+                      if (handleClick()) handleAdd();
+                    }}
+                    backgroundColor="#1cb557"
+                    hoverBackgroundColor="green"
+                    color="white"
+                  />
+                )}
+                {action !== "add" && (
+                  <ButtonRank
+                    text={"Update"}
+                    onClick={() => {
+                      if (handleClick()) handleUpdate(null, "all", null);
+                    }}
+                    backgroundColor="#1cb557"
+                    hoverBackgroundColor="green"
+                    color="white"
+                  />
+                )}
                 {action !== "add" && (
                   <ButtonRank
                     text={"Cancel"}
