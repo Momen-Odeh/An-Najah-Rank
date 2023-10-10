@@ -17,6 +17,7 @@ import Administration from "../Pages/Administration";
 import IsLoggedIn from "../Components/Authorization/IsLoggedIn";
 import Challenges from "../Pages/Challenges";
 import MoveToPath from '../Components/MoveToPath'
+import Profile from "../Pages/Profile";
 // const AboutUs = lazy(() => import("../Pages/AboutUs/SubComponents/AboutUs"))
 
 export const routeNames = {
@@ -35,6 +36,7 @@ export const routeNames = {
   COURSE_VIEW: "Course View",
   ADMINISTRATION: "Administration",
   ENROLL_STUDENT: "Enroll Student",
+  PROFILE: "Profile",
 };
 export const routes = [
   {
@@ -46,6 +48,11 @@ export const routes = [
         <Home />{" "}
       </IsLoggedIn>
     ),
+  },
+  {
+    path: "/profile",
+    title: routeNames.PROFILE,
+    component: <Profile />,
   },
   {
     path: "/sign-up",

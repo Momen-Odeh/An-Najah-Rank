@@ -12,9 +12,13 @@ import handelStateChanges from "../../Utils/handelStateChanges";
 import axios from "axios";
 import AlertComponent from "../../Components/Alert";
 import { useNavigate } from "react-router-dom";
+import { useCookies } from "react-cookie";
+import { Navigate } from "react-router-dom";
+
 const ForgetPassword = () => {
   const classes = useStyles();
   const navigate = useNavigate();
+  const [cookies, setCookies] = useCookies();
   const setActiveTab = useOutletContext();
   useEffect(() => {
     setActiveTab(routeNames.LOG_IN);
@@ -40,7 +44,7 @@ const ForgetPassword = () => {
         setAlert({ value: true, msg: "Not found email please try again" });
       });
   };
-  return (
+  return !cookies?.token ? ( // Gard for forget passoed
     <div className={classes.center}>
       <Container className={`${classes.Container}`}>
         <Row className={`${classes.Row}  mb-4`}>
@@ -119,6 +123,8 @@ const ForgetPassword = () => {
         </Row>
       </Container>
     </div>
+  ) : (
+    <Navigate to={"/"} />
   );
 };
 

@@ -5,7 +5,7 @@ import TextRegister from "../../Components/Text";
 import InputFiledRegister from "../../Components/InputFiledRegister";
 import { TfiLock } from "react-icons/tfi";
 import ButtonRegister from "../../Components/ButtonRegister";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import { routeNames } from "../../Utils/Utils";
 import { useOutletContext } from "react-router-dom";
 import handelStateChanges from "../../Utils/handelStateChanges";
@@ -45,7 +45,7 @@ const NewPassword = () => {
         }
       });
   };
-  return (
+  return sessionStorage?.event ? ( //Gard for the new password
     <div className={classes.center}>
       <Container className={`${classes.Container}`}>
         <Row className={`${classes.Row}  mb-4`}>
@@ -120,6 +120,8 @@ const NewPassword = () => {
         </Row>
       </Container>
     </div>
+  ) : (
+    <Navigate to={"/"} />
   );
 };
 
