@@ -1,7 +1,7 @@
 from FlaskSetUp import app
 from flask import request, jsonify
 import json
-from dataBaseConnection import insert_data, update_data, delete_data
+from dataBaseConnection import insert_data, update_data, delete_data, execute_query, fetch_results
 from MySQL_SetUp import connection
 
 @app.route('/challenges', methods=['POST'])
@@ -22,7 +22,7 @@ def add_challenge():
     except Exception as e:
         return {'message': str(e)}, 409
 
-@app.route('/challenges', methods=['GET'])
+@app.route('/challenge_id', methods=['GET'])
 def get_challenge_id():
     try:
         sql_query = """
@@ -56,6 +56,30 @@ def get_challenge_id():
     except Exception as e:
         return {'message': str(e)}, 409
 
+@app.route('/get-challenge', methods=['GET'])
+def get_challenge_details():
+    try:
+        query = f"""SELECT * from challenges WHERE id = {request.args.get('challenge_id')}"""
+        cursor = connection.cursor()
+        cursor.execute(query)
+        result = cursor.fetchone()
+        if result:
+            response = {
+                'difficulty': result[3],
+                'name': result[1],
+                'description': result[2],
+                'problemStatement': result[4],
+                'inputFormat': result[5],
+                'constraints': result[6],
+                'outputFormat': result[7],
+                'tags': json.loads(result[8])
+            }
+            return response
+        else:
+            return jsonify({'message': 'Challenge not found'}), 404
+    except Exception as e:
+        return jsonify({'message': str(e)}), 409
+
 @app.route('/challenges/<int:id>', methods=['PUT'])
 def update_challenge(id):
     try:
@@ -75,7 +99,7 @@ def update_challenge(id):
         )
         result = update_data(
             connection,
-            'test_cases',
+            'challenges',
             ['name', 'description', 'difficulty', 'problem_statement', 'input_format', 'constraints', 'output_format',
              'tags'],
             new_values,
