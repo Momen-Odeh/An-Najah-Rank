@@ -23,7 +23,7 @@ const Tags = ({tags, handleChange, name}) => {
         placeholder={"Add a tag"}
         />
       <div>
-        {tags.map((tag) => (
+        {tags?.map((tag) => (
           <span key={tag} className={`badge  bg-secondary m-1 p-1 ${classes.tabContent}`}>
             {tag}
             <button
