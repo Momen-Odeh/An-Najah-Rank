@@ -11,75 +11,94 @@ const sample = {
  9,-4,16,2`,
   output: "53",
 };
-const TestCaseProblem = ({ input, outputExpect, outputReal, compilerMsg }) => {
+const TestCaseProblem = ({
+  error,
+  title,
+  input,
+  outputExpect,
+  outputReal,
+  compilerMsg,
+}) => {
   const classes = useStyles();
   return (
     <Container fluid className={classes.Container}>
-      <Row>
+      <Row className="mb-3">
         <Col>
           <Text
-            text={"Your code did not pass this test case."}
-            color="#39424E "
-            size="17.6px"
+            text={title}
+            color={error ? "red" : "#39424E"}
+            size={error ? "22px" : "17.6px"}
           />
         </Col>
       </Row>
-      <Row>
-        <Col>
-          <Text text={"Input (stdin)"} color="#39424E " size="14px" />
-        </Col>
-      </Row>
-      <Row>
-        <Col>
-          <SampleContainer
-            data={input}
-            backgroundColor="#efefef"
-            border={"1px solid #c2c7d0"}
-          />
-        </Col>
-      </Row>
-      <Row>
-        <Col>
-          <Text text={"Your Output (stdout)"} color="#39424E " size="14px" />
-        </Col>
-      </Row>
-      <Row>
-        <Col>
-          <SampleContainer
-            data={outputReal}
-            backgroundColor="#efefef"
-            border={"1px solid #c2c7d0"}
-          />
-        </Col>
-      </Row>
-      <Row>
-        <Col>
-          <Text text={"Expected Output"} color="#39424E " size="14px" />
-        </Col>
-      </Row>
-      <Row>
-        <Col>
-          <SampleContainer
-            data={outputExpect}
-            backgroundColor="#efefef"
-            border={"1px solid #c2c7d0"}
-          />
-        </Col>
-      </Row>
-      <Row>
-        <Col>
-          <Text text={"Compiler Message"} color="#39424E " size="14px" />
-        </Col>
-      </Row>
-      <Row>
-        <Col>
-          <SampleContainer
-            data={compilerMsg}
-            backgroundColor="#efefef"
-            border={"1px solid #c2c7d0"}
-          />
-        </Col>
-      </Row>
+      {!error && (
+        <>
+          <Row>
+            <Col>
+              <Text text={"Input (stdin)"} color="#39424E " size="14px" />
+            </Col>
+          </Row>
+          <Row>
+            <Col>
+              <SampleContainer
+                data={input}
+                backgroundColor="#efefef"
+                border={"1px solid #c2c7d0"}
+              />
+            </Col>
+          </Row>
+          <Row>
+            <Col>
+              <Text
+                text={"Your Output (stdout)"}
+                color="#39424E "
+                size="14px"
+              />
+            </Col>
+          </Row>
+          <Row>
+            <Col>
+              <SampleContainer
+                data={outputReal}
+                backgroundColor="#efefef"
+                border={"1px solid #c2c7d0"}
+              />
+            </Col>
+          </Row>
+          <Row>
+            <Col>
+              <Text text={"Expected Output"} color="#39424E " size="14px" />
+            </Col>
+          </Row>
+          <Row>
+            <Col>
+              <SampleContainer
+                data={outputExpect}
+                backgroundColor="#efefef"
+                border={"1px solid #c2c7d0"}
+              />
+            </Col>
+          </Row>
+        </>
+      )}
+      {compilerMsg && (
+        <>
+          <Row>
+            <Col>
+              <Text text={"Compiler Message"} color="#39424E " size="14px" />
+            </Col>
+          </Row>
+          <Row>
+            <Col>
+              <SampleContainer
+                data={compilerMsg}
+                backgroundColor="#efefef"
+                border={"1px solid #c2c7d0"}
+              />
+            </Col>
+          </Row>
+        </>
+      )}
     </Container>
   );
 };

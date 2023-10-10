@@ -44,7 +44,7 @@ def compileAndRunCCode(code):
             else:
                 return jsonify({'error': 'Runtime error', 'stderr': stderr}), 500
         else:
-            return jsonify({'error': 'Compilation error', 'stderr': std}), 400
+            return jsonify({'error': 'Compile time error', 'stderr': std}), 400
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 

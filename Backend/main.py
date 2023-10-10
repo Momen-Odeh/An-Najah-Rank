@@ -20,7 +20,7 @@ def applayJava():
 
 @app.route('/c', methods=['POST'])
 def compile_and_run_c():
-    c_code = request.json.get('c_code')
+    c_code = request.json.get('code')
     if not c_code:
         return jsonify({"error": "Missing 'c_code' parameter"}), 400
     return compileAndRunCCode(c_code)

@@ -70,30 +70,30 @@ const Challenge = ({}) => {
       .then((res) => {
         setChallengeData(res.data);
         console.log(res);
-        const ArrTest = res.data.testCases.map((item, index) => {
-          return {
-            eventKey: "TestCase " + index,
-            title: (
-              <span>
-                TestCase {index}{" "}
-                {/* <FaCheck className={`${clasess.Icon} ${clasess.IconPass}`} /> */}
-              </span>
-            ),
-            TabComponent: (
-              <TestCaseProblem
-                input={item.input_data}
-                outputExpect={item.output_data}
-                outputReal={50}
-                compilerMsg={"Correct Answer"}
-              />
-            ),
-          };
-        });
-        console.log(ArrTest);
-        setTestCases({
-          ...testCases,
-          tabContent: ArrTest,
-        });
+        // const ArrTest = res.data.testCases.map((item, index) => {
+        //   return {
+        //     eventKey: "TestCase " + index,
+        //     title: (
+        //       <span>
+        //         TestCase {index}{" "}
+        //         {/* <FaCheck className={`${clasess.Icon} ${clasess.IconPass}`} /> */}
+        //       </span>
+        //     ),
+        //     TabComponent: (
+        //       <TestCaseProblem
+        //         input={item.input_data}
+        //         outputExpect={item.output_data}
+        //         outputReal={50}
+        //         compilerMsg={"Correct Answer"}
+        //       />
+        //     ),
+        //   };
+        // });
+        // console.log(ArrTest);
+        // setTestCases({
+        //   ...testCases,
+        //   tabContent: ArrTest,
+        // });
       })
       .catch((e) => {
         console.log(e.response);
