@@ -43,7 +43,7 @@ def updateUserStatusAuth ():
         email = val.get('email')
         res = execute_query(connection, f"select role from user where email = '{email}'")
         if(fetch_results(res)[0][0] == "student"):
-            return update_data(connection,'user',['status'],("active"),f"email = '{email}'")
+            return update_data(connection,'user',['status'],("approved"),f"email = '{email}'")
         elif (fetch_results(res)[0][0] == "professor") :
             return update_data(connection, 'user', ['status'], ("pending for adminstrator"), f"email = '{email}'")
 
