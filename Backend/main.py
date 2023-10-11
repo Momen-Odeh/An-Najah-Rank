@@ -3,8 +3,9 @@ from codeCompilationAndRun.java import compileAndRunJavaCode
 from codeCompilationAndRun.c import compileAndRunCCode
 from codeCompilationAndRun.python import runPythonCode
 from codeCompilationAndRun.javaScript import runJsCode
+from flask_cors import CORS
 app = Flask(__name__)
-
+CORS(app)
 @app.route('/java', methods=['POST'])
 def applayJava():
     if request.is_json:
@@ -19,7 +20,7 @@ def applayJava():
 
 @app.route('/c', methods=['POST'])
 def compile_and_run_c():
-    c_code = request.json.get('c_code')
+    c_code = request.json.get('code')
     if not c_code:
         return jsonify({"error": "Missing 'c_code' parameter"}), 400
     return compileAndRunCCode(c_code)
@@ -51,4 +52,4 @@ def applayJs():
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=True, port=5001)

@@ -18,6 +18,7 @@ import IsLoggedIn from "../Components/Authorization/IsLoggedIn";
 import Challenges from "../Pages/Challenges";
 import MoveToPath from '../Components/MoveToPath'
 import Profile from "../Pages/Profile";
+import MoveToPath from "../Components/MoveToPath";
 // const AboutUs = lazy(() => import("../Pages/AboutUs/SubComponents/AboutUs"))
 
 export const routeNames = {
@@ -80,7 +81,7 @@ export const routes = [
     component: <NewPassword />,
   },
   {
-    path: "/challenge",
+    path: "/challenge/:id",
     title: routeNames.CHALLENGE,
     component: (
       <IsLoggedIn moveTo={"log-in"}>
@@ -91,7 +92,7 @@ export const routes = [
     subRoutes: [
       {
         index: true,
-        component: <Navigate to={"/challenge/problem"} />,
+        component: <MoveToPath endPath={"problem"} />,
       },
       {
         title: "problem",

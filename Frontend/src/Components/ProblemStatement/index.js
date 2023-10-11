@@ -1,16 +1,23 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Col, Container, Row } from "react-bootstrap";
 import useStyles from "./style";
 import Text from "../Text";
 import SampleContainer from "../SampleContainer";
+import ChallengeContext from "../../Utils/ChallengeContext";
 
-const ProblemStatement = ({ data }) => {
+const ProblemStatement = () => {
   const classes = useStyles();
+  const context = useContext(ChallengeContext);
   return (
     <Container fluid>
       <Row className="mb-4">
         <Col className={classes.Col}>
-          <span className={classes.descrition}> {data.descrition}</span>
+          <span
+            className={classes.descrition}
+            dangerouslySetInnerHTML={{
+              __html: context.challengeData.description,
+            }}
+          />
         </Col>
       </Row>
       <Row className="mb-1">
@@ -20,7 +27,12 @@ const ProblemStatement = ({ data }) => {
       </Row>
       <Row className="mb-4">
         <Col className={classes.Col}>
-          <span className={classes.descrition}> {data.inputFormat}</span>
+          <span
+            className={classes.descrition}
+            dangerouslySetInnerHTML={{
+              __html: context.challengeData.inputFormat,
+            }}
+          />
         </Col>
       </Row>
       <Row className="mb-1">
@@ -30,7 +42,12 @@ const ProblemStatement = ({ data }) => {
       </Row>
       <Row className="mb-4">
         <Col className={classes.Col}>
-          <span className={classes.descrition}> {data.Constraints}</span>
+          <span
+            className={classes.descrition}
+            dangerouslySetInnerHTML={{
+              __html: context.challengeData.constraints,
+            }}
+          />
         </Col>
       </Row>
       <Row className="mb-1">
@@ -40,10 +57,16 @@ const ProblemStatement = ({ data }) => {
       </Row>
       <Row className="mb-4">
         <Col className={classes.Col}>
-          <span className={classes.descrition}> {data.outputFormat}</span>
+          <span
+            className={classes.descrition}
+            dangerouslySetInnerHTML={{
+              __html: context.challengeData.outputFormat,
+            }}
+          />
         </Col>
       </Row>
-      {data.sampleInput.map((item, index) => (
+      {/* {console.log(context.challengeData.testCases)} */}
+      {context.challengeData?.testCases?.map((itemData, index) => (
         <div key={index}>
           <Row className="mb-1">
             <Col className={classes.Col}>
@@ -52,23 +75,35 @@ const ProblemStatement = ({ data }) => {
           </Row>
           <Row className="mb-4">
             <Col className={`${classes.Col} `}>
-              <SampleContainer data={item} />
+              <SampleContainer data={itemData.input_data} />
             </Col>
           </Row>
-        </div>
-      ))}
-      {data.sampleOutput.map((item, index) => (
-        <div key={index}>
           <Row className="mb-1">
             <Col className={classes.Col}>
-              <Text text={`Simple Output ${index}`} />
+              <Text text={`Sample Output ${index}`} />
             </Col>
           </Row>
           <Row className="mb-4">
             <Col className={`${classes.Col} `}>
-              <SampleContainer data={item} />
+              <SampleContainer data={itemData.output_data} />
             </Col>
           </Row>
+          {/*  */}
+          {itemData.explanation && (
+            <>
+              <Row className="mb-1">
+                <Col className={classes.Col}>
+                  <Text text={`Explanation ${index}`} />
+                </Col>
+              </Row>
+              <Row className="mb-4">
+                <Col className={`${classes.Col} `}>
+                  <SampleContainer data={itemData.explanation} />
+                </Col>
+              </Row>
+            </>
+          )}
+          {/*  */}
         </div>
       ))}
     </Container>

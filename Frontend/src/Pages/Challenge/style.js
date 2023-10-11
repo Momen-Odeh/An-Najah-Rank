@@ -14,6 +14,17 @@ const useStyles = createUseStyles({
     width: "100%",
     // backgroundColor: "red",
   },
+  Icon: {
+    textAlign: "center",
+    marginLeft: "5px",
+    fontSize: "15px",
+  },
+  IconPass: {
+    color: "green",
+  },
+  IconFail: {
+    color: "red",
+  },
 });
 
 export default useStyles;

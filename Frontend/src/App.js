@@ -1,6 +1,6 @@
 import "./App.css";
 import "bootstrap/dist/css/bootstrap.css";
-import 'sweetalert2/dist/sweetalert2.min.css'
+import "sweetalert2/dist/sweetalert2.min.css";
 import {
   RouterProvider,
   Route,
@@ -10,10 +10,11 @@ import {
 import { Suspense } from "react";
 import PageLayout from "./Layout/PageLayout";
 import { routes, generateRoutes } from "./Utils/Utils";
+import NotFound from "./Components/NotFound";
 function App() {
   const router = createBrowserRouter(
     createRoutesFromElements(
-      <Route element={<PageLayout />} errorElement={<>Not Found</>}>
+      <Route element={<PageLayout />} errorElement={<NotFound />}>
         {generateRoutes(routes)}
       </Route>
     )

@@ -23,6 +23,17 @@ const useStyles = createUseStyles({
   RowSelect: {
     borderBottom: "1.5px solid #c2c7d0",
   },
+  Icon: {
+    textAlign: "center",
+    marginLeft: "5px",
+    fontSize: "15px",
+  },
+  IconPass: {
+    color: "green",
+  },
+  IconFail: {
+    color: "red",
+  },
 });
 
 export default useStyles;

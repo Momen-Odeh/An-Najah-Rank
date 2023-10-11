@@ -10,48 +10,51 @@ import { Link, useNavigate } from "react-router-dom";
 import handelStateChanges from "../../Utils/handelStateChanges";
 import Axios from "axios";
 import Alert from "../Alert";
-import { useCookies } from 'react-cookie';
+import { useCookies } from "react-cookie";
 import { useUserContext } from "../../Utils/userContext";
 const LogInForm = () => {
-  const navigate = useNavigate()
-  const [cookies, setCookie, removeCookie] = useCookies(['token'])
-  const [activeUser ,setActiveUser] = useUserContext()
+  const navigate = useNavigate();
+  const [cookies, setCookie, removeCookie] = useCookies(["token"]);
+  const [activeUser, setActiveUser] = useUserContext();
   const [loginValue, setLoginValue] = useState({ email: "", password: "" });
-  const [showAlert, setShowAlert] = useState(false)
-  const [alertMessage,setAlertMessage] = useState('')
-  const [variant, setVariant] = useState('warning')
-  const handelLoginButton = async (e) => {
+  const [showAlert, setShowAlert] = useState(false);
+  const [alertMessage, setAlertMessage] = useState("");
+  const [variant, setVariant] = useState("warning");
+  const preventDefultAction = (e) => {
     e.preventDefault();
-    let thereError=false;
-    try{
-      setShowAlert(false)
-      if(!loginValue.email){
-        throw new Error("should enter your email")
-      }else if(!loginValue.password){
-        throw new Error("should enter your password")
-      }
-    }catch(error){
-      setAlertMessage(error.message)
-      setVariant('warning')
-      setShowAlert(true)
-      thereError=true;
-    }
-    if(!thereError){
+  };
+  const handelLoginButton = async (e) => {
+    let thereError = false;
     try {
-      const response = await Axios.get("http://localhost:5000/login", {
-        params: {
-          email: loginValue.email,
-          password: loginValue.password,
-        },
-      });
-      setActiveUser(response.data.token)
-      setCookie('token',response.data.token)
-      navigate('/')
+      setShowAlert(false);
+      if (!loginValue.email) {
+        throw new Error("should enter your email");
+      } else if (!loginValue.password) {
+        throw new Error("should enter your password");
+      }
     } catch (error) {
-      setAlertMessage(error.response.data.message)
-      setVariant('danger')
-      setShowAlert(true)
-    }}
+      setAlertMessage(error.message);
+      setVariant("warning");
+      setShowAlert(true);
+      thereError = true;
+    }
+    if (!thereError) {
+      try {
+        const response = await Axios.get("http://localhost:5000/login", {
+          params: {
+            email: loginValue.email,
+            password: loginValue.password,
+          },
+        });
+        setActiveUser(response.data.token);
+        setCookie("token", response.data.token);
+        navigate("/");
+      } catch (error) {
+        setAlertMessage(error.response.data.message);
+        setVariant("danger");
+        setShowAlert(true);
+      }
+    }
   };
   const classes = useStyles();
   return (
@@ -109,6 +112,7 @@ const LogInForm = () => {
             onChange={(event) =>
               handelStateChanges(event, loginValue, setLoginValue)
             }
+            onClick={preventDefultAction}
           />
         </Col>
       </Row>
@@ -123,6 +127,7 @@ const LogInForm = () => {
             onChange={(event) =>
               handelStateChanges(event, loginValue, setLoginValue)
             }
+            onClick={preventDefultAction}
           />
         </Col>
       </Row>
@@ -141,9 +146,7 @@ const LogInForm = () => {
       </Row>
       <Row>
         <Col>
-        {showAlert&&
-        <Alert message={alertMessage} variant={variant}/>
-        }
+          {showAlert && <Alert message={alertMessage} variant={variant} />}
         </Col>
       </Row>
       <Row>
