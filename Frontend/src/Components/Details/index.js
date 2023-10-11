@@ -7,11 +7,38 @@ import ButtonRank from "../ButtonRank";
 import Axios from "axios";
 import AlertComponent from "../Alert";
 import { useNavigate, useParams } from "react-router-dom";
-const Details = ({ operation, details, handleChange }) => {
+import { useEffect } from "react";
+const Details = ({ operation, data }) => {
   const { id } = useParams();
+  const [details, setDetails] = useState({
+    difficulty: "Easy",
+    name: null,
+    description: null,
+    problemStatement: null,
+    inputFormat: null,
+    constraints: null,
+    outputFormat: null,
+    tags: [],
+  });
+  useEffect(() => {
+    if (data) setDetails(data);
+  }, [data]);
   const [showAlert, setShowAlert] = useState(false);
-  const [alertData, setAlertData] = useState({message:"", variant:"warning"});
+  const [alertData, setAlertData] = useState({
+    message: "",
+    variant: "warning",
+  });
   const navigate = useNavigate();
+  const handleChange = (e, nameVal = null, val = null) => {
+    if (e) {
+      const { name, value } = e.target;
+      console.log(details);
+      setDetails({ ...details, [name]: value });
+    } else {
+      setDetails({ ...details, [nameVal]: val });
+      console.log(details);
+    }
+  };
   const handleClick = async () => {
     setShowAlert(false);
     let thereError = false;
@@ -32,7 +59,7 @@ const Details = ({ operation, details, handleChange }) => {
       else if (!details.problemStatement)
         throw new Error("should fill the problem statement");
     } catch (error) {
-      setAlertData({message: error.message, variant: "warning"});
+      setAlertData({ message: error.message, variant: "warning" });
       setShowAlert(true);
       thereError = true;
     }
@@ -45,7 +72,8 @@ const Details = ({ operation, details, handleChange }) => {
           );
           challenge = {
             ...challenge,
-            tags: details.tags.length === 0 ? null : JSON.stringify(details.tags),
+            tags:
+              details.tags.length === 0 ? null : JSON.stringify(details.tags),
           };
           const params = new URLSearchParams(challenge);
           const res = await Axios.get(
@@ -61,7 +89,10 @@ const Details = ({ operation, details, handleChange }) => {
         }
         console.log(challenge);
       } catch (error) {
-        setAlertData({message: error.response.data.message, variant: "danger"});
+        setAlertData({
+          message: error.response.data.message,
+          variant: "danger",
+        });
         setShowAlert(true);
       }
     }
@@ -229,7 +260,10 @@ const Details = ({ operation, details, handleChange }) => {
         <Col md={2}></Col>
         <Col md={8}>
           {showAlert && (
-            <AlertComponent message={alertData.message} variant={alertData.variant} />
+            <AlertComponent
+              message={alertData.message}
+              variant={alertData.variant}
+            />
           )}
         </Col>
       </Row>

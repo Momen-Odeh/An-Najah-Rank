@@ -23,7 +23,9 @@ const TextEditor = ({name, text, handleChange}) => {
   ];
   const [isLoaded, setIsLoaded] = useState(false);
   useEffect(() => {
-    setIsLoaded(true);
+    setTimeout(()=>{
+      setIsLoaded(true);
+    },700)
   }, []);
   const handleEditorChange = (value) => {
     if (isLoaded) {

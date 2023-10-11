@@ -18,7 +18,6 @@ import IsLoggedIn from "../Components/Authorization/IsLoggedIn";
 import Challenges from "../Pages/Challenges";
 import MoveToPath from '../Components/MoveToPath'
 import Profile from "../Pages/Profile";
-import MoveToPath from "../Components/MoveToPath";
 // const AboutUs = lazy(() => import("../Pages/AboutUs/SubComponents/AboutUs"))
 
 export const routeNames = {
