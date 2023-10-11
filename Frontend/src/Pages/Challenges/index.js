@@ -21,33 +21,33 @@ const Challenges = () => {
       });
       const [challengeName, setChallengeName] = useState(null)
       useEffect(() => {
-        Axios.get(`http://localhost:5000/get-challenge?challenge_id=23`)
-          .then((res) => {
-            setDetails(res.data.message)
-            setChallengeName(res.data.message.name)
-          })
-          .catch((error) => {
-            console.log('Error:', error)
-            if (error.response) {
-              console.log('Response data:', error.response.data)
-              console.log('Response status:', error.response.status)
-            }
-          });
-      //   const res = {
-      //     difficulty: "Easy",
-      //     name: "test 22",
-      //     description: "add two numbers",
-      //     problemStatement: "<p>x + y </p>",
-      //     inputFormat: "<p>int</p>",
-      //     constraints: "<p>x&gt;0</p>",
-      //     outputFormat: "<p>int</p>",
-      //     tags:[
-      //       "dsa",
-      //       "ser"
-      //     ]
-      // }
-        // setDetails(res)
-        // setChallengeName(res.name)
+        // Axios.get(`http://localhost:5000/get-challenge?challenge_id=23`)
+        //   .then((res) => {
+        //     setDetails(res.data.message)
+        //     setChallengeName(res.data.message.name)
+        //   })
+        //   .catch((error) => {
+        //     console.log('Error:', error)
+        //     if (error.response) {
+        //       console.log('Response data:', error.response.data)
+        //       console.log('Response status:', error.response.status)
+        //     }
+        //   });
+        const res = {
+          difficulty: "Easy",
+          name: "test 22",
+          description: "add two numbers",
+          problemStatement: "<p>x + y </p>",
+          inputFormat: "<p>int</p>",
+          constraints: "<p>x&gt;0</p>",
+          outputFormat: "<p>int</p>",
+          tags:[
+            "dsa",
+            "ser"
+          ]
+      }
+        setDetails(res)
+        setChallengeName(res.name)
     }, []);
     console.log(details)
     const handleChange = (e, nameVal=null, val = null) => {
