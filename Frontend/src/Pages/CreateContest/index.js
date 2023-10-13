@@ -1,10 +1,7 @@
 import React from "react";
 import { Col, Container, Row } from "react-bootstrap";
 import Breadcrumbs from "../../Components/Breadcrumbs";
-import Text from "../../Components/Text";
-import ChallengeTabs from "../../Components/ChallengTabs";
 import ContestsDetalis from "../../Components/ContestDetails";
-import ContestChallenges from "../../Components/ContestChallenges";
 import useStyles from "./style";
 const path = [
   {
@@ -12,46 +9,27 @@ const path = [
     url: "/log-in",
   },
   {
-    title: "   Momen Test",
+    title: "create contest",
     url: "",
   },
 ];
 
-const tabContent = [
-  {
-    eventKey: "Details",
-    title: "Details",
-    TabComponent: <ContestsDetalis />,
-    urlPattern:'/create-contest/details'
-  },
-  {
-    eventKey: "ContestChallenges",
-    title: "Challenges",
-    TabComponent: <ContestChallenges />,
-    urlPattern:'/create-contest/challenges'
-  },
-];
 const CreateContest = () => {
-  const clasess = useStyles();
+  const classes = useStyles();
   return (
     <>
-      <Container fluid className={clasess.Container}>
-        <Row className={`mt-2 ${clasess.maxWidth}`}>
+      <Container className={classes.Container}>
+        <Row className={`mt-2 ${classes.maxWidth}`}>
           <Col>
             <Breadcrumbs path={path} />
           </Col>
         </Row>
       </Container>
       <hr></hr>
-      <Container fluid className={clasess.Container}>
-        <Row className={`mb-4 ${clasess.maxWidth}`}>
+      <Container className={classes.Container}>
+        <Row className={`mb-4 mt-2 ${classes.maxWidth}`}>
           <Col>
-            <Text text={"Momen Test"} size="36px" wegiht="500" height="40px" />
-          </Col>
-        </Row>
-        <Row className={`mb-4 ${clasess.maxWidth}`}>
-          <Col>
-            <ChallengeTabs ListTabs={tabContent} />
+            <ContestsDetalis operation={"create"}/>
           </Col>
         </Row>
       </Container>
