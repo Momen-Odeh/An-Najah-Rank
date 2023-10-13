@@ -8,6 +8,7 @@ import Axios from "axios";
 import AlertComponent from "../Alert";
 import { useNavigate, useParams } from "react-router-dom";
 import { useEffect } from "react";
+import { useCookies } from "react-cookie";
 const Details = ({ operation, data }) => {
   const { id } = useParams();
   const [details, setDetails] = useState({
@@ -28,6 +29,7 @@ const Details = ({ operation, data }) => {
     message: "",
     variant: "warning",
   });
+  const [cookies, setCookies] = useCookies();
   const navigate = useNavigate();
   const handleChange = (e, nameVal = null, val = null) => {
     if (e) {
@@ -51,6 +53,7 @@ const Details = ({ operation, data }) => {
       constraints: details.constraints,
       output_format: details.outputFormat,
       tags: details.tags.length === 0 ? null : details.tags,
+      token: cookies?.token,
     };
     try {
       if (!details.name) throw new Error("should fill the name");

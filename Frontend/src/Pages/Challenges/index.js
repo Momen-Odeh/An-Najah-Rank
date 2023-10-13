@@ -19,7 +19,6 @@ const Challenges = () => {
     outputFormat: null,
     tags: [],
   });
-  const [challengeName, setChallengeName] = useState(null);
   const [testCasesData, setTestCasesData] = useState([]);
   useEffect(() => {
     Axios.get("http://127.0.0.1:5000/challenge/" + id)
@@ -47,13 +46,11 @@ const Challenges = () => {
             isSelected: false,
           }))
         );
-        setChallengeName(res.data.name);
       })
       .catch((e) => {
         console.log(e.response);
       });
   }, []);
-  console.log(details);
 
   const tabs = [
     {
@@ -73,7 +70,7 @@ const Challenges = () => {
   ];
   const path = [
     { title: "Manage Challenges", url: "#manage challenges" },
-    { title: challengeName, url: "#" },
+    { title: details.name, url: "#" },
   ];
   return (
     <>
@@ -86,7 +83,7 @@ const Challenges = () => {
       <Container>
         <Row className="m-2 mt-4 mb-2">
           <Text
-            text={challengeName}
+            text={details.name}
             size={"30px"}
             fontFamily={"OpenSans"}
             color={"#39424e"}

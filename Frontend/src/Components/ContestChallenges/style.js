@@ -17,5 +17,11 @@ const useStyles = createUseStyles({
   smallWidth: {
     width: "50px",
   },
+  iconColor:{
+    marginLeft:'10px',
+    '&:hover':{
+        color:'#4691f6 !important'
+    },
+  },
 });
 export default useStyles;

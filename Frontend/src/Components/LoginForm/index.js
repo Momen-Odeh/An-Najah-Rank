@@ -50,7 +50,9 @@ const LogInForm = () => {
         setCookie("token", response.data.token);
         navigate("/");
       } catch (error) {
-        setAlertMessage(error.response.data.message);
+        error.response?.data.message
+          ? setAlertMessage(error.response.data.message)
+          : setAlertMessage("no connection with backend");
         setVariant("danger");
         setShowAlert(true);
       }
