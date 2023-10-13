@@ -5,15 +5,16 @@ SECRET_KEY = 'Noor_Aldeen_$%!~_@2002@_^&*'
 def get_Data_from_token(token):
     try:
         decoded_token = jwt.decode(token, SECRET_KEY, algorithms=['HS256'])
-        return {'email': decoded_token['email'], 'name': decoded_token['name'], 'role': decoded_token['role']}
+        return {'email': decoded_token['email'], 'universityNumber': decoded_token['universityNumber'], 'name': decoded_token['name'], 'role': decoded_token['role']}
     except jwt.ExpiredSignatureError:
         return False
     except jwt.InvalidTokenError:
         return False
 
-def generate_token(email, name, role):
+def generate_token(email, universityNumber, name, role):
     payload = {
         'email': email,
+        'universityNumber': universityNumber,
         'name': name,
         'role': role
     }

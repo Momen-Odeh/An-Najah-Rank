@@ -25,7 +25,7 @@ def getChallenge(id):
         print(resultTestCases)
         if len(result) != 0:
             # id, name, description, difficulty, problem_statement, input_format, constraints, output_format, tags, created_at, updated_at
-            return jsonify({
+            return {
                     "status": f"ok",
                     "id": result[0][0],
                     "name":result[0][1],
@@ -39,7 +39,7 @@ def getChallenge(id):
                     "created_at": result[0][9],
                     "updated_at": result[0][10],
                     "testCases":test_case_objects
-                            }), 200
+                            }, 200
         else:
             return jsonify({
                     "status": f"not found",
