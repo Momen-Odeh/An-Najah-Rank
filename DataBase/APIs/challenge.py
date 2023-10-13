@@ -3,20 +3,21 @@ from flask import request, jsonify
 import json
 from dataBaseConnection import insert_data, update_data, delete_data, execute_query, fetch_results
 from MySQL_SetUp import connection
-
+from authentication import get_Data_from_token
 @app.route('/challenges', methods=['POST'])
 def add_challenge():
     try:
         data = request.get_json()
-        print(data)
+        tokenData = get_Data_from_token(data['token'])
+        ownerUniversityNumber = tokenData['universityNumber']
         converted_tags = json.dumps(data['tags'])
         result = insert_data(
             connection,
             'challenges',
             ['name', 'description', 'difficulty', 'problem_statement', 'input_format', 'constraints', 'output_format',
-             'tags'],
+             'tags','ownerUniversityNumber'],
             (data['name'], data['description'], data['difficulty'], data['problem_statement'], data['input_format'],
-             data['constraints'], data['output_format'], converted_tags)
+             data['constraints'], data['output_format'], converted_tags,ownerUniversityNumber)
         )
         return result
     except Exception as e:
@@ -37,8 +38,10 @@ def get_challenge_id():
                 AND constraints = %s 
                 AND output_format = %s 
                 AND JSON_CONTAINS(tags, %s)
+                AND ownerUniversityNumber = %s
         """
-        print(request.args.get('tags'))
+        tokenData = get_Data_from_token(request.args.get('token'))
+        ownerUniversityNumber = tokenData['universityNumber']
         params = (
             request.args.get('name'),
             request.args.get('description'),
@@ -47,7 +50,8 @@ def get_challenge_id():
             request.args.get('input_format'),
             request.args.get('constraints'),
             request.args.get('output_format'),
-            request.args.get('tags')
+            request.args.get('tags'),
+            ownerUniversityNumber
         )
         cursor = connection.cursor()
         cursor.execute(sql_query, params)
