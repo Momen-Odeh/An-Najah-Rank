@@ -12,6 +12,9 @@ from EmailAuth.forgetPassword import forgetPassword
 from APIs.challengeInfo import getChallenge
 from APIs.challenge import add_challenge, get_challenge_id, update_challenge, delete_challenge, get_challenge_details
 from APIs.testCases import add_test_case, get_testCase_id, get_testCases, delete_test_case, update_test_case
+from APIs.contests import add_contest
+from APIs.contestInfo import get_contests_info
+from APIs.contestChallenges import add_challenge_in_contest
 CORS(app)
 
 @app.route('/sendEmail', methods=['POST'])

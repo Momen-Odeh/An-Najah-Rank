@@ -10,7 +10,7 @@ import Axios from "axios";
 import AlertComponent from "../Alert";
 import { useParams } from "react-router-dom";
 
-const TestCases = memo(({ operation }) => {
+const TestCases = memo(({ operation, testCasesData }) => {
   const { id } = useParams();
   const classes = useStyle();
   const [showAddModal, setShowAddModal] = useState(false);
@@ -32,26 +32,8 @@ const TestCases = memo(({ operation }) => {
     variant: "warning",
   });
   useEffect(() => {
-    Axios.get(`http://localhost:5000/test_cases/get?challenge_id=${id}`)
-      .then((res) => {
-        const data = res.data.message;
-        const result = data.map((item, index) => ({
-          id: item[0],
-          order: index,
-          input: item[2],
-          output: item[3],
-          sample: item[5],
-          strength: item[4],
-          explanation: item[6],
-          isSelected: false,
-        }));
-        setTestCases(result);
-      })
-      .catch((error) => {
-        console.error("Error:", error);
-      });
-  }, []);
-
+    if (testCasesData) setTestCases(testCasesData);
+  }, [testCasesData]);
   const header = [
     "Order",
     "Input",
