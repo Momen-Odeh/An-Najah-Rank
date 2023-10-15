@@ -1,80 +1,131 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Container, Row, Col } from "react-bootstrap";
 import Breadcrumbs from "../../Components/Breadcrumbs";
 import ChallengeInContest from "../../Components/ChallengeInContest";
 import Text from "../../Components/Text";
+import { useParams } from "react-router-dom";
+import axios from "axios";
+import { useCookies } from "react-cookie";
+import ChallengeShow from "../../Components/ChallengeShow";
+import useStyles from "./style";
+import { BiSolidCategory } from "react-icons/bi";
+import { AiFillFileText } from "react-icons/ai";
+import { PiCodeBold } from "react-icons/pi";
+import { RxLapTimer } from "react-icons/rx";
+import CountDown from "../../Components/CountDown";
 const ContestView = () => {
-  const [contest, setContest] = useState({
-    name: "Contest Name",
-    challenges: [
-      {
-        challengeName: "An-Najah Rank test1",
-        solved: true,
-        statistics:[
-          {key:"Difficulty: ",val: "Medium"},
-          {key:"Success Rate: ",val:"80%"},
-          {key:"Max Score: ",val:100}
-        ],
-        url:'#test1'
-      },
-      {
-        challengeName: "An-Najah Rank test2",
-        solved: false,
-        statistics:[
-          {key:"Difficulty: ",val: "Medium"},
-          {key:"Success Rate: ",val:"100%"},
-          {key:"Max Score: ",val:100}
-        ],
-        url:'#test2'
-      },
-    ],
-  });
+  const { id } = useParams();
+  const [cookies] = useCookies();
+  const [challengeContest, setChallengeContest] = useState([]);
+  const [contestInfo, setContestInfo] = useState({});
+  const clasess = useStyles();
+  useEffect(() => {
+    axios
+      .get(
+        `http://127.0.0.1:5000/contest-info?contest_id=${id}&token=${cookies.token}`
+      )
+      .then((response) => {
+        setChallengeContest(
+          response.data.ContestChallenges.map((item, index) => {
+            return {
+              challengeName: item.name,
+              solved: index % 2 === 0 ? true : false,
+              statistics: [
+                { key: "Difficulty: ", val: item.difficulty },
+                { key: "Success Rate: ", val: "100%" },
+                { key: "Max Score: ", val: item.maxScore },
+              ],
+              url: `/challenge/${item.challenge_id}/problem`,
+            };
+          })
+        );
+        setContestInfo(response.data.contest);
+      });
+  }, []);
   const path = [
-    { title: "Manage Challenges", url: "#manage challenges" },
-    { title: contest.name, url: "#" },
+    { title: "OOP Coures", url: "#" },
+    { title: contestInfo.name, url: "#" },
   ];
+
   return (
-    <>
-      <Container>
-        <Row className="m-2">
-          <Col>
-            <Breadcrumbs path={path} />
+    <Container fluid className={clasess.Container}>
+      <Row className={`${clasess.Row} mb-5`}>
+        <Col className={`${clasess.Col}`}>
+          <Breadcrumbs path={path} />
+        </Col>
+      </Row>
+      <Row className={`${clasess.Row} mb-5`}>
+        <Col className={`${clasess.Col} ${clasess.IconContainer}`}>
+          <BiSolidCategory className={clasess.Icon} />
+          <Text
+            text={contestInfo.name}
+            size="1.8em"
+            fontFamily="Open Sans"
+            wegiht="600"
+            color="#0e141e"
+          />
+        </Col>
+      </Row>
+      <Row className={`${clasess.Row} mb-1`}>
+        <Col className={`${clasess.Col} ${clasess.IconContainer}`}>
+          <AiFillFileText className={clasess.Icon} />
+          <Text
+            text={"Description"}
+            size="1.3em"
+            fontFamily="Open Sans"
+            wegiht="600"
+            color="#0e141e"
+          />
+        </Col>
+      </Row>
+      <Row className={`${clasess.Row} mb-2`}>
+        <Col className={`${clasess.Col}`}>
+          <span
+            className={clasess.descrition}
+            dangerouslySetInnerHTML={{
+              __html: contestInfo.description,
+            }}
+          />
+        </Col>
+      </Row>
+      <Row className={`${clasess.Row} mb-2`}>
+        <Col className={`${clasess.Col} ${clasess.IconContainer}`}>
+          <RxLapTimer className={clasess.Icon} />
+          <Text
+            text={"Remaining time"}
+            size="1.3em"
+            fontFamily="Open Sans"
+            wegiht="600"
+            color="#0e141e"
+          />
+        </Col>
+      </Row>
+      <Row className={`${clasess.Row} mb-2`}>
+        <Col className={`${clasess.Col}`}>
+          <CountDown endDate={new Date(contestInfo.endTime)} />
+        </Col>
+      </Row>
+
+      <Row className={`${clasess.Row} mb-3`}>
+        <Col className={`${clasess.Col} ${clasess.IconContainer}`}>
+          <PiCodeBold className={clasess.Icon} />
+          <Text
+            text={"Challenges"}
+            size="20px"
+            fontFamily="Open Sans"
+            wegiht="600"
+            color="#0e141e"
+          />
+        </Col>
+      </Row>
+      {challengeContest.map((item, index) => (
+        <Row className={`${clasess.Row} mb-4`} key={index}>
+          <Col className={`${clasess.Col}`}>
+            <ChallengeShow {...item} />
           </Col>
         </Row>
-      </Container>
-      <hr></hr>
-      <Container>
-        <Row className="m-2">
-          <Col>
-            <Text text={contest.name} wegiht={500} size={"1.5em"} />
-          </Col>
-        </Row>
-      </Container>
-      <hr></hr>
-      <Container>
-        <Row className="m-2 mt-5">
-          <Col>
-            <Text
-              text={"Challenges"}
-              fontFamily={"OpenSans"}
-              wegiht="600"
-              size="22px"
-              color="#39424e"
-            />
-          </Col>
-        </Row>
-        {contest.challenges.map((item)=><Row className="m-2 mt-3">
-          <Col>
-            <ChallengeInContest
-              challengeName={item.challengeName}
-              solved={item.solved}
-              Statistics={item.statistics}
-              challengeUrl={item.url}
-            />
-          </Col>
-        </Row>)}
-      </Container>
-    </>
+      ))}
+    </Container>
   );
 };
 

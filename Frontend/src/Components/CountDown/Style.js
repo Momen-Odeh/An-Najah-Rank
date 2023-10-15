@@ -10,23 +10,24 @@ const useStyle = createUseStyles({
   countdownItem: {
     fontSize: "14px",
     margin: "5px",
-    padding:'5px',
+    padding: "5px",
     display: "flex",
     flexDirection: "column",
     backgroundColor: "#f0f0f0",
     borderRadius: "5px",
-    width:'70px'
+    width: "70px",
+    fontWeight: "600",
   },
-  '@media (max-width: 600px)': {
+  "@media (max-width: 600px)": {
     countdownContainer: {
-      flexWrap:'wrap',
+      flexWrap: "wrap",
     },
   },
   messageContainer: {
     fontSize: "14px",
-    fontWeight:'600',
-    marginBottom:'10px',
-    marginTop:'10px',
+    fontWeight: "600",
+    marginBottom: "10px",
+    marginTop: "10px",
     display: "flex",
     flexDirection: "column",
     justifyContent: "center",
