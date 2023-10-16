@@ -19,6 +19,7 @@ import Challenges from "../Pages/Challenges";
 import MoveToPath from "../Components/MoveToPath";
 import Profile from "../Pages/Profile";
 import Contests from "../Pages/Contests";
+import Settings from "../Pages/Settings";
 // const AboutUs = lazy(() => import("../Pages/AboutUs/SubComponents/AboutUs"))
 
 export const routeNames = {
@@ -39,6 +40,7 @@ export const routeNames = {
   ADMINISTRATION: "Administration",
   ENROLL_STUDENT: "Enroll Student",
   PROFILE: "Profile",
+  SETTINGS: "Settings",
 };
 export const routes = [
   {
@@ -55,6 +57,11 @@ export const routes = [
     path: "/profile",
     title: routeNames.PROFILE,
     component: <Profile />,
+  },
+  {
+    path: "/settings",
+    title: routeNames.SETTINGS,
+    component: <Settings />,
   },
   {
     path: "/sign-up",
