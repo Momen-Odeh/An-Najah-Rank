@@ -5,22 +5,24 @@ import Avatar from "react-avatar";
 import Text from "../Text";
 import ButtonRank from "../ButtonRank";
 import { BiCheckCircle } from "react-icons/bi";
+import { useNavigate } from "react-router-dom";
 const ChallengeShow = ({ challengeName, solved, statistics, url }) => {
   const clasess = useStyles();
+  const navigate = useNavigate();
   return (
     <Container fluid className={clasess.Container}>
       <Row className={clasess.RowChallengeShow}>
         <Row>
           <Col className={clasess.ColTitle}>
-            {solved && (
-              <BiCheckCircle size={26} color="green" className="m-1" />
-            )}
             <Text
               text={challengeName}
               size="20px"
               fontFamily="Open Sans"
               wegiht="600"
             />
+            {solved && (
+              <BiCheckCircle size={26} color="green" className="ml-4" />
+            )}
           </Col>
         </Row>
         <Row className={clasess.statisticsRow}>
@@ -42,7 +44,11 @@ const ChallengeShow = ({ challengeName, solved, statistics, url }) => {
             </Col>
           ))}
           <Col className={clasess.ButtonTry}>
-            <ButtonRank text={"Try Again"} hoverBackgroundColor="#0e141e" />
+            <ButtonRank
+              text={"Try Again"}
+              hoverBackgroundColor="#0e141e"
+              onClick={() => navigate(url)}
+            />
           </Col>
         </Row>
       </Row>
