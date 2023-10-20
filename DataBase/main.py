@@ -15,6 +15,10 @@ from APIs.testCases import add_test_case, get_testCase_id, get_testCases, delete
 from APIs.contests import add_contest
 from APIs.contestInfo import get_contests_info
 from APIs.contestChallenges import add_challenge_in_contest
+from APIs.course import add_course
+from APIs.courseInfo import get_course_info
+from APIs.course_moderators import add_course_moderators
+from APIs.student_enrollments import add_student_enrollments
 CORS(app)
 
 @app.route('/sendEmail', methods=['POST'])
