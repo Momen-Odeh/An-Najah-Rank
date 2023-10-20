@@ -6,13 +6,13 @@ import ChallengeTabs from "../../Components/ChallengTabs";
 import ContestsDetalis from "../../Components/ContestDetails";
 import ContestChallenges from "../../Components/ContestChallenges";
 import useStyles from "./style";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useState } from "react";
 import { useEffect } from "react";
 import { useCookies } from "react-cookie";
 import axios from "axios";
-
 const Contests = () => {
+  const navigate = useNavigate();
   const clasess = useStyles();
   const { id } = useParams();
   const [cookies, setCookies] = useCookies();
@@ -23,29 +23,40 @@ const Contests = () => {
     hasEndTime: false,
     endTime: null,
   });
-  const [challenges, setChallenges]=useState([])
-  const [challengesContest, setChallengesContest]=useState([])
+  const [challenges, setChallenges] = useState([]);
+  const [challengesContest, setChallengesContest] = useState([]);
   useEffect(() => {
-    axios.get(
-      `http://localhost:5000/contest-info?contest_id=${id}&token=${cookies.token}`
-    ).then((res)=>{
-      setDetails({
-        name: res.data.contest[1],
-        description: res.data.contest[2],
-        startTime: new Date(res.data.contest[3]),
-        hasEndTime: !res.data.contest[4],
-        endTime: res.data.contest[5]?new Date(res.data.contest[5]):null,
+    axios
+      .get(
+        `http://localhost:5000/contest-info?contest_id=${id}&token=${cookies.token}`
+      )
+      .then((res) => {
+        setDetails({
+          name: res.data.contest.name,
+          description: res.data.contest.description,
+          startTime: new Date(res.data.contest.startTime),
+          hasEndTime: !res.data.contest.hasEndTime,
+          endTime: res.data.contest.endTime
+            ? new Date(res.data.contest.endTime)
+            : null,
+        });
+        setChallenges(
+          res.data.myChallenges.map((item, index) => ({
+            id: item[0],
+            name: item[1],
+          }))
+        );
+        setChallengesContest(
+          res.data.ContestChallenges?.map((item, index) => ({
+            id: item.id,
+            name: item.name + " id= " + item.id,
+            maxScore: item.maxScore,
+          }))
+        );
       })
-      setChallenges(res.data.myChallenges.map((item, index)=>({
-        id: item[0],
-        name: item[1],
-      })))
-      setChallengesContest(res.data.ContestChallenges?.map((item,index)=>({
-        id: item[13],
-        name: item[1]+" id= "+item[0],
-        maxScore: item[12],
-      })))
-    })
+      .catch((error) => {
+        navigate("/");
+      });
   }, []);
 
   const path = [
@@ -69,7 +80,12 @@ const Contests = () => {
     {
       eventKey: "ContestChallenges",
       title: "Challenges",
-      TabComponent: <ContestChallenges challengesData={challenges} challengesContest={challengesContest} />,
+      TabComponent: (
+        <ContestChallenges
+          challengesData={challenges}
+          challengesContest={challengesContest}
+        />
+      ),
       urlPattern: `/contests/${id}/challenges`,
     },
   ];

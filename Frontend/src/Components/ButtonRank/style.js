@@ -6,7 +6,7 @@ const useStyles = createUseStyles({
     color: ({ color }) => color,
     fontSize: ({ size }) => size,
     border: ({ border }) => border,
-    padding: "10px 15px",
+    padding: "8px 15px",
     width: ({ width }) => width,
     "&:hover": {
       backgroundColor: ({ hoverBackgroundColor }) => hoverBackgroundColor,

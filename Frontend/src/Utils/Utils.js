@@ -19,6 +19,7 @@ import Challenges from "../Pages/Challenges";
 import MoveToPath from "../Components/MoveToPath";
 import Profile from "../Pages/Profile";
 import Contests from "../Pages/Contests";
+import Course from "../Pages/Course";
 // const AboutUs = lazy(() => import("../Pages/AboutUs/SubComponents/AboutUs"))
 
 export const routeNames = {
@@ -39,6 +40,7 @@ export const routeNames = {
   ADMINISTRATION: "Administration",
   ENROLL_STUDENT: "Enroll Student",
   PROFILE: "Profile",
+  COURSE: "Course",
 };
 export const routes = [
   {
@@ -225,10 +227,35 @@ export const routes = [
         path: "details",
         component: <CreateCourse />,
       },
+    ],
+  },
+  {
+    path: "/course/:id",
+    title: routeNames.COURSE,
+    component: (
+      <IsLoggedIn moveTo={"log-in"}>
+        <Outlet />
+      </IsLoggedIn>
+    ),
+    subRoutes: [
+      {
+        index: true,
+        component: <MoveToPath startPath="course" endPath="details" />,
+      },
+      {
+        title: "details",
+        path: "details",
+        component: <Course />,
+      },
       {
         title: "moderators",
         path: "moderators",
-        component: <CreateCourse />,
+        component: <Course />,
+      },
+      {
+        title: "members",
+        path: "members",
+        component: <Course />,
       },
     ],
   },
