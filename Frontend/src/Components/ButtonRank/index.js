@@ -12,6 +12,7 @@ const ButtonRank = ({
   onClick,
   disabled = false,
   width,
+  type,
 }) => {
   const classes = useStyles({
     backgroundColor,
@@ -22,7 +23,12 @@ const ButtonRank = ({
     width,
   });
   return (
-    <Button className={classes.Button} onClick={onClick} disabled={disabled}>
+    <Button
+      type={type}
+      className={classes.Button}
+      onClick={onClick}
+      disabled={disabled}
+    >
       {text}
     </Button>
   );

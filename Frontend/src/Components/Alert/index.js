@@ -5,14 +5,14 @@ const AlertComponent = ({ variant = "warning", message, show }) => {
   const classes = useStyle();
   return (
     <Container className="mt-2 mb-2">
-    <Alert
-      key={variant}
-      variant={variant}
-      className={classes.alert}
-      show={show}
-    >
-      {message}
-    </Alert>
+      <Alert
+        key={variant}
+        variant={variant}
+        className={classes.alert}
+        show={show}
+      >
+        {message}
+      </Alert>
     </Container>
   );
 };
