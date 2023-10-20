@@ -61,7 +61,11 @@ export const routes = [
   {
     path: "/settings",
     title: routeNames.SETTINGS,
-    component: <Settings />,
+    component: (
+      <IsLoggedIn moveTo={"log-in"}>
+        <Settings />
+      </IsLoggedIn>
+    ),
   },
   {
     path: "/sign-up",

@@ -4,6 +4,7 @@ const useStyles = createUseStyles({
   Container: {
     maxWidth: "1200px",
     marginTop: "40px",
+    padding: "20px",
   },
   Row: {
     boxShadow: "0 3px 10px 0 rgba(0,0,0,.1)",
@@ -27,6 +28,7 @@ const useStyles = createUseStyles({
     columnGap: "10px",
     rowGap: "25px",
     paddingRight: "30px",
+    cursor: "pointer",
   },
   UserInfoImg: {
     display: "flex",
