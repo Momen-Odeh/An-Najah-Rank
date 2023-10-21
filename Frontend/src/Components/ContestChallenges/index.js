@@ -12,8 +12,9 @@ import SuggestionsInput from "../SuggestionsInput";
 import { useEffect } from "react";
 import axios from "axios";
 const ContestChallenges = ({ challengesData, challengesContest }) => {
-  const { id } = useParams();
+  const { contestId } = useParams();
   const classes = useStyles();
+  const [oldChallengeId, setOldChallengeId] = useState(null);
   const [challenges, setChallenges] = useState([]);
   const TableHeader = ["No.", "Name", "Max Score", ""];
   const [showCreateChallenge, SetShowCreateChallenge] = useState({
@@ -27,8 +28,17 @@ const ContestChallenges = ({ challengesData, challengesContest }) => {
   });
   const [TableData, setTableData] = useState([]);
   useEffect(() => {
-    setChallenges(challengesData?.map((item) => item.name + " id= " + item.id));
-  }, [challengesData]);
+    setChallenges(
+      challengesData
+        ?.filter(
+          (item) =>
+            !challengesContest.some(
+              (chCoItem) => chCoItem.name === item.name + " id= " + item.id
+            )
+        )
+        .map((item) => item.name + " id= " + item.id)
+    );
+  }, [challengesData, challengesContest]);
   useEffect(() => {
     setTableData(challengesContest);
   }, [challengesContest]);
@@ -61,7 +71,7 @@ const ContestChallenges = ({ challengesData, challengesContest }) => {
     if (challenge_id) {
       const challengeContest = {
         challenge_id: challenge_id,
-        contest_id: id,
+        contest_id: contestId,
         max_score: newChallenge.maxScore,
       };
       try {
@@ -69,11 +79,7 @@ const ContestChallenges = ({ challengesData, challengesContest }) => {
           "http://localhost:5000/contests-challenges",
           challengeContest
         );
-        const params = new URLSearchParams(challengeContest);
-        const res = await axios.get(
-          "http://localhost:5000/contests-challenges-id?" + params.toString()
-        );
-        setTableData([...TableData, { ...newChallenge, id: res.data.message }]);
+        setTableData([...TableData, { ...newChallenge, id: challenge_id }]);
         SetNewChallenge({
           id: null,
           name: "",
@@ -100,21 +106,24 @@ const ContestChallenges = ({ challengesData, challengesContest }) => {
       mode: "edit",
       index: index,
     });
+    setOldChallengeId(TableData[index].id);
     SetNewChallenge({
       id: TableData[index].id,
       name: TableData[index].name,
       maxScore: TableData[index].maxScore,
     });
   };
-  const handleRemoveTableData = async(indexEx) => {
+  const handleRemoveTableData = async (indexEx) => {
     try {
-      await axios.delete(`http://localhost:5000/contests-challenges/${TableData[indexEx].id}`,)
+      await axios.delete(
+        `http://localhost:5000/contests-challenges?challenge_id=${TableData[indexEx].id}&contest_id=${contestId}`
+      );
       setTableData(TableData.filter((element, index) => index !== indexEx));
     } catch (error) {
       setAlertData({
         message: error.response.data.message,
         variant: "danger",
-      })
+      });
       setShowAlert(true);
     }
   };
@@ -123,21 +132,28 @@ const ContestChallenges = ({ challengesData, challengesContest }) => {
     const challenge_id = handleChallengeInfo();
     if (challenge_id) {
       const challengeContest = {
+        old_challenge_id: oldChallengeId,
         challenge_id: challenge_id,
-        contest_id: id,
+        contest_id: contestId,
         max_score: newChallenge.maxScore,
       };
       try {
         await axios.put(
-          `http://localhost:5000/contests-challenges/${newChallenge.id}`,
+          `http://localhost:5000/contests-challenges`,
           challengeContest
         );
         TableData[showCreateChallenge.index].name = newChallenge.name;
         TableData[showCreateChallenge.index].maxScore = newChallenge.maxScore;
+        TableData[showCreateChallenge.index].id = challenge_id;
         setTableData(TableData);
         SetShowCreateChallenge({
           value: false,
           mode: "add",
+        });
+        SetNewChallenge({
+          id: null,
+          name: "",
+          maxScore: "",
         });
       } catch (error) {
         setAlertData({
@@ -158,7 +174,7 @@ const ContestChallenges = ({ challengesData, challengesContest }) => {
           <HiPencil
             size={30}
             color="#949494"
-            className={classes.iconColor }
+            className={classes.iconColor}
             onClick={() => handleEditTableData(index)}
           />
           <BiTrash
@@ -222,6 +238,7 @@ const ContestChallenges = ({ challengesData, challengesContest }) => {
                 mode: "add",
               });
               SetNewChallenge({
+                id: null,
                 name: "",
                 maxScore: "",
               });
