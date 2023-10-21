@@ -175,51 +175,7 @@ export const routes = [
       },
     ],
   },
-  {
-    path: "/create-contest",
-    title: routeNames.CREATE_CHALLENGE,
-    component: (
-      <IsLoggedIn moveTo={"log-in"}>
-        <Outlet />
-      </IsLoggedIn>
-    ),
-    subRoutes: [
-      {
-        index: true,
-        component: <Navigate to={"/create-contest/details"} />,
-      },
-      {
-        title: "details",
-        path: "details",
-        component: <CreateContest />,
-      },
-    ],
-  },
-  {
-    path: "/contests/:id",
-    title: routeNames.CONTESTS,
-    component: (
-      <IsLoggedIn moveTo={"log-in"}>
-        <Outlet />
-      </IsLoggedIn>
-    ),
-    subRoutes: [
-      {
-        index: true,
-        component: <MoveToPath startPath="contests" endPath="details" />,
-      },
-      {
-        title: "details",
-        path: "details",
-        component: <Contests />,
-      },
-      {
-        title: "challenges",
-        path: "challenges",
-        component: <Contests />,
-      },
-    ],
-  },
+
   {
     path: "/create-course",
     title: routeNames.CREATE_COURSE,
@@ -267,6 +223,59 @@ export const routes = [
         title: "members",
         path: "members",
         component: <Course />,
+      },
+      {
+        path: "create-contest",
+        title: routeNames.CREATE_CHALLENGE,
+        component: (
+          <IsLoggedIn moveTo={"log-in"}>
+            <Outlet />
+          </IsLoggedIn>
+        ),
+        subRoutes: [
+          {
+            index: true,
+            component: (
+              <MoveToPath startPath="course" endPath="create-contest/details" />
+            ),
+          },
+          {
+            title: "details",
+            path: "details",
+            component: <CreateContest />,
+          },
+        ],
+      },
+      {
+        path: "contests/:contestId",
+        title: routeNames.CONTESTS,
+        component: (
+          <IsLoggedIn moveTo={"log-in"}>
+            <Outlet />
+          </IsLoggedIn>
+        ),
+        subRoutes: [
+          {
+            index: true,
+            component: (
+              <MoveToPath
+                startPath="course"
+                middle="contests"
+                endPath="details"
+              />
+            ),
+          },
+          {
+            title: "details",
+            path: "details",
+            component: <Contests />,
+          },
+          {
+            title: "challenges",
+            path: "challenges",
+            component: <Contests />,
+          },
+        ],
       },
     ],
   },
