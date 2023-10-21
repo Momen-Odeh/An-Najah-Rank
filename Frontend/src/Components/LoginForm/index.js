@@ -56,12 +56,12 @@ const LogInForm = () => {
       } catch (error) {
         if (error.response?.status === 404) {
           setErrorMsg({
-            ...errorMsg,
             email: error.response.data.message,
+            password: null,
           });
         } else if (error.response?.status === 401) {
           setErrorMsg({
-            ...errorMsg,
+            email: null,
             password: error.response.data.message,
           });
         } else

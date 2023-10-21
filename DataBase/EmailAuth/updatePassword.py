@@ -17,6 +17,6 @@ def updatePassword():
             else:
                 return jsonify({"msg": f"miss match passwords"}), 422
         except Exception as e:
-            return jsonify({"error": "Invalid JSON data"}), 400
+            return jsonify({"error": e}), 400
     else:
         return jsonify({"error": "Request body must contain JSON data"}), 400

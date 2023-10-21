@@ -41,6 +41,7 @@ const SignUpForm = () => {
   });
 
   const handelSignUpButton = async () => {
+    console.log(signupValue);
     setLoading(true);
     setErrorMsg({
       email: !validateEmail(signupValue.email) ? "Invalid Email" : null,
@@ -67,11 +68,23 @@ const SignUpForm = () => {
       if (signupValue.password !== signupValue.confirmPassword) {
         setErrorMsg({
           ...errorMsg,
+          email: null,
+          fullName: null,
+          universityNumber: null,
           password: "new password and confirm password not matched",
           confirmPassword: "new password and confirm password not matched",
         });
         setLoading(false);
         return;
+      } else {
+        setErrorMsg({
+          ...errorMsg,
+          email: null,
+          fullName: null,
+          universityNumber: null,
+          password: null,
+          confirmPassword: null,
+        });
       }
       try {
         console.log(signupValue);
@@ -95,14 +108,19 @@ const SignUpForm = () => {
           if (error.response?.data.message.includes("@")) {
             setErrorMsg({
               ...errorMsg,
+
               email: "Email already exist",
               universityNumber: null,
+              password: null,
+              confirmPassword: null,
             });
           } else {
             setErrorMsg({
               ...errorMsg,
               email: null,
               universityNumber: "University Number already exist",
+              password: null,
+              confirmPassword: null,
             });
           }
         } else {

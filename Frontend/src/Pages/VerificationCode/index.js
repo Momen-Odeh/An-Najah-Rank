@@ -9,10 +9,14 @@ import { routeNames } from "../../Utils/Utils";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import AlertComponent from "../../Components/Alert";
+import Loader from "react-spinners/ClipLoader";
+import { toast } from "react-toastify";
 const VarificationCode = () => {
   const classes = useStyles();
   const navigate = useNavigate();
   const [alert, setAlert] = useState({ msg: "", value: false });
+  const [loading, setLoading] = useState(false);
+  const [errorMsg, setErrorMsg] = useState(null);
   const setActiveTab = useOutletContext();
   useEffect(() => {
     setActiveTab(routeNames.LOG_IN);
@@ -23,60 +27,72 @@ const VarificationCode = () => {
   };
   const handelVerifyBtn = () => {
     console.log(code);
-    axios
-      .post("http://127.0.0.1:5000/verfiyCode", {
-        email: sessionStorage.getItem("email"),
-        code: code,
-      })
-      .then((resp) => {
-        if (resp.status === 200) {
-          // axios
-          //   .post("http://127.0.0.1:5000/emailCodeVerification", {
-          //     email: sessionStorage.getItem("email"),
-          //   })
-          //   .then((resp) => {
-          //     console.log(resp);
-          //     navigate("/new-password");
-          //   })
-          //   .catch((err) => {
-          //     setAlert({
-          //       value: true,
-          //       msg: "there is error:" + err,
-          //     });
-          //   });
-          if (sessionStorage.getItem("event") === "forget Password")
-            navigate("/new-password");
-          else if (sessionStorage.getItem("event") === "register") {
-            axios
-              .put("http://127.0.0.1:5000/userStatusAuth", {
-                email: sessionStorage.getItem("email"),
-              })
-              .then((resp) => {
-                sessionStorage.clear();
-                navigate("/log-in");
-              })
-              .catch((err) => {
-                setAlert({
-                  value: true,
-                  msg: "" + err,
+
+    setErrorMsg(!(code.length === 6) ? "please fill all cells" : null);
+    if (code.length === 6) {
+      setLoading(true);
+      axios
+        .post("http://127.0.0.1:5000/verfiyCode", {
+          email: sessionStorage.getItem("email"),
+          code: code,
+        })
+        .then((resp) => {
+          if (resp.status === 200) {
+            // axios
+            //   .post("http://127.0.0.1:5000/emailCodeVerification", {
+            //     email: sessionStorage.getItem("email"),
+            //   })
+            //   .then((resp) => {
+            //     console.log(resp);
+            //     navigate("/new-password");
+            //   })
+            //   .catch((err) => {
+            //     setAlert({
+            //       value: true,
+            //       msg: "there is error:" + err,
+            //     });
+            //   });
+            if (sessionStorage.getItem("event") === "forget Password")
+              navigate("/new-password");
+            else if (sessionStorage.getItem("event") === "register") {
+              axios
+                .put("http://127.0.0.1:5000/userStatusAuth", {
+                  email: sessionStorage.getItem("email"),
+                })
+                .then((resp) => {
+                  sessionStorage.clear();
+                  navigate("/log-in");
+                })
+                .catch((err) => {
+                  setAlert({
+                    value: true,
+                    msg: "" + err,
+                  });
                 });
-              });
+            }
           }
-        }
-      })
-      .catch((err) => {
-        if (err.response.data.msg === "invalid access") {
-          setAlert({
-            value: true,
-            msg: "Incorrect Code, Try again",
-          });
-        } else if (err.response.data.msg === "invalid TTL") {
-          setAlert({
-            value: true,
-            msg: "code has expired time, resend code again",
-          });
-        }
-      });
+          setLoading(false);
+        })
+        .catch((err) => {
+          if (err.response.data.msg === "invalid access") {
+            setErrorMsg("Incorrect Code, Try again");
+          } else if (err.response.data.msg === "invalid TTL") {
+            setErrorMsg("code has expired time, try again");
+          } else {
+            toast.error(err.response.data.error, {
+              position: "bottom-left",
+              autoClose: 10000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "light",
+            });
+          }
+          setLoading(false);
+        });
+    }
   };
   return sessionStorage?.event ? ( //Gard for the Verification code
     <div className={classes.center}>
@@ -103,26 +119,35 @@ const VarificationCode = () => {
             />
           </Col>
         </Row>
-        <Row className={`${classes.Row} mb-4`}>
+        <Row className={`${classes.Row} mb-3`}>
           <Col>
             <AuthCode
               containerClassName={classes.AuthCode}
               inputClassName={classes.AuthCodeCell}
               length={6}
               onChange={changeCode}
+              disabled={loading}
             />
           </Col>
         </Row>
+        {errorMsg && (
+          <Row className={`${classes.RowMsg} mb-2`}>
+            <Col>
+              <p className={classes.msg}>* {errorMsg}</p>
+            </Col>
+          </Row>
+        )}
         <Row className={`${classes.Row} mb-2 `}>
           <Col className={classes.Col}>
             <ButtonRegister
               text="Verify"
               // to={"/new-password"}
               onClick={handelVerifyBtn}
+              disabled={loading}
             />
           </Col>
         </Row>
-        <Row className={`${classes.Row} mb-2`}>
+        {/* <Row className={`${classes.Row} mb-2`}>
           <Col className={classes.Col}>
             <TextRegister
               text={"If you didn't receive a code! "}
@@ -139,7 +164,7 @@ const VarificationCode = () => {
               wegiht="400"
             />
           </Col>
-        </Row>
+        </Row> */}
         <Row className={`${classes.Row} `}>
           <Col className={classes.Col}>
             <AlertComponent
@@ -149,6 +174,13 @@ const VarificationCode = () => {
             />
           </Col>
         </Row>
+        {loading && (
+          <Row>
+            <Col className={classes.LoaderCol}>
+              <Loader size={50} color="#191e35" speedMultiplier={1} />
+            </Col>
+          </Row>
+        )}
       </Container>
     </div>
   ) : (
