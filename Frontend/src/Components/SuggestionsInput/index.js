@@ -1,20 +1,24 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { Form, ListGroup } from "react-bootstrap";
 import useStyle from "./Style";
 
-const SuggestionsInput = ({ data, name, value, placeholder = "Type here...", handleChange }) => {
+const SuggestionsInput = ({
+  data,
+  name,
+  value,
+  placeholder = "Type here...",
+  handleChange,
+}) => {
   const classes = useStyle();
   const words = data;
   const inputRef = useRef(null);
   const suggestionsContainerRef = useRef(null);
-  const [inputValue, setInputValue] = useState(value);
   const [suggestions, setSuggestions] = useState([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(-1);
   const handleInputChange = (e) => {
     const inputText = e.target.value;
-    setInputValue(inputText);
-    handleChange(inputValue)
+    handleChange(inputText);
     if (!inputText) {
       setSuggestions([]);
       setShowSuggestions(false);
@@ -28,8 +32,7 @@ const SuggestionsInput = ({ data, name, value, placeholder = "Type here...", han
     }
   };
   const handleSuggestionClick = (word) => {
-    setInputValue(word);
-    handleChange(word)
+    handleChange(word);
     setSuggestions([]);
     setShowSuggestions(false);
   };
@@ -42,8 +45,7 @@ const SuggestionsInput = ({ data, name, value, placeholder = "Type here...", han
       setSelectedIndex(selectedIndex - 1);
       scrollSuggestionsContainer(selectedIndex - 1);
     } else if (e.key === "Enter" && selectedIndex >= 0) {
-      setInputValue(suggestions[selectedIndex]);
-      handleChange(suggestions[selectedIndex])
+      handleChange(suggestions[selectedIndex]);
       setSuggestions([]);
       setShowSuggestions(false);
     }
@@ -51,7 +53,8 @@ const SuggestionsInput = ({ data, name, value, placeholder = "Type here...", han
 
   const scrollSuggestionsContainer = (index) => {
     if (suggestionsContainerRef.current) {
-      const itemHeight = suggestionsContainerRef.current.firstChild.clientHeight;
+      const itemHeight =
+        suggestionsContainerRef.current.firstChild.clientHeight;
       const containerHeight = suggestions.length * itemHeight;
       suggestionsContainerRef.current.style.height = `${containerHeight}px`;
       const scrollOffset = index * itemHeight;
@@ -65,7 +68,7 @@ const SuggestionsInput = ({ data, name, value, placeholder = "Type here...", han
         type="text"
         name={name}
         placeholder={placeholder}
-        value={inputValue}
+        value={value}
         onChange={(e) => {
           handleInputChange(e);
         }}
@@ -75,20 +78,23 @@ const SuggestionsInput = ({ data, name, value, placeholder = "Type here...", han
       />
       {showSuggestions && (
         <div className={classes.suggestionsContainer}>
-          <ListGroup className={classes.ListGroup} ref={suggestionsContainerRef}>
-              {suggestions.map((word, index) => (
-                <ListGroup.Item
-                  key={index}
-                  onClick={() => handleSuggestionClick(word)}
-                  className={
-                    selectedIndex === index
-                      ? `${classes.suggestionItem} ${classes.selected}`
-                      : classes.suggestionItem
-                  }
-                >
-                  {word}
-                </ListGroup.Item>
-              ))}
+          <ListGroup
+            className={classes.ListGroup}
+            ref={suggestionsContainerRef}
+          >
+            {suggestions.map((word, index) => (
+              <ListGroup.Item
+                key={index}
+                onClick={() => handleSuggestionClick(word)}
+                className={
+                  selectedIndex === index
+                    ? `${classes.suggestionItem} ${classes.selected}`
+                    : classes.suggestionItem
+                }
+              >
+                {word}
+              </ListGroup.Item>
+            ))}
           </ListGroup>
         </div>
       )}

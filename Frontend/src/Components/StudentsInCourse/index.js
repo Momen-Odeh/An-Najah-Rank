@@ -1,12 +1,16 @@
+import axios from "axios";
 import React, { useState } from "react";
 import { Col, Container, Form, Modal, Row } from "react-bootstrap";
 import { BiTrash } from "react-icons/bi";
+import { useParams } from "react-router-dom";
 import ButtonRank from "../ButtonRank";
 import TabTable from "../TabTable";
 import useStyle from "../TestCases/Style";
 import Text from "../Text";
 const StudentsInCourse = ({ students, setStudents }) => {
   const classes = useStyle();
+  const { id } = useParams();
+  const [search, setSearch] = useState("");
   const [showAddModal, setShowAddModal] = useState(false);
   const tableHeader = ["Registration Number", "Name", "email", ""];
   const [student, setStudent] = useState({
@@ -14,28 +18,52 @@ const StudentsInCourse = ({ students, setStudents }) => {
     studentName: "",
     email: "",
   });
-  const handleAdd = () => {
-    setStudents([...students, student]);
-    setShowAddModal(false);
-    setStudent("");
+  const handleAdd = async () => {
+    if (student.registrationNumber) {
+      const result = await axios.post(
+        `http://localhost:5000/student_enrollments`,
+        {
+          studentNumber: student.registrationNumber,
+          courseNumber: id,
+        }
+      );
+      setStudents([
+        ...students,
+        {
+          registrationNumber: result.data.registrationNumber,
+          studentName: result.data.studentName,
+          email: result.data.email,
+        },
+      ]);
+      setShowAddModal(false);
+      setStudent("");
+    }
   };
-  const handleDelete = (index) => {
+  const handleDelete = async (index) => {
+    await axios.delete(
+      `http://localhost:5000/student_enrollments?courseNumber=${id}&studentNumber=${students[index].registrationNumber}`
+    );
     setStudents(students.filter((item, idx) => idx !== index));
   };
-  const data = students.map((item, index) => ({
-    ...item,
-    delete: (
-      <BiTrash
-        size={30}
-        color="#949494"
-        className={classes.iconColor}
-        onClick={() => handleDelete(index)}
-      />
-    ),
-  }));
+  const data = students
+    .filter((word) =>
+      word.studentName?.toLowerCase().includes(search.toLowerCase())
+    )
+    .map((item, index) => ({
+      registrationNumber: item.registrationNumber,
+      studentName: item.studentName,
+      email: item.email,
+      delete: (
+        <BiTrash
+          size={30}
+          color="#949494"
+          className={classes.iconColor}
+          onClick={() => handleDelete(index)}
+        />
+      ),
+    }));
 
   const { registrationNumber, studentName, email } = student;
-
   const handleChange = (e) => {
     const { name, value } = e.target;
     setStudent({
@@ -60,12 +88,13 @@ const StudentsInCourse = ({ students, setStudents }) => {
       <Row className="mt-3">
         <Col></Col>
         <Col md={4} className="d-flex justify-content-end">
-          <Form.Control type="text" placeholder="Type username" />
-          <ButtonRank
-            text={"Search"}
-            color="white"
-            hoverBackgroundColor="green"
-            backgroundColor="#1cb557"
+          <Form.Control
+            type="text"
+            placeholder="Type username to search"
+            value={search}
+            onChange={(e) => {
+              setSearch(e.target.value);
+            }}
           />
         </Col>
       </Row>
@@ -95,33 +124,12 @@ const StudentsInCourse = ({ students, setStudents }) => {
                 <Form.Group controlId="registrationNumber">
                   <Text text={"Registration Number"} />
                   <Form.Control
-                    type="text"
+                    type="number"
                     name="registrationNumber"
                     value={registrationNumber}
                     onChange={handleChange}
                     placeholder="Enter registration number"
-                  />
-                </Form.Group>
-
-                <Form.Group controlId="studentName" className="mt-2">
-                  <Text text={"Student Name"} />
-                  <Form.Control
-                    type="text"
-                    name="studentName"
-                    value={studentName}
-                    onChange={handleChange}
-                    placeholder="Enter student name"
-                  />
-                </Form.Group>
-
-                <Form.Group controlId="email" className="mt-2">
-                  <Text text={"Email"} />
-                  <Form.Control
-                    type="email"
-                    name="email"
-                    value={email}
-                    onChange={handleChange}
-                    placeholder="Enter email"
+                    className="mt-2"
                   />
                 </Form.Group>
               </Form>

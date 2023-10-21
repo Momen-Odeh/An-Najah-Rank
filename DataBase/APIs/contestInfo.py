@@ -62,7 +62,6 @@ def get_contests_info():
                 else:
                     data_object[fields[i]] = record[i]
             ContestChallengesData.append(data_object)
-        print(ContestChallengesData)
         response_data = {
             'contest': contestData,
             'myChallenges': myChallenges,
