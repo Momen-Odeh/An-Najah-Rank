@@ -15,29 +15,13 @@ from APIs.testCases import add_test_case, get_testCase_id, get_testCases, delete
 from APIs.contests import add_contest
 from APIs.contestInfo import get_contests_info
 from APIs.contestChallenges import add_challenge_in_contest
+from APIs.user import getUserInfo,UpdateUserImg,getUserImg,UpdateUser,updatePasswordSettings,DeleteUser
 from APIs.course import add_course
 from APIs.courseInfo import get_course_info
 from APIs.course_moderators import add_course_moderators
 from APIs.student_enrollments import add_student_enrollments
+
 CORS(app)
-
-@app.route('/sendEmail', methods=['POST'])
-def mailAPI():
-    if request.is_json:
-        try:
-            data = request.get_json()
-            email = data.get('email')
-            title = data.get('title')
-            body = "reset password body"
-            return sendEmail(email,title,body)
-        except Exception as e:
-            return jsonify({"error": "Invalid JSON data"}), 400
-    else:
-        return jsonify({"error": "Request body must contain JSON data"}), 400
-
-@app.route('/checkCode', methods=['POST'])  # Not Need to API called after register
-def create():
-    return createVerificationCode("momen.odeh74@gmail.com")
 
 
 
