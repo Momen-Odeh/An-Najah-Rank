@@ -3,7 +3,6 @@ from flask import request, jsonify
 from dataBaseConnection import insert_data, update_data, delete_data
 from MySQL_SetUp import connection
 from authentication import get_Data_from_token
-from dateutil.parser import isoparse
 @app.route('/contests', methods=['POST'])
 def add_contest():
     try:
@@ -13,9 +12,9 @@ def add_contest():
         result = insert_data(
             connection,
             'contests',
-            ['name', 'description', 'startTime', 'hasEndTime', 'endTime', 'OwnerUniversityNumber'],
+            ['name', 'description', 'startTime', 'hasEndTime', 'endTime', 'OwnerUniversityNumber', 'courseNumber'],
             (data['name'], data['description'], data['startTime'], data['hasEndTime'], data['endTime'],
-             ownerUniversityNumber)
+             ownerUniversityNumber, data['courseNumber'])
         )
         return result
     except Exception as e:
@@ -34,6 +33,7 @@ def get_contests_id():
                 AND hasEndTime = %s 
                 AND endTime = %s 
                 AND OwnerUniversityNumber = %s 
+                AND courseNumber = %s
         """
         hasEndTime = 1 if request.args.get('hasEndTime') and request.args.get('hasEndTime').lower() == 'true' else 0
         tokenData = get_Data_from_token(request.args.get('token'))
@@ -44,9 +44,10 @@ def get_contests_id():
             request.args.get('startTime'),
             hasEndTime,
             request.args.get('endTime'),
-            ownerUniversityNumber
+            ownerUniversityNumber,
+            request.args.get('courseNumber')
         )
-        print (params)
+        print(params)
         cursor = connection.cursor()
         cursor.execute(sql_query, params)
         result = cursor.fetchall()
