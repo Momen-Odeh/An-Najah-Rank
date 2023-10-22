@@ -11,11 +11,9 @@ import handelStateChanges from "../../Utils/handelStateChanges";
 import Axios from "axios";
 import Alert from "../Alert";
 import { useCookies } from "react-cookie";
-import { useUserContext } from "../../Utils/userContext";
 const LogInForm = () => {
   const navigate = useNavigate();
   const [cookies, setCookie, removeCookie] = useCookies(["token"]);
-  const [activeUser, setActiveUser] = useUserContext();
   const [loginValue, setLoginValue] = useState({ email: "", password: "" });
   const [showAlert, setShowAlert] = useState(false);
   const [alertMessage, setAlertMessage] = useState("");
@@ -46,7 +44,6 @@ const LogInForm = () => {
             password: loginValue.password,
           },
         });
-        setActiveUser(response.data.token);
         setCookie("token", response.data.token);
         navigate("/");
       } catch (error) {
