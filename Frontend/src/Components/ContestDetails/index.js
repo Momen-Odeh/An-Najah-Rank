@@ -11,12 +11,12 @@ import Axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 import { useCookies } from "react-cookie";
 import { useEffect } from "react";
-import moment from "moment"; 
-import SuggestionsInput from '../SuggestionsInput'
+import moment from "moment";
+import SuggestionsInput from "../SuggestionsInput";
 const ContestsDetalis = ({ operation, data = null }) => {
   const classes = useStyle();
   const navigate = useNavigate();
-  const { id } = useParams();
+  const { id, contestId } = useParams();
   const [cookies, setCookies] = useCookies();
   const [details, setDetails] = useState({
     name: null,
@@ -33,7 +33,7 @@ const ContestsDetalis = ({ operation, data = null }) => {
     message: "",
     variant: "warning",
   });
-console.log(details);
+  console.log(details);
   const handleChange = (e, nameVal = null, val = null) => {
     if (e) {
       const { name, value, type, checked, files } = e.target;
@@ -51,7 +51,9 @@ console.log(details);
       ...details,
       hasEndTime: !details.hasEndTime,
       startTime: moment(details.startTime).format("YYYY-MM-DD HH:mm:ss"),
-      endTime:details.endTime? moment(details.endTime).format("YYYY-MM-DD HH:mm:ss"):null,
+      endTime: details.endTime
+        ? moment(details.endTime).format("YYYY-MM-DD HH:mm:ss")
+        : null,
       token: cookies?.token,
     };
     try {
@@ -68,21 +70,21 @@ console.log(details);
     if (!thereError) {
       try {
         if (operation === "create") {
-          const response = await Axios.post(
-            "http://localhost:5000/contests",
-            contest
-          );
-          const params = new URLSearchParams(contest);
+          const response = await Axios.post("http://localhost:5000/contests", {
+            ...contest,
+            courseNumber: id,
+          });
+          const params = new URLSearchParams({ ...contest, courseNumber: id });
           const res = await Axios.get(
             "http://localhost:5000/contest_id?" + params.toString()
           );
-          navigate(`/contests/${res?.data?.message}/challenges`);
+          navigate(`/course/${id}/contests/${res?.data?.message}/challenges`);
         } else {
           const response = await Axios.put(
-            `http://localhost:5000/contests/${id}`,
+            `http://localhost:5000/contests/${contestId}`,
             contest
           );
-          navigate(`/contests/${id}/challenges`);
+          navigate(`/course/${id}/contests/${contestId}/challenges`);
         }
       } catch (error) {
         setAlertData({
@@ -152,7 +154,7 @@ console.log(details);
           <Datetime
             onChange={(val) => handleChange(null, "startTime", val)}
             value={details.startTime}
-            />
+          />
         </Col>
       </Row>
       <Row className="mb-3">
@@ -180,7 +182,7 @@ console.log(details);
             type={"checkbox"}
             label={`This contest has no end time.`}
             name="hasEndTime"
-            checked= {details.hasEndTime}
+            checked={details.hasEndTime}
             onChange={handleChange}
           />
         </Col>

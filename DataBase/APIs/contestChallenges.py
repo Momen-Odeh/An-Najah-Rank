@@ -16,45 +16,20 @@ def add_challenge_in_contest():
     except Exception as e:
         return {'message': str(e)}, 409
 
-@app.route('/contests-challenges-id', methods=['GET'])
-def get_challenge_in_contest_id():
-    try:
-        sql_query = """
-            SELECT id 
-            FROM contests_challenges 
-            WHERE 
-                challenge_id = %s 
-                AND contest_id = %s 
-                AND max_score = %s
-        """
-        params = (
-            request.args.get('challenge_id'),
-            request.args.get('contest_id'),
-            request.args.get('max_score')
-        )
-        print (params)
-        cursor = connection.cursor()
-        cursor.execute(sql_query, params)
-        result = cursor.fetchall()
-        return jsonify({'message': result[len(result)-1][0]}), 200
-    except Exception as e:
-        return {'message': str(e)}, 409
 
-@app.route('/contests-challenges/<int:id>', methods=['PUT'])
-def update_challenge_in_contest(id):
+@app.route('/contests-challenges', methods=['PUT'])
+def update_challenge_in_contest():
     try:
         data = request.get_json()
-        condition = 'id = %s'
+        condition = f'contest_id = {data["contest_id"]} AND challenge_id = {data["old_challenge_id"]}'
         new_values = (
             data['challenge_id'],
-            data['contest_id'],
-            data['max_score'],
-            id
+            data['max_score']
         )
         result = update_data(
             connection,
             'contests_challenges',
-            ['challenge_id', 'contest_id', 'max_score'],
+            ['challenge_id', 'max_score'],
             new_values,
             condition
         )
@@ -62,10 +37,10 @@ def update_challenge_in_contest(id):
     except Exception as e:
         return {'message': str(e)}, 500
 
-@app.route('/contests-challenges/<int:id>', methods=['DELETE'])
-def delete_challenge_in_contest(id):
+@app.route('/contests-challenges', methods=['DELETE'])
+def delete_challenge_in_contest():
     try:
-        condition = f'id = {id}'
+        condition = f'contest_id = {request.args.get("contest_id")} AND challenge_id = {request.args.get("challenge_id")}'
         result = delete_data(
             connection,
             'contests_challenges',
