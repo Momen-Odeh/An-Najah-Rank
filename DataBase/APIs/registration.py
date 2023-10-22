@@ -17,7 +17,7 @@ def register_user():
         hashed_password = generate_password_hash(password)
         result= insert_data(connection,'user', ['universityNumber','email','fullName','role','status','password'],
                     (universityNumber,email,fullName,role,'pending',hashed_password))
-        if(result):
+        if(result[1] == 201):
             createVerificationCode(email)
         return result
     except Exception as e:

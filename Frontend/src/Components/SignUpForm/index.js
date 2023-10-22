@@ -11,14 +11,19 @@ import useStyles from "./style";
 import { Link, useNavigate } from "react-router-dom";
 import handelStateChanges from "../../Utils/handelStateChanges";
 import Text from "../Text";
-import Alert from "../Alert";
 import Axios from "axios";
+import {
+  validateEmail,
+  validatePassword,
+  validateUniversityNumber,
+  validateFullName,
+} from "../../Utils/Validation";
+import Loader from "react-spinners/ClipLoader";
+import { toast } from "react-toastify";
 const SignUpForm = () => {
   const classes = useStyles();
   const navigate = useNavigate();
-  const [showAlert, setShowAlert] = useState(false);
-  const [alertMessage, setAlertMessage] = useState("");
-  const [variant, setVariant] = useState("warning");
+  const [loading, setLoading] = useState(false);
   const [signupValue, setSignupValue] = useState({
     email: "",
     fullName: "",
@@ -27,37 +32,60 @@ const SignUpForm = () => {
     confirmPassword: "",
     isProfessor: false,
   });
+  const [errorMsg, setErrorMsg] = useState({
+    email: null,
+    fullName: null,
+    universityNumber: null,
+    password: null,
+    confirmPassword: null,
+  });
 
-  const handelSignUpButton = async (e) => {
-    e.preventDefault();
-    let thereError = false;
-    try {
-      setShowAlert(false);
-      if (!signupValue.email) {
-        throw new Error("should enter your email");
-      } else if (!signupValue.universityNumber) {
-        throw new Error("should enter your university number");
-      } else if (!signupValue.fullName) {
-        throw new Error("should enter your full name");
-      } else if (!signupValue.password) {
-        throw new Error("should enter your password");
-      } else if (!signupValue.email) {
-        throw new Error("should enter your confirmation password");
-      } else if (signupValue.password !== signupValue.confirmPassword) {
-        throw new Error("password not the same of confirm password");
-      } else if (signupValue.isProfessor) {
-        if (signupValue.email.endsWith("@najah.edu"));
-        else {
-          throw new Error("You are not a professor");
-        }
+  const handelSignUpButton = async () => {
+    console.log(signupValue);
+    setLoading(true);
+    setErrorMsg({
+      email: !validateEmail(signupValue.email) ? "Invalid Email" : null,
+      fullName: !validateFullName(signupValue.fullName)
+        ? "Full Names must contain at least 3 characters"
+        : null,
+      universityNumber: !validateUniversityNumber(signupValue.universityNumber)
+        ? "The university number must consist of digits and contain at least three digits."
+        : null,
+      password: !validatePassword(signupValue.password)
+        ? "Password must contain at least 6 characters"
+        : null,
+      confirmPassword: !validatePassword(signupValue.confirmPassword)
+        ? "Password must contain at least 6 characters"
+        : null,
+    });
+    if (
+      validateEmail(signupValue.email) &&
+      validateFullName(signupValue.fullName) &&
+      validateUniversityNumber(signupValue.universityNumber) &&
+      validatePassword(signupValue.password) &&
+      validatePassword(signupValue.confirmPassword)
+    ) {
+      if (signupValue.password !== signupValue.confirmPassword) {
+        setErrorMsg({
+          ...errorMsg,
+          email: null,
+          fullName: null,
+          universityNumber: null,
+          password: "new password and confirm password not matched",
+          confirmPassword: "new password and confirm password not matched",
+        });
+        setLoading(false);
+        return;
+      } else {
+        setErrorMsg({
+          ...errorMsg,
+          email: null,
+          fullName: null,
+          universityNumber: null,
+          password: null,
+          confirmPassword: null,
+        });
       }
-    } catch (error) {
-      setAlertMessage(error.message);
-      setVariant("warning");
-      setShowAlert(true);
-      thereError = true;
-    }
-    if (!thereError) {
       try {
         console.log(signupValue);
         const data = {
@@ -76,11 +104,51 @@ const SignUpForm = () => {
         sessionStorage.setItem("event", "register");
         navigate("/verification-code");
       } catch (error) {
-        setAlertMessage(error.response.data.message);
-        setVariant("danger");
-        setShowAlert(true);
+        if (error.response?.status === 409) {
+          if (error.response?.data.message.includes("@")) {
+            setErrorMsg({
+              ...errorMsg,
+
+              email: "Email already exist",
+              universityNumber: null,
+              password: null,
+              confirmPassword: null,
+            });
+          } else {
+            setErrorMsg({
+              ...errorMsg,
+              email: null,
+              universityNumber: "University Number already exist",
+              password: null,
+              confirmPassword: null,
+            });
+          }
+        } else {
+          error.response?.data.message
+            ? toast.error(error.response.data.message, {
+                position: "bottom-left",
+                autoClose: 10000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "light",
+              })
+            : toast.error("No connection with backend", {
+                position: "bottom-left",
+                autoClose: 10000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "light",
+              });
+        }
       }
     }
+    setLoading(false);
   };
   return (
     <Container className={`${classes.Container} `} fluid={true}>
@@ -134,7 +202,9 @@ const SignUpForm = () => {
             placeHolder="Enter your email address"
             type="email"
             name={"email"}
+            msg={errorMsg.email}
             onChange={(e) => handelStateChanges(e, signupValue, setSignupValue)}
+            disabled={loading}
           />
         </Col>
       </Row>
@@ -146,7 +216,9 @@ const SignUpForm = () => {
             placeHolder="Enter your Full Name"
             type="text"
             name={"fullName"}
+            msg={errorMsg.fullName}
             onChange={(e) => handelStateChanges(e, signupValue, setSignupValue)}
+            disabled={loading}
           />
         </Col>
       </Row>
@@ -158,7 +230,9 @@ const SignUpForm = () => {
             placeHolder="Enter your University Number"
             type="text"
             name={"universityNumber"}
+            msg={errorMsg.universityNumber}
             onChange={(e) => handelStateChanges(e, signupValue, setSignupValue)}
+            disabled={loading}
           />
         </Col>
       </Row>
@@ -170,7 +244,9 @@ const SignUpForm = () => {
             placeHolder="Enter your Password"
             type="password"
             name={"password"}
+            msg={errorMsg.password}
             onChange={(e) => handelStateChanges(e, signupValue, setSignupValue)}
+            disabled={loading}
           />
         </Col>
       </Row>
@@ -182,7 +258,9 @@ const SignUpForm = () => {
             placeHolder="Confirm your Password"
             type="password"
             name={"confirmPassword"}
+            msg={errorMsg.confirmPassword}
             onChange={(e) => handelStateChanges(e, signupValue, setSignupValue)}
+            disabled={loading}
           />
         </Col>
       </Row>
@@ -197,6 +275,7 @@ const SignUpForm = () => {
               onChange={(e) =>
                 handelStateChanges(e, signupValue, setSignupValue)
               }
+              disabled={loading}
             />
             <Form.Label className={classes.labelForm}>
               {" "}
@@ -205,14 +284,20 @@ const SignUpForm = () => {
           </Form.Group>
         </Col>
       </Row>
+      {loading && (
+        <Row>
+          <Col className={classes.LoaderCol}>
+            <Loader size={50} color="#191e35" speedMultiplier={1} />
+          </Col>
+        </Row>
+      )}
       <Row>
         <Col>
-          {showAlert && <Alert message={alertMessage} variant={variant} />}
-        </Col>
-      </Row>
-      <Row>
-        <Col>
-          <ButtonRegister text="Register" onClick={handelSignUpButton} />
+          <ButtonRegister
+            text="Register"
+            onClick={handelSignUpButton}
+            disabled={loading}
+          />
         </Col>
       </Row>
     </Container>

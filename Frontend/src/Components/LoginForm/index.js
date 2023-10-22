@@ -9,36 +9,40 @@ import useStyles from "./style";
 import { Link, useNavigate } from "react-router-dom";
 import handelStateChanges from "../../Utils/handelStateChanges";
 import Axios from "axios";
-import Alert from "../Alert";
 import { useCookies } from "react-cookie";
 import { useUserContext } from "../../Utils/userContext";
+import { validateEmail, validatePassword } from "../../Utils/Validation";
+import { toast } from "react-toastify";
+import Loader from "react-spinners/ClipLoader";
 const LogInForm = () => {
   const navigate = useNavigate();
   const [cookies, setCookie, removeCookie] = useCookies(["token"]);
   const [activeUser, setActiveUser] = useUserContext();
   const [loginValue, setLoginValue] = useState({ email: "", password: "" });
-  const [showAlert, setShowAlert] = useState(false);
-  const [alertMessage, setAlertMessage] = useState("");
-  const [variant, setVariant] = useState("warning");
-  const preventDefultAction = (e) => {
-    e.preventDefault();
-  };
-  const handelLoginButton = async (e) => {
-    let thereError = false;
-    try {
-      setShowAlert(false);
-      if (!loginValue.email) {
-        throw new Error("should enter your email");
-      } else if (!loginValue.password) {
-        throw new Error("should enter your password");
-      }
-    } catch (error) {
-      setAlertMessage(error.message);
-      setVariant("warning");
-      setShowAlert(true);
-      thereError = true;
+  const [errorMsg, setErrorMsg] = useState({
+    email: null,
+    password: null,
+  });
+  const [loading, setLoading] = useState(false);
+  const handleKeyPress = (event) => {
+    if (event.key === "Enter") {
+      handelLoginButton();
     }
-    if (!thereError) {
+  };
+
+  const handelLoginButton = async () => {
+    setLoading(true);
+    setErrorMsg({
+      email: !validateEmail(loginValue.email) ? "Invalid Email" : null,
+      password: !validatePassword(loginValue.password)
+        ? "password must contain at least 6 characters"
+        : null,
+    });
+
+    if (
+      validatePassword(loginValue.password) &&
+      validateEmail(loginValue.email)
+    ) {
       try {
         const response = await Axios.get("http://localhost:5000/login", {
           params: {
@@ -50,13 +54,41 @@ const LogInForm = () => {
         setCookie("token", response.data.token);
         navigate("/");
       } catch (error) {
-        error.response?.data.message
-          ? setAlertMessage(error.response.data.message)
-          : setAlertMessage("no connection with backend");
-        setVariant("danger");
-        setShowAlert(true);
+        if (error.response?.status === 404) {
+          setErrorMsg({
+            email: error.response.data.message,
+            password: null,
+          });
+        } else if (error.response?.status === 401) {
+          setErrorMsg({
+            email: null,
+            password: error.response.data.message,
+          });
+        } else
+          error.response?.data.message
+            ? toast.error(error.response.data.message, {
+                position: "bottom-left",
+                autoClose: 10000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "light",
+              })
+            : toast.error("No connection with backend", {
+                position: "bottom-left",
+                autoClose: 10000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "light",
+              });
       }
     }
+    setLoading(false);
   };
   const classes = useStyles();
   return (
@@ -114,7 +146,10 @@ const LogInForm = () => {
             onChange={(event) =>
               handelStateChanges(event, loginValue, setLoginValue)
             }
-            onClick={preventDefultAction}
+            onKeyDown={handleKeyPress}
+            id={"Email"}
+            msg={errorMsg.email}
+            disabled={loading}
           />
         </Col>
       </Row>
@@ -129,11 +164,14 @@ const LogInForm = () => {
             onChange={(event) =>
               handelStateChanges(event, loginValue, setLoginValue)
             }
-            onClick={preventDefultAction}
+            id={"password"}
+            msg={errorMsg.password}
+            onKeyDown={handleKeyPress}
+            disabled={loading}
           />
         </Col>
       </Row>
-      <Row className="mb-5">
+      <Row className="mb-3">
         <Col className="text-right">
           <Link to={"/forget-password"} className={classes.Link}>
             <TextRegister
@@ -146,14 +184,20 @@ const LogInForm = () => {
           </Link>
         </Col>
       </Row>
+      {loading && (
+        <Row className="mb-3">
+          <Col className={classes.LoaderCol}>
+            <Loader size={50} color="#191e35" speedMultiplier={1} />
+          </Col>
+        </Row>
+      )}
       <Row>
         <Col>
-          {showAlert && <Alert message={alertMessage} variant={variant} />}
-        </Col>
-      </Row>
-      <Row>
-        <Col>
-          <ButtonRegister text="Login" onClick={handelLoginButton} />
+          <ButtonRegister
+            text="Login"
+            onClick={handelLoginButton}
+            disabled={loading}
+          />
         </Col>
       </Row>
     </Container>

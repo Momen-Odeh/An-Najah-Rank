@@ -1,12 +1,16 @@
 import { createUseStyles } from "react-jss";
 const useStyles = createUseStyles({
-  labelForm:{
-    userSelect: 'none',
+  labelForm: {
+    userSelect: "none",
   },
   Link: {
+    textDecoration: "none",
     "&:hover": {
       textDecoration: "none",
     },
+  },
+  LoaderCol: {
+    textAlign: "center",
   },
   Container: {
     padding: "0 12%",

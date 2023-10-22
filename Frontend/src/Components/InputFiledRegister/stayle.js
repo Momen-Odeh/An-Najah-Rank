@@ -1,10 +1,5 @@
 import { createUseStyles } from "react-jss";
 const useStyles = createUseStyles({
-  form: {
-    // border: "1px solid red",
-    padding: "0",
-    margin: "0",
-  },
   label: {
     fontFamily: "'Poppins', sans-serif",
     fontSize: "13px",
@@ -16,9 +11,8 @@ const useStyles = createUseStyles({
     marginBottom: "5px",
   },
   icon: {
-    width: "17px",
-    height: "17px",
-    color: "#000842",
+    fontSize: "20px",
+    color: "#0e141e",
     marginRight: "10px",
   },
   iconPassword: {
@@ -32,15 +26,17 @@ const useStyles = createUseStyles({
     border: "none",
     padding: "0",
     margin: "0",
-    borderBottom: "solid 2px #999999",
+    borderBottom: ({ msg }) =>
+      msg ? "2px solid #e40506" : "solid 2px #999999",
     borderRadius: "0",
     paddingBottom: "5px",
+    transition: "0.5s",
     "&:hover ": {
       borderBottom: "solid 2px #000842",
     },
   },
   InputFiled: {
-    padding: "0",
+    padding: "2px 5px",
     margin: "0",
     border: "none",
     fontFamily: "'Poppins', sans-serif",
@@ -52,6 +48,10 @@ const useStyles = createUseStyles({
     "&:focus": {
       boxShadow: "none",
     },
+  },
+  msg: {
+    color: "#e40506 !important",
+    fontWeight: "500",
   },
 });
 

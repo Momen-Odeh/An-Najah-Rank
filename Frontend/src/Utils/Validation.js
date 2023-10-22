@@ -15,3 +15,12 @@ export const validatePassword = (password) => {
   //   return pattern.test(password);
   return password.length >= 6;
 };
+
+export const validateFullName = (fullName) => {
+  return fullName.length >= 3;
+};
+
+export const validateUniversityNumber = (universityNumber) => {
+  const patternNum = /^[-+]?\d*\.?\d*$/;
+  return patternNum.test(universityNumber) && universityNumber.length >= 3;
+};
