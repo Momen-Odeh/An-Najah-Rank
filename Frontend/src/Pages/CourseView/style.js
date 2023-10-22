@@ -4,6 +4,7 @@ const useStyles = createUseStyles({
   Container: {
     padding: "0 20px",
     maxWidth: "1200px",
+    // backgroundColor: "red",
   },
   Row: {
     padding: "0",
@@ -33,4 +34,5 @@ const useStyles = createUseStyles({
     paddingLeft: "35px",
   },
 });
+
 export default useStyles;

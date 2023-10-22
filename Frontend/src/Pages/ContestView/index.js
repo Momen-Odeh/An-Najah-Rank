@@ -79,7 +79,7 @@ const ContestView = () => {
         </Col>
       </Row>
       <Row className={`${clasess.Row} mb-2`}>
-        <Col className={`${clasess.Col}`}>
+        <Col className={`${clasess.Col} ${clasess.descritionCol}`}>
           <span
             className={clasess.descrition}
             dangerouslySetInnerHTML={{

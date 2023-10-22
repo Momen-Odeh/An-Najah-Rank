@@ -16,10 +16,10 @@ function PageLayout() {
       <userContext.Provider
         value={{ activeUser: activeUser, setActiveUser: setActiveUser }}
       >
-        {/* <div> */}
-        <MainNavbar activeTab={activeTab} />
-        <Outlet context={setActiveTab} />
-        {/* </div> */}
+        <div>
+          <MainNavbar activeTab={activeTab} />
+          <Outlet context={setActiveTab} />
+        </div>
         <Footer className={classes.Footer} />
       </userContext.Provider>
     </div>
