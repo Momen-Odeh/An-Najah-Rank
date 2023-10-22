@@ -11,6 +11,8 @@ import { Suspense } from "react";
 import PageLayout from "./Layout/PageLayout";
 import { routes, generateRoutes } from "./Utils/Utils";
 import NotFound from "./Components/NotFound";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 function App() {
   const router = createBrowserRouter(
     createRoutesFromElements(
@@ -23,6 +25,7 @@ function App() {
   return (
     <Suspense fallback={<>Loading</>}>
       <RouterProvider router={router} />
+      <ToastContainer />
     </Suspense>
   );
 }

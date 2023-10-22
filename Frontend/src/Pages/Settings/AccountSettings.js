@@ -14,8 +14,7 @@ import SettingsContext from "../../Utils/SettingsContext";
 import axios from "axios";
 import { useCookies } from "react-cookie";
 import Loader from "react-spinners/ClipLoader";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import { toast } from "react-toastify";
 import { validatePassword } from "../../Utils/Validation";
 import { useNavigate } from "react-router-dom";
 const AccountSettings = ({}) => {
@@ -305,7 +304,6 @@ const AccountSettings = ({}) => {
           />
         </Col>
       </Row>
-      <ToastContainer />
       <Modal
         show={deleteModal}
         onHide={() => setDeleteModal(false)}

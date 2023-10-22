@@ -1,5 +1,8 @@
 import { createUseStyles } from "react-jss";
 const useStyles = createUseStyles({
+  LoaderCol: {
+    textAlign: "center",
+  },
   Link: {
     "&:hover": {
       textDecoration: "none",

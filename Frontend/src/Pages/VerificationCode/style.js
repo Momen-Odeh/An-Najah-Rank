@@ -1,5 +1,12 @@
 import { createUseStyles } from "react-jss";
 const useStyles = createUseStyles({
+  LoaderCol: {
+    textAlign: "center",
+  },
+  msg: {
+    color: "#e40506 !important",
+    fontWeight: "500",
+  },
   Container: {
     boxSizing: "border-box",
     width: "480px",
@@ -19,7 +26,6 @@ const useStyles = createUseStyles({
     margin: "15px",
   },
   AuthCode: {
-    // backgroundColor: "red",
     display: "flex",
     justifyContent: "center",
     columnGap: "10px",
