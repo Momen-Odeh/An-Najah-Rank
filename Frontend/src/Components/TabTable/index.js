@@ -7,16 +7,20 @@ import { FaCheck } from "react-icons/fa";
 import ButtonRank from "../ButtonRank";
 
 const renderValue = (value) => {
-  if (typeof value === 'string' || typeof value === 'number' || typeof value === 'boolean') {
+  if (
+    typeof value === "string" ||
+    typeof value === "number" ||
+    typeof value === "boolean"
+  ) {
     return value;
   } else if (Array.isArray(value)) {
-    return value.join(', ');
-  } else if (typeof value === 'object' && value !== null) {
-    return Object.values(value).join(', ');
+    return value.join(", ");
+  } else if (typeof value === "object" && value !== null) {
+    return Object.values(value).join(", ");
   }
-}
+};
 
-const TabTable = ({ TableHeader, TableData, url=null }) => {
+const TabTable = ({ TableHeader, TableData, url = [] }) => {
   const classes = useStyles();
   let values;
   const setValues = (e) => {
@@ -26,29 +30,43 @@ const TabTable = ({ TableHeader, TableData, url=null }) => {
     <Container fluid className={classes.Container}>
       <Row className={classes.Row}>
         {TableHeader.map((item, index) => (
-          <Col key={index} className="d-flex align-items-center justify-content-center">
+          <Col
+            key={index}
+            className="d-flex align-items-center justify-content-center"
+          >
             <Text text={item} color="#39424E" />
           </Col>
         ))}
       </Row>
-      {TableData.map((item, index) => (
-        url?
-        <Link to={url} className={classes.link}>
-        <Row className={classes.Row} key={index}>
-          {setValues(Object.values(item))}
-          {values.map((val, index) => (
-            <Col key={index} className="d-flex align-items-center justify-content-center">{renderValue(val)}</Col>
-          ))}
-        </Row>
-        </Link>
-        :
-        <Row className={classes.Row} key={index}>
-          {setValues(Object.values(item))}
-          {values.map((val, index) => (
-            <Col key={index} className="d-flex align-items-center justify-content-center">{val}</Col>
-          ))}
-        </Row>
-      ))}
+      {TableData?.map((item, index) =>
+        url[index] ? (
+          <Link to={url[index]} className={classes.link}>
+            <Row className={classes.Row} key={index}>
+              {setValues(Object.values(item))}
+              {values.map((val, index) => (
+                <Col
+                  key={index}
+                  className="d-flex align-items-center justify-content-center"
+                >
+                  {renderValue(val)}
+                </Col>
+              ))}
+            </Row>
+          </Link>
+        ) : (
+          <Row className={classes.Row} key={index}>
+            {setValues(Object.values(item))}
+            {values.map((val, index) => (
+              <Col
+                key={index}
+                className="d-flex align-items-center justify-content-center"
+              >
+                {val}
+              </Col>
+            ))}
+          </Row>
+        )
+      )}
     </Container>
   );
 };

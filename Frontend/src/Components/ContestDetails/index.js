@@ -78,13 +78,17 @@ const ContestsDetalis = ({ operation, data = null }) => {
           const res = await Axios.get(
             "http://localhost:5000/contest_id?" + params.toString()
           );
-          navigate(`/course/${id}/contests/${res?.data?.message}/challenges`);
+          navigate(
+            `/administration/courses/${id}/contests/${res?.data?.message}/challenges`
+          );
         } else {
           const response = await Axios.put(
             `http://localhost:5000/contests/${contestId}`,
             contest
           );
-          navigate(`/course/${id}/contests/${contestId}/challenges`);
+          navigate(
+            `/administration/courses/${id}/contests/${contestId}/challenges`
+          );
         }
       } catch (error) {
         setAlertData({

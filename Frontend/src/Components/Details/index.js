@@ -82,13 +82,13 @@ const Details = ({ operation, data }) => {
           const res = await Axios.get(
             "http://localhost:5000/challenge_id?" + params.toString()
           );
-          navigate(`/challenges/${res.data.message}/test-cases`);
+          navigate(`/administration/challenges/${res.data.message}/test-cases`);
         } else {
           const response = await Axios.put(
             `http://localhost:5000/challenges/${id}`,
             challenge
           );
-          navigate(`/challenges/${id}/test-cases`);
+          navigate(`/administration/challenges/${id}/test-cases`);
         }
         console.log(challenge);
       } catch (error) {
@@ -273,7 +273,10 @@ const Details = ({ operation, data }) => {
       <Row className="mb-3">
         <Col md={2}></Col>
         <Col md={8} className="d-flex justify-content-end">
-          <ButtonRank text={"Cancel Changes"} />
+          <ButtonRank
+            text={"Cancel Changes"}
+            onClick={() => navigate("/administration/challenges")}
+          />
           <span className="m-1"></span>
           <ButtonRank
             onClick={handleClick}

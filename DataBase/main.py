@@ -20,6 +20,8 @@ from APIs.course import add_course
 from APIs.courseInfo import get_course_info
 from APIs.course_moderators import add_course_moderators
 from APIs.student_enrollments import add_student_enrollments
+from APIs.challengesCoursesAdministration import getChallengesForOwner
+from APIs.contestsForCourse import getContestForCourse
 from authentication import check_token
 
 CORS(app)

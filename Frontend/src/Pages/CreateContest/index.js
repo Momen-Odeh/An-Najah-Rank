@@ -29,7 +29,7 @@ const CreateContest = () => {
       <Container className={classes.Container}>
         <Row className={`mb-4 mt-2 ${classes.maxWidth}`}>
           <Col>
-            <ContestsDetalis operation={"create"}/>
+            <ContestsDetalis operation={"create"} />
           </Col>
         </Row>
       </Container>
