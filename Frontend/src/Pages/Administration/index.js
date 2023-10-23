@@ -1,28 +1,36 @@
-import React from "react";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
 import { Col, Container, Row } from "react-bootstrap";
+import { useCookies } from "react-cookie";
 import ChallengeTabs from "../../Components/ChallengTabs";
 import ManageChallenges from "../../Components/ManageChallenges";
 import ManageContests from "../../Components/ManageContests";
 import ManageCourses from "../../Components/ManageCourses";
 import Text from "../../Components/Text";
 const Administration = () => {
+  const [cookies, setCookies] = useCookies();
+  const [data, setData] = useState({
+    courses: [],
+    challenges: [],
+  });
+  useEffect(() => {
+    axios
+      .get(`http://localhost:5000/challenges-for-owner?token=${cookies.token}`)
+      .then((res) => {
+        setData(res.data);
+      });
+  }, []);
   const tabs = [
     {
       title: "Manage Courses",
       eventKey: "ManageCourses",
-      TabComponent: <ManageCourses />,
+      TabComponent: <ManageCourses courses={data.courses} />,
       urlPattern: "/administration/courses",
-    },
-    {
-      title: "Manage Contests",
-      eventKey: "ManageContests",
-      TabComponent: <ManageContests />,
-      urlPattern: "/administration/contests",
     },
     {
       title: "Manage Challenges",
       eventKey: "ManageChallenges",
-      TabComponent: <ManageChallenges />,
+      TabComponent: <ManageChallenges challenges={data.challenges} />,
       urlPattern: "/administration/challenges",
     },
   ];

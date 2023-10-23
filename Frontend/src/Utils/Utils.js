@@ -130,146 +130,7 @@ export const routes = [
       },
     ],
   },
-  {
-    path: "/create-challenge",
-    title: routeNames.CREATE_CHALLENGE,
-    component: (
-      <IsLoggedIn moveTo={"log-in"}>
-        <Outlet />
-      </IsLoggedIn>
-    ),
-    subRoutes: [
-      {
-        index: true,
-        component: <Navigate to={"/create-challenge/details"} />,
-      },
-      {
-        title: "details",
-        path: "details",
-        component: <CreateChallenge />,
-      },
-    ],
-  },
-  {
-    path: "/challenges/:id",
-    title: routeNames.CHALLENGES,
-    component: (
-      <IsLoggedIn moveTo={"log-in"}>
-        <Outlet />
-      </IsLoggedIn>
-    ),
-    subRoutes: [
-      {
-        index: true,
-        component: <MoveToPath startPath="challenges" endPath="details" />,
-      },
-      {
-        title: "details",
-        path: "details",
-        component: <Challenges />,
-      },
-      {
-        title: "test-cases",
-        path: "test-cases",
-        component: <Challenges />,
-      },
-    ],
-  },
-  {
-    path: "/create-contest",
-    title: routeNames.CREATE_CHALLENGE,
-    component: (
-      <IsLoggedIn moveTo={"log-in"}>
-        <Outlet />
-      </IsLoggedIn>
-    ),
-    subRoutes: [
-      {
-        index: true,
-        component: <Navigate to={"/create-contest/details"} />,
-      },
-      {
-        title: "details",
-        path: "details",
-        component: <CreateContest />,
-      },
-    ],
-  },
-  {
-    path: "/contests/:id",
-    title: routeNames.CONTESTS,
-    component: (
-      <IsLoggedIn moveTo={"log-in"}>
-        <Outlet />
-      </IsLoggedIn>
-    ),
-    subRoutes: [
-      {
-        index: true,
-        component: <MoveToPath startPath="contests" endPath="details" />,
-      },
-      {
-        title: "details",
-        path: "details",
-        component: <Contests />,
-      },
-      {
-        title: "challenges",
-        path: "challenges",
-        component: <Contests />,
-      },
-    ],
-  },
-  {
-    path: "/create-course",
-    title: routeNames.CREATE_COURSE,
-    component: (
-      <IsLoggedIn moveTo={"log-in"}>
-        <Outlet />
-      </IsLoggedIn>
-    ),
-    subRoutes: [
-      {
-        index: true,
-        component: <Navigate to={"/create-course/details"} />,
-      },
-      {
-        title: "details",
-        path: "details",
-        component: <CreateCourse />,
-      },
-    ],
-  },
-  {
-    path: "/course/:id",
-    title: routeNames.COURSE,
-    component: (
-      <IsLoggedIn moveTo={"log-in"}>
-        <Outlet />
-      </IsLoggedIn>
-    ),
-    subRoutes: [
-      {
-        index: true,
-        component: <MoveToPath startPath="course" endPath="details" />,
-      },
-      {
-        title: "details",
-        path: "details",
-        component: <Course />,
-      },
-      {
-        title: "moderators",
-        path: "moderators",
-        component: <Course />,
-      },
-      {
-        title: "members",
-        path: "members",
-        component: <Course />,
-      },
-    ],
-  },
+
   {
     path: "/contest-view/:id",
     title: routeNames.CONTEST_VIEW,
@@ -313,6 +174,7 @@ export const routes = [
       },
     ],
   },
+  /******************************************* /administration ***********************************/
   {
     path: "/administration",
     title: routeNames.ADMINISTRATION,
@@ -326,25 +188,178 @@ export const routes = [
         index: true,
         component: <Navigate to={"/administration/courses"} />,
       },
+      /******************************************* /administration/courses ***********************************/
       {
         title: "courses",
         path: "courses",
-        component: <Administration />,
+        component: (
+          <IsLoggedIn moveTo={"log-in"}>
+            <Outlet />
+          </IsLoggedIn>
+        ),
+        subRoutes: [
+          {
+            index: true,
+            component: <Administration />,
+          },
+          /******************************************* /administration/courses/create-course ***********************************/
+          {
+            path: "create-course",
+            title: routeNames.CREATE_COURSE,
+            component: (
+              <IsLoggedIn moveTo={"log-in"}>
+                <CreateCourse />
+              </IsLoggedIn>
+            ),
+          },
+          /******************************************* /administration/courses/:id ***********************************/
+          {
+            path: ":id",
+            title: routeNames.COURSE,
+            component: (
+              <IsLoggedIn moveTo={"log-in"}>
+                <Outlet />
+              </IsLoggedIn>
+            ),
+            subRoutes: [
+              {
+                index: true,
+                component: <Navigate to={"details"} />,
+              },
+              {
+                title: "details",
+                path: "details",
+                component: <Course />,
+              },
+              {
+                title: "moderators",
+                path: "moderators",
+                component: <Course />,
+              },
+              {
+                title: "members",
+                path: "members",
+                component: <Course />,
+              },
+              /******************************************* /administration/courses/:id/contests ***********************************/
+              {
+                title: "contests",
+                path: "contests",
+                component: (
+                  <IsLoggedIn moveTo={"log-in"}>
+                    <Outlet />
+                  </IsLoggedIn>
+                ),
+                subRoutes: [
+                  {
+                    index: true,
+                    component: <Course />,
+                  },
+                  /******************************************* /administration/courses/:id/contests/create-contest ***********************************/
+                  {
+                    path: "create-contest",
+                    title: routeNames.CREATE_CHALLENGE,
+                    component: (
+                      <IsLoggedIn moveTo={"log-in"}>
+                        <CreateContest />
+                      </IsLoggedIn>
+                    ),
+                  },
+                  /******************************************* /administration/courses/:id/contests/:contestId ***********************************/
+                  {
+                    path: ":contestId",
+                    title: routeNames.CONTESTS,
+                    component: (
+                      <IsLoggedIn moveTo={"log-in"}>
+                        <Outlet />
+                      </IsLoggedIn>
+                    ),
+                    subRoutes: [
+                      {
+                        index: true,
+                        component: <Navigate to={"details"} />,
+                      },
+                      {
+                        title: "details",
+                        path: "details",
+                        component: <Contests />,
+                      },
+                      {
+                        title: "challenges",
+                        path: "challenges",
+                        component: <Contests />,
+                      },
+                    ],
+                  },
+                ],
+              },
+            ],
+          },
+        ],
       },
-      {
-        title: "contests",
-        path: "contests",
-        component: <Administration />,
-      },
+
+      /******************************************* /administration/challenges ***********************************/
+
       {
         title: "challenges",
         path: "challenges",
-        component: <Administration />,
+        component: (
+          <IsLoggedIn moveTo={"log-in"}>
+            <Outlet />
+          </IsLoggedIn>
+        ),
+        subRoutes: [
+          {
+            index: true,
+            component: <Administration />,
+          },
+
+          /******************************************* /administration/challenges/create-challenge ***********************************/
+
+          {
+            path: "create-challenge",
+            title: routeNames.CREATE_CHALLENGE,
+            component: (
+              <IsLoggedIn moveTo={"log-in"}>
+                <CreateChallenge />
+              </IsLoggedIn>
+            ),
+          },
+
+          /******************************************* /administration/challenges/:id ***********************************/
+
+          {
+            path: ":id",
+            title: routeNames.CHALLENGES,
+            component: (
+              <IsLoggedIn moveTo={"log-in"}>
+                <Outlet />
+              </IsLoggedIn>
+            ),
+            subRoutes: [
+              {
+                index: true,
+                component: <Navigate to={"details"} />,
+              },
+              {
+                title: "details",
+                path: "details",
+                component: <Challenges />,
+              },
+              {
+                title: "test-cases",
+                path: "test-cases",
+                component: <Challenges />,
+              },
+            ],
+          },
+        ],
       },
     ],
   },
 ];
 
+/******************************************* function to generate routes ***********************************/
 export const generateRoutes = (routes) => {
   let _routes = routes.map((route, idx) => {
     if (route.subRoutes) {

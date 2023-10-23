@@ -11,8 +11,8 @@ import Loader from "react-spinners/ClipLoader";
 import SettingsContext from "../../Utils/SettingsContext";
 import { useContext } from "react";
 import { validatePassword } from "../../Utils/Validation";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import { toast } from "react-toastify";
+
 const PasswordSettings = () => {
   const clasess = useStyles();
   const [cookies] = useCookies();
@@ -178,7 +178,6 @@ const PasswordSettings = () => {
           />
         </Col>
       </Row>
-      <ToastContainer />
     </Container>
   );
 };

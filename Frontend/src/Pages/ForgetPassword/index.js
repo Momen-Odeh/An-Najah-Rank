@@ -14,35 +14,61 @@ import AlertComponent from "../../Components/Alert";
 import { useNavigate } from "react-router-dom";
 import { useCookies } from "react-cookie";
 import { Navigate } from "react-router-dom";
-
+import { validateEmail } from "../../Utils/Validation";
+import Loader from "react-spinners/ClipLoader";
+import { toast } from "react-toastify";
 const ForgetPassword = () => {
   const classes = useStyles();
   const navigate = useNavigate();
   const [cookies, setCookies] = useCookies();
   const setActiveTab = useOutletContext();
+  const [errorMsg, setErrorMsg] = useState({
+    email: null,
+  });
+  const [loading, setLoading] = useState(false);
+
   useEffect(() => {
     setActiveTab(routeNames.LOG_IN);
   }, []);
   const [email, setEmail] = useState({ value: "" });
-  const [alert, setAlert] = useState({ msg: "", value: false });
-  const handelResetPasswordButton = () => {
-    console.log(email);
-    axios
-      .post("http://127.0.0.1:5000/forgetPassword", {
-        email: email.value,
-      })
-      .then((resp) => {
-        console.log(resp.status);
-        if (resp.status === 200) {
-          sessionStorage.setItem("email", email.value);
-          sessionStorage.setItem("event", "forget Password");
-          navigate("/verification-code");
-        }
-      })
-      .catch((err) => {
-        console.log("Error:", err);
-        setAlert({ value: true, msg: "Not found email please try again" });
-      });
+  const handelResetPasswordButton = async () => {
+    setErrorMsg({
+      email: !validateEmail(email.value) ? "Invalid Email" : null,
+    });
+    console.log();
+    if (validateEmail(email.value)) {
+      setLoading(true);
+      axios
+        .post("http://127.0.0.1:5000/forgetPassword", {
+          email: email.value,
+        })
+        .then((respons) => {
+          if (respons.status === 200) {
+            sessionStorage.setItem("email", email.value);
+            sessionStorage.setItem("event", "forget Password");
+            navigate("/verification-code");
+          }
+          setLoading(false);
+        })
+        .catch((error) => {
+          console.log("Error:", error);
+          if (error.response?.status === 404) {
+            setErrorMsg({ email: "Not found email" });
+          } else {
+            toast.error(error.response.data.error, {
+              position: "bottom-left",
+              autoClose: 10000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "light",
+            });
+          }
+          setLoading(false);
+        });
+    }
   };
   return !cookies?.token ? ( // Gard for forget passoed
     <div className={classes.center}>
@@ -74,12 +100,13 @@ const ForgetPassword = () => {
         <Row className={`${classes.Row} mb-4`}>
           <Col>
             <InputFiledRegister
-              // label="Email: "
               Icon={TfiEmail}
               placeHolder="Enter your Email"
               type="Email"
               name={"value"}
               onChange={(e) => handelStateChanges(e, email, setEmail)}
+              disabled={loading}
+              msg={errorMsg.email}
             />
           </Col>
         </Row>
@@ -87,8 +114,8 @@ const ForgetPassword = () => {
           <Col className={classes.Col}>
             <ButtonRegister
               text="Reset Password"
-              // to={"/verification-code"}
               onClick={handelResetPasswordButton}
+              disabled={loading}
             />
           </Col>
         </Row>
@@ -112,15 +139,13 @@ const ForgetPassword = () => {
             </Link>
           </Col>
         </Row>
-        <Row className={`${classes.Row} `}>
-          <Col className={classes.Col}>
-            <AlertComponent
-              message={alert.msg}
-              variant="warning"
-              show={alert.value}
-            />
-          </Col>
-        </Row>
+        {loading && (
+          <Row>
+            <Col className={classes.LoaderCol}>
+              <Loader size={50} color="#191e35" speedMultiplier={1} />
+            </Col>
+          </Row>
+        )}
       </Container>
     </div>
   ) : (

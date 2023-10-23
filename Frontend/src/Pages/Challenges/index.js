@@ -57,7 +57,7 @@ const Challenges = () => {
       title: "Details",
       eventKey: "Details",
       TabComponent: <Details operation={"update"} data={details} />,
-      urlPattern: `/challenges/${id}/details`,
+      urlPattern: `/administration/challenges/${id}/details`,
     },
     {
       title: "TestCases",
@@ -65,11 +65,11 @@ const Challenges = () => {
       TabComponent: (
         <TestCases operation={"update"} testCasesData={testCasesData} />
       ),
-      urlPattern: `/challenges/${id}/test-cases`,
+      urlPattern: `/administration/challenges/${id}/test-cases`,
     },
   ];
   const path = [
-    { title: "Manage Challenges", url: "#manage challenges" },
+    { title: "Manage Challenges", url: "/administration/challenges" },
     { title: details.name, url: "#" },
   ];
   return (

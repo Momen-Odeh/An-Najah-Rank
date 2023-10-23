@@ -14,7 +14,7 @@ import axios from "axios";
 const Contests = () => {
   const navigate = useNavigate();
   const clasess = useStyles();
-  const { id } = useParams();
+  const { id, contestId } = useParams();
   const [cookies, setCookies] = useCookies();
   const [details, setDetails] = useState({
     name: null,
@@ -28,7 +28,7 @@ const Contests = () => {
   useEffect(() => {
     axios
       .get(
-        `http://localhost:5000/contest-info?contest_id=${id}&token=${cookies.token}`
+        `http://localhost:5000/contest-info?contest_id=${contestId}&token=${cookies.token}`
       )
       .then((res) => {
         setDetails({
@@ -48,21 +48,19 @@ const Contests = () => {
         );
         setChallengesContest(
           res.data.ContestChallenges?.map((item, index) => ({
-            id: item.id,
-            name: item.name + " id= " + item.id,
+            id: item.challenge_id,
+            name: item.name + " id= " + item.challenge_id,
             maxScore: item.maxScore,
           }))
         );
       })
-      .catch((error) => {
-        navigate("/");
-      });
+      .catch((error) => {});
   }, []);
 
   const path = [
     {
       title: "Manage Contests",
-      url: "/log-in",
+      url: `/administration/courses/${id}/contests`,
     },
     {
       title: details.name,
@@ -75,7 +73,7 @@ const Contests = () => {
       eventKey: "Details",
       title: "Details",
       TabComponent: <ContestsDetalis operation={"update"} data={details} />,
-      urlPattern: `/contests/${id}/details`,
+      urlPattern: `/administration/courses/${id}/contests/${contestId}/details`,
     },
     {
       eventKey: "ContestChallenges",
@@ -86,7 +84,7 @@ const Contests = () => {
           challengesContest={challengesContest}
         />
       ),
-      urlPattern: `/contests/${id}/challenges`,
+      urlPattern: `/administration/courses/${id}/contests/${contestId}/challenges`,
     },
   ];
   return (
