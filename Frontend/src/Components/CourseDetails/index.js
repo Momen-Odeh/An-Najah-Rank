@@ -137,7 +137,7 @@ const CourseDetails = ({ operation, data = null, setData }) => {
           }
           setData(details);
         }
-        navigate(`/course/${details.number}/moderators`);
+        navigate(`/administration/courses/${details.number}/moderators`);
       } catch (error) {
         setAlertData({
           message: error?.response?.data?.message,
@@ -287,7 +287,10 @@ const CourseDetails = ({ operation, data = null, setData }) => {
       <Row className="mb-3">
         <Col md={2}></Col>
         <Col md={8} className="d-flex justify-content-end">
-          <ButtonRank text={"Cancel Changes"} />
+          <ButtonRank
+            text={"Cancel Changes"}
+            onClick={() => navigate("/administration/courses")}
+          />
           <span className="m-1"></span>
           <ButtonRank
             text={"Save Changes"}
