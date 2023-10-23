@@ -35,9 +35,9 @@ def insert_data(connection, table_name, column_names, values):
         cursor.execute(query, values)
         connection.commit()
         return jsonify({'message': 'data inserted successfully'}), 201
-    except pymysql.Error as e:
+    except Exception as e:
         print(f"Error: {e}")
-        return jsonify({'message': f"Error: {e}" }), 409
+        return jsonify({'message': f"{e}" }), 409
 
 def update_data(connection, table_name, column_names, new_values, condition):
     try:
@@ -45,7 +45,7 @@ def update_data(connection, table_name, column_names, new_values, condition):
         query = f"UPDATE {table_name} SET {', '.join([f'{col} = %s' for col in column_names])} WHERE {condition}"
         cursor.execute(query, new_values)
         connection.commit()
-        return jsonify({'message':"Data updated successfully."})
+        return jsonify({'message':"Data updated successfully."}),200
     except pymysql.Error as e:
         return jsonify({'message': f"Error: {e}" }), 409
 

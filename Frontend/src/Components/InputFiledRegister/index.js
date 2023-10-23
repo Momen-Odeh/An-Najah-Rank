@@ -11,49 +11,58 @@ const InputFiledRegister = ({
   type,
   onChange,
   name,
-  onClick,
+  id,
+  msg,
+  onKeyDown,
+  disabled,
 }) => {
-  const classes = useStyles();
+  const classes = useStyles({ msg });
   const [showPassword, setShowPassword] = useState(false);
   const changePasswordState = () => {
     setShowPassword(!showPassword);
   };
   return (
-    <Form
-      className={classes.form} // controlId="formGroupEmail"
+    <Form.Group
+      className={`${classes.Group} `} //mb-4
     >
-      <Form.Group
-        className={`${classes.Group} `} //mb-4
-      >
-        <Form.Label className={classes.label}>{label}</Form.Label>
-        <InputGroup.Text className={classes.InputGroup}>
-          <Icon className={classes.icon} draggable={false} alt="icon" />
-          <Form.Control
-            type={type === "password" && showPassword ? "text" : type}
-            placeholder={placeHolder}
-            className={classes.InputFiled}
-            onChange={onChange}
-            name={name}
-          />
-          {type === "password" &&
-            (showPassword ? (
-              <AiOutlineEye
-                className={classes.iconPassword}
-                draggable={false}
-                alt="icon"
-                onClick={changePasswordState}
-              />
-            ) : (
-              <AiOutlineEyeInvisible
-                className={classes.iconPassword}
-                draggable={false}
-                alt="icon"
-                onClick={changePasswordState}
-              />
-            ))}
-        </InputGroup.Text>
-      </Form.Group>
-    </Form>
+      <Form.Label className={classes.label} htmlFor={id}>
+        {label}
+      </Form.Label>
+      <InputGroup.Text className={classes.InputGroup}>
+        <Icon className={classes.icon} draggable={false} alt="icon" />
+        <Form.Control
+          type={type === "password" && showPassword ? "text" : type}
+          placeholder={placeHolder}
+          className={classes.InputFiled}
+          onChange={onChange}
+          name={name}
+          id={id}
+          onKeyDown={onKeyDown}
+          disabled={disabled}
+        />
+        {type === "password" &&
+          (showPassword ? (
+            <AiOutlineEye
+              className={classes.iconPassword}
+              draggable={false}
+              alt="icon"
+              onClick={changePasswordState}
+            />
+          ) : (
+            <AiOutlineEyeInvisible
+              className={classes.iconPassword}
+              draggable={false}
+              alt="icon"
+              onClick={changePasswordState}
+            />
+          ))}
+      </InputGroup.Text>
+      {msg && (
+        <Form.Text className={classes.msg} muted>
+          * {msg}
+        </Form.Text>
+      )}
+    </Form.Group>
   );
 };
 
