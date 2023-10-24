@@ -23,7 +23,7 @@ from APIs.student_enrollments import add_student_enrollments
 from APIs.challengesCoursesAdministration import getChallengesForOwner
 from APIs.contestsForCourse import getContestForCourse
 from authentication import check_token
-
+from APIs.admin import get_professor_pending
 CORS(app)
 
 
