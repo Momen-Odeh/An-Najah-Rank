@@ -6,6 +6,7 @@ const useStyles = createUseStyles({
     fontSize: "16px",
     lineHeight: "24px",
     color: "#979faf",
+    borderRadius: "5px",
     //
     backgroundColor: "#f8f9fa",
     border: "1px solid #C2C7D0",

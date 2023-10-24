@@ -1,17 +1,9 @@
 import { createUseStyles } from "react-jss";
 
 const useStyles = createUseStyles({
-  Container: {
-    width: "100%",
+  Table: {
     border: "1px solid #c2c7d0",
-  },
-  Row: {
-    padding: "15px",
-    borderBottom: "1px solid #c2c7d0",
-    alignItems: "center",
-    "&:nth-child(even)": {
-      backgroundColor: "#f8f9fa",
-    },
+    // borderRadius: "15px",
   },
   Icon: {
     marginLeft: "10px",
@@ -22,13 +14,16 @@ const useStyles = createUseStyles({
   IconFail: {
     color: "red",
   },
-  link:{
-    textDecoration:'none',
-    color: 'inherit',
-    '&:hover':{
-      textDecoration:'none',
-      color: 'inherit',
-    }
+  link: {
+    textDecoration: "none",
+    color: "inherit",
+    "&:hover": {
+      textDecoration: "none",
+      color: "inherit",
+    },
+  },
+  tableHeader: {
+    // textAlign: "center",
   },
 });
 

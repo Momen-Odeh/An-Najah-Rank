@@ -18,8 +18,16 @@ const useStyle = createUseStyles({
     width: "70px",
     fontWeight: "600",
   },
-  "@media (max-width: 600px)": {
+  "@media (max-width: 510px)": {
     countdownContainer: {
+      width: "100%",
+      // flexWrap: "wrap",
+    },
+  },
+  "@media (max-width: 390px)": {
+    countdownContainer: {
+      // width: "100%",
+      justifyContent: "center",
       flexWrap: "wrap",
     },
   },
@@ -32,7 +40,7 @@ const useStyle = createUseStyles({
     flexDirection: "column",
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#f65039",
+    backgroundColor: "#39424e",
     color: "#fff",
     borderRadius: "5px",
     padding: "5px",

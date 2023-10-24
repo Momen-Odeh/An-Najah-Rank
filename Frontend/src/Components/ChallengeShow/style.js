@@ -31,6 +31,23 @@ const useStyles = createUseStyles({
   },
   ButtonTry: {
     textAlign: "end",
+    alignItems: "center",
+    alignSelf: "center",
+    alignContent: "center",
+  },
+  CountDownCol: {
+    textAlign: "center",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "flex-end",
+  },
+  "@media (max-width: 770px)": {
+    ColTitle: {
+      marginBottom: "10px",
+    },
+    CountDownCol: {
+      justifyContent: "center",
+    },
   },
 });
 

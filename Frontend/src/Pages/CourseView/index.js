@@ -16,8 +16,23 @@ import axios from "axios";
 import useStyles from "./style";
 const CourseView = () => {
   const [showDescription, setShowDescription] = useState(false);
-  const [img, setImg] = useState(null);
   const { id } = useParams();
+  const [course, setCourse] = useState({
+    contests: [
+      // {
+      //   Name: "An-Najah Rank test1",
+      //   solved: true,
+      //   statistics: [
+      //     { key: "Solved Rate: ", val: "50%" },
+      //     { key: "My Score: ", val: 100 },
+      //   ],
+      //   url: "#test1",
+      //   endDate: new Date(2023, 8, 30, 17, 0, 0),
+      // },
+    ],
+  });
+
+  const [students, setStudents] = useState([]);
   useEffect(() => {
     axios
       .get("http://127.0.0.1:5000/course-info", {
@@ -26,67 +41,30 @@ const CourseView = () => {
         },
       })
       .then((response) => {
-        setImg(
-          response.data.course.backgroundImage &&
-            `data:image/jpeg;base64,${response.data.course.backgroundImage}`
-        );
-        console.log();
-        console.log(response);
+        const { name, description, backgroundImage } = response.data.course;
+        setCourse({
+          ...course,
+          name,
+          description,
+          backgroundImage: backgroundImage
+            ? `data:image/jpeg;base64,${backgroundImage}`
+            : "https://wallpapercrafter.com/desktop/161398-low-poly-digital-art-network-dots-abstract-lines-red-cyan.png",
+          contests: response.data.contests.map((item) => {
+            return {
+              ...item,
+              url: `/contest-view/${item.id}`,
+              endDate: item.endDate ? new Date(item.endDate) : null,
+            };
+          }),
+        });
+        setStudents(response.data.students);
+        // console.log(response.data);
       })
       .catch((error) => {
         console.log(error);
       });
   }, []);
   const isAdmin = true;
-  const [students, setStudents] = useState([
-    {
-      registrationNumber: "11923513",
-      studentName: "Noor Aldeen",
-      email: "s11923513@stu.najah.edu",
-    },
-    {
-      registrationNumber: "11923513",
-      studentName: "momen",
-      email: "s11923929@stu.najah.edu",
-    },
-    {
-      registrationNumber: "11923513",
-      studentName: "mohee",
-      email: "s11924789@stu.najah.edu",
-    },
-    {
-      registrationNumber: "11923513",
-      studentName: "obaida",
-      email: "s11924578@stu.najah.edu",
-    },
-  ]);
-  const [course, setCourse] = useState({
-    name: "Data structre and Algorithm",
-    description:
-      "An Algorithm course is a comprehensive study of fundamental computer algorithms and data structures. It explores efficient problem-solving techniques and teaches students how to design, analyze, and implement algorithms for various computational tasks. This course equips students with essential skills for optimizing software performance and solving complex real-world problems efficiently. Topics often include sorting, searching, graph algorithms, dynamic programming, and algorithmic analysis.",
-    contests: [
-      {
-        ContestName: "An-Najah Rank test1",
-        solved: true,
-        statistics: [
-          { key: "Solved Rate: ", val: "50%" },
-          { key: "My Score: ", val: 100 },
-        ],
-        url: "#test1",
-        endDate: new Date(2023, 8, 30, 17, 0, 0),
-      },
-      {
-        ContestName: "An-Najah Rank test2",
-        solved: false,
-        statistics: [
-          { key: "Solved Rate: ", val: "50%" },
-          { key: "My Score: ", val: 100 },
-        ],
-        url: "#test2",
-        endDate: new Date(2023, 10, 2, 17, 0, 0),
-      },
-    ],
-  });
 
   const handleAddContest = (name) => {
     const newContest = {
@@ -136,10 +114,14 @@ const CourseView = () => {
   const clasess = useStyles();
   return (
     <Container fluid className={clasess.Container}>
-      {img && (
-        <Row className={`${clasess.Row} mb-1`}>
+      {course.backgroundImage && (
+        <Row className={`${clasess.Row} mb-2 mt-3`}>
           <Col className={`${clasess.Col}`}>
-            <img src={img} alt="background Img" />
+            <img
+              src={course.backgroundImage}
+              alt="background Img"
+              className={clasess.BGImg}
+            />
           </Col>
         </Row>
       )}
@@ -172,7 +154,7 @@ const CourseView = () => {
           />
         </Col>
       </Row>
-      <Row className={`${clasess.Row} mb-2`}>
+      <Row className={`${clasess.Row} mb-4`}>
         <Col className={`${clasess.Col} ${clasess.descritionCol}`}>
           <span
             className={clasess.descrition}
@@ -182,7 +164,12 @@ const CourseView = () => {
           />
         </Col>
       </Row>
-      {isAdmin ? (
+      <Row className={`${clasess.Row} mb-2`}>
+        <Col className={`${clasess.Col}`}>
+          <ChallengeTabs ListTabs={tabs} />
+        </Col>
+      </Row>
+      {/* {isAdmin ? (
         <Row className={`${clasess.Row} mb-2`}>
           <Col className={`${clasess.Col}`}>
             <ChallengeTabs ListTabs={tabs} />
@@ -194,7 +181,7 @@ const CourseView = () => {
           isAdmin={isAdmin}
           handleAddContest={handleAddContest}
         />
-      )}
+      )} */}
     </Container>
   );
 };

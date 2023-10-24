@@ -28,7 +28,7 @@ const ContestView = () => {
         setChallengeContest(
           response.data.ContestChallenges.map((item, index) => {
             return {
-              challengeName: item.name,
+              Name: item.name,
               solved: index % 2 === 0 ? true : false,
               statistics: [
                 { key: "Difficulty: ", val: item.difficulty },

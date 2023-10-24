@@ -33,6 +33,14 @@ const useStyles = createUseStyles({
   descritionCol: {
     paddingLeft: "35px",
   },
+  BGImg: {
+    width: "100%",
+    height: "35vh",
+    objectFit: "fill",
+    borderRadius: "5px",
+    boxShadow: "0 3px 10px 0 rgba(0,0,0,.1)",
+    // border: "2px solid red",
+  },
 });
 
 export default useStyles;

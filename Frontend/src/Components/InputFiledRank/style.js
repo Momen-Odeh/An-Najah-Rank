@@ -31,6 +31,9 @@ const useStyles = createUseStyles({
     color: "#e40506 !important",
     fontWeight: "500",
   },
+  div: {
+    width: ({ width }) => width,
+  },
 });
 
 export default useStyles;
