@@ -7,6 +7,7 @@ import io
 @app.route('/course-info', methods=['GET'])
 def get_course_info():
     try:
+
         query = f"""
                     SELECT *
                     FROM courses 
@@ -30,9 +31,10 @@ def get_course_info():
             "name": course[1],
             "description": course[2],
             "owner": {"universityNumber": course[3], "name": Owner[0], "email": Owner[1]},
-            "backgroundImage": base64.b64encode(course[4]).decode('utf-8')
+            "backgroundImage": None
         }
-
+        if course[4] is not None:
+            courseData["backgroundImage"] = base64.b64encode(course[4]).decode('utf-8')
         query = f"""
                     SELECT *
                     FROM user 
@@ -96,12 +98,33 @@ def get_course_info():
                 "email": professor[1],
                 "universityNumber": professor[0]
             })
-
+        query = f"""
+                            SELECT id,name,hasEndTime,endTime
+                            FROM contests 
+                            WHERE 
+                            courseNumber ={request.args.get('courseNumber')}
+                        """
+        cursor = execute_query(connection, query)
+        contests = fetch_results(cursor)
+        contestsData = []
+        for tmp in contests:
+            contestsData.append({
+                "id": tmp[0],
+                "Name": tmp[1],
+                "hasEndDate": tmp[2],
+                "endDate":tmp[3],
+                'solved':True,
+                "statistics":[
+                    {'key':'Solved Rate: ',"val":"50%"},
+                    {'key':'My Score: ',"val":100}
+                ]
+            })
         response_data = {
             'course': courseData,
             'suggestionModerators': suggestionModerators,
             'students': students,
-            'moderators': moderators
+            'moderators': moderators,
+            'contests':contestsData
         }
         return jsonify(response_data), 200
     except Exception as e:
