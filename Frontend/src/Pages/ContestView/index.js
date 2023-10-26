@@ -28,7 +28,7 @@ const ContestView = () => {
         setChallengeContest(
           response.data.ContestChallenges.map((item, index) => {
             return {
-              challengeName: item.name,
+              Name: item.name,
               solved: index % 2 === 0 ? true : false,
               statistics: [
                 { key: "Difficulty: ", val: item.difficulty },
@@ -79,7 +79,7 @@ const ContestView = () => {
         </Col>
       </Row>
       <Row className={`${clasess.Row} mb-2`}>
-        <Col className={`${clasess.Col}`}>
+        <Col className={`${clasess.Col} ${clasess.descritionCol}`}>
           <span
             className={clasess.descrition}
             dangerouslySetInnerHTML={{

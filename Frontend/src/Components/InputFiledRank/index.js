@@ -12,14 +12,18 @@ const InputFiledRand = ({
   onChange,
   disabled,
   msg,
+  placeholder,
+  width,
 }) => {
-  const clasess = useStyles({ msg });
+  const clasess = useStyles({ msg, width });
   const [showPassword, SetShowPassword] = useState(false);
   return (
-    <div>
-      <Form.Label className={clasess.Label} htmlFor={id}>
-        {label}
-      </Form.Label>
+    <div className={clasess.div}>
+      {label && (
+        <Form.Label className={clasess.Label} htmlFor={id}>
+          {label}
+        </Form.Label>
+      )}
       <InputGroup>
         <Form.Control
           className={clasess.Control}
@@ -29,6 +33,7 @@ const InputFiledRand = ({
           name={name}
           onChange={onChange}
           disabled={disabled}
+          placeholder={placeholder}
         />
 
         {type === "password" && (

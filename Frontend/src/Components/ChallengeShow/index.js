@@ -6,28 +6,29 @@ import Text from "../Text";
 import ButtonRank from "../ButtonRank";
 import { BiCheckCircle } from "react-icons/bi";
 import { useNavigate } from "react-router-dom";
-const ChallengeShow = ({ challengeName, solved, statistics, url }) => {
+import CountDown from "../CountDown";
+const ChallengeShow = ({ Name, solved, statistics, url, endDate }) => {
   const clasess = useStyles();
   const navigate = useNavigate();
   return (
     <Container fluid className={clasess.Container}>
       <Row className={clasess.RowChallengeShow}>
-        <Row>
-          <Col className={clasess.ColTitle}>
-            <Text
-              text={challengeName}
-              size="20px"
-              fontFamily="Open Sans"
-              wegiht="600"
-            />
+        <Row className="mb-3">
+          <Col className={`${clasess.ColTitle}`} xs={"auto"}>
+            <Text text={Name} size="20px" fontFamily="Open Sans" wegiht="600" />
             {solved && (
               <BiCheckCircle size={26} color="green" className="ml-4" />
             )}
           </Col>
+          {endDate && (
+            <Col className={`${clasess.CountDownCol} `}>
+              <CountDown endDate={endDate} />
+            </Col>
+          )}
         </Row>
         <Row className={clasess.statisticsRow}>
           {statistics.map((item, index) => (
-            <Col xs={"auto"} key={index}>
+            <Col xs={"auto"} key={index} className="mb-1">
               <Text
                 text={item.key}
                 fontFamily="Open Sans"
@@ -45,7 +46,7 @@ const ChallengeShow = ({ challengeName, solved, statistics, url }) => {
           ))}
           <Col className={clasess.ButtonTry}>
             <ButtonRank
-              text={"Try Again"}
+              text={solved ? "Try Again" : "Solve Challenge"}
               hoverBackgroundColor="#0e141e"
               onClick={() => navigate(url)}
             />

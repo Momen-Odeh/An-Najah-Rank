@@ -5,7 +5,7 @@ import Text from "../Text";
 import { Link } from "react-router-dom";
 import { FaCheck } from "react-icons/fa";
 import ButtonRank from "../ButtonRank";
-
+import Table from "react-bootstrap/Table";
 const renderValue = (value) => {
   if (
     typeof value === "string" ||
@@ -20,6 +20,7 @@ const renderValue = (value) => {
   }
 };
 
+
 const TabTable = ({ TableHeader, TableData, url = [] }) => {
   const classes = useStyles();
   let values;
@@ -27,47 +28,43 @@ const TabTable = ({ TableHeader, TableData, url = [] }) => {
     values = e;
   };
   return (
-    <Container fluid className={classes.Container}>
-      <Row className={classes.Row}>
-        {TableHeader.map((item, index) => (
-          <Col
-            key={index}
-            className="d-flex align-items-center justify-content-center"
-          >
-            <Text text={item} color="#39424E" />
-          </Col>
-        ))}
-      </Row>
-      {TableData?.map((item, index) =>
-        url[index] ? (
-          <Link to={url[index]} className={classes.link}>
-            <Row className={classes.Row} key={index}>
+    <Table responsive striped className={classes.Table}>
+      <thead className={classes.tableHeader}>
+        <tr className={classes.tableRow}>
+          {TableHeader.map((item, index) => (
+            <th key={index}>
+              <Text text={item} color="#39424E" size="1em" />
+            </th>
+          ))}
+        </tr>
+      </thead>
+
+      <tbody>
+        {TableData.map((item, index) =>
+          url ? (
+            <tr className={classes.tableRow} key={index}>
               {setValues(Object.values(item))}
               {values.map((val, index) => (
-                <Col
-                  key={index}
-                  className="d-flex align-items-center justify-content-center"
-                >
-                  {renderValue(val)}
-                </Col>
+                <td key={index} className={classes.TableData}>
+                  <Link to={url} className={classes.link}>
+                    {renderValue(val)}
+                  </Link>
+                </td>
               ))}
-            </Row>
-          </Link>
-        ) : (
-          <Row className={classes.Row} key={index}>
-            {setValues(Object.values(item))}
-            {values.map((val, index) => (
-              <Col
-                key={index}
-                className="d-flex align-items-center justify-content-center"
-              >
-                {val}
-              </Col>
-            ))}
-          </Row>
-        )
-      )}
-    </Container>
+            </tr>
+          ) : (
+            <tr key={index} className={classes.tableRow}>
+              {setValues(Object.values(item))}
+              {values.map((val, index) => (
+                <td key={index} className={classes.TableData}>
+                  {val}
+                </td>
+              ))}
+            </tr>
+          )
+        )}
+      </tbody>
+    </Table>
   );
 };
 

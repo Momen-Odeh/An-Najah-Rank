@@ -152,7 +152,7 @@ export const routes = [
     ),
   },
   {
-    path: "/course-view",
+    path: "/course-view/:id",
     title: routeNames.COURSE_VIEW,
     component: (
       <IsLoggedIn moveTo={"log-in"}>
@@ -162,7 +162,7 @@ export const routes = [
     subRoutes: [
       {
         index: true,
-        component: <Navigate to={"/course-view/course"} />,
+        component: <MoveToPath startPath="course-view" endPath="course" />,
       },
       {
         title: "course",

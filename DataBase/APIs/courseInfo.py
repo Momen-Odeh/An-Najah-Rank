@@ -8,6 +8,7 @@ import io
 @app.route('/course-info', methods=['GET'])
 def get_course_info():
     try:
+
         query = f"""
                     SELECT *
                     FROM courses 
@@ -31,9 +32,10 @@ def get_course_info():
             "name": course[1],
             "description": course[2],
             "owner": {"universityNumber": course[3], "name": Owner[0], "email": Owner[1]},
-            "backgroundImage": base64.b64encode(course[4]).decode('utf-8')
+            "backgroundImage": None
         }
-
+        if course[4] is not None:
+            courseData["backgroundImage"] = base64.b64encode(course[4]).decode('utf-8')
         query = f"""
                     SELECT *
                     FROM user 
@@ -98,7 +100,6 @@ def get_course_info():
                 "universityNumber": professor[0]
             })
         contests = getContestForCourse(request.args.get('courseNumber'))
-
         response_data = {
             'course': courseData,
             'suggestionModerators': suggestionModerators,

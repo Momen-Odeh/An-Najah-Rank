@@ -7,6 +7,10 @@ import ButtonRank from "../ButtonRank";
 import TabTable from "../TabTable";
 import useStyle from "../TestCases/Style";
 import Text from "../Text";
+import InputFiledRank from "../InputFiledRank";
+import useStyles from "./style";
+import ModalRank from "../ModalRank";
+import { validateUniversityNumber } from "../../Utils/Validation";
 const StudentsInCourse = ({ students, setStudents }) => {
   const classes = useStyle();
   const { id } = useParams();
@@ -18,32 +22,57 @@ const StudentsInCourse = ({ students, setStudents }) => {
     studentName: "",
     email: "",
   });
+  const [errorMsg, setErrorMsg] = useState({ registrationNumber: null });
+  const [loading, setLoading] = useState(false);
+  const [deleteModal, setDeleteModal] = useState({ show: false, index: -1 });
   const handleAdd = async () => {
-    if (student.registrationNumber) {
-      const result = await axios.post(
-        `http://localhost:5000/student_enrollments`,
-        {
-          studentNumber: student.registrationNumber,
-          courseNumber: id,
+    // console.log(student.registrationNumber);
+    setErrorMsg({
+      registrationNumber: !validateUniversityNumber(student.registrationNumber)
+        ? "must be Number at consist from 3 character at least"
+        : null,
+    });
+    if (validateUniversityNumber(student.registrationNumber)) {
+      try {
+        setLoading(true);
+        const result = await axios.post(
+          `http://localhost:5000/student_enrollments`,
+          {
+            studentNumber: student.registrationNumber,
+            courseNumber: id,
+          }
+        );
+        setStudents([
+          ...students,
+          {
+            registrationNumber: result.data.registrationNumber,
+            studentName: result.data.studentName,
+            email: result.data.email,
+          },
+        ]);
+        setShowAddModal(false);
+        setStudent("");
+      } catch (error) {
+        console.log(error);
+        if (error.response.status === 409) {
+          setErrorMsg({
+            ...errorMsg,
+            registrationNumber: "User already exist",
+          });
         }
-      );
-      setStudents([
-        ...students,
-        {
-          registrationNumber: result.data.registrationNumber,
-          studentName: result.data.studentName,
-          email: result.data.email,
-        },
-      ]);
-      setShowAddModal(false);
-      setStudent("");
+      }
+      setLoading(false);
     }
   };
-  const handleDelete = async (index) => {
+  const handleDelete = async () => {
+    const { index } = deleteModal;
+    setLoading(true);
     await axios.delete(
       `http://localhost:5000/student_enrollments?courseNumber=${id}&studentNumber=${students[index].registrationNumber}`
     );
     setStudents(students.filter((item, idx) => idx !== index));
+    setDeleteModal({ show: false });
+    setLoading(false);
   };
   const data = students
     .filter((word) =>
@@ -58,7 +87,13 @@ const StudentsInCourse = ({ students, setStudents }) => {
           size={30}
           color="#949494"
           className={classes.iconColor}
-          onClick={() => handleDelete(index)}
+          onClick={() =>
+            setDeleteModal({
+              show: true,
+              index: index,
+              registrationNumber: item.registrationNumber,
+            })
+          }
         />
       ),
     }));
@@ -71,30 +106,26 @@ const StudentsInCourse = ({ students, setStudents }) => {
       [name]: value,
     });
   };
-
+  const clasess = useStyles();
   return (
     <Container>
-      <Row>
-        <Col className="d-flex justify-content-end align-items-center">
-          <ButtonRank
-            text={"Add Student"}
-            color="white"
-            hoverBackgroundColor="green"
-            backgroundColor="#1cb557"
-            onClick={() => setShowAddModal(true)}
-          />
-        </Col>
-      </Row>
-      <Row className="mt-3">
-        <Col></Col>
-        <Col md={4} className="d-flex justify-content-end">
-          <Form.Control
+      <Row className={clasess.Row}>
+        <Col>
+          <InputFiledRank
             type="text"
             placeholder="Type username to search"
+            width={"250px"}
             value={search}
             onChange={(e) => {
               setSearch(e.target.value);
             }}
+          />
+        </Col>
+        <Col xs={"auto"} className={clasess.AddCol}>
+          <ButtonRank
+            text={"Add Student"}
+            hoverBackgroundColor="#0e141e"
+            onClick={() => setShowAddModal(true)}
           />
         </Col>
       </Row>
@@ -103,55 +134,64 @@ const StudentsInCourse = ({ students, setStudents }) => {
           <TabTable TableHeader={tableHeader} TableData={data} />
         </Col>
       </Row>
-      <Row>
-        <Modal
-          show={showAddModal}
-          dialogClassName={classes.customModal}
-          onHide={() => {
-            setShowAddModal(false);
-            setStudent("");
-          }}
-          scrollable
-          centered
-          backdrop="static"
-        >
-          <Modal.Header closeButton>
-            <Modal.Title>Add Student</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            <Container fluid>
-              <Form>
-                <Form.Group controlId="registrationNumber">
-                  <Text text={"Registration Number"} />
-                  <Form.Control
-                    type="number"
-                    name="registrationNumber"
-                    value={registrationNumber}
-                    onChange={handleChange}
-                    placeholder="Enter registration number"
-                    className="mt-2"
-                  />
-                </Form.Group>
-              </Form>
-            </Container>
-          </Modal.Body>
-          <Modal.Footer>
-            <Container fluid>
-              <Row>
-                <Col className="d-flex justify-content-end align-align-items-center">
-                  <ButtonRank
-                    text={"Add"}
-                    color="white"
-                    hoverBackgroundColor="green"
-                    backgroundColor="#1cb557"
-                    onClick={handleAdd}
-                  />
-                </Col>
-              </Row>
-            </Container>
-          </Modal.Footer>
-        </Modal>
-      </Row>
+      <ModalRank
+        show={showAddModal}
+        onHide={() => {
+          setShowAddModal(false);
+          setStudent("");
+        }}
+        title="Add student"
+        footer={
+          <ButtonRank
+            text={"Add student"}
+            hoverBackgroundColor="#0e141e"
+            width={"150px"}
+            disabled={loading}
+            onClick={handleAdd}
+          />
+        }
+      >
+        <InputFiledRank
+          id="UniNum"
+          label={"Registration Number"}
+          name={"registrationNumber"}
+          value={registrationNumber}
+          type={"text"}
+          placeholder={"Enter registration number"}
+          onChange={handleChange}
+          msg={errorMsg.registrationNumber}
+          disabled={loading}
+        />
+      </ModalRank>
+
+      <ModalRank
+        show={deleteModal.show}
+        onHide={() => {
+          setDeleteModal({ ...deleteModal, show: false });
+        }}
+        title="Delete Student"
+        footer={
+          <ButtonRank
+            text={"Yes"}
+            hoverBackgroundColor="#0e141e"
+            disabled={loading}
+            onClick={handleDelete}
+            disabled={loading}
+          />
+        }
+      >
+        <Text
+          text={
+            "are you sure that want to delete the student with id " +
+            deleteModal.registrationNumber +
+            " from the course?"
+          }
+          size="0.9em"
+          fontFamily="Open Sans"
+          wegiht="600"
+          color="#0e141e"
+        />
+      </ModalRank>
     </Container>
   );
 };

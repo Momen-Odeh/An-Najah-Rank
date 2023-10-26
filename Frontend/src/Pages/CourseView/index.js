@@ -8,58 +8,63 @@ import ContestsInCourse from "../../Components/ContestsInCourse";
 import Text from "../../Components/Text";
 import ChallengeTabs from "../../Components/ChallengTabs";
 import StudentsInCourse from "../../Components/StudentsInCourse";
+import { FaSwatchbook } from "react-icons/fa";
+import { useParams } from "react-router-dom";
+import { useEffect } from "react";
+import { AiFillFileText } from "react-icons/ai";
+import axios from "axios";
+import useStyles from "./style";
 const CourseView = () => {
   const [showDescription, setShowDescription] = useState(false);
-  const isAdmin = true;
-  const [students, setStudents] = useState([
-    {
-      registrationNumber: "11923513",
-      studentName: "Noor Aldeen",
-      email: "s11923513@stu.najah.edu",
-    },
-    {
-      registrationNumber: "11923513",
-      studentName: "momen",
-      email: "s11923929@stu.najah.edu",
-    },
-    {
-      registrationNumber: "11923513",
-      studentName: "mohee",
-      email: "s11924789@stu.najah.edu",
-    },
-    {
-      registrationNumber: "11923513",
-      studentName: "obaida",
-      email: "s11924578@stu.najah.edu",
-    },
-  ]);
+  const { id } = useParams();
   const [course, setCourse] = useState({
-    name: "Algorithm",
-    description:
-      "An Algorithm course is a comprehensive study of fundamental computer algorithms and data structures. It explores efficient problem-solving techniques and teaches students how to design, analyze, and implement algorithms for various computational tasks. This course equips students with essential skills for optimizing software performance and solving complex real-world problems efficiently. Topics often include sorting, searching, graph algorithms, dynamic programming, and algorithmic analysis.",
     contests: [
-      {
-        ContestName: "An-Najah Rank test1",
-        solved: true,
-        statistics: [
-          { key: "Solved Rate: ", val: "50%" },
-          { key: "My Score: ", val: 100 },
-        ],
-        url: "#test1",
-        endDate: new Date(2023, 8, 30, 17, 0, 0),
-      },
-      {
-        ContestName: "An-Najah Rank test2",
-        solved: false,
-        statistics: [
-          { key: "Solved Rate: ", val: "50%" },
-          { key: "My Score: ", val: 100 },
-        ],
-        url: "#test2",
-        endDate: new Date(2023, 9, 2, 17, 0, 0),
-      },
+      // {
+      //   Name: "An-Najah Rank test1",
+      //   solved: true,
+      //   statistics: [
+      //     { key: "Solved Rate: ", val: "50%" },
+      //     { key: "My Score: ", val: 100 },
+      //   ],
+      //   url: "#test1",
+      //   endDate: new Date(2023, 8, 30, 17, 0, 0),
+      // },
     ],
   });
+
+  const [students, setStudents] = useState([]);
+  useEffect(() => {
+    axios
+      .get("http://127.0.0.1:5000/course-info", {
+        params: {
+          courseNumber: id,
+        },
+      })
+      .then((response) => {
+        const { name, description, backgroundImage } = response.data.course;
+        setCourse({
+          ...course,
+          name,
+          description,
+          backgroundImage: backgroundImage
+            ? `data:image/jpeg;base64,${backgroundImage}`
+            : "https://wallpapercrafter.com/desktop/161398-low-poly-digital-art-network-dots-abstract-lines-red-cyan.png",
+          contests: response.data.contests.map((item) => {
+            return {
+              ...item,
+              url: `/contest-view/${item.id}`,
+              endDate: item.endDate ? new Date(item.endDate) : null,
+            };
+          }),
+        });
+        setStudents(response.data.students);
+        // console.log(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
+  const isAdmin = true;
 
   const handleAddContest = (name) => {
     const newContest = {
@@ -92,7 +97,7 @@ const CourseView = () => {
           handleAddContest={handleAddContest}
         />
       ),
-      urlPattern: "/course-view/course",
+      urlPattern: `/course-view/${id}/course`,
     },
     {
       title: "Course Students",
@@ -100,59 +105,84 @@ const CourseView = () => {
       TabComponent: (
         <StudentsInCourse students={students} setStudents={setStudents} />
       ),
-      urlPattern: "/course-view/members",
+      urlPattern: `/course-view/${id}/members`,
     },
   ];
   const toggleDescription = () => {
     setShowDescription(!showDescription);
   };
+  const clasess = useStyles();
   return (
-    <>
-      <Container>
-        <Row className="m-2">
-          <Col>
-            <Breadcrumbs path={path} />
+    <Container fluid className={clasess.Container}>
+      {course.backgroundImage && (
+        <Row className={`${clasess.Row} mb-2 mt-3`}>
+          <Col className={`${clasess.Col}`}>
+            <img
+              src={course.backgroundImage}
+              alt="background Img"
+              className={clasess.BGImg}
+            />
           </Col>
         </Row>
-      </Container>
-      <hr></hr>
-      <Container>
-        <Row className="m-2">
-          <Col>
-            <Text text={course.name} wegiht={500} size={"1.5em"} />{" "}
-            <Link
-              className="ms-2"
-              style={{ textDecoration: "none" }}
-              onClick={toggleDescription}
-            >
-              Description
-              <BiSolidRightArrow />
-            </Link>
-            <Collapse in={showDescription}>
-              <div id="description" className="m-3">
-                {course.description}
-              </div>
-            </Collapse>
+      )}
+      <Row className={`${clasess.Row} mb-2`}>
+        <Col className={`${clasess.Col}`}>
+          <Breadcrumbs path={path} />
+        </Col>
+      </Row>
+      <Row className={`${clasess.Row} mb-4`}>
+        <Col className={`${clasess.Col} ${clasess.IconContainer}`}>
+          <FaSwatchbook className={clasess.Icon} />
+          <Text
+            text={course.name}
+            size="1.8em"
+            fontFamily="Open Sans"
+            wegiht="600"
+            color="#0e141e"
+          />
+        </Col>
+      </Row>
+      <Row className={`${clasess.Row} mb-1`}>
+        <Col className={`${clasess.Col} ${clasess.IconContainer}`}>
+          <AiFillFileText className={clasess.Icon} />
+          <Text
+            text={"Description"}
+            size="1.3em"
+            fontFamily="Open Sans"
+            wegiht="600"
+            color="#0e141e"
+          />
+        </Col>
+      </Row>
+      <Row className={`${clasess.Row} mb-4`}>
+        <Col className={`${clasess.Col} ${clasess.descritionCol}`}>
+          <span
+            className={clasess.descrition}
+            dangerouslySetInnerHTML={{
+              __html: course.description,
+            }}
+          />
+        </Col>
+      </Row>
+      <Row className={`${clasess.Row} mb-2`}>
+        <Col className={`${clasess.Col}`}>
+          <ChallengeTabs ListTabs={tabs} />
+        </Col>
+      </Row>
+      {/* {isAdmin ? (
+        <Row className={`${clasess.Row} mb-2`}>
+          <Col className={`${clasess.Col}`}>
+            <ChallengeTabs ListTabs={tabs} />
           </Col>
         </Row>
-      </Container>
-      <hr></hr>
-      {isAdmin ? (
-        <Container>
-          <Row className="m-2">
-            <Col>
-              <ChallengeTabs ListTabs={tabs} />
-            </Col>
-          </Row>
-        </Container>
       ) : (
         <ContestsInCourse
           contests={course.contests}
           isAdmin={isAdmin}
           handleAddContest={handleAddContest}
         />
-      )}
-    </>
+      )} */}
+    </Container>
   );
 };
 
