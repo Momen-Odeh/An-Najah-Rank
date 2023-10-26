@@ -8,6 +8,7 @@ import CourseDetails from "../../Components/CourseDetails";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import StudentsInCourse from "../../Components/StudentsInCourse";
+import ManageContests from "../../Components/ManageContests";
 const Course = () => {
   const { id } = useParams();
   const [details, setDetails] = useState({
@@ -25,6 +26,7 @@ const Course = () => {
     name: "",
     email: "",
   });
+  const [contests, setContests] = useState([]);
   useEffect(() => {
     axios
       .get(`http://localhost:5000/course-info?courseNumber=${id}`)
@@ -40,6 +42,7 @@ const Course = () => {
         setOwnerInfo(res.data.course.owner);
         setModerators(res.data.moderators);
         setSuggestionModerators(res.data.suggestionModerators);
+        setContests(res.data.contests);
       });
   }, []);
 
@@ -54,7 +57,7 @@ const Course = () => {
           setData={setDetails}
         />
       ),
-      urlPattern: `/course/${id}/details`,
+      urlPattern: `/administration/courses/${id}/details`,
     },
     {
       title: "Moderators",
@@ -66,7 +69,7 @@ const Course = () => {
           suggestionModerators={suggestionModerators}
         />
       ),
-      urlPattern: `/course/${id}/moderators`,
+      urlPattern: `/administration/courses/${id}/moderators`,
     },
     {
       title: "Course Students",
@@ -79,11 +82,17 @@ const Course = () => {
           }}
         />
       ),
-      urlPattern: `/course/${id}/members`,
+      urlPattern: `/administration/courses/${id}/members`,
+    },
+    {
+      title: "Manage Contests",
+      eventKey: "ManageContests",
+      TabComponent: <ManageContests contests={contests} />,
+      urlPattern: `/administration/courses/${id}/contests`,
     },
   ];
   const path = [
-    { title: "Courses", url: "#" },
+    { title: "Courses", url: `/administration/courses` },
     { title: details.name, url: "#" },
   ];
   return (

@@ -54,15 +54,13 @@ const Contests = () => {
           }))
         );
       })
-      .catch((error) => {
-        // navigate("/");
-      });
+      .catch((error) => {});
   }, []);
 
   const path = [
     {
       title: "Manage Contests",
-      url: "/log-in",
+      url: `/administration/courses/${id}/contests`,
     },
     {
       title: details.name,
@@ -75,7 +73,7 @@ const Contests = () => {
       eventKey: "Details",
       title: "Details",
       TabComponent: <ContestsDetalis operation={"update"} data={details} />,
-      urlPattern: `/course/${id}/contests/${contestId}/details`,
+      urlPattern: `/administration/courses/${id}/contests/${contestId}/details`,
     },
     {
       eventKey: "ContestChallenges",
@@ -86,7 +84,7 @@ const Contests = () => {
           challengesContest={challengesContest}
         />
       ),
-      urlPattern: `/course/${id}/contests/${contestId}/challenges`,
+      urlPattern: `/administration/courses/${id}/contests/${contestId}/challenges`,
     },
   ];
   return (

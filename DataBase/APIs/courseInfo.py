@@ -3,6 +3,7 @@ from flask import request, jsonify, send_file
 from dataBaseConnection import execute_query, fetch_results
 from MySQL_SetUp import connection
 import base64
+from APIs.contestsForCourse import getContestForCourse
 import io
 @app.route('/course-info', methods=['GET'])
 def get_course_info():
@@ -98,33 +99,13 @@ def get_course_info():
                 "email": professor[1],
                 "universityNumber": professor[0]
             })
-        query = f"""
-                            SELECT id,name,hasEndTime,endTime
-                            FROM contests 
-                            WHERE 
-                            courseNumber ={request.args.get('courseNumber')}
-                        """
-        cursor = execute_query(connection, query)
-        contests = fetch_results(cursor)
-        contestsData = []
-        for tmp in contests:
-            contestsData.append({
-                "id": tmp[0],
-                "Name": tmp[1],
-                "hasEndDate": tmp[2],
-                "endDate":tmp[3],
-                'solved':True,
-                "statistics":[
-                    {'key':'Solved Rate: ',"val":"50%"},
-                    {'key':'My Score: ',"val":100}
-                ]
-            })
+        contests = getContestForCourse(request.args.get('courseNumber'))
         response_data = {
             'course': courseData,
             'suggestionModerators': suggestionModerators,
             'students': students,
             'moderators': moderators,
-            'contests':contestsData
+            "contests": contests
         }
         return jsonify(response_data), 200
     except Exception as e:

@@ -7,7 +7,7 @@ import { Container, Row } from "react-bootstrap";
 import CourseDetails from "../../Components/CourseDetails";
 const CreateCourse = () => {
   const path = [
-    { title: "Courses", url: "#Courses" },
+    { title: "Courses", url: "/administration/courses" },
     { title: "Create Course", url: "#" },
   ];
   return (
