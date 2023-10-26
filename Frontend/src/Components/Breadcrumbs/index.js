@@ -1,9 +1,17 @@
 import React from "react";
 import useStyles from "./style";
 import { Link } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 
-const Breadcrumbs = ({ path }) => {
+const Breadcrumbs = () => {
   const classes = useStyles();
+  const location = useLocation();
+  const pathContent = location.pathname.split("/").filter(Boolean);
+  let urlPath = "";
+  const path = pathContent.map((item) => {
+    urlPath += "/" + item;
+    return { title: item, url: urlPath };
+  });
   return (
     <div className={classes.Breadcrumb}>
       {path.map((item, index) => (

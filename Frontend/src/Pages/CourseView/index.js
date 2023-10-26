@@ -109,9 +109,6 @@ const CourseView = () => {
       urlPattern: `/course-view/${id}/members`,
     },
   ];
-  const toggleDescription = () => {
-    setShowDescription(!showDescription);
-  };
   const clasess = useStyles();
   return (
     <Container fluid className={clasess.Container}>

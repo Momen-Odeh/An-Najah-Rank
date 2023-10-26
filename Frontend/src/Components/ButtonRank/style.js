@@ -8,6 +8,8 @@ const useStyles = createUseStyles({
     border: ({ border }) => border,
     padding: "8px 15px",
     width: ({ width }) => width,
+    fontWeight: ({ weight }) => weight,
+    transition: ".5s",
     "&:hover": {
       backgroundColor: ({ hoverBackgroundColor }) => hoverBackgroundColor,
       border: ({ border }) => border,

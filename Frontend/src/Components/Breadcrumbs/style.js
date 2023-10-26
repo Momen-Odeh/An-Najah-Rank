@@ -3,7 +3,7 @@ const useStyles = createUseStyles({
   Breadcrumb: {
     background: "#fff",
     padding: "8px 0",
-    paddingTop: '15px',
+    paddingTop: "15px",
     margin: "0",
   },
   item: {
@@ -15,6 +15,7 @@ const useStyles = createUseStyles({
   },
   Link: {
     textDecoration: "none",
+    transition: "0.4s",
     "&:hover": {
       textDecoration: "none",
       color: "#000",
