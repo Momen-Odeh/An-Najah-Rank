@@ -52,6 +52,7 @@ const CourseView = () => {
           contests: response.data.contests.map((item) => {
             return {
               ...item,
+              Name: item.name,
               url: `/contest-view/${item.id}`,
               endDate: item.endDate ? new Date(item.endDate) : null,
             };

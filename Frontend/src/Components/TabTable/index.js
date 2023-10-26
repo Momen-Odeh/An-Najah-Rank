@@ -20,8 +20,7 @@ const renderValue = (value) => {
   }
 };
 
-
-const TabTable = ({ TableHeader, TableData, url = [] }) => {
+const TabTable = ({ TableHeader, TableData, url = null }) => {
   const classes = useStyles();
   let values;
   const setValues = (e) => {
