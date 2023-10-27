@@ -1,31 +1,43 @@
-import React, { useEffect, useState } from 'react';
-import ReactQuill from 'react-quill';
-import 'react-quill/dist/quill.snow.css';
-import useStyle from './Style';
+import React, { useEffect, useState } from "react";
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css";
+import useStyle from "./Style";
 
-const TextEditor = ({name, text, handleChange}) => {
+const TextEditor = ({ name, text, handleChange }) => {
   const classes = useStyle();
   const modules = {
     toolbar: [
-      [{ 'header': [1, 2, false] }],
-      ['bold', 'italic', 'underline', 'strike', 'blockquote'],
-      [{ 'list': 'ordered' }, { 'list': 'bullet' }, { 'indent': '-1' }, { 'indent': '+1' }],
-      ['link', 'image'],
-      ['clean']
+      [{ header: [1, 2, false] }],
+      ["bold", "italic", "underline", "strike", "blockquote"],
+      [
+        { list: "ordered" },
+        { list: "bullet" },
+        { indent: "-1" },
+        { indent: "+1" },
+      ],
+      ["link", "image"],
+      ["clean"],
     ],
   };
 
   const formats = [
-    'header',
-    'bold', 'italic', 'underline', 'strike', 'blockquote',
-    'list', 'bullet', 'indent',
-    'link', 'image'
+    "header",
+    "bold",
+    "italic",
+    "underline",
+    "strike",
+    "blockquote",
+    "list",
+    "bullet",
+    "indent",
+    "link",
+    "image",
   ];
   const [isLoaded, setIsLoaded] = useState(false);
   useEffect(() => {
-    setTimeout(()=>{
+    setTimeout(() => {
       setIsLoaded(true);
-    },700)
+    }, 700);
   }, []);
   const handleEditorChange = (value) => {
     if (isLoaded) {
@@ -42,9 +54,8 @@ const TextEditor = ({name, text, handleChange}) => {
         onChange={handleEditorChange}
         className={classes.editor}
       />
-      </div>
+    </div>
   );
 };
 
 export default TextEditor;
-

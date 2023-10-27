@@ -3,9 +3,9 @@ import { createUseStyles } from "react-jss";
 const useStyles = createUseStyles({
   Label: {
     fontFamily: `'Open Sans', sans-serif`,
-    fontSize: "18px",
-    fontWeight: "500",
-    color: "#696c83",
+    fontSize: ({ labelFontSize }) => labelFontSize,
+    fontWeight: ({ labelFontWeight }) => labelFontWeight,
+    color: ({ labelFontColor }) => labelFontColor,
   },
   Control: {
     fontFamily: `'Open Sans', sans-serif`,
@@ -33,6 +33,18 @@ const useStyles = createUseStyles({
   },
   div: {
     width: ({ width }) => width,
+  },
+  Select: {
+    // color: "red",
+    // backgroundColor: "red",
+    // "&::selection": {
+    //   backgroundColor: "red",
+    // },
+  },
+  option: {
+    "&:hover": {
+      backgroundColor: "red !important",
+    },
   },
 });
 

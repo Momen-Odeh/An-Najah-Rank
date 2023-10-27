@@ -4,7 +4,7 @@ import Text from "../../Components/Text";
 import Avatar from "react-avatar";
 import ButtonRank from "../../Components/ButtonRank";
 import useStyles from "./style";
-import InputFiledRand from "../../Components/InputFiledRank";
+import InputFiledRank from "../../Components/InputFiledRank";
 import { AiOutlineMail } from "react-icons/ai";
 import { MdOutlineWorkOutline } from "react-icons/md";
 import { AiOutlineNumber } from "react-icons/ai";
@@ -243,7 +243,7 @@ const AccountSettings = ({}) => {
       </Row>
       <Row className="mb-4">
         <Col>
-          <InputFiledRand
+          <InputFiledRank
             type={"text"}
             label={"Full Name"}
             id={"fullName"}
@@ -319,7 +319,7 @@ const AccountSettings = ({}) => {
             Are you sure you want to delete your account? You won't be able to
             use your account information again.
           </p>
-          <InputFiledRand
+          <InputFiledRank
             type={"password"}
             label={"password"}
             id={"deleteAccountPassword"}

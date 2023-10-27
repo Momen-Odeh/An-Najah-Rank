@@ -9,6 +9,7 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 import StudentsInCourse from "../../Components/StudentsInCourse";
 import ManageContests from "../../Components/ManageContests";
+import useStyle from "./style";
 const Course = () => {
   const { id } = useParams();
   const [details, setDetails] = useState({
@@ -91,33 +92,26 @@ const Course = () => {
       urlPattern: `/administration/courses/${id}/contests`,
     },
   ];
-  const path = [
-    { title: "Courses", url: `/administration/courses` },
-    { title: details.name, url: "#" },
-  ];
+  const clasess = useStyle();
   return (
-    <>
-      <Container>
-        <Row className="m-2">
-          <Breadcrumbs path={path} />
-        </Row>
-      </Container>
-      <hr></hr>
-      <Container>
-        <Row className="m-2 mt-4 mb-4">
-          <Text
-            text={details.name}
-            size={"30px"}
-            wegiht="600"
-            fontFamily={"OpenSans"}
-            color={"#39424e"}
-          />
-        </Row>
-        <Row className="m-2">
-          <ChallengeTabs ListTabs={tabs} />
-        </Row>
-      </Container>
-    </>
+    <Container fluid className={clasess.Container}>
+      <Row className="m-2">
+        <Breadcrumbs />
+      </Row>
+
+      <Row className="m-2 mt-4 mb-4">
+        <Text
+          text={details.name}
+          size={"30px"}
+          wegiht="600"
+          fontFamily={"OpenSans"}
+          color={"#39424e"}
+        />
+      </Row>
+      <Row className="m-2">
+        <ChallengeTabs ListTabs={tabs} />
+      </Row>
+    </Container>
   );
 };
 

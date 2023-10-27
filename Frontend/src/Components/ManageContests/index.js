@@ -2,38 +2,37 @@ import axios from "axios";
 import React from "react";
 import { useEffect } from "react";
 import { useState } from "react";
-import { Col, Form, Row } from "react-bootstrap";
+import { Col, Container, Form, Row } from "react-bootstrap";
 import { useNavigate, useParams } from "react-router-dom";
 import ButtonRank from "../ButtonRank";
 import TabTable from "../TabTable";
+import InputFiledRank from "../InputFiledRank";
+import useStyles from "./style";
 const ManageContests = ({ contests }) => {
   const navigate = useNavigate();
   const { id } = useParams();
   const [search, setSearch] = useState("");
   const header = ["Contest Name", "Contest Owner", "Start Date", "End Date"];
+  const clasess = useStyles();
   return (
-    <>
-      <Row>
-        <Col className="d-flex justify-content-end">
-          <ButtonRank
-            text="Create Contest"
-            color="#ffffff"
-            hoverBackgroundColor="green"
-            backgroundColor="#1cb557"
-            onClick={() =>
-              navigate(`/administration/courses/${id}/contests/create-contest`)
-            }
-          />
-        </Col>
-      </Row>
-      <Row className="mt-4">
-        <Col></Col>
-        <Col md={4} className="d-flex justify-content-end">
-          <Form.Control
+    <Container>
+      <Row className={clasess.Row}>
+        <Col>
+          <InputFiledRank
             type="text"
+            width={"250px"}
             placeholder="Type context name"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
+          />
+        </Col>
+        <Col xs={"auto"} className={clasess.AddCol}>
+          <ButtonRank
+            text={"Create Contest"}
+            hoverBackgroundColor="#0e141e"
+            onClick={() =>
+              navigate(`/administration/courses/${id}/contests/create-contest`)
+            }
           />
         </Col>
       </Row>
@@ -61,7 +60,7 @@ const ManageContests = ({ contests }) => {
           />
         </Col>
       </Row>
-    </>
+    </Container>
   );
 };
 

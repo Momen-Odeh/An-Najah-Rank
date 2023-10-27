@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Form, ListGroup } from "react-bootstrap";
 import useStyle from "./Style";
+import InputFiledRank from "../InputFiledRank";
 
 const SuggestionsInput = ({
   data,
@@ -8,6 +9,7 @@ const SuggestionsInput = ({
   value,
   placeholder = "Type here...",
   handleChange,
+  width,
 }) => {
   const classes = useStyle();
   const words = data;
@@ -64,7 +66,7 @@ const SuggestionsInput = ({
 
   return (
     <div className={`${classes.inputContainer}`}>
-      <Form.Control
+      <InputFiledRank
         type="text"
         name={name}
         placeholder={placeholder}
@@ -75,7 +77,20 @@ const SuggestionsInput = ({
         onKeyDown={handleKeyDown}
         ref={inputRef}
         autoComplete="off"
+        width={width}
       />
+      {/* <Form.Control
+        type="text"
+        name={name}
+        placeholder={placeholder}
+        value={value}
+        onChange={(e) => {
+          handleInputChange(e);
+        }}
+        onKeyDown={handleKeyDown}
+        ref={inputRef}
+        autoComplete="off"
+      /> */}
       {showSuggestions && (
         <div className={classes.suggestionsContainer}>
           <ListGroup

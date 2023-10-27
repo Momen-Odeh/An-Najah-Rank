@@ -1,8 +1,9 @@
 import React, { useState } from "react";
-import Details from "../../Components/Details";
+import CreateChallengeDetails from "../../Components/CreateChallengeDetails";
 import Breadcrumbs from "../../Components/Breadcrumbs";
 import Text from "../../Components/Text";
 import { Container, Row } from "react-bootstrap";
+import useStyles from "./style";
 const CreateChallenge = () => {
   const [details, setDetails] = useState({
     difficulty: "Easy",
@@ -25,36 +26,29 @@ const CreateChallenge = () => {
       console.log(details);
     }
   };
-  const path = [
-    { title: "Manage Challenges", url: "/administration/challenges" },
-    { title: "Create Challenge", url: "#" },
-  ];
+  const clasess = useStyles();
   return (
-    <>
-      <Container>
-        <Row className="m-2">
-          <Breadcrumbs path={path} />
-        </Row>
-      </Container>
-      <hr></hr>
-      <Container>
-        <Row className="m-2 mt-4 mb-4">
-          <Text
-            text={"Details"}
-            size={"30px"}
-            fontFamily={"OpenSans"}
-            color={"#39424e"}
-          />
-        </Row>
-        <Row className="m-2">
-          <Details
-            operation={"create"}
-            details={details}
-            handleChange={handleChange}
-          />
-        </Row>
-      </Container>
-    </>
+    <Container fluid className={clasess.Container}>
+      <Row className="m-2">
+        <Breadcrumbs />
+      </Row>
+      <Row className="m-2 ">
+        <Text
+          text={"Details"}
+          size="26px"
+          fontFamily="Open Sans"
+          wegiht="600"
+          color="#0e141e"
+        />
+      </Row>
+      <Row className="m-2">
+        <CreateChallengeDetails
+          operation={"create"}
+          details={details}
+          handleChange={handleChange}
+        />
+      </Row>
+    </Container>
   );
 };
 

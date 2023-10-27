@@ -37,7 +37,7 @@ const TabTable = ({ TableHeader, TableData, url = null }) => {
           ))}
         </tr>
       </thead>
-
+      {/* {console.log(url)} */}
       <tbody>
         {TableData.map((item, index) =>
           url ? (
@@ -45,7 +45,7 @@ const TabTable = ({ TableHeader, TableData, url = null }) => {
               {setValues(Object.values(item))}
               {values.map((val, index) => (
                 <td key={index} className={classes.TableData}>
-                  <Link to={url} className={classes.link}>
+                  <Link to={url[index]} className={classes.link}>
                     {renderValue(val)}
                   </Link>
                 </td>

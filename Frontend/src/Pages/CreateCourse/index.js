@@ -13,12 +13,13 @@ const CreateCourse = () => {
       <Row className="m-2">
         <Breadcrumbs />
       </Row>
-      <Row className="m-2 mt-4 mb-4">
+      <Row className="m-2">
         <Text
           text={"Create Course"}
-          size={"30px"}
-          fontFamily={"OpenSans"}
-          color={"#39424e"}
+          size="26px"
+          fontFamily="Open Sans"
+          wegiht="600"
+          color="#0e141e"
         />
       </Row>
       <Row className="m-2">

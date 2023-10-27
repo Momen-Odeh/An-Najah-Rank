@@ -203,7 +203,7 @@ const TestCases = memo(({ operation, testCasesData }) => {
   console.log(testCases);
   /**********************************************************************************************************/
   return (
-    <Container fluid className="p-0">
+    <Container fluid>
       <TestCase
         setShowAddModal={setShowAddModal}
         handleUpdate={handleUpdateTestCase}
@@ -214,7 +214,7 @@ const TestCases = memo(({ operation, testCasesData }) => {
         action={action}
       />
       <Row className="mb-3">
-        <Col className="d-flex justify-content-end m-0 p-0">
+        <Col className="d-flex justify-content-end">
           <ButtonRank
             text={"Add Test Case"}
             onClick={() => {
@@ -230,9 +230,6 @@ const TestCases = memo(({ operation, testCasesData }) => {
               setAction("add");
               setShowAddModal(true);
             }}
-            backgroundColor="#1cb557"
-            hoverBackgroundColor="green"
-            color="white"
           />
         </Col>
       </Row>

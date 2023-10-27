@@ -8,6 +8,7 @@ import ButtonRank from "../ButtonRank";
 import { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
+import CancelModeratorsBtn from "../CancelModeratorsBtn";
 const Moderators = ({ Owner, moderatorsData, suggestionModerators }) => {
   const classes = useStyle();
   const { id } = useParams();
@@ -49,7 +50,7 @@ const Moderators = ({ Owner, moderatorsData, suggestionModerators }) => {
   return (
     <Container>
       <Row>
-        <Col md={2}>
+        <Col>
           <Text
             fontFamily="Open Sans"
             text={"Moderators"}
@@ -57,61 +58,53 @@ const Moderators = ({ Owner, moderatorsData, suggestionModerators }) => {
             wegiht={"600"}
           />
         </Col>
-        <Col md={8}>
-          <Row>
-            <Col>
-              <Row>
-                <Col style={{ minWidth: "250px" }}>
-                  <SuggestionsInput
-                    data={suggestionData}
-                    value={input}
-                    handleChange={(val) => {
-                      setInput(val);
-                    }}
-                  />
-                </Col>
-                <Col>
-                  <ButtonRank text={"Add"} size="14px" onClick={handleAdd} />
-                </Col>
-              </Row>
-            </Col>
-          </Row>
-
-          <Row className="m-1">
-            <Text
-              wegiht={"300"}
-              size="14px"
-              color={"#979faf"}
-              text={`Enter moderator's name. Moderators can edit this course.`}
-            />
-          </Row>
-
-          <Row>
-            <Row className="ms-3">
-              <UserLimitAccess
-                userName={Owner.name}
-                email={Owner.email}
-                access={"owner"}
-              />
-            </Row>
-            {moderators?.map((item, index) => (
-              <div key={index} className="d-flex align-items-center">
-                <button
-                  className={`badge m-1 p-1 border-0 ${classes.button}`}
-                  onClick={() => handleRemoveModerator(index)}
-                >
-                  &times;
-                </button>
-                <UserLimitAccess
-                  userName={item.name}
-                  email={item.email}
-                  access={"moderator"}
-                />
-              </div>
-            ))}
-          </Row>
+      </Row>
+      <Row className={classes.RowAddModerators}>
+        <Col className={classes.ColAddModerators}>
+          <SuggestionsInput
+            data={suggestionData}
+            value={input}
+            handleChange={(val) => {
+              setInput(val);
+            }}
+          />
+        </Col>
+        <Col xs="auto">
+          <ButtonRank text={"Add"} size="14px" onClick={handleAdd} />
         </Col>
       </Row>
+      <Row className="m-1">
+        <Text
+          wegiht={"300"}
+          size="14px"
+          color={"#979faf"}
+          text={`Enter moderator's name. Moderators can edit this course.`}
+        />
+      </Row>
+      <Row className={classes.RowNoWrap}>
+        <Col xs="auto" className={classes.BtnCol}></Col>
+        <Col>
+          <UserLimitAccess
+            userName={Owner.name}
+            email={Owner.email}
+            access={"owner"}
+          />
+        </Col>
+      </Row>
+      {moderators?.map((item, index) => (
+        <Row key={index} className={`align-items-center ${classes.RowNoWrap}`}>
+          <Col xs="auto" className={classes.BtnCol}>
+            <CancelModeratorsBtn onClick={() => handleRemoveModerator(index)} />
+          </Col>
+          <Col>
+            <UserLimitAccess
+              userName={item.name}
+              email={item.email}
+              access={"moderator"}
+            />
+          </Col>
+        </Row>
+      ))}
     </Container>
   );
 };

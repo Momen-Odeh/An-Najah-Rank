@@ -1,29 +1,41 @@
-import React, {useState} from 'react'
-import { InputGroup, Form, Button } from 'react-bootstrap';
-import useStyle from './Style';
+import React, { useState } from "react";
+import { InputGroup, Form, Button } from "react-bootstrap";
+import useStyle from "./Style";
+import InputFiledRank from "../InputFiledRank";
+import ButtonRank from "../ButtonRank";
 
-const CustomInputGroup = ({ BtnText, handleBtnClick, placeholder='Enter text',type='text' }) => {
-  const classes = useStyle()
-  const [data,setData]=useState('');
+const CustomInputGroup = ({
+  BtnText,
+  handleBtnClick,
+  placeholder = "Enter text",
+  type = "text",
+  disabled,
+}) => {
+  const classes = useStyle();
+  const [data, setData] = useState("");
   return (
     <InputGroup className="mb-3">
-        <Form.Control
+      <InputFiledRank
         type={type}
         placeholder={placeholder}
         value={data}
-        onChange={(e)=>{
-          setData(e.target.value)
+        onChange={(e) => {
+          setData(e.target.value);
         }}
         className={classes.inputTags}
-        />
-        <Button variant="success" onClick={()=>{
-          handleBtnClick(data)
-          setData('')
-        }} className={classes.button}>
-        {BtnText}
-        </Button>
+        disabled={disabled}
+      />
+      <ButtonRank
+        onClick={() => {
+          handleBtnClick(data);
+          setData("");
+        }}
+        text={BtnText}
+        className={classes.button}
+        disabled={disabled}
+      />
     </InputGroup>
-  )
-}
+  );
+};
 
-export default CustomInputGroup
+export default CustomInputGroup;

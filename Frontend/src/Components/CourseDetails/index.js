@@ -1,15 +1,19 @@
 import React, { useState } from "react";
-import { Col, Container, Form, Row } from "react-bootstrap";
+import { Col, Container, Row } from "react-bootstrap";
 import Text from "../Text";
 import * as XLSX from "xlsx";
 import useStyle from "./Style";
 import ButtonRank from "../ButtonRank";
 import { useEffect } from "react";
-import AlertComponent from "../Alert";
 import axios from "axios";
 import { useCookies } from "react-cookie";
 import { useNavigate, useParams } from "react-router-dom";
+import InputFiledRank from "../InputFiledRank";
+import { validateUniversityNumber } from "../../Utils/Validation";
+import { toast } from "react-toastify";
+import LoaderRank from "../LoaderRank";
 const CourseDetails = ({ operation, data = null, setData }) => {
+  const [loading, setLoading] = useState(false);
   const classes = useStyle();
   const navigate = useNavigate();
   const [cookies, setCookies] = useCookies();
@@ -22,12 +26,14 @@ const CourseDetails = ({ operation, data = null, setData }) => {
     students: "",
     uploadImg: null,
   });
-  console.log(details);
-  const [showAlert, setShowAlert] = useState(false);
-  const [alertData, setAlertData] = useState({
-    message: "",
-    variant: "warning",
+  const [errorMsg, setErrorMsg] = useState({
+    number: null,
+    name: null,
+    description: null,
+    image: null,
+    students: null,
   });
+
   useEffect(() => {
     if (data) setDetails(data);
   }, [data]);
@@ -85,27 +91,32 @@ const CourseDetails = ({ operation, data = null, setData }) => {
   };
 
   const handleClick = async () => {
-    let thereError = false;
-    setShowAlert(false);
-    try {
-      if (!details.number) {
-        throw new Error("should enter course number");
-      } else if (!details.name) {
-        throw new Error("should enter course name");
-      } else if (!details.description) {
-        throw new Error("should enter course description");
-      } else if (!details.image) {
-        throw new Error("should enter course background image");
-      } else if (!details.students && operation === "create") {
-        throw new Error("should enter course students");
-      }
-    } catch (error) {
-      setAlertData({ message: error.message, variant: "warning" });
-      setShowAlert(true);
-      thereError = true;
-    }
-    if (!thereError) {
+    setErrorMsg({
+      number: !validateUniversityNumber(details.number)
+        ? "must consist of digits and contain at least three digits."
+        : null,
+      name: !(details.name.length >= 3)
+        ? "must consist at least 3 character."
+        : null,
+      description: !(details.description.length > 0)
+        ? "must enter course description."
+        : null,
+      image: !details.image ? "should enter course background image" : null,
+      students:
+        !details.students && operation === "create"
+          ? "should enter Students Excel File"
+          : null,
+    });
+    if (
+      validateUniversityNumber(details.number) &&
+      details.name.length >= 3 &&
+      details.description.length > 0 &&
+      details.image &&
+      details.students &&
+      operation === "create"
+    ) {
       try {
+        setLoading(true);
         if (operation === "create") {
           const idIndex = details.students[0].indexOf("id");
           const studentsUniversityNumber = details.students
@@ -137,20 +148,27 @@ const CourseDetails = ({ operation, data = null, setData }) => {
           }
           setData(details);
         }
+        setLoading(false);
         navigate(`/administration/courses/${details.number}/moderators`);
       } catch (error) {
-        setAlertData({
-          message: error?.response?.data?.message,
-          variant: "danger",
+        toast.error(error?.response?.data?.message, {
+          position: "bottom-left",
+          autoClose: 10000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
         });
-        setShowAlert(true);
+        setLoading(false);
       }
     }
   };
   return (
-    <Container>
-      <Row className="mb-3">
-        <Col md={2}>
+    <Container fluid>
+      <Row className="mb-3 mt-5">
+        <Col xs={"auto"} className={classes.TitleFiled}>
           <Text
             fontFamily="Open Sans"
             text={"Course Number"}
@@ -158,22 +176,21 @@ const CourseDetails = ({ operation, data = null, setData }) => {
             wegiht={"600"}
           />
         </Col>
-        <Col md={5}>
-          <Form.Group>
-            <Form.Control
-              type="number"
-              name="number"
-              id="input"
-              onChange={handleChange}
-              value={details.number}
-              disabled={operation !== "create"}
-            />
-          </Form.Group>
+        <Col className={classes.ColInputFiled}>
+          <InputFiledRank
+            type="text"
+            name="number"
+            id="input"
+            onChange={handleChange}
+            value={details.number}
+            disabled={operation !== "create" || loading}
+            size={"sm"}
+            msg={errorMsg.number}
+          />
         </Col>
       </Row>
-
       <Row className="mb-3">
-        <Col md={2}>
+        <Col xs={"auto"} className={classes.TitleFiled}>
           <Text
             fontFamily="Open Sans"
             text={"Course Name"}
@@ -181,21 +198,22 @@ const CourseDetails = ({ operation, data = null, setData }) => {
             wegiht={"600"}
           />
         </Col>
-        <Col md={5}>
-          <Form.Group>
-            <Form.Control
-              type="text"
-              name="name"
-              id="input"
-              onChange={handleChange}
-              value={details.name}
-            />
-          </Form.Group>
+        <Col className={classes.ColInputFiled}>
+          <InputFiledRank
+            type="text"
+            name="name"
+            id="input"
+            onChange={handleChange}
+            value={details.name}
+            size={"sm"}
+            msg={errorMsg.name}
+            disabled={loading}
+          />
         </Col>
       </Row>
 
       <Row className="mb-3">
-        <Col md={2}>
+        <Col xs={"auto"} className={classes.TitleFiled}>
           <Text
             fontFamily="Open Sans"
             text={"Description"}
@@ -203,22 +221,22 @@ const CourseDetails = ({ operation, data = null, setData }) => {
             wegiht={"600"}
           />
         </Col>
-        <Col md={8}>
-          <Form.Group>
-            <Form.Control
-              as="textarea"
-              name="description"
-              id="textarea"
-              rows={3}
-              onChange={handleChange}
-              value={details.description}
-            />
-          </Form.Group>
+        <Col className={classes.ColInputFiled}>
+          <InputFiledRank
+            as="textarea"
+            name="description"
+            id="textarea"
+            rows={3}
+            onChange={handleChange}
+            value={details.description}
+            msg={errorMsg.description}
+            disabled={loading}
+          />
         </Col>
       </Row>
 
-      <Row>
-        <Col md={2}>
+      <Row className="mb-3">
+        <Col xs={"auto"} className={classes.TitleFiled}>
           <Text
             fontFamily="Open Sans"
             text={"Background Image"}
@@ -227,31 +245,29 @@ const CourseDetails = ({ operation, data = null, setData }) => {
           />
         </Col>
 
-        <Col>
-          <Form.Control
+        <Col className={classes.ColInputFiled}>
+          <InputFiledRank
             type="file"
             accept="image/*"
             onChange={handleImageUpload}
             className={classes.file}
+            size={"sm"}
+            msg={errorMsg.image}
+            disabled={loading}
           />
           {details.image && (
             <img
               src={details.image}
               alt="Preview"
-              style={{
-                width: "200px",
-                height: "200px",
-                objectFit: "contain",
-              }}
-              className="mb-2"
+              className={`${classes.ImgPreview} mb-2 mt-4`}
             />
           )}
         </Col>
       </Row>
 
       {operation === "create" && (
-        <Row>
-          <Col md={2}>
+        <Row className="mb-3">
+          <Col xs={"auto"} className={classes.TitleFiled}>
             <Text
               fontFamily="Open Sans"
               text={"Students Excel File"}
@@ -260,44 +276,39 @@ const CourseDetails = ({ operation, data = null, setData }) => {
             />
           </Col>
 
-          <Col>
-            <Form.Group>
-              <Form.Control
-                type="file"
-                name="students"
-                accept=".xls, .xlsx"
-                onChange={handleFileChange}
-                className={classes.file}
-              />
-            </Form.Group>
+          <Col className={classes.ColInputFiled}>
+            <InputFiledRank
+              type="file"
+              name="students"
+              accept=".xls, .xlsx"
+              onChange={handleFileChange}
+              size={"sm"}
+              msg={errorMsg.students}
+              disabled={loading}
+            />
           </Col>
         </Row>
       )}
-      <Row>
-        <Col md={2}></Col>
-        <Col md={8}>
-          {showAlert && (
-            <AlertComponent
-              message={alertData.message}
-              variant={alertData.variant}
-            />
-          )}
-        </Col>
-      </Row>
-      <Row className="mb-3">
-        <Col md={2}></Col>
-        <Col md={8} className="d-flex justify-content-end">
+      {loading && (
+        <Row>
+          <Col xs={"auto"} className={classes.Loaderspace}></Col>
+          <Col className={classes.Loader}>
+            <LoaderRank loading={loading} />
+          </Col>
+        </Row>
+      )}
+      <Row className="mt-5">
+        <Col Col xs={"auto"} className={classes.TitleFiled}></Col>
+        <Col className={classes.ActionBtns}>
           <ButtonRank
             text={"Cancel Changes"}
             onClick={() => navigate("/administration/courses")}
+            disabled={loading}
           />
-          <span className="m-1"></span>
           <ButtonRank
             text={"Save Changes"}
-            backgroundColor="#1cb557"
-            hoverBackgroundColor="green"
-            color="white"
             onClick={handleClick}
+            disabled={loading}
           />
         </Col>
       </Row>

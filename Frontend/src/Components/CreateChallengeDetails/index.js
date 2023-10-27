@@ -9,7 +9,11 @@ import AlertComponent from "../Alert";
 import { useNavigate, useParams } from "react-router-dom";
 import { useEffect } from "react";
 import { useCookies } from "react-cookie";
-const Details = ({ operation, data }) => {
+import InputFiledRank from "../InputFiledRank";
+import useStyle from "./style";
+import LoaderRank from "../LoaderRank";
+const CreateChallengeDetails = ({ operation, data }) => {
+  const [loading, setLoading] = useState(false);
   const { id } = useParams();
   const [details, setDetails] = useState({
     difficulty: "Easy",
@@ -100,11 +104,12 @@ const Details = ({ operation, data }) => {
       }
     }
   };
-
+  const classes = useStyle();
   return (
     <Container fluid>
-      <Row className="mb-3">
-        <Col md={2}>
+      {/*  */}
+      <Row className="mb-3 mt-5">
+        <Col xs={"auto"} className={classes.TitleFiled}>
           <Text
             fontFamily="Open Sans"
             text={"Challenge Difficulty"}
@@ -112,25 +117,39 @@ const Details = ({ operation, data }) => {
             wegiht={"600"}
           />
         </Col>
-        <Col md={3}>
-          <Form.Group>
-            <Form.Select
-              name="difficulty"
-              onChange={handleChange}
-              value={details.difficulty}
-            >
-              <option value="easy">Easy</option>
-              <option value="medium">Medium</option>
-              <option value="hard">Hard</option>
-              <option value="advanced">Advanced</option>
-              <option value="expert">Expert</option>
-            </Form.Select>
-          </Form.Group>
+        <Col className={classes.ColInputFiled}>
+          <InputFiledRank
+            disabled={loading}
+            name="difficulty"
+            onChange={handleChange}
+            value={details.difficulty}
+            options={[
+              {
+                value: "easy",
+                text: "Easy",
+              },
+              {
+                value: "medium",
+                text: "Medium",
+              },
+              {
+                value: "hard",
+                text: "Hard",
+              },
+              {
+                value: "advanced",
+                text: "Advanced",
+              },
+              {
+                value: "expert",
+                text: "Expert",
+              },
+            ]}
+          />
         </Col>
       </Row>
-
       <Row className="mb-3">
-        <Col md={2}>
+        <Col xs={"auto"} className={classes.TitleFiled}>
           <Text
             fontFamily="Open Sans"
             text={"Challenge Name"}
@@ -138,21 +157,19 @@ const Details = ({ operation, data }) => {
             wegiht={"600"}
           />
         </Col>
-        <Col md={5}>
-          <Form.Group>
-            <Form.Control
-              type="text"
-              name="name"
-              id="input"
-              onChange={handleChange}
-              value={details.name}
-            />
-          </Form.Group>
+        <Col className={classes.ColInputFiled}>
+          <InputFiledRank
+            type="text"
+            name="name"
+            id="input"
+            onChange={handleChange}
+            value={details.name}
+            disabled={loading}
+          />
         </Col>
       </Row>
-
       <Row className="mb-3">
-        <Col md={2}>
+        <Col xs={"auto"} className={classes.TitleFiled}>
           <Text
             fontFamily="Open Sans"
             text={"Description"}
@@ -160,22 +177,20 @@ const Details = ({ operation, data }) => {
             wegiht={"600"}
           />
         </Col>
-        <Col md={8}>
-          <Form.Group>
-            <Form.Control
-              as="textarea"
-              name="description"
-              id="textarea"
-              rows={3}
-              onChange={handleChange}
-              value={details.description}
-            />
-          </Form.Group>
+        <Col className={classes.ColInputFiled}>
+          <InputFiledRank
+            as="textarea"
+            name="description"
+            id="textarea"
+            rows={3}
+            onChange={handleChange}
+            value={details.description}
+            disabled={loading}
+          />
         </Col>
       </Row>
-
       <Row className="mb-3">
-        <Col md={2}>
+        <Col xs={"auto"} className={classes.TitleFiled}>
           <Text
             fontFamily="Open Sans"
             text={"Problem Statement"}
@@ -183,17 +198,17 @@ const Details = ({ operation, data }) => {
             wegiht={"600"}
           />
         </Col>
-        <Col md={8}>
+        <Col className={classes.ColInputFiled}>
           <TextEditor
             name={"problemStatement"}
             text={details.problemStatement}
             handleChange={handleChange}
+            disabled={loading}
           />
         </Col>
       </Row>
-
       <Row className="mb-3">
-        <Col md={2}>
+        <Col xs={"auto"} className={classes.TitleFiled}>
           <Text
             fontFamily="Open Sans"
             text={"Input Format"}
@@ -201,7 +216,7 @@ const Details = ({ operation, data }) => {
             wegiht={"600"}
           />
         </Col>
-        <Col md={8}>
+        <Col className={classes.ColInputFiled}>
           <TextEditor
             name={"inputFormat"}
             text={details.inputFormat}
@@ -209,9 +224,8 @@ const Details = ({ operation, data }) => {
           />
         </Col>
       </Row>
-
       <Row className="mb-3">
-        <Col md={2}>
+        <Col xs={"auto"} className={classes.TitleFiled}>
           <Text
             fontFamily="Open Sans"
             text={"Constraints"}
@@ -219,7 +233,7 @@ const Details = ({ operation, data }) => {
             wegiht={"600"}
           />
         </Col>
-        <Col md={8}>
+        <Col className={classes.ColInputFiled}>
           <TextEditor
             name={"constraints"}
             text={details.constraints}
@@ -227,9 +241,8 @@ const Details = ({ operation, data }) => {
           />
         </Col>
       </Row>
-
       <Row className="mb-3">
-        <Col md={2}>
+        <Col xs={"auto"} className={classes.TitleFiled}>
           <Text
             fontFamily="Open Sans"
             text={"Output Format"}
@@ -237,7 +250,7 @@ const Details = ({ operation, data }) => {
             wegiht={"600"}
           />
         </Col>
-        <Col md={8}>
+        <Col className={classes.ColInputFiled}>
           <TextEditor
             name={"outputFormat"}
             text={details.outputFormat}
@@ -247,7 +260,7 @@ const Details = ({ operation, data }) => {
       </Row>
 
       <Row className="mb-3">
-        <Col md={2}>
+        <Col xs={"auto"} className={classes.TitleFiled}>
           <Text
             fontFamily="Open Sans"
             text={"Tags"}
@@ -255,11 +268,16 @@ const Details = ({ operation, data }) => {
             wegiht={"600"}
           />
         </Col>
-        <Col md={8}>
-          <Tags tags={details.tags} handleChange={handleChange} />
+        <Col className={classes.ColInputFiled}>
+          <Tags
+            tags={details.tags}
+            handleChange={handleChange}
+            disabled={loading}
+          />
         </Col>
       </Row>
-      <Row>
+
+      {/* <Row>
         <Col md={2}></Col>
         <Col md={8}>
           {showAlert && (
@@ -269,8 +287,32 @@ const Details = ({ operation, data }) => {
             />
           )}
         </Col>
+      </Row> */}
+
+      {loading && (
+        <Row>
+          <Col xs={"auto"} className={classes.Loaderspace}></Col>
+          <Col className={classes.Loader}>
+            <LoaderRank loading={loading} />
+          </Col>
+        </Row>
+      )}
+      <Row className="mt-5">
+        <Col Col xs={"auto"} className={classes.TitleFiled}></Col>
+        <Col className={classes.ActionBtns}>
+          <ButtonRank
+            text={"Cancel Changes"}
+            onClick={() => navigate("/administration/challenges")}
+            disabled={loading}
+          />
+          <ButtonRank
+            onClick={handleClick}
+            text={"Save Changes"}
+            disabled={loading}
+          />
+        </Col>
       </Row>
-      <Row className="mb-3">
+      {/* <Row className="mb-3">
         <Col md={2}></Col>
         <Col md={8} className="d-flex justify-content-end">
           <ButtonRank
@@ -286,9 +328,9 @@ const Details = ({ operation, data }) => {
             color="white"
           />
         </Col>
-      </Row>
+      </Row> */}
     </Container>
   );
 };
 
-export default Details;
+export default CreateChallengeDetails;
