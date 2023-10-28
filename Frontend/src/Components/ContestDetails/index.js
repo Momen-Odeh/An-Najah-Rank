@@ -13,16 +13,28 @@ import { useCookies } from "react-cookie";
 import { useEffect } from "react";
 import moment from "moment";
 import SuggestionsInput from "../SuggestionsInput";
+import InputFiledRank from "../InputFiledRank";
+import CheckRank from "../CheckRank";
+import LoaderRank from "../LoaderRank";
+
 const ContestsDetalis = ({ operation, data = null }) => {
   const classes = useStyle();
   const navigate = useNavigate();
   const { id, contestId } = useParams();
   const [cookies, setCookies] = useCookies();
+  const [loading, setLoading] = useState(false);
   const [details, setDetails] = useState({
     name: null,
     description: null,
     startTime: null,
-    hasEndTime: false,
+    hasEndTime: true,
+    endTime: null,
+  });
+  const [errorMsg, setErrorMsg] = useState({
+    name: null,
+    description: null,
+    startTime: null,
+    hasEndTime: true,
     endTime: null,
   });
   useEffect(() => {
@@ -100,137 +112,107 @@ const ContestsDetalis = ({ operation, data = null }) => {
     }
   };
   return (
-    <Container className={classes.Container}>
-      <Row className="mb-2">
+    <Container fluid className={classes.Container}>
+      <Row className="mt-3 mb-3">
         <Col>
           <Text
             text={"Contest Details"}
-            color="#39424e"
-            size="24px"
-            fontFamily="Open Sans"
-            wegiht="bold"
+            size={"26px"}
+            wegiht="600"
+            fontFamily={"OpenSans"}
+            color={"#39424e"}
           />
         </Col>
       </Row>
-      <Row className="mb-3">
-        <Col>
+      <Row className="mb-3 mt-5">
+        <Col xs={"auto"} className={classes.TitleFiled}>
           <Text
-            text={
-              "Customize your contest by providing more information needed to create your landing page. Your contest will only be available to those who have access to the contest URL."
-            }
-            color="#979FAF"
-            size="16px"
             fontFamily="Open Sans"
-          />
-        </Col>
-      </Row>
-      <Row className="mb-3">
-        <Col md={2} sm={3} xs={5} className={classes.ColInput}>
-          <Text
             text={"Contest Name"}
-            color="#39424e"
-            size="14px"
-            wegiht="bold"
-            fontFamily="Open Sans"
+            height={"40px"}
+            wegiht={"600"}
           />
         </Col>
-        <Col lg={3} md={5} sm={6} xs={7}>
-          <Form.Control
+        <Col className={classes.ColInputFiled}>
+          <InputFiledRank
             type="text"
-            className={classes.Form}
             name="name"
             onChange={handleChange}
             value={details.name}
-          />
-        </Col>
-      </Row>
-      <Row className="mb-3">
-        <Col md={2} sm={3} xs={5} className={classes.ColInput}>
-          <Text
-            text={"Start Time"}
-            color="#39424e"
-            size="14px"
-            wegiht="bold"
-            fontFamily="Open Sans"
-          />
-        </Col>
-        <Col lg={3} md={5} sm={6} xs={7}>
-          <Datetime
-            onChange={(val) => handleChange(null, "startTime", val)}
-            value={details.startTime}
-          />
-        </Col>
-      </Row>
-      <Row className="mb-3">
-        <Col md={2} sm={3} xs={5} className={classes.ColInput}>
-          <Text
-            text={"End Time"}
-            color="#39424e"
-            size="14px"
-            wegiht="bold"
-            fontFamily="Open Sans"
-          />
-        </Col>
-        <Col lg={3} md={5} sm={6} xs={7}>
-          <Datetime
-            onChange={(val) => handleChange(null, "endTime", val)}
-            value={details.endTime}
-          />
-        </Col>
-      </Row>
-      <Row className="mb-3">
-        <Col md={2} sm={3} xs={5} className={classes.ColInput}></Col>
-        <Col lg={3} md={5} sm={6} xs={7}>
-          <Form.Check
-            className={classes.Check}
-            type={"checkbox"}
-            label={`This contest has no end time.`}
-            name="hasEndTime"
-            checked={details.hasEndTime}
-            onChange={handleChange}
-          />
-        </Col>
-      </Row>
-      <Row className="mb-2">
-        <Col>
-          <hr />
-        </Col>
-      </Row>
-      <Row className="mb-2">
-        <Col>
-          <Text
-            text={"Landing Page Customization"}
-            color="#39424e"
-            size="24px"
-            fontFamily="Open Sans"
-            wegiht="bold"
-          />
-        </Col>
-      </Row>
-      <Row className="mb-3">
-        <Col>
-          <Text
-            text={
-              "Fill out this information to customize your contest landing page."
-            }
-            color="#979FAF"
-            size="16px"
-            fontFamily="Open Sans"
+            size={"sm"}
+            disabled={loading}
+            msg={errorMsg.name}
           />
         </Col>
       </Row>
 
       <Row className="mb-3">
-        <Col md={2} sm={3} xs={5} className={classes.ColInput}>
+        <Col xs={"auto"} className={classes.TitleFiled}>
           <Text
-            text={"Description"}
-            color="#39424e"
-            size="14px"
-            wegiht="bold"
             fontFamily="Open Sans"
+            text={"Start Time"}
+            height={"40px"}
+            wegiht={"600"}
           />
         </Col>
-        <Col>
+        <Col className={classes.ColInputFiled}>
+          <InputFiledRank
+            type="datetime-local"
+            onChange={(e) => handleChange(null, "startTime", e.target.value)}
+            value={details.startTime}
+            disabled={loading}
+            size={"sm"}
+            msg={errorMsg.startTime}
+          />
+        </Col>
+      </Row>
+
+      <Row className="mb-3">
+        <Col xs={"auto"} className={classes.TitleFiled}>
+          <Text
+            fontFamily="Open Sans"
+            text={"End Time"}
+            height={"40px"}
+            wegiht={"600"}
+          />
+        </Col>
+        <Col className={classes.ColInputFiled}>
+          <InputFiledRank
+            type="datetime-local"
+            onChange={(e) => handleChange(null, "endTime", e.target.value)}
+            value={details.hasEndTime ? details.endTime : null}
+            disabled={loading || details.hasEndTime ? false : true}
+            size={"sm"}
+            msg={errorMsg.endTime}
+          />
+        </Col>
+      </Row>
+
+      <Row className="mb-3">
+        <Col xs={"auto"} className={classes.TitleFiled}></Col>
+        <Col className={`${classes.ColInputFiled} ml-4`}>
+          <CheckRank
+            type={"checkbox"}
+            label={`This contest has end time.`}
+            name="hasEndTime"
+            checked={details.hasEndTime}
+            onChange={handleChange}
+            disabled={loading}
+          />
+        </Col>
+      </Row>
+
+      {/*  */}
+      <Row className="mb-3">
+        <Col xs={"auto"} className={classes.TitleFiled}>
+          <Text
+            fontFamily="Open Sans"
+            text={"Description"}
+            height={"40px"}
+            wegiht={"600"}
+          />
+        </Col>
+        <Col className={classes.ColInputFiled}>
           <TextEditor
             name={"description"}
             text={details.description}
@@ -238,8 +220,34 @@ const ContestsDetalis = ({ operation, data = null }) => {
           />
         </Col>
       </Row>
+      {loading && (
+        <Row>
+          <Col xs={"auto"} className={classes.Loaderspace}></Col>
+          <Col className={classes.Loader}>
+            <LoaderRank loading={loading} />
+          </Col>
+        </Row>
+      )}
+      <Row className="mt-5 mb-3">
+        <Col Col xs={"auto"} className={classes.TitleFiled}></Col>
+        <Col className={classes.ActionBtns}>
+          <ButtonRank
+            text={"Cancel Changes"}
+            onClick={() =>
+              navigate("/administration/courses/" + id + "/contests")
+            }
+            disabled={loading}
+          />
+          <ButtonRank
+            text={"Save Changes"}
+            onClick={handleClick}
+            disabled={loading}
+          />
+        </Col>
+      </Row>
+      {/*  */}
 
-      <Row>
+      {/* <Row>
         <Col md={2}></Col>
         <Col md={8}>
           {showAlert && (
@@ -249,9 +257,9 @@ const ContestsDetalis = ({ operation, data = null }) => {
             />
           )}
         </Col>
-      </Row>
+      </Row> */}
 
-      <Row className="mb-3">
+      {/* <Row className="mb-3">
         <Col className={classes.ButtonSelect}>
           <ButtonRank
             text={"Save Changes"}
@@ -260,7 +268,7 @@ const ContestsDetalis = ({ operation, data = null }) => {
             onClick={handleClick}
           />
         </Col>
-      </Row>
+      </Row> */}
     </Container>
   );
 };

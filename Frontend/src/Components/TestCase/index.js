@@ -5,7 +5,9 @@ import TextEditor from "../TextEditor";
 import useStyle from "./Style";
 import DataTypes from "../DataTypes";
 import ButtonRank from "../ButtonRank";
+import InputFiledRank from "../InputFiledRank";
 import AlertComponent from "../Alert";
+import CheckRank from "../CheckRank";
 const TestCase = ({
   showAddModal,
   setShowAddModal,
@@ -85,51 +87,45 @@ const TestCase = ({
       </Modal.Header>
       <Modal.Body>
         <Container fluid>
-          <Row>
-            <Col xs="auto" className="d-flex align-items-center">
+          <Row className="align-items-center">
+            <Col xs="auto">
               <Text text={"Strength"} />
-              <Form.Group className="m-2">
-                <Form.Control
-                  type="number"
-                  name="strength"
-                  value={currentTestCase.strength}
-                  onChange={handleInputChange}
-                  className={classes.StrengthInput}
-                />
-              </Form.Group>
             </Col>
-            <Col className="d-flex align-items-center">
-              <Form.Group>
-                <Form.Check
-                  type="checkbox"
-                  name="sample"
-                  label="Sample"
-                  checked={currentTestCase.sample}
-                  onChange={handleInputChange}
-                />
-              </Form.Group>
+            <Col xs="auto">
+              <InputFiledRank
+                name="strength"
+                value={currentTestCase.strength}
+                onChange={handleInputChange}
+                className={classes.StrengthInput}
+                width={"80px"}
+              />
+            </Col>
+            <Col className={"ms-2"}>
+              <CheckRank
+                type="checkbox"
+                name="sample"
+                label={"Sample"}
+                checked={currentTestCase.sample}
+                onChange={handleInputChange}
+              />
             </Col>
           </Row>
 
-          <Row>
-            <DataTypes
-              name={"input"}
-              data={currentTestCase.input}
-              selectedOption={selectedOptionInput}
-              handleRadioChange={handleRadioChangeInput}
-              handleInputChange={handleInputChange}
-            />
-          </Row>
+          <DataTypes
+            name={"input"}
+            data={currentTestCase.input}
+            selectedOption={selectedOptionInput}
+            handleRadioChange={handleRadioChangeInput}
+            handleInputChange={handleInputChange}
+          />
 
-          <Row>
-            <DataTypes
-              name={"output"}
-              data={currentTestCase.output}
-              selectedOption={selectedOptionOutput}
-              handleRadioChange={handleRadioChangeOutput}
-              handleInputChange={handleInputChange}
-            />
-          </Row>
+          <DataTypes
+            name={"output"}
+            data={currentTestCase.output}
+            selectedOption={selectedOptionOutput}
+            handleRadioChange={handleRadioChangeOutput}
+            handleInputChange={handleInputChange}
+          />
 
           {currentTestCase.sample && (
             <Row className="mt-3">
@@ -166,9 +162,6 @@ const TestCase = ({
                   onClick={() => {
                     if (handleClick()) handleAdd();
                   }}
-                  backgroundColor="#1cb557"
-                  hoverBackgroundColor="green"
-                  color="white"
                 />
               )}
               {action !== "add" && (

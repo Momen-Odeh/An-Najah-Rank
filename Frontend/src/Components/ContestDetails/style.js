@@ -5,20 +5,28 @@ const useStyles = createUseStyles({
     padding: "0",
     margin: "0",
   },
-  Form: {
-    height: "100%",
-    "&:focus": {
-      boxShadow: "none",
+  ColInputFiled: {
+    maxWidth: "700px",
+    minWidth: "300px",
+  },
+  TitleFiled: {
+    width: "200px",
+  },
+  ActionBtns: {
+    maxWidth: "700px",
+    display: "flex",
+    justifyContent: "space-between",
+    gap: "5px",
+  },
+  Loaderspace: {
+    width: "200px",
+    "@media (max-width: 535px)": {
+      width: "0px",
     },
   },
-  ColInput: {
-    display: "flex",
-    alignItems: "center",
-  },
-  Check: {},
-  ButtonSelect: {
-    display: "flex",
-    justifyContent: "flex-end",
+  Loader: {
+    maxWidth: "700px",
+    textAlign: "center",
   },
 });
 export default useStyles;

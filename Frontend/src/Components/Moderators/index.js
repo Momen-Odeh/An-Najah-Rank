@@ -9,11 +9,14 @@ import { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import CancelModeratorsBtn from "../CancelModeratorsBtn";
+import ModalRank from "../ModalRank";
 const Moderators = ({ Owner, moderatorsData, suggestionModerators }) => {
   const classes = useStyle();
   const { id } = useParams();
   const [moderators, setModerators] = useState([]);
   const [input, setInput] = useState("");
+  const [errorMsg, setErrorMsg] = useState({ moderators: null });
+  const [loading, setLoading] = useState(false);
   const suggestionData = (suggestionModerators || [])
     .filter(
       (item) =>
@@ -24,29 +27,48 @@ const Moderators = ({ Owner, moderatorsData, suggestionModerators }) => {
     setModerators(moderatorsData);
   }, [moderatorsData]);
   const handleAdd = async () => {
-    if (input.trim() !== "") {
-      const newModerator = suggestionModerators?.filter(
-        (item) => item.name + " | " + item.email === input.trim()
-      );
-      if (newModerator[0]) {
-        await axios.post(`http://localhost:5000/course_moderators`, {
-          courseNumber: id,
-          stuffNumber: newModerator[0].universityNumber,
-        });
-        setModerators([...moderators, newModerator[0]]);
+    try {
+      if (input.trim() !== "") {
+        const newModerator = suggestionModerators?.filter(
+          (item) => item.name + " | " + item.email === input.trim()
+        );
+        if (newModerator[0]) {
+          setLoading(true);
+          await axios.post(`http://localhost:5000/course_moderators`, {
+            courseNumber: id,
+            stuffNumber: newModerator[0].universityNumber,
+          });
+          setModerators([...moderators, newModerator[0]]);
+        } else {
+          setErrorMsg({ moderators: "Not Correct User, Try again" });
+        }
+        setInput("");
+        setLoading(false);
       } else {
-        alert("enter correct name");
+        setErrorMsg({ moderators: "please enter moderator name" });
       }
-      setInput("");
+    } catch (error) {
+      console.log(error);
+      setLoading(false);
     }
   };
   const handleRemoveModerator = async (idx) => {
     const updatedModerators = moderators.filter((mo, index) => index !== idx);
-    await axios.delete(
-      `http://localhost:5000/course_moderators?courseNumber=${id}&stuffNumber=${moderators[idx].universityNumber}`
-    );
-    setModerators(updatedModerators);
+    try {
+      setLoading(true);
+      await axios.delete(
+        `http://localhost:5000/course_moderators?courseNumber=${id}&stuffNumber=${moderators[idx].universityNumber}`
+      );
+      setModerators(updatedModerators);
+      setLoading(false);
+      setDeleteModal({ show: false });
+    } catch (error) {
+      console.log(error);
+      setDeleteModal({ show: false });
+      setLoading(false);
+    }
   };
+  const [deleteModal, setDeleteModal] = useState({ show: false });
   return (
     <Container>
       <Row>
@@ -67,10 +89,17 @@ const Moderators = ({ Owner, moderatorsData, suggestionModerators }) => {
             handleChange={(val) => {
               setInput(val);
             }}
+            msgInput={{ errorMsg, setErrorMsg }}
+            loadingVal={{ loading, setLoading }}
           />
         </Col>
         <Col xs="auto">
-          <ButtonRank text={"Add"} size="14px" onClick={handleAdd} />
+          <ButtonRank
+            text={"Add"}
+            size="14px"
+            onClick={handleAdd}
+            disabled={loading}
+          />
         </Col>
       </Row>
       <Row className="m-1">
@@ -94,7 +123,11 @@ const Moderators = ({ Owner, moderatorsData, suggestionModerators }) => {
       {moderators?.map((item, index) => (
         <Row key={index} className={`align-items-center ${classes.RowNoWrap}`}>
           <Col xs="auto" className={classes.BtnCol}>
-            <CancelModeratorsBtn onClick={() => handleRemoveModerator(index)} />
+            <CancelModeratorsBtn
+              onClick={() =>
+                setDeleteModal({ show: true, index: index, name: item.name })
+              }
+            />
           </Col>
           <Col>
             <UserLimitAccess
@@ -105,6 +138,33 @@ const Moderators = ({ Owner, moderatorsData, suggestionModerators }) => {
           </Col>
         </Row>
       ))}
+      <ModalRank
+        show={deleteModal.show}
+        onHide={() => {
+          setDeleteModal({ ...deleteModal, show: false });
+        }}
+        title="Delete Moderator"
+        footer={
+          <ButtonRank
+            text={"Yes"}
+            hoverBackgroundColor="#0e141e"
+            onClick={() => handleRemoveModerator(deleteModal.index)}
+            disabled={loading}
+          />
+        }
+      >
+        <Text
+          text={
+            "are you sure that want to delete the moderator " +
+            deleteModal.name +
+            " from the Moderators list?"
+          }
+          size="0.9em"
+          fontFamily="Open Sans"
+          wegiht="600"
+          color="#0e141e"
+        />
+      </ModalRank>
     </Container>
   );
 };

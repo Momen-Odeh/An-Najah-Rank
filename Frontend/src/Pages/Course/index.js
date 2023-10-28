@@ -46,7 +46,7 @@ const Course = () => {
         setContests(res.data.contests);
       });
   }, []);
-
+  // console.log(suggestionModerators);
   const tabs = [
     {
       title: "Details",

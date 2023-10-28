@@ -92,7 +92,7 @@ const CourseDetails = ({ operation, data = null, setData }) => {
 
   const handleClick = async () => {
     setErrorMsg({
-      number: !validateUniversityNumber(details.number)
+      number: !validateUniversityNumber(String(details.number))
         ? "must consist of digits and contain at least three digits."
         : null,
       name: !(details.name.length >= 3)
@@ -102,20 +102,18 @@ const CourseDetails = ({ operation, data = null, setData }) => {
         ? "must enter course description."
         : null,
       image: !details.image ? "should enter course background image" : null,
-      students:
-        !details.students && operation === "create"
-          ? "should enter Students Excel File"
-          : null,
+      students: !details.students ? "should enter Students Excel File" : null,
     });
+    console.log(details.image && details.students && operation === "create");
     if (
-      validateUniversityNumber(details.number) &&
+      validateUniversityNumber(String(details.number)) &&
       details.name.length >= 3 &&
       details.description.length > 0 &&
       details.image &&
-      details.students &&
-      operation === "create"
+      details.students
     ) {
       try {
+        console.log(1);
         setLoading(true);
         if (operation === "create") {
           const idIndex = details.students[0].indexOf("id");

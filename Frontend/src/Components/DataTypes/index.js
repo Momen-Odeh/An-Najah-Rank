@@ -1,7 +1,9 @@
 import React from "react";
 import Text from "../Text";
-import { Col, Form } from "react-bootstrap";
+import { Col, Form, Row } from "react-bootstrap";
 import CustomTextarea from "../CustomTextarea";
+import CheckRank from "../CheckRank";
+import InputFiledRank from "../InputFiledRank";
 
 const DataTypes = ({
   name,
@@ -11,21 +13,25 @@ const DataTypes = ({
   handleInputChange,
 }) => {
   return (
-    <>
-      <Col className="d-flex align-items-center">
-        <Text text={name} />
-        <Form>
-          <Form.Group className="d-flex align-items-center m-2">
-            <Form.Check
+    <Row>
+      <Col xs="auto">
+        <Text text={name + ":"} />
+      </Col>
+
+      <Form>
+        <Form.Group className="d-flex align-items-center m-2">
+          <Col xs="auto">
+            <CheckRank
+              label={"Editor"}
               type="radio"
-              label="Editor"
               name="radioGroupInput"
-              value="editor"
               checked={selectedOption === "editor"}
               onChange={handleRadioChange}
-              className="m-2"
+              value="editor"
             />
-            <Form.Check
+          </Col>
+          <Col xs="auto">
+            <CheckRank
               type="radio"
               label="Upload"
               name="radioGroupInput"
@@ -33,17 +39,16 @@ const DataTypes = ({
               checked={selectedOption === "upload"}
               onChange={handleRadioChange}
             />
-          </Form.Group>
-        </Form>
-      </Col>
+          </Col>
+        </Form.Group>
+      </Form>
 
       {selectedOption === "upload" ? (
-        <Form.Group controlId="formFile" className="mb-3">
-          <Form.Control
+        <Form.Group className="mb-3">
+          <InputFiledRank
             type="file"
             name={name}
             onChange={handleInputChange}
-            className="mb-2"
           />
           <Text
             text={typeof data != "string" ? "Chosen file: " + data?.name : ""}
@@ -56,7 +61,7 @@ const DataTypes = ({
           text={data}
         />
       )}
-    </>
+    </Row>
   );
 };
 

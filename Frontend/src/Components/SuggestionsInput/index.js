@@ -10,6 +10,8 @@ const SuggestionsInput = ({
   placeholder = "Type here...",
   handleChange,
   width,
+  msgInput,
+  loadingVal,
 }) => {
   const classes = useStyle();
   const words = data;
@@ -28,6 +30,7 @@ const SuggestionsInput = ({
       const filteredSuggestions = words.filter((word) =>
         word.toLowerCase().includes(inputText.toLowerCase())
       );
+      setErrorMsg({ moderators: null });
       setSuggestions(filteredSuggestions);
       setShowSuggestions(true);
       setSelectedIndex(-1);
@@ -63,7 +66,8 @@ const SuggestionsInput = ({
       suggestionsContainerRef.current.scrollTop = scrollOffset;
     }
   };
-
+  const { errorMsg, setErrorMsg } = msgInput;
+  const { loading, setLoading } = loadingVal;
   return (
     <div className={`${classes.inputContainer}`}>
       <InputFiledRank
@@ -78,19 +82,9 @@ const SuggestionsInput = ({
         ref={inputRef}
         autoComplete="off"
         width={width}
+        msg={errorMsg.moderators}
+        disabled={loading}
       />
-      {/* <Form.Control
-        type="text"
-        name={name}
-        placeholder={placeholder}
-        value={value}
-        onChange={(e) => {
-          handleInputChange(e);
-        }}
-        onKeyDown={handleKeyDown}
-        ref={inputRef}
-        autoComplete="off"
-      /> */}
       {showSuggestions && (
         <div className={classes.suggestionsContainer}>
           <ListGroup
