@@ -54,5 +54,18 @@ def applayJs():
     else:
         return jsonify({"error": "Request body must contain JSON data"}), 400
 
+@app.route('/RE', methods=['POST'])
+def applayRE():
+    if request.is_json:
+        try:
+            data = request.get_json()
+            code = data.get('code')
+            input = data.get('input')
+            return test_regex(code, input)
+        except Exception as e:
+            return jsonify({"error": "Invalid JSON data"}), 400
+    else:
+        return jsonify({"error": "Request body must contain JSON data"}), 400
+
 if __name__ == "__main__":
     app.run(debug=True, port=5001)
