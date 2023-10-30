@@ -16,6 +16,7 @@ import SuggestionsInput from "../SuggestionsInput";
 import InputFiledRank from "../InputFiledRank";
 import CheckRank from "../CheckRank";
 import LoaderRank from "../LoaderRank";
+import { toast } from "react-toastify";
 
 const ContestsDetalis = ({ operation, data = null }) => {
   const classes = useStyle();
@@ -24,12 +25,13 @@ const ContestsDetalis = ({ operation, data = null }) => {
   const [cookies, setCookies] = useCookies();
   const [loading, setLoading] = useState(false);
   const [details, setDetails] = useState({
-    name: null,
-    description: null,
+    name: "",
+    description: "",
     startTime: null,
     hasEndTime: true,
     endTime: null,
   });
+
   const [errorMsg, setErrorMsg] = useState({
     name: null,
     description: null,
@@ -40,12 +42,7 @@ const ContestsDetalis = ({ operation, data = null }) => {
   useEffect(() => {
     if (data) setDetails(data);
   }, [data]);
-  const [showAlert, setShowAlert] = useState(false);
-  const [alertData, setAlertData] = useState({
-    message: "",
-    variant: "warning",
-  });
-  console.log(details);
+
   const handleChange = (e, nameVal = null, val = null) => {
     if (e) {
       const { name, value, type, checked, files } = e.target;
@@ -57,43 +54,60 @@ const ContestsDetalis = ({ operation, data = null }) => {
     }
   };
   const handleClick = async () => {
-    setShowAlert(false);
-    let thereError = false;
-    const contest = {
-      ...details,
-      hasEndTime: !details.hasEndTime,
-      startTime: moment(details.startTime).format("YYYY-MM-DD HH:mm:ss"),
-      endTime: details.endTime
-        ? moment(details.endTime).format("YYYY-MM-DD HH:mm:ss")
-        : null,
-      token: cookies?.token,
-    };
-    try {
-      if (!details.name) {
-        throw new Error("should enter context name");
-      } else if (!details.startTime) {
-        throw new Error("should enter start time");
-      }
-    } catch (error) {
-      setAlertData({ message: error.message, variant: "warning" });
-      setShowAlert(true);
-      thereError = true;
-    }
-    if (!thereError) {
+    const endTimeCondition =
+      (details.hasEndTime &&
+        details.endTime != null &&
+        new Date(details.startTime) <= new Date(details.endTime)) ||
+      !details.hasEndTime;
+    setErrorMsg({
+      name:
+        details.name.length < 3 ? "must contains at least 3 characters" : null,
+      description: null,
+      startTime:
+        details.startTime == null
+          ? "please enter the start time of contest"
+          : new Date(details.startTime) < new Date()
+          ? "start time should be in future"
+          : null,
+      hasEndTime: true,
+      endTime:
+        details.hasEndTime && details.endTime == null
+          ? "please enter the end time of contest"
+          : new Date(details.startTime) > new Date(details.endTime)
+          ? "end time should be after start time"
+          : null,
+    });
+
+    if (
+      details.name.length >= 3 &&
+      details.startTime != null &&
+      new Date(details.startTime) >= new Date() &&
+      endTimeCondition
+    ) {
+      const contest = {
+        ...details,
+        endTime: details.hasEndTime ? details.endTime : null,
+        token: cookies?.token,
+      };
       try {
+        setLoading(true);
         if (operation === "create") {
+          setErrorMsg({ ...errorMsg, endTime: null });
           const response = await Axios.post("http://localhost:5000/contests", {
             ...contest,
             courseNumber: id,
           });
           const params = new URLSearchParams({ ...contest, courseNumber: id });
+          console.log({ ...contest, courseNumber: id });
           const res = await Axios.get(
             "http://localhost:5000/contest_id?" + params.toString()
           );
           navigate(
             `/administration/courses/${id}/contests/${res?.data?.message}/challenges`
           );
+          setLoading(false);
         } else {
+          setErrorMsg({ ...errorMsg, endTime: null });
           const response = await Axios.put(
             `http://localhost:5000/contests/${contestId}`,
             contest
@@ -101,13 +115,21 @@ const ContestsDetalis = ({ operation, data = null }) => {
           navigate(
             `/administration/courses/${id}/contests/${contestId}/challenges`
           );
+          setLoading(false);
         }
       } catch (error) {
-        setAlertData({
-          message: error?.response?.data?.message,
-          variant: "danger",
+        console.log(error);
+        toast.error(error?.response?.data?.message, {
+          position: "bottom-left",
+          autoClose: 10000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
         });
-        setShowAlert(true);
+        setLoading(false);
       }
     }
   };
@@ -120,7 +142,6 @@ const ContestsDetalis = ({ operation, data = null }) => {
             size={"26px"}
             wegiht="600"
             fontFamily={"OpenSans"}
-            color={"#39424e"}
           />
         </Col>
       </Row>
@@ -181,7 +202,7 @@ const ContestsDetalis = ({ operation, data = null }) => {
             type="datetime-local"
             onChange={(e) => handleChange(null, "endTime", e.target.value)}
             value={details.hasEndTime ? details.endTime : null}
-            disabled={loading || details.hasEndTime ? false : true}
+            disabled={loading || !details.hasEndTime}
             size={"sm"}
             msg={errorMsg.endTime}
           />
@@ -245,30 +266,6 @@ const ContestsDetalis = ({ operation, data = null }) => {
           />
         </Col>
       </Row>
-      {/*  */}
-
-      {/* <Row>
-        <Col md={2}></Col>
-        <Col md={8}>
-          {showAlert && (
-            <AlertComponent
-              message={alertData.message}
-              variant={alertData.variant}
-            />
-          )}
-        </Col>
-      </Row> */}
-
-      {/* <Row className="mb-3">
-        <Col className={classes.ButtonSelect}>
-          <ButtonRank
-            text={"Save Changes"}
-            backgroundColor="rgb(46, 200, 102)"
-            color="#fff"
-            onClick={handleClick}
-          />
-        </Col>
-      </Row> */}
     </Container>
   );
 };

@@ -5,6 +5,11 @@ const useStyles = createUseStyles({
     padding: "0",
     margin: "0",
   },
+  Row: {
+    justifyContent: "space-between",
+    alignItems: "center",
+    gap: "20px",
+  },
   Form: {
     height: "100%",
     "&:focus": {
@@ -17,10 +22,10 @@ const useStyles = createUseStyles({
   smallWidth: {
     width: "50px",
   },
-  iconColor:{
-    marginLeft:'10px',
-    '&:hover':{
-        color:'#4691f6 !important'
+  iconColor: {
+    marginLeft: "10px",
+    "&:hover": {
+      color: "#4691f6 !important",
     },
   },
 });

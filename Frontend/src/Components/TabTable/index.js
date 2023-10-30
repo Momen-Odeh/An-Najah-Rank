@@ -43,19 +43,25 @@ const TabTable = ({ TableHeader, TableData, url = null }) => {
           url ? (
             <tr className={classes.tableRow} key={index}>
               {setValues(Object.values(item))}
-              {values.map((val, index) => (
-                <td key={index} className={classes.TableData}>
-                  <Link to={url[index]} className={classes.link}>
-                    {renderValue(val)}
-                  </Link>
-                </td>
-              ))}
+              {values.map((val, indexIN) =>
+                TableHeader[indexIN] === "" ? (
+                  <td key={indexIN} className={classes.TableData}>
+                    {val}
+                  </td>
+                ) : (
+                  <td key={indexIN} className={classes.TableData}>
+                    <Link to={url[index]} className={classes.link}>
+                      {renderValue(val)}
+                    </Link>
+                  </td>
+                )
+              )}
             </tr>
           ) : (
             <tr key={index} className={classes.tableRow}>
               {setValues(Object.values(item))}
-              {values.map((val, index) => (
-                <td key={index} className={classes.TableData}>
+              {values.map((val, indexIN) => (
+                <td key={indexIN} className={classes.TableData}>
                   {val}
                 </td>
               ))}

@@ -82,7 +82,7 @@ const SuggestionsInput = ({
         ref={inputRef}
         autoComplete="off"
         width={width}
-        msg={errorMsg.moderators}
+        msg={errorMsg.SuggestionsInput}
         disabled={loading}
       />
       {showSuggestions && (

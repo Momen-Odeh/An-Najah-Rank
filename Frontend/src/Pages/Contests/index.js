@@ -34,11 +34,9 @@ const Contests = () => {
         setDetails({
           name: res.data.contest.name,
           description: res.data.contest.description,
-          startTime: new Date(res.data.contest.startTime),
-          hasEndTime: !res.data.contest.hasEndTime,
-          endTime: res.data.contest.endTime
-            ? new Date(res.data.contest.endTime)
-            : null,
+          startTime: res.data.contest.startTime,
+          hasEndTime: res.data.contest.hasEndTime,
+          endTime: res.data.contest.endTime ? res.data.contest.endTime : null,
         });
         setChallenges(
           res.data.myChallenges.map((item, index) => ({
@@ -88,28 +86,23 @@ const Contests = () => {
     },
   ];
   return (
-    <>
-      <Container fluid className={clasess.Container}>
-        <Row className={`mt-2 ${clasess.maxWidth}`}>
-          <Col>
-            <Breadcrumbs path={path} />
-          </Col>
-        </Row>
-      </Container>
-      <hr></hr>
-      <Container fluid className={clasess.Container}>
-        <Row className={`mb-4 ${clasess.maxWidth}`}>
-          <Col>
-            <Text text={details.name} size="36px" wegiht="500" height="40px" />
-          </Col>
-        </Row>
-        <Row className={`mb-4 ${clasess.maxWidth}`}>
-          <Col>
-            <ChallengeTabs ListTabs={tabContent} />
-          </Col>
-        </Row>
-      </Container>
-    </>
+    <Container fluid className={clasess.Container}>
+      <Row className={`mt-2 ${clasess.maxWidth}`}>
+        <Col>
+          <Breadcrumbs path={path} />
+        </Col>
+      </Row>
+      <Row className={`mb-4 ${clasess.maxWidth}`}>
+        <Col>
+          <Text text={details.name} size="36px" wegiht="500" height="40px" />
+        </Col>
+      </Row>
+      <Row className={`mb-4 ${clasess.maxWidth}`}>
+        <Col>
+          <ChallengeTabs ListTabs={tabContent} />
+        </Col>
+      </Row>
+    </Container>
   );
 };
 
