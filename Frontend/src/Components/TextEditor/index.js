@@ -3,7 +3,7 @@ import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import useStyle from "./Style";
 
-const TextEditor = ({ name, text, handleChange }) => {
+const TextEditor = ({ name, text, handleChange, msg, disabled }) => {
   const classes = useStyle();
   const modules = {
     toolbar: [
@@ -53,7 +53,9 @@ const TextEditor = ({ name, text, handleChange }) => {
         theme="snow"
         onChange={handleEditorChange}
         className={classes.editor}
+        readOnly={disabled}
       />
+      {msg && <span className={classes.msg}>* {msg}</span>}
     </div>
   );
 };

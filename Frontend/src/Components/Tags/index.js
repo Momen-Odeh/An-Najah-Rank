@@ -1,6 +1,7 @@
 import React from "react";
 import CustomInputGroup from "../CustomInputGroup";
 import useStyle from "./Style";
+import CancelModeratorsBtn from "../CancelModeratorsBtn";
 
 const Tags = ({ tags, handleChange, name, disabled }) => {
   const classes = useStyle();
@@ -25,17 +26,13 @@ const Tags = ({ tags, handleChange, name, disabled }) => {
       />
       <div>
         {tags?.map((tag) => (
-          <span
-            key={tag}
-            className={`badge  bg-secondary m-1 p-1 ${classes.tabContent}`}
-          >
-            {tag}
-            <button
-              className={`badge m-1 p-1 border-0 ${classes.button}`}
+          <span key={tag} className={`badge ${classes.tabContent}`}>
+            {tag + " "}
+            <CancelModeratorsBtn
               onClick={() => handleRemoveTag(tag)}
-            >
-              &times;
-            </button>
+              backgroundColor="#838e98"
+              hoverBackgroundColor="#a4b2be"
+            />
           </span>
         ))}
       </div>

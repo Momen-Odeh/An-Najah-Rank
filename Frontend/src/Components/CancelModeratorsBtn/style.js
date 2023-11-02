@@ -2,7 +2,7 @@ import { createUseStyles } from "react-jss";
 
 const useStyle = createUseStyles({
   button: {
-    backgroundColor: "#e4e4e4",
+    backgroundColor: ({ backgroundColor }) => backgroundColor,
     padding: "5px",
     color: "#211f20",
     fontSize: "23px",
@@ -11,7 +11,7 @@ const useStyle = createUseStyles({
     cursor: "pointer",
     transition: "0.4s",
     "&:hover": {
-      backgroundColor: "#b1b1b1",
+      backgroundColor: ({ hoverBackgroundColor }) => hoverBackgroundColor,
     },
   },
 });

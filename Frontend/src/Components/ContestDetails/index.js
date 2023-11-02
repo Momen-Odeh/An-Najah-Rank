@@ -62,7 +62,8 @@ const ContestsDetalis = ({ operation, data = null }) => {
     setErrorMsg({
       name:
         details.name.length < 3 ? "must contains at least 3 characters" : null,
-      description: null,
+      description:
+        details.description.length === 0 ? "please enter description" : null,
       startTime:
         details.startTime == null
           ? "please enter the start time of contest"
@@ -79,6 +80,7 @@ const ContestsDetalis = ({ operation, data = null }) => {
     });
 
     if (
+      details.description.length !== 0 &&
       details.name.length >= 3 &&
       details.startTime != null &&
       new Date(details.startTime) >= new Date() &&
@@ -238,6 +240,8 @@ const ContestsDetalis = ({ operation, data = null }) => {
             name={"description"}
             text={details.description}
             handleChange={handleChange}
+            disabled={loading}
+            msg={errorMsg.description}
           />
         </Col>
       </Row>

@@ -5,49 +5,52 @@ import TextEditor from "../TextEditor";
 import Tags from "../Tags";
 import ButtonRank from "../ButtonRank";
 import Axios from "axios";
-import AlertComponent from "../Alert";
 import { useNavigate, useParams } from "react-router-dom";
 import { useEffect } from "react";
 import { useCookies } from "react-cookie";
 import InputFiledRank from "../InputFiledRank";
 import useStyle from "./style";
 import LoaderRank from "../LoaderRank";
+import { toastError } from "../../Utils/toast";
 const CreateChallengeDetails = ({ operation, data }) => {
   const [loading, setLoading] = useState(false);
   const { id } = useParams();
   const [details, setDetails] = useState({
     difficulty: "Easy",
+    name: "",
+    description: "",
+    problemStatement: "",
+    inputFormat: "",
+    constraints: "",
+    outputFormat: "",
+    tags: [],
+  });
+  const [errorMsg, setErrorMsg] = useState({
     name: null,
     description: null,
     problemStatement: null,
     inputFormat: null,
     constraints: null,
     outputFormat: null,
-    tags: [],
   });
   useEffect(() => {
-    if (data) setDetails(data);
+    if (data) {
+      setDetails(data);
+    }
   }, [data]);
-  const [showAlert, setShowAlert] = useState(false);
-  const [alertData, setAlertData] = useState({
-    message: "",
-    variant: "warning",
-  });
   const [cookies, setCookies] = useCookies();
   const navigate = useNavigate();
   const handleChange = (e, nameVal = null, val = null) => {
     if (e) {
       const { name, value } = e.target;
-      console.log(details);
+      // console.log(details);
       setDetails({ ...details, [name]: value });
     } else {
       setDetails({ ...details, [nameVal]: val });
-      console.log(details);
+      // console.log(details);
     }
   };
   const handleClick = async () => {
-    setShowAlert(false);
-    let thereError = false;
     let challenge = {
       difficulty: details.difficulty,
       name: details.name,
@@ -59,18 +62,42 @@ const CreateChallengeDetails = ({ operation, data }) => {
       tags: details.tags.length === 0 ? null : details.tags,
       token: cookies?.token,
     };
-    try {
-      if (!details.name) throw new Error("should fill the name");
-      else if (!details.description)
-        throw new Error("should fill the description");
-      else if (!details.problemStatement)
-        throw new Error("should fill the problem statement");
-    } catch (error) {
-      setAlertData({ message: error.message, variant: "warning" });
-      setShowAlert(true);
-      thereError = true;
-    }
-    if (!thereError) {
+    setErrorMsg({
+      name:
+        challenge.name.length < 3
+          ? "challenge name must contain at least 3 characters"
+          : null,
+      description:
+        challenge.description.length === 0
+          ? "please enter the challenge description"
+          : null,
+      problemStatement:
+        challenge.problem_statement.length === 0
+          ? "please enter the challenge problem statement"
+          : null,
+      inputFormat:
+        challenge.input_format.length === 0
+          ? "please enter the challenge input format"
+          : null,
+      constraints:
+        challenge.constraints.length === 0
+          ? "please enter the challenge constraints"
+          : null,
+      outputFormat:
+        challenge.output_format.length === 0
+          ? "please enter the challenge output format"
+          : null,
+    });
+
+    if (
+      challenge.name.length >= 3 &&
+      challenge.description.length !== 0 &&
+      challenge.problem_statement.length !== 0 &&
+      challenge.input_format.length !== 0 &&
+      challenge.constraints.length !== 0 &&
+      challenge.output_format.length !== 0
+    ) {
+      setLoading(true);
       try {
         if (operation === "create") {
           const response = await Axios.post(
@@ -94,13 +121,11 @@ const CreateChallengeDetails = ({ operation, data }) => {
           );
           navigate(`/administration/challenges/${id}/test-cases`);
         }
-        console.log(challenge);
+        setLoading(false);
       } catch (error) {
-        setAlertData({
-          message: error.response.data.message,
-          variant: "danger",
-        });
-        setShowAlert(true);
+        console.log(error);
+        toastError(error.response.data.message);
+        setLoading(false);
       }
     }
   };
@@ -125,23 +150,23 @@ const CreateChallengeDetails = ({ operation, data }) => {
             value={details.difficulty}
             options={[
               {
-                value: "easy",
+                value: "Easy",
                 text: "Easy",
               },
               {
-                value: "medium",
+                value: "Medium",
                 text: "Medium",
               },
               {
-                value: "hard",
+                value: "Hard",
                 text: "Hard",
               },
               {
-                value: "advanced",
+                value: "Advanced",
                 text: "Advanced",
               },
               {
-                value: "expert",
+                value: "Expert",
                 text: "Expert",
               },
             ]}
@@ -165,6 +190,7 @@ const CreateChallengeDetails = ({ operation, data }) => {
             onChange={handleChange}
             value={details.name}
             disabled={loading}
+            msg={errorMsg.name}
           />
         </Col>
       </Row>
@@ -186,6 +212,7 @@ const CreateChallengeDetails = ({ operation, data }) => {
             onChange={handleChange}
             value={details.description}
             disabled={loading}
+            msg={errorMsg.description}
           />
         </Col>
       </Row>
@@ -204,6 +231,7 @@ const CreateChallengeDetails = ({ operation, data }) => {
             text={details.problemStatement}
             handleChange={handleChange}
             disabled={loading}
+            msg={errorMsg.problemStatement}
           />
         </Col>
       </Row>
@@ -221,6 +249,8 @@ const CreateChallengeDetails = ({ operation, data }) => {
             name={"inputFormat"}
             text={details.inputFormat}
             handleChange={handleChange}
+            disabled={loading}
+            msg={errorMsg.inputFormat}
           />
         </Col>
       </Row>
@@ -238,6 +268,8 @@ const CreateChallengeDetails = ({ operation, data }) => {
             name={"constraints"}
             text={details.constraints}
             handleChange={handleChange}
+            disabled={loading}
+            msg={errorMsg.constraints}
           />
         </Col>
       </Row>
@@ -255,6 +287,8 @@ const CreateChallengeDetails = ({ operation, data }) => {
             name={"outputFormat"}
             text={details.outputFormat}
             handleChange={handleChange}
+            disabled={loading}
+            msg={errorMsg.outputFormat}
           />
         </Col>
       </Row>
@@ -276,18 +310,6 @@ const CreateChallengeDetails = ({ operation, data }) => {
           />
         </Col>
       </Row>
-
-      {/* <Row>
-        <Col md={2}></Col>
-        <Col md={8}>
-          {showAlert && (
-            <AlertComponent
-              message={alertData.message}
-              variant={alertData.variant}
-            />
-          )}
-        </Col>
-      </Row> */}
 
       {loading && (
         <Row>
@@ -312,23 +334,6 @@ const CreateChallengeDetails = ({ operation, data }) => {
           />
         </Col>
       </Row>
-      {/* <Row className="mb-3">
-        <Col md={2}></Col>
-        <Col md={8} className="d-flex justify-content-end">
-          <ButtonRank
-            text={"Cancel Changes"}
-            onClick={() => navigate("/administration/challenges")}
-          />
-          <span className="m-1"></span>
-          <ButtonRank
-            onClick={handleClick}
-            text={"Save Changes"}
-            backgroundColor="#1cb557"
-            hoverBackgroundColor="green"
-            color="white"
-          />
-        </Col>
-      </Row> */}
     </Container>
   );
 };
