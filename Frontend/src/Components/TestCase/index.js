@@ -16,8 +16,12 @@ const TestCase = ({
   handleAdd,
   handleUpdate,
   action,
+  errorMsg,
+  loading,
+  setErrorMsg,
 }) => {
   const classes = useStyle();
+
   const inputType =
     typeof currentTestCase.input == "string" ? "editor" : "upload";
   const outputType =
@@ -55,21 +59,6 @@ const TestCase = ({
     setSelectedOptionOutput(event.target.value);
   };
 
-  const handleClick = () => {
-    setShowAlert(false);
-    try {
-      if (!currentTestCase.input) {
-        throw new Error("should fill the input");
-      } else if (!currentTestCase.output) {
-        throw new Error("should fill the input");
-      }
-      return true;
-    } catch (error) {
-      setAlertData({ message: error.message, variant: "warning" });
-      setShowAlert(true);
-    }
-  };
-
   return (
     <Modal
       show={showAddModal}
@@ -77,6 +66,12 @@ const TestCase = ({
       onHide={() => {
         setShowAddModal(false);
         setCurrentTestCase("");
+        setErrorMsg({
+          input: null,
+          output: null,
+          explanation: null,
+          strength: null,
+        });
       }}
       scrollable
       centered
@@ -87,7 +82,8 @@ const TestCase = ({
       </Modal.Header>
       <Modal.Body>
         <Container fluid>
-          <Row className="align-items-center">
+          <Row>
+            {/* className="align-items-center justify-content-center"> */}
             <Col xs="auto">
               <Text text={"Strength"} />
             </Col>
@@ -98,6 +94,7 @@ const TestCase = ({
                 onChange={handleInputChange}
                 className={classes.StrengthInput}
                 width={"80px"}
+                msg={errorMsg.strength}
               />
             </Col>
             <Col className={"ms-2"}>
@@ -107,6 +104,7 @@ const TestCase = ({
                 label={"Sample"}
                 checked={currentTestCase.sample}
                 onChange={handleInputChange}
+                disabled={loading}
               />
             </Col>
           </Row>
@@ -117,6 +115,8 @@ const TestCase = ({
             selectedOption={selectedOptionInput}
             handleRadioChange={handleRadioChangeInput}
             handleInputChange={handleInputChange}
+            msg={errorMsg.input}
+            loading={loading}
           />
 
           <DataTypes
@@ -125,6 +125,8 @@ const TestCase = ({
             selectedOption={selectedOptionOutput}
             handleRadioChange={handleRadioChangeOutput}
             handleInputChange={handleInputChange}
+            msg={errorMsg.output}
+            loading={loading}
           />
 
           {currentTestCase.sample && (
@@ -136,20 +138,11 @@ const TestCase = ({
                 name={"explanation"}
                 text={currentTestCase.explanation}
                 handleChange={handleInputChange}
+                msg={errorMsg.explanation}
+                disabled={loading}
               />
             </Row>
           )}
-          <Row>
-            <Col md={2}></Col>
-            <Col md={8}>
-              {showAlert && (
-                <AlertComponent
-                  message={alertData.message}
-                  variant={alertData.variant}
-                />
-              )}
-            </Col>
-          </Row>
         </Container>
       </Modal.Body>
       <Modal.Footer>
@@ -159,32 +152,15 @@ const TestCase = ({
               {action === "add" && (
                 <ButtonRank
                   text={"Save"}
-                  onClick={() => {
-                    if (handleClick()) handleAdd();
-                  }}
+                  onClick={handleAdd}
+                  disabled={loading}
                 />
               )}
               {action !== "add" && (
                 <ButtonRank
                   text={"Update"}
-                  onClick={() => {
-                    if (handleClick()) handleUpdate(null, "all", null);
-                  }}
-                  backgroundColor="#1cb557"
-                  hoverBackgroundColor="green"
-                  color="white"
-                />
-              )}
-              {action !== "add" && (
-                <ButtonRank
-                  text={"Cancel"}
-                  onClick={() => {
-                    setShowAddModal(false);
-                    setCurrentTestCase("");
-                  }}
-                  backgroundColor="#1cb557"
-                  hoverBackgroundColor="green"
-                  color="white"
+                  onClick={() => handleUpdate(null, "all", null)}
+                  disabled={loading}
                 />
               )}
             </Col>

@@ -26,6 +26,7 @@ const InputFiledRank = ({
   autoComplete,
   options,
   className,
+  style,
 }) => {
   const clasess = useStyles({
     msg,
@@ -46,6 +47,7 @@ const InputFiledRank = ({
         {options ? (
           <Form.Select
             className={`${clasess.Control} ${clasess.Select} ${className}`}
+            style={style}
             type={type}
             id={id}
             value={value}

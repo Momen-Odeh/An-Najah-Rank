@@ -11,6 +11,8 @@ const DataTypes = ({
   selectedOption,
   handleRadioChange,
   handleInputChange,
+  msg,
+  loading,
 }) => {
   return (
     <Row>
@@ -49,6 +51,8 @@ const DataTypes = ({
             type="file"
             name={name}
             onChange={handleInputChange}
+            msg={msg}
+            loading={loading}
           />
           <Text
             text={typeof data != "string" ? "Chosen file: " + data?.name : ""}
@@ -59,6 +63,8 @@ const DataTypes = ({
           name={name}
           handleChange={handleInputChange}
           text={data}
+          msg={msg}
+          loading={loading}
         />
       )}
     </Row>

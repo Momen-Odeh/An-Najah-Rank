@@ -381,7 +381,7 @@ const ContestChallenges = ({ challengesData, challengesContest }) => {
         onHide={() => {
           setDeleteModal({ ...deleteModal, show: false });
         }}
-        title="Delete Student"
+        title="Delete Challenge"
         footer={
           <ButtonRank
             text={"Yes"}

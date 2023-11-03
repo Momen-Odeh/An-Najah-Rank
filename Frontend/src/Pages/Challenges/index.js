@@ -71,16 +71,13 @@ const Challenges = () => {
       urlPattern: `/administration/challenges/${id}/test-cases`,
     },
   ];
-  const path = [
-    { title: "Manage Challenges", url: "/administration/challenges" },
-    { title: details.name, url: "#" },
-  ];
+
   const classes = useStyles();
   return (
     <Container fluid className={`${classes.Container}`}>
       <Row className="mb-2">
         <Col>
-          <Breadcrumbs path={path} />
+          <Breadcrumbs />
         </Col>
       </Row>
       <Row className="mb-3">
