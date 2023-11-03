@@ -15,20 +15,7 @@ import ChallengeContext from "../../Utils/ChallengeContext";
 import { FaCheck } from "react-icons/fa";
 import { ImCross } from "react-icons/im";
 import TestCaseProblem from "../../Components/TestCaseProblem";
-const path = [
-  {
-    title: "All Contests",
-    url: "/log-in",
-  },
-  {
-    title: "  DAQ-Summer-2021-Q3",
-    url: "",
-  },
-  {
-    title: "DAQ-Spring-2021-Q2",
-    url: "",
-  },
-];
+
 const Challenge = ({}) => {
   const clasess = useStyles();
   const { id } = useParams();
@@ -38,6 +25,7 @@ const Challenge = ({}) => {
     show: false,
     tabContent: [],
   });
+  const [loading, setLoading] = useState(false);
   const tabContent = [
     {
       eventKey: "Problem",
@@ -105,17 +93,16 @@ const Challenge = ({}) => {
       value={{
         challengeData: challengeData,
         testCases: { val: testCases, setVal: setTestCases },
+        loading: loading,
+        setLoading: setLoading,
       }}
     >
       <Container fluid className={clasess.Container}>
         <Row className={`mt-2 ${clasess.maxWidth}`}>
           <Col>
-            <Breadcrumbs path={path} />
+            <Breadcrumbs />
           </Col>
         </Row>
-      </Container>
-      <hr></hr>
-      <Container fluid className={clasess.Container}>
         <Row className={`mb-4 ${clasess.maxWidth}`}>
           <Col>
             <TextRegister
