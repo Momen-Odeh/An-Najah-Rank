@@ -97,52 +97,6 @@ export const routes = [
     component: <NewPassword />,
   },
   {
-    path: "/challenge/:id",
-    title: routeNames.CHALLENGE,
-    component: (
-      <IsLoggedIn moveTo={"log-in"}>
-        {" "}
-        <Outlet />{" "}
-      </IsLoggedIn>
-    ),
-    subRoutes: [
-      {
-        index: true,
-        component: <MoveToPath endPath={"problem"} />,
-      },
-      {
-        title: "problem",
-        path: "problem",
-        component: <Challenge />,
-      },
-      {
-        title: "submissions",
-        path: "submissions",
-        component: <Challenge />,
-      },
-      {
-        title: "leaderboard",
-        path: "leaderboard",
-        component: <Challenge />,
-      },
-      {
-        title: "discussions",
-        path: "discussions",
-        component: <Challenge />,
-      },
-    ],
-  },
-
-  {
-    path: "/contest-view/:id",
-    title: routeNames.CONTEST_VIEW,
-    component: (
-      <IsLoggedIn moveTo={"log-in"}>
-        <ContestView />
-      </IsLoggedIn>
-    ),
-  },
-  {
     path: "/enroll-student",
     title: routeNames.ENROLL_STUDENT,
     component: (
@@ -151,8 +105,45 @@ export const routes = [
       </IsLoggedIn>
     ),
   },
+
+  // {
+  //   path: "/challenge/:id",
+  //   title: routeNames.CHALLENGE,
+  //   component: (
+  //     <IsLoggedIn moveTo={"log-in"}>
+  //       {" "}
+  //       <Outlet />{" "}
+  //     </IsLoggedIn>
+  //   ),
+  //   subRoutes: [
+  //     {
+  //       index: true,
+  //       component: <MoveToPath endPath={"problem"} />,
+  //     },
+  //     {
+  //       title: "problem",
+  //       path: "problem",
+  //       component: <Challenge />,
+  //     },
+  //     {
+  //       title: "submissions",
+  //       path: "submissions",
+  //       component: <Challenge />,
+  //     },
+  //     {
+  //       title: "leaderboard",
+  //       path: "leaderboard",
+  //       component: <Challenge />,
+  //     },
+  //     {
+  //       title: "discussions",
+  //       path: "discussions",
+  //       component: <Challenge />,
+  //     },
+  //   ],
+  // },
   {
-    path: "/course-view/:id",
+    path: "/courses/:id",
     title: routeNames.COURSE_VIEW,
     component: (
       <IsLoggedIn moveTo={"log-in"}>
@@ -162,12 +153,84 @@ export const routes = [
     subRoutes: [
       {
         index: true,
-        component: <MoveToPath startPath="course-view" endPath="course" />,
+        component: <CourseView />, //<Navigate to={"contests"} />,
       },
       {
-        title: "course",
-        path: "course",
-        component: <CourseView />,
+        title: "contests",
+        path: "contests",
+        component: <Outlet />,
+        subRoutes: [
+          {
+            index: true,
+            component: <CourseView />,
+          },
+          {
+            title: routeNames.CONTEST_VIEW,
+            path: ":contestId",
+            component: (
+              // <IsLoggedIn moveTo={"log-in"}>
+
+              <Outlet />
+
+              // </IsLoggedIn>
+            ),
+            subRoutes: [
+              {
+                index: true,
+                component: (
+                  <ContestView />
+                  // <MoveToPath
+                  //   startPath="courses"
+                  //   middle="contests"
+                  //   endPath="challenges"
+                  // />
+                ),
+              },
+              {
+                title: "challenges",
+                path: "challenges",
+                component: <Outlet />,
+                subRoutes: [
+                  {
+                    index: true,
+                    component: <ContestView />,
+                  },
+                  {
+                    title: "challenge",
+                    path: ":challengeId",
+                    component: <Outlet />,
+                    subRoutes: [
+                      {
+                        index: true,
+                        component: <Challenge />,
+                      },
+                      {
+                        title: "problem",
+                        path: "problem",
+                        component: <Challenge />,
+                      },
+                      {
+                        title: "submissions",
+                        path: "submissions",
+                        component: <Challenge />,
+                      },
+                      {
+                        title: "leaderboard",
+                        path: "leaderboard",
+                        component: <Challenge />,
+                      },
+                      {
+                        title: "discussions",
+                        path: "discussions",
+                        component: <Challenge />,
+                      },
+                    ],
+                  },
+                ],
+              },
+            ],
+          },
+        ],
       },
       {
         title: "members",

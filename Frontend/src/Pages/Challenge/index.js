@@ -18,7 +18,7 @@ import TestCaseProblem from "../../Components/TestCaseProblem";
 
 const Challenge = ({}) => {
   const clasess = useStyles();
-  const { id } = useParams();
+  const { id, contestId, challengeId } = useParams();
   const navigate = useNavigate();
   const [challengeData, setChallengeData] = useState({});
   const [testCases, setTestCases] = useState({
@@ -31,30 +31,30 @@ const Challenge = ({}) => {
       eventKey: "Problem",
       title: "Problem",
       TabComponent: <ProblemDescription />,
-      urlPattern: "/challenge/" + id + "/problem",
+      urlPattern: `/courses/${id}/contests/${contestId}/challenges/${challengeId}/problem`,
     },
     {
       eventKey: "Submissions",
       title: "Submissions",
       TabComponent: <SubmitionTab />,
-      urlPattern: "/challenge/" + id + "/submissions",
+      urlPattern: `/courses/${id}/contests/${contestId}/challenges/${challengeId}/submissions`,
     },
     {
       eventKey: "Leaderboard",
       title: "Leaderboard",
       TabComponent: <LeadboardTab />,
-      urlPattern: "/challenge/" + id + "/leaderboard",
+      urlPattern: `/courses/${id}/contests/${contestId}/challenges/${challengeId}/leaderboard`,
     },
     {
       eventKey: "Discussions",
       title: "Discussions",
       TabComponent: <h1>Tab4</h1>,
-      urlPattern: "/challenge/" + id + "/discussions",
+      urlPattern: `/courses/${id}/contests/${contestId}/challenges/${challengeId}/discussions`,
     },
   ];
   useEffect(() => {
     axios
-      .get("http://127.0.0.1:5000/challenge/" + id)
+      .get("http://127.0.0.1:5000/challenge/" + challengeId)
       .then((res) => {
         setChallengeData(res.data);
         console.log(res);

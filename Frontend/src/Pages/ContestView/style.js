@@ -32,5 +32,8 @@ const useStyles = createUseStyles({
   descritionCol: {
     paddingLeft: "35px",
   },
+  ColDWN: {
+    display: "flex",
+  },
 });
 export default useStyles;
