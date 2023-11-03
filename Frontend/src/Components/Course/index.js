@@ -4,8 +4,9 @@ import useStyles from "./style";
 import Avatar from "react-avatar";
 import Text from "../Text";
 import ButtonRank from "../ButtonRank";
+import { Link } from "react-router-dom";
 
-const Course = ({ img, title, url, modirator }) => {
+const Course = ({ img, title, url, modirators }) => {
   const clasess = useStyles();
   return (
     <Container fluid className={clasess.Container}>
@@ -16,16 +17,18 @@ const Course = ({ img, title, url, modirator }) => {
         <Col className={`${clasess.ColInfo} `}>
           <Row>
             <Col>
-              <Text
-                text={title}
-                size="20px"
-                fontFamily="Open Sans"
-                wegiht="600"
-              />
+              <Link to={url} className={clasess.Link}>
+                <Text
+                  text={title}
+                  size="20px"
+                  fontFamily="Open Sans"
+                  wegiht="600"
+                />
+              </Link>
             </Col>
           </Row>
           <Row>
-            {modirator.map((item, index) => (
+            {modirators.map((item, index) => (
               <Col xs={"auto"} key={index}>
                 <Text
                   text={item}

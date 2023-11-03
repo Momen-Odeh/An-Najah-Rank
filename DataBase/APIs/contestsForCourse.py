@@ -16,7 +16,12 @@ def getContestForCourse(id):
                 "name": row[1],
                 "startDate": row[3],
                 "endDate": row[5],
-                "ownerName": cursor.fetchone()
+                "ownerName": cursor.fetchone(),
+                'solved': True,
+                "statistics": [
+                    {'key': 'Solved Rate: ', "val": "50%"},
+                    {'key': 'My Score: ', "val": 100}
+                ]
             }
             challenge_objects.append(challenge)
 
