@@ -3,6 +3,7 @@ from codeCompilationAndRun.java import compileAndRunJavaCode
 from codeCompilationAndRun.c import compileAndRunCCode
 from codeCompilationAndRun.python import runPythonCode
 from codeCompilationAndRun.javaScript import runJsCode
+from codeCompilationAndRun.regex import test_regex
 from flask_cors import CORS
 app = Flask(__name__)
 CORS(app)
@@ -12,7 +13,8 @@ def applayJava():
         try:
             data = request.get_json()
             code = data.get('code')
-            return compileAndRunJavaCode(code)
+            input = data.get('input')
+            return compileAndRunJavaCode(code, input)
         except Exception as e:
             return jsonify({"error": "Invalid JSON data"}), 400
     else:
@@ -20,10 +22,11 @@ def applayJava():
 
 @app.route('/c', methods=['POST'])
 def compile_and_run_c():
-    c_code = request.json.get('code')
-    if not c_code:
-        return jsonify({"error": "Missing 'c_code' parameter"}), 400
-    return compileAndRunCCode(c_code)
+    code = request.json.get('code')
+    inputData = request.json.get('input')
+    if not code:
+        return jsonify({"error": "Missing 'code' parameter"}), 400
+    return compileAndRunCCode(code, inputData)
 
 @app.route('/python', methods=['POST'])
 def applayPython():
@@ -31,7 +34,8 @@ def applayPython():
         try:
             data = request.get_json()
             code = data.get('code')
-            return runPythonCode(code)
+            input = data.get('input')
+            return runPythonCode(code, input)
         except Exception as e:
             return jsonify({"error": "Invalid JSON data"}), 400
     else:
@@ -43,13 +47,25 @@ def applayJs():
         try:
             data = request.get_json()
             code = data.get('code')
-            return runJsCode(code)
+            input = data.get('input')
+            return runJsCode(code, input)
         except Exception as e:
             return jsonify({"error": "Invalid JSON data"}), 400
     else:
         return jsonify({"error": "Request body must contain JSON data"}), 400
 
-
+@app.route('/RE', methods=['POST'])
+def applayRE():
+    if request.is_json:
+        try:
+            data = request.get_json()
+            code = data.get('code')
+            input = data.get('input')
+            return test_regex(code, input)
+        except Exception as e:
+            return jsonify({"error": "Invalid JSON data"}), 400
+    else:
+        return jsonify({"error": "Request body must contain JSON data"}), 400
 
 if __name__ == "__main__":
     app.run(debug=True, port=5001)

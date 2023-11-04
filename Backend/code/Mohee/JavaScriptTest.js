@@ -1,10 +1,10 @@
-  import java.io.*;
-  import java.util.*;
-  
-  class Main {
-  
-      public static void main(String[] args) {
-          /* Enter your code here. Read input from STDIN. Print output to STDOUT. Your class should be named Solution. */
-          System.out.print("13");
-      }
-  }
+function processData(input) { console.log('I am ',input) }
+ process.stdin.resume(); 
+process.stdin.setEncoding('ascii'); 
+ _input = '';
+ process.stdin.on('data', function (input) {
+ _input += input;
+ });
+ process.stdin.on('end', function () {
+ processData(_input);
+});
