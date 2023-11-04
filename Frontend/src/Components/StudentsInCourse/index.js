@@ -174,7 +174,6 @@ const StudentsInCourse = ({ students, setStudents }) => {
           <ButtonRank
             text={"Yes"}
             hoverBackgroundColor="#0e141e"
-            disabled={loading}
             onClick={handleDelete}
             disabled={loading}
           />

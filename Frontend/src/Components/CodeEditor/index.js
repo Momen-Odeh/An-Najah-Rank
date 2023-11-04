@@ -134,11 +134,15 @@ const CodeEditor = () => {
     return await Promise.all(
       ArrTestCases.map(async (item, index) => {
         try {
+          context.setLoading(true);
+          context.testCases.setVal({ ...context.testCases.val, show: false });
           console.log("Send Request");
           const codeResult = await axios.post("http://127.0.0.1:5001/" + lang, {
             code: textCode,
           });
           console.log("Get Result", codeResult.data);
+          context.setLoading(false);
+          context.testCases.setVal({ ...context.testCases.val, show: true });
           return {
             ...item,
             output_real: codeResult.data.output,
@@ -147,6 +151,8 @@ const CodeEditor = () => {
         } catch (err) {
           const { error, stderr } = err.response.data;
           console.log("Error Type:", error, "&&", "stderr:", stderr);
+          context.setLoading(false);
+          context.testCases.setVal({ ...context.testCases.val, show: true });
           return {
             ...item,
             errorType: error,
@@ -172,6 +178,8 @@ const CodeEditor = () => {
     });
   };
   const handleRunCode = async () => {
+    // console.log("1111111111111", language);
+    // console.log("2222222222222", textCode);
     switch (language) {
       case "java":
         buildTableUI("java");
@@ -233,12 +241,15 @@ const CodeEditor = () => {
       </Row>
       <Row className={`${classes.Row} ${classes.Buttons}`}>
         <Col className={`${classes.Col} ${classes.ColSelect}`}>
-          <ButtonRank text={"Run Code"} onClick={handleRunCode} />
+          <ButtonRank
+            text={"Run Code"}
+            onClick={handleRunCode}
+            disabled={context.loading}
+          />
           <ButtonRank
             text={"Submit Code"}
-            backgroundColor="#2ec866"
-            color="#F0F0F4"
             onClick={handleSubmitCode}
+            disabled={context.loading}
           />
         </Col>
       </Row>

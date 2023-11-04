@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react";
-import Details from "../../Components/Details";
+import CreateChallengeDetails from "../../Components/CreateChallengeDetails";
 import ChallengeTabs from "../../Components/ChallengTabs";
 import Breadcrumbs from "../../Components/Breadcrumbs";
 import Text from "../../Components/Text";
-import { Container, Row } from "react-bootstrap";
+import { Col, Container, Row } from "react-bootstrap";
 import TestCases from "../../Components/TestCases";
 import { useParams } from "react-router-dom";
 import Axios from "axios";
+import useStyles from "./style";
 const Challenges = () => {
   const { id } = useParams();
   const [details, setDetails] = useState({
@@ -56,7 +57,9 @@ const Challenges = () => {
     {
       title: "Details",
       eventKey: "Details",
-      TabComponent: <Details operation={"update"} data={details} />,
+      TabComponent: (
+        <CreateChallengeDetails operation={"update"} data={details} />
+      ),
       urlPattern: `/administration/challenges/${id}/details`,
     },
     {
@@ -68,32 +71,32 @@ const Challenges = () => {
       urlPattern: `/administration/challenges/${id}/test-cases`,
     },
   ];
-  const path = [
-    { title: "Manage Challenges", url: "/administration/challenges" },
-    { title: details.name, url: "#" },
-  ];
+
+  const classes = useStyles();
   return (
-    <>
-      <Container>
-        <Row className="m-2">
-          <Breadcrumbs path={path} />
-        </Row>
-      </Container>
-      <hr></hr>
-      <Container>
-        <Row className="m-2 mt-4 mb-2">
+    <Container fluid className={`${classes.Container}`}>
+      <Row className="mb-2">
+        <Col>
+          <Breadcrumbs />
+        </Col>
+      </Row>
+      <Row className="mb-3">
+        <Col>
           <Text
             text={details.name}
-            size={"30px"}
-            fontFamily={"OpenSans"}
-            color={"#39424e"}
+            size="26px"
+            fontFamily="Open Sans"
+            wegiht="600"
+            color="#0e141e"
           />
-        </Row>
-        <Row className="m-2">
+        </Col>
+      </Row>
+      <Row className="mb-3">
+        <Col>
           <ChallengeTabs ListTabs={tabs} />
-        </Row>
-      </Container>
-    </>
+        </Col>
+      </Row>
+    </Container>
   );
 };
 

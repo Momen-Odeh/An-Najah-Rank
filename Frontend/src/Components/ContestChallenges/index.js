@@ -11,8 +11,13 @@ import handelStateChanges from "../../Utils/handelStateChanges";
 import SuggestionsInput from "../SuggestionsInput";
 import { useEffect } from "react";
 import axios from "axios";
+import InputFiledRank from "../InputFiledRank";
+import ModalRank from "../ModalRank";
+import { validateNumber } from "../../Utils/Validation";
+import { toastError } from "../../Utils/toast";
 const ContestChallenges = ({ challengesData, challengesContest }) => {
   const { contestId } = useParams();
+  const [deleteModal, setDeleteModal] = useState({ show: false });
   const classes = useStyles();
   const [oldChallengeId, setOldChallengeId] = useState(null);
   const [challenges, setChallenges] = useState([]);
@@ -26,7 +31,10 @@ const ContestChallenges = ({ challengesData, challengesContest }) => {
     name: "",
     maxScore: "",
   });
+  const [search, setSearch] = useState("");
   const [TableData, setTableData] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [errorMsg, setErrorMsg] = useState({ SuggestionsInput: null });
   useEffect(() => {
     setChallenges(
       challengesData
@@ -48,33 +56,42 @@ const ContestChallenges = ({ challengesData, challengesContest }) => {
     variant: "warning",
   });
   const handleChallengeInfo = () => {
-    try {
-      const challenge_id = challengesData?.filter(
-        (item) => item.name + " id= " + item.id === newChallenge.name
-      )[0]?.id;
-      if (!newChallenge.name) {
-        throw new Error("should enter challenge name");
-      } else if (!newChallenge.maxScore) {
-        throw new Error("should enter max score");
-      } else if (!challenge_id) {
-        throw new Error("challenge not exist in your challenges");
-      }
-      return challenge_id;
-    } catch (error) {
-      setAlertData({ message: error.message, variant: "warning" });
-      setShowAlert(true);
-      return null;
-    }
+    const challenge_id = challengesData?.filter(
+      (item) => item.name + " id= " + item.id === newChallenge.name
+    )[0]?.id;
+
+    if (!challenge_id) return null;
+
+    return challenge_id;
   };
   const handelAddNewChallenge = async () => {
     const challenge_id = handleChallengeInfo();
-    if (challenge_id) {
+
+    setErrorMsg({
+      SuggestionsInput: !(newChallenge.name.length >= 3)
+        ? "challenge name must contain at least 3 characters"
+        : challenge_id === null
+        ? "challenge not exist in your challenges"
+        : null,
+      maxScore:
+        !validateNumber(newChallenge.maxScore) ||
+        newChallenge.maxScore.length === 0
+          ? "please enter max score as number"
+          : null,
+    });
+    if (
+      newChallenge.name.length >= 3 &&
+      challenge_id !== null &&
+      validateNumber(newChallenge.maxScore) &&
+      newChallenge.maxScore.length !== 0
+    ) {
       const challengeContest = {
         challenge_id: challenge_id,
         contest_id: contestId,
         max_score: newChallenge.maxScore,
       };
       try {
+        setLoading(true);
         await axios.post(
           "http://localhost:5000/contests-challenges",
           challengeContest
@@ -89,12 +106,14 @@ const ContestChallenges = ({ challengesData, challengesContest }) => {
           ...showCreateChallenge,
           value: false,
         });
+        setLoading(false);
+
+        setChallenges(
+          challenges.filter((item) => item.split("=")[1] != challenge_id)
+        );
       } catch (error) {
-        setAlertData({
-          message: error.response.data.message,
-          variant: "danger",
-        });
-        setShowAlert(true);
+        toastError(error.response.data.message);
+        setLoading(false);
       }
     }
   };
@@ -114,23 +133,42 @@ const ContestChallenges = ({ challengesData, challengesContest }) => {
     });
   };
   const handleRemoveTableData = async (indexEx) => {
+    setLoading(true);
     try {
       await axios.delete(
         `http://localhost:5000/contests-challenges?challenge_id=${TableData[indexEx].id}&contest_id=${contestId}`
       );
       setTableData(TableData.filter((element, index) => index !== indexEx));
+      setLoading(false);
+      setDeleteModal({ ...deleteModal, show: false });
+      setChallenges([...challenges, TableData[indexEx].name]);
     } catch (error) {
-      setAlertData({
-        message: error.response.data.message,
-        variant: "danger",
-      });
-      setShowAlert(true);
+      toastError(error.response.data.message);
+      setLoading(false);
+      setDeleteModal({ ...deleteModal, show: false });
     }
   };
 
   const handleAplayEditTableData = async () => {
     const challenge_id = handleChallengeInfo();
-    if (challenge_id) {
+    setErrorMsg({
+      SuggestionsInput: !(newChallenge.name.length >= 3)
+        ? "challenge name must contain at least 3 characters"
+        : challenge_id === null
+        ? "challenge not exist in your challenges"
+        : null,
+      maxScore:
+        !validateNumber(newChallenge.maxScore) ||
+        newChallenge.maxScore.length === 0
+          ? "please enter max score as number"
+          : null,
+    });
+    if (
+      newChallenge.name.length >= 3 &&
+      challenge_id !== null &&
+      validateNumber(newChallenge.maxScore) &&
+      newChallenge.maxScore.length !== 0
+    ) {
       const challengeContest = {
         old_challenge_id: oldChallengeId,
         challenge_id: challenge_id,
@@ -138,6 +176,7 @@ const ContestChallenges = ({ challengesData, challengesContest }) => {
         max_score: newChallenge.maxScore,
       };
       try {
+        setLoading(true);
         await axios.put(
           `http://localhost:5000/contests-challenges`,
           challengeContest
@@ -155,16 +194,21 @@ const ContestChallenges = ({ challengesData, challengesContest }) => {
           name: "",
           maxScore: "",
         });
+        setLoading(false);
       } catch (error) {
-        setAlertData({
-          message: error.response.data.message,
-          variant: "danger",
-        });
-        setShowAlert(true);
+        console.log(error);
+        toastError(error.response.data.message);
+
+        setLoading(false);
       }
     }
   };
-  const Data = TableData.map((item, index) => {
+  //
+
+  //
+  const Data = TableData.filter((word) =>
+    word.name?.toLowerCase().includes(search.toLowerCase())
+  ).map((item, index) => {
     return {
       NO: index,
       name: item.name,
@@ -181,7 +225,14 @@ const ContestChallenges = ({ challengesData, challengesContest }) => {
             size={30}
             color="#949494"
             className={classes.iconColor}
-            onClick={() => handleRemoveTableData(index)}
+            onClick={() =>
+              setDeleteModal({
+                ...deleteModal,
+                show: true,
+                index: index,
+                name: item.name,
+              })
+            }
           />
         </span>
       ),
@@ -193,10 +244,9 @@ const ContestChallenges = ({ challengesData, challengesContest }) => {
         <Col>
           <Text
             text={"Contest Challenges"}
-            color="#39424e"
-            size="24px"
+            size="26px"
             fontFamily="Open Sans"
-            wegiht="bold"
+            wegiht="600"
           />
         </Col>
       </Row>
@@ -210,7 +260,7 @@ const ContestChallenges = ({ challengesData, challengesContest }) => {
             size="16px"
             fontFamily="Open Sans"
           />
-          <Link to={"/create-challenge"}>here</Link>
+          <Link to={"/administration/challenges/create-challenge"}>here</Link>
           <Text
             text={
               ". To reorder your challenges, simply select the challenge and then drag and drop to the desired location."
@@ -221,87 +271,138 @@ const ContestChallenges = ({ challengesData, challengesContest }) => {
           />
         </Col>
       </Row>
-      <Row className="mb-3">
+      <Row className={`${classes.Row} mb-3`}>
         <Col>
+          <InputFiledRank
+            type="text"
+            placeholder="Type username to search"
+            width={"250px"}
+            value={search}
+            onChange={(e) => {
+              setSearch(e.target.value);
+            }}
+          />
+        </Col>
+        <Col xs={"auto"}>
           <ButtonRank
             text={"Add Challenge"}
             onClick={() => {
               SetShowCreateChallenge({ ...showCreateChallenge, value: true });
             }}
           />
-          <Modal
-            show={showCreateChallenge.value}
-            onHide={() => {
-              SetShowCreateChallenge({
-                ...showCreateChallenge,
-                value: false,
-                mode: "add",
-              });
-              SetNewChallenge({
-                id: null,
-                name: "",
-                maxScore: "",
-              });
-            }}
-            dialogClassName={classes.customModal}
-            scrollable
-            centered
-            backdrop="static"
-          >
-            <Modal.Header closeButton>
-              <Modal.Title>
-                {showCreateChallenge.mode == "edit" ? "Edit" : "Add"} Challenge
-              </Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-              <div className="mb-3">
-                You can {showCreateChallenge.mode == "edit" ? "edit" : "add"} a
-                challenge from our public library, a challenge that you have
-                created, or a challenge that you have moderator access to.
-              </div>
-              <div className={"Modal mb-3"}>
-                <Text text={"Name"} />
-                <SuggestionsInput
-                  name={"name"}
-                  handleChange={(value) => {
-                    SetNewChallenge({ ...newChallenge, name: value });
-                  }}
-                  placeholder="enter name..."
-                  data={challenges}
-                  value={newChallenge.name}
-                />
-              </div>
-              <div className={`${Modal} mb-3`}>
-                <Text text={"Max Score"} />
-                <Form.Control
-                  type="number"
-                  className={classes.Form}
-                  name="maxScore"
-                  value={newChallenge.maxScore}
-                  onChange={(e) => {
-                    handelStateChanges(e, newChallenge, SetNewChallenge);
-                  }}
-                />
-              </div>
-              <ButtonRank
-                text={`${
-                  showCreateChallenge.mode == "edit" ? "Edit" : "Add"
-                } Challenge`}
-                onClick={
-                  showCreateChallenge.mode == "edit"
-                    ? handleAplayEditTableData
-                    : handelAddNewChallenge
-                }
-              />
-            </Modal.Body>
-          </Modal>
         </Col>
       </Row>
       <Row className="mb-2">
         <Col>
-          <TabTable TableHeader={TableHeader} TableData={Data} />
+          <TabTable
+            TableHeader={TableHeader}
+            TableData={Data}
+            url={Data.map(
+              (item) =>
+                "/administration/challenges/" +
+                Number(item.name.split("=")[1]) +
+                "/details"
+            )}
+          />
         </Col>
       </Row>
+
+      <ModalRank
+        title={
+          showCreateChallenge.mode == "edit" ? "Edit" : "Add" + " Challenge"
+        }
+        show={showCreateChallenge.value}
+        onHide={() => {
+          SetShowCreateChallenge({
+            ...showCreateChallenge,
+            value: false,
+            mode: "add",
+          });
+          SetNewChallenge({
+            id: null,
+            name: "",
+            maxScore: "",
+          });
+          setErrorMsg({
+            SuggestionsInput: null,
+            maxScore: null,
+          });
+        }}
+        footer={
+          <ButtonRank
+            text={`${
+              showCreateChallenge.mode == "edit" ? "Edit" : "Add"
+            } Challenge`}
+            onClick={
+              showCreateChallenge.mode == "edit"
+                ? handleAplayEditTableData
+                : handelAddNewChallenge
+            }
+          />
+        }
+      >
+        <div className="mb-3">
+          You can {showCreateChallenge.mode == "edit" ? "edit" : "add"} a
+          challenge from our public library, a challenge that you have created,
+          or a challenge that you have moderator access to.
+        </div>
+        <div className={"Modal mb-3"}>
+          <Text text={"Name"} />
+          <SuggestionsInput
+            name={"name"}
+            handleChange={(value) => {
+              SetNewChallenge({ ...newChallenge, name: value });
+            }}
+            placeholder="enter name..."
+            data={challenges}
+            msgInput={{ errorMsg, setErrorMsg }}
+            loadingVal={{ loading, setLoading }}
+            value={newChallenge.name}
+          />
+        </div>
+        <div className={`${Modal} mb-3`}>
+          <Text text={"Max Score"} />
+          <InputFiledRank
+            // className={classes.Form}
+            name="maxScore"
+            value={newChallenge.maxScore}
+            msg={errorMsg.maxScore}
+            onChange={(e) => {
+              handelStateChanges(e, newChallenge, SetNewChallenge);
+            }}
+            disabled={loading}
+            size="sm"
+          />
+          {/* <Form.Control /> */}
+        </div>
+      </ModalRank>
+      <ModalRank
+        show={deleteModal.show}
+        onHide={() => {
+          setDeleteModal({ ...deleteModal, show: false });
+        }}
+        title="Delete Challenge"
+        footer={
+          <ButtonRank
+            text={"Yes"}
+            hoverBackgroundColor="#0e141e"
+            onClick={() => handleRemoveTableData(deleteModal.index)}
+            disabled={loading}
+          />
+        }
+      >
+        <Text
+          text={
+            "are you sure that want to delete the Challenge with Name " +
+            deleteModal.name +
+            " from the contest?"
+          }
+          size="0.9em"
+          fontFamily="Open Sans"
+          wegiht="600"
+          color="#0e141e"
+        />
+      </ModalRank>
     </Container>
   );
 };

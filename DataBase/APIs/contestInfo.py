@@ -26,7 +26,7 @@ def get_contests_info():
             "description":contest[2],
             "startTime":(contest[3]).strftime('%Y-%m-%dT%H:%M:%S'),
             "hasEndTime":contest[4],
-            "endTime":(contest[5]).strftime('%Y-%m-%dT%H:%M:%S'),
+            "endTime":(contest[5]).strftime('%Y-%m-%dT%H:%M:%S') if contest[5] != None else contest[5],
             "OwnerUniversityNumber":contest[6]
         }
         query = f"""

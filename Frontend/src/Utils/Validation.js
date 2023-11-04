@@ -20,6 +20,11 @@ export const validateFullName = (fullName) => {
   return fullName.length >= 3;
 };
 
+export const validateNumber = (universityNumber) => {
+  const patternNum = /^[-+]?\d*\.?\d*$/;
+  return patternNum.test(universityNumber);
+};
+
 export const validateUniversityNumber = (universityNumber) => {
   const patternNum = /^[-+]?\d*\.?\d*$/;
   return patternNum.test(universityNumber) && universityNumber.length >= 3;

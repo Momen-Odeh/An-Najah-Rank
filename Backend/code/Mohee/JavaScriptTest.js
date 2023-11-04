@@ -1,4 +1,4 @@
-function processData(input) { console.log('I am ',input) } 
+function processData(input) { console.log('I am ',input) }
  process.stdin.resume(); 
 process.stdin.setEncoding('ascii'); 
  _input = '';

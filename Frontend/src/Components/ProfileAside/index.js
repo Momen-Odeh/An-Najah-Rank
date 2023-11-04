@@ -7,9 +7,10 @@ import { TfiEmail } from "react-icons/tfi";
 import { AiOutlineNumber } from "react-icons/ai";
 import { FiUser } from "react-icons/fi";
 import ButtonRank from "../ButtonRank";
-
-const ProfileAside = () => {
+import { useNavigate } from "react-router-dom";
+const ProfileAside = ({ accountInfo }) => {
   const clasess = useStyles();
+  const navigate = useNavigate();
   return (
     <Container fluid className={clasess.Container}>
       <Row>
@@ -18,9 +19,9 @@ const ProfileAside = () => {
             <Col>
               <Avatar
                 round
-                src="https://media.licdn.com/dms/image/C4D03AQEIPhrTNjU_2A/profile-displayphoto-shrink_800_800/0/1663090037588?e=2147483647&v=beta&t=2Lndt7vDM-_MOETPCI99l4nNMJL_XjpIHlY_5m9sJvc"
+                src={accountInfo.img}
                 size="150px"
-                name="Momen Odeh"
+                name={accountInfo.fullName}
               />
             </Col>
           </Row>
@@ -28,7 +29,7 @@ const ProfileAside = () => {
             <Col className={`${clasess.Col} ${clasess.IconContainer}`}>
               <FiUser className={clasess.Icon} />
               <Text
-                text={"Momen Odeh"}
+                text={accountInfo.fullName}
                 fontFamily="Open Sans"
                 size="18px"
                 wegiht="600"
@@ -39,7 +40,7 @@ const ProfileAside = () => {
             <Col className={`${clasess.Col} ${clasess.IconContainer}`}>
               <AiOutlineNumber className={clasess.Icon} />
               <Text
-                text={"11923929"}
+                text={accountInfo.universityNumber}
                 fontFamily="Open Sans"
                 size="18px"
                 wegiht="600"
@@ -50,7 +51,7 @@ const ProfileAside = () => {
             <Col className={`${clasess.Col} ${clasess.IconContainer}`}>
               <TfiEmail className={clasess.Icon} />
               <Text
-                text={"momen.odeh74@gmail.com"}
+                text={accountInfo.email}
                 fontFamily="Open Sans"
                 size="14px"
                 wegiht="600"
@@ -61,8 +62,8 @@ const ProfileAside = () => {
             <Col className={`${clasess.Col} ${clasess.IconContainer}`}>
               <ButtonRank
                 text={"Edit Profile"}
-                hoverBackgroundColor="#0e141e"
                 width={"100%"}
+                onClick={() => navigate("/settings")}
               />
             </Col>
           </Row>

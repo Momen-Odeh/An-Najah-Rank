@@ -28,7 +28,6 @@ def get_testCase_id():
                 AND output_data = %s 
                 AND strength = %s 
                 AND is_sample = %s
-                AND explanation = %s
         """
         is_sample = 1 if request.args.get('is_sample', '').lower() == 'true' else 0
 
@@ -38,11 +37,11 @@ def get_testCase_id():
             request.args.get('output_data'),
             request.args.get('strength'),
             is_sample,
-            request.args.get('explanation')
         )
         cursor = connection.cursor()
         cursor.execute(sql_query, params)
         result = cursor.fetchall()
+        print('result',result)
         return jsonify({'message': result[len(result)-1][0]}), 200
     except Exception as e:
         return {'message': str(e)}, 409

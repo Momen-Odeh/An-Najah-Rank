@@ -3,7 +3,7 @@ import { Form, InputGroup } from "react-bootstrap";
 import useStyles from "./style";
 import { AiOutlineEyeInvisible } from "react-icons/ai";
 import { AiOutlineEye } from "react-icons/ai";
-const InputFiledRand = ({
+const InputFiledRank = ({
   id,
   type,
   label,
@@ -14,8 +14,27 @@ const InputFiledRand = ({
   msg,
   placeholder,
   width,
+  size,
+  labelFontSize = "18px",
+  labelFontWeight = "500",
+  labelFontColor = "#696c83",
+  as,
+  rows,
+  accept,
+  onKeyDown,
+  ref,
+  autoComplete,
+  options,
+  className,
+  style,
 }) => {
-  const clasess = useStyles({ msg, width });
+  const clasess = useStyles({
+    msg,
+    width,
+    labelFontSize,
+    labelFontColor,
+    labelFontWeight,
+  });
   const [showPassword, SetShowPassword] = useState(false);
   return (
     <div className={clasess.div}>
@@ -25,16 +44,45 @@ const InputFiledRand = ({
         </Form.Label>
       )}
       <InputGroup>
-        <Form.Control
-          className={clasess.Control}
-          type={type === "password" && showPassword ? "text" : type}
-          id={id}
-          value={value}
-          name={name}
-          onChange={onChange}
-          disabled={disabled}
-          placeholder={placeholder}
-        />
+        {options ? (
+          <Form.Select
+            className={`${clasess.Control} ${clasess.Select} ${className}`}
+            style={style}
+            type={type}
+            id={id}
+            value={value}
+            name={name}
+            onChange={onChange}
+            disabled={disabled}
+            placeholder={placeholder}
+            size={size}
+            onKeyDown={onKeyDown}
+          >
+            {options.map((item, index) => (
+              <option value={item.value} key={index} className={clasess.option}>
+                {item.text}
+              </option>
+            ))}
+          </Form.Select>
+        ) : (
+          <Form.Control
+            className={clasess.Control}
+            type={type === "password" && showPassword ? "text" : type}
+            id={id}
+            value={value}
+            name={name}
+            onChange={onChange}
+            disabled={disabled}
+            placeholder={placeholder}
+            size={size}
+            as={as}
+            rows={rows}
+            accept={accept}
+            onKeyDown={onKeyDown}
+            ref={ref}
+            autoComplete={autoComplete}
+          />
+        )}
 
         {type === "password" && (
           <InputGroup.Text
@@ -56,4 +104,4 @@ const InputFiledRand = ({
   );
 };
 
-export default InputFiledRand;
+export default InputFiledRank;

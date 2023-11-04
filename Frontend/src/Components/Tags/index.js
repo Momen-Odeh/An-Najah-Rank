@@ -1,37 +1,38 @@
-import React from 'react';
-import CustomInputGroup from '../CustomInputGroup';
-import useStyle from './Style';
+import React from "react";
+import CustomInputGroup from "../CustomInputGroup";
+import useStyle from "./Style";
+import CancelModeratorsBtn from "../CancelModeratorsBtn";
 
-const Tags = ({tags, handleChange, name}) => {
-  const classes = useStyle()
+const Tags = ({ tags, handleChange, name, disabled }) => {
+  const classes = useStyle();
   const handleAdd = (val) => {
-    if (val.trim() !== '') {
-        handleChange(null, 'tags',[...tags, val.trim()]);
+    if (val.trim() !== "") {
+      handleChange(null, "tags", [...tags, val.trim()]);
     }
   };
 
   const handleRemoveTag = (tagToRemove) => {
     const updatedTags = tags.filter((tag) => tag !== tagToRemove);
-    handleChange(null, 'tags', updatedTags);
+    handleChange(null, "tags", updatedTags);
   };
 
   return (
     <div>
-      <CustomInputGroup 
-        BtnText={'Add'}
+      <CustomInputGroup
+        BtnText={"Add"}
         handleBtnClick={handleAdd}
         placeholder={"Add a tag"}
-        />
+        disabled={disabled}
+      />
       <div>
         {tags?.map((tag) => (
-          <span key={tag} className={`badge  bg-secondary m-1 p-1 ${classes.tabContent}`}>
-            {tag}
-            <button
-              className={`badge m-1 p-1 border-0 ${classes.button}`}
+          <span key={tag} className={`badge ${classes.tabContent}`}>
+            {tag + " "}
+            <CancelModeratorsBtn
               onClick={() => handleRemoveTag(tag)}
-            >
-              &times;
-            </button>
+              backgroundColor="#838e98"
+              hoverBackgroundColor="#a4b2be"
+            />
           </span>
         ))}
       </div>

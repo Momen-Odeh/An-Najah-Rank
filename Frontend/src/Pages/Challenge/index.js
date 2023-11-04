@@ -15,58 +15,46 @@ import ChallengeContext from "../../Utils/ChallengeContext";
 import { FaCheck } from "react-icons/fa";
 import { ImCross } from "react-icons/im";
 import TestCaseProblem from "../../Components/TestCaseProblem";
-const path = [
-  {
-    title: "All Contests",
-    url: "/log-in",
-  },
-  {
-    title: "  DAQ-Summer-2021-Q3",
-    url: "",
-  },
-  {
-    title: "DAQ-Spring-2021-Q2",
-    url: "",
-  },
-];
+
 const Challenge = ({}) => {
   const clasess = useStyles();
-  const { id } = useParams();
+  const { id, contestId, challengeId } = useParams();
   const navigate = useNavigate();
   const [challengeData, setChallengeData] = useState({});
   const [testCases, setTestCases] = useState({
     show: false,
     tabContent: [],
   });
+  const [loading, setLoading] = useState(false);
   const tabContent = [
     {
       eventKey: "Problem",
       title: "Problem",
       TabComponent: <ProblemDescription />,
-      urlPattern: "/challenge/" + id + "/problem",
+      urlPattern: `/courses/${id}/contests/${contestId}/challenges/${challengeId}/problem`,
     },
     {
       eventKey: "Submissions",
       title: "Submissions",
       TabComponent: <SubmitionTab />,
-      urlPattern: "/challenge/" + id + "/submissions",
+      urlPattern: `/courses/${id}/contests/${contestId}/challenges/${challengeId}/submissions`,
     },
     {
       eventKey: "Leaderboard",
       title: "Leaderboard",
       TabComponent: <LeadboardTab />,
-      urlPattern: "/challenge/" + id + "/leaderboard",
+      urlPattern: `/courses/${id}/contests/${contestId}/challenges/${challengeId}/leaderboard`,
     },
     {
       eventKey: "Discussions",
       title: "Discussions",
       TabComponent: <h1>Tab4</h1>,
-      urlPattern: "/challenge/" + id + "/discussions",
+      urlPattern: `/courses/${id}/contests/${contestId}/challenges/${challengeId}/discussions`,
     },
   ];
   useEffect(() => {
     axios
-      .get("http://127.0.0.1:5000/challenge/" + id)
+      .get("http://127.0.0.1:5000/challenge/" + challengeId)
       .then((res) => {
         setChallengeData(res.data);
         console.log(res);
@@ -105,17 +93,16 @@ const Challenge = ({}) => {
       value={{
         challengeData: challengeData,
         testCases: { val: testCases, setVal: setTestCases },
+        loading: loading,
+        setLoading: setLoading,
       }}
     >
       <Container fluid className={clasess.Container}>
         <Row className={`mt-2 ${clasess.maxWidth}`}>
           <Col>
-            <Breadcrumbs path={path} />
+            <Breadcrumbs />
           </Col>
         </Row>
-      </Container>
-      <hr></hr>
-      <Container fluid className={clasess.Container}>
         <Row className={`mb-4 ${clasess.maxWidth}`}>
           <Col>
             <TextRegister

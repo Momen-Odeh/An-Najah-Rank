@@ -1,36 +1,34 @@
 import React from "react";
-import { Col, Form, Row } from "react-bootstrap";
+import { Col, Container, Form, Row } from "react-bootstrap";
 import ButtonRank from "../ButtonRank";
 import TabTable from "../TabTable";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
+import InputFiledRank from "../InputFiledRank";
+import useStyles from "./style";
 const ManageChallenges = ({ challenges }) => {
   const header = ["Challenge Name", "Challenge tags", "Challenge Owner"];
   const navigate = useNavigate();
   const [search, setSearch] = useState("");
+  const clasess = useStyles();
   return (
-    <>
-      <Row>
-        <Col className="d-flex justify-content-end">
-          <ButtonRank
-            text="Create Challenge"
-            color="#ffffff"
-            hoverBackgroundColor="green"
-            backgroundColor="#1cb557"
-            onClick={() =>
-              navigate("/administration/challenges/create-challenge")
-            }
-          />
-        </Col>
-      </Row>
-      <Row className="mt-4">
-        <Col></Col>
-        <Col md={4} className="d-flex justify-content-end">
-          <Form.Control
+    <Container>
+      <Row className={clasess.RowChallenge}>
+        <Col>
+          <InputFiledRank
             type="text"
             placeholder="Type challenge name"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
+            width={"250px"}
+          />
+        </Col>
+        <Col xs="auto">
+          <ButtonRank
+            text="Create Challenge"
+            onClick={() =>
+              navigate("/administration/challenges/create-challenge")
+            }
           />
         </Col>
       </Row>
@@ -55,7 +53,7 @@ const ManageChallenges = ({ challenges }) => {
           />
         </Col>
       </Row>
-    </>
+    </Container>
   );
 };
 

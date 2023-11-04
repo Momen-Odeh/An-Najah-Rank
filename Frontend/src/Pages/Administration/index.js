@@ -7,8 +7,12 @@ import ManageChallenges from "../../Components/ManageChallenges";
 import ManageContests from "../../Components/ManageContests";
 import ManageCourses from "../../Components/ManageCourses";
 import Text from "../../Components/Text";
+
+import useStyles from "./style";
+import Breadcrumbs from "../../Components/Breadcrumbs";
 const Administration = () => {
   const [cookies, setCookies] = useCookies();
+
   const [data, setData] = useState({
     courses: [],
     challenges: [],
@@ -34,30 +38,32 @@ const Administration = () => {
       urlPattern: "/administration/challenges",
     },
   ];
+
+  const clasess = useStyles();
   return (
-    <>
-      <Container>
-        <Row className="mt-3">
-          <Col>
-            <Text
-              text={"Administration"}
-              size="26px"
-              wegiht="700"
-              color="#0e141e"
-              height="1.4"
-            />
-          </Col>
-        </Row>
-      </Container>
-      <hr></hr>
-      <Container>
-        <Row>
-          <Col>
-            <ChallengeTabs ListTabs={tabs} />
-          </Col>
-        </Row>
-      </Container>
-    </>
+    <Container fluid className={clasess.Container}>
+      <Row className={`${clasess.Row} mb-2`}>
+        <Col className={`${clasess.Col}`}>
+          <Breadcrumbs />
+        </Col>
+      </Row>
+      <Row className="mb-3">
+        <Col>
+          <Text
+            text={"Administration"}
+            size="26px"
+            fontFamily="Open Sans"
+            wegiht="600"
+            color="#0e141e"
+          />
+        </Col>
+      </Row>
+      <Row>
+        <Col>
+          <ChallengeTabs ListTabs={tabs} />
+        </Col>
+      </Row>
+    </Container>
   );
 };
 

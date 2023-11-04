@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Form, ListGroup } from "react-bootstrap";
 import useStyle from "./Style";
+import InputFiledRank from "../InputFiledRank";
 
 const SuggestionsInput = ({
   data,
@@ -8,6 +9,9 @@ const SuggestionsInput = ({
   value,
   placeholder = "Type here...",
   handleChange,
+  width,
+  msgInput,
+  loadingVal,
 }) => {
   const classes = useStyle();
   const words = data;
@@ -26,6 +30,7 @@ const SuggestionsInput = ({
       const filteredSuggestions = words.filter((word) =>
         word.toLowerCase().includes(inputText.toLowerCase())
       );
+      setErrorMsg({ moderators: null });
       setSuggestions(filteredSuggestions);
       setShowSuggestions(true);
       setSelectedIndex(-1);
@@ -61,10 +66,11 @@ const SuggestionsInput = ({
       suggestionsContainerRef.current.scrollTop = scrollOffset;
     }
   };
-
+  const { errorMsg, setErrorMsg } = msgInput;
+  const { loading, setLoading } = loadingVal;
   return (
     <div className={`${classes.inputContainer}`}>
-      <Form.Control
+      <InputFiledRank
         type="text"
         name={name}
         placeholder={placeholder}
@@ -75,6 +81,9 @@ const SuggestionsInput = ({
         onKeyDown={handleKeyDown}
         ref={inputRef}
         autoComplete="off"
+        width={width}
+        msg={errorMsg.SuggestionsInput}
+        disabled={loading}
       />
       {showSuggestions && (
         <div className={classes.suggestionsContainer}>

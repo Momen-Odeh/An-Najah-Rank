@@ -17,23 +17,18 @@ const path = [
 const CreateContest = () => {
   const classes = useStyles();
   return (
-    <>
-      <Container className={classes.Container}>
-        <Row className={`mt-2 ${classes.maxWidth}`}>
-          <Col>
-            <Breadcrumbs path={path} />
-          </Col>
-        </Row>
-      </Container>
-      <hr></hr>
-      <Container className={classes.Container}>
-        <Row className={`mb-4 mt-2 ${classes.maxWidth}`}>
-          <Col>
-            <ContestsDetalis operation={"create"} />
-          </Col>
-        </Row>
-      </Container>
-    </>
+    <Container fluid className={classes.Container}>
+      <Row className={`mt-2 `}>
+        <Col>
+          <Breadcrumbs path={path} />
+        </Col>
+      </Row>
+      <Row>
+        <Col>
+          <ContestsDetalis operation={"create"} />
+        </Col>
+      </Row>
+    </Container>
   );
 };
 

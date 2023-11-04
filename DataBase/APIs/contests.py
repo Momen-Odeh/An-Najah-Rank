@@ -9,6 +9,7 @@ def add_contest():
         data = request.get_json()
         tokenData = get_Data_from_token(data['token'])
         ownerUniversityNumber = tokenData['universityNumber']
+        print(data['hasEndTime'])
         result = insert_data(
             connection,
             'contests',
@@ -18,6 +19,7 @@ def add_contest():
         )
         return result
     except Exception as e:
+        print("ddddddddd",e)
         return {'message': str(e)}, 409
 
 @app.route('/contest_id', methods=['GET'])
@@ -31,11 +33,11 @@ def get_contests_id():
                 AND description = %s 
                 AND startTime = %s 
                 AND hasEndTime = %s 
-                AND endTime = %s 
                 AND OwnerUniversityNumber = %s 
                 AND courseNumber = %s
         """
         hasEndTime = 1 if request.args.get('hasEndTime') and request.args.get('hasEndTime').lower() == 'true' else 0
+        # endTime = None if request.args.get('endTime')== 'null' else request.args.get('endTime')
         tokenData = get_Data_from_token(request.args.get('token'))
         ownerUniversityNumber = tokenData['universityNumber']
         params = (
@@ -43,11 +45,9 @@ def get_contests_id():
             request.args.get('description'),
             request.args.get('startTime'),
             hasEndTime,
-            request.args.get('endTime'),
             ownerUniversityNumber,
             request.args.get('courseNumber')
         )
-        print(params)
         cursor = connection.cursor()
         cursor.execute(sql_query, params)
         result = cursor.fetchall()

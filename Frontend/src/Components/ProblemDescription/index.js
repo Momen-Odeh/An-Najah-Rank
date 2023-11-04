@@ -9,11 +9,12 @@ import { FaCheck } from "react-icons/fa";
 import { ImCross } from "react-icons/im";
 import TestCaseProblem from "../TestCaseProblem";
 import ChallengeContext from "../../Utils/ChallengeContext";
+import LoaderRank from "../LoaderRank";
 
 const ProblemDescription = () => {
   const classes = useStyles({});
   const context = useContext(ChallengeContext);
-
+  const { tabContent, show } = context.testCases.val;
   return (
     <Container fluid>
       <Row className={classes.Row}>
@@ -29,13 +30,17 @@ const ProblemDescription = () => {
           <CodeEditor />
         </Col>
       </Row>
-      {context.testCases.val.show && ( //******************************************************************************* */
+      {show && ( //******************************************************************************* */
         <Row>
           <Col className={classes.Col}>
-            <ChallengeTabs
-              ListTabs={context.testCases.val.tabContent}
-              PaddingTop="0"
-            />
+            <ChallengeTabs ListTabs={tabContent} PaddingTop="0" />
+          </Col>
+        </Row>
+      )}
+      {context.loading && (
+        <Row>
+          <Col className={classes.LoaderCol}>
+            <LoaderRank loading={context.loading} />
           </Col>
         </Row>
       )}

@@ -7,31 +7,31 @@ import { ImBooks } from "react-icons/im";
 import { PiCodeBold } from "react-icons/pi";
 import ChallengeInContest from "../ChallengeInContest";
 import ChallengeShow from "../ChallengeShow";
-const ProfileMain = () => {
+const ProfileMain = ({ userCouses }) => {
   const clasess = useStyles();
-  const CoursesData = [
-    {
-      img: "https://media.geeksforgeeks.org/wp-content/cdn-uploads/20230706095706/intro-data-structure-%E2%80%93-1.png",
-      title: "Data Structure and Algorithms",
-      url: "",
-      modirator: ["Dr. Samer Arandi", "Dr. Raed Alqadi"],
-    },
-    {
-      img: "https://d1ng1bucl7w66k.cloudfront.net/ghost-blog/2022/08/Screen-Shot-2022-08-09-at-7.03.38-AM.png",
-      title: "Object Oriented Programming",
-      url: "",
-      modirator: ["Dr. Ashraf Armosh", "Dr. Manar Qamhia"],
-    },
-    {
-      img: "https://bs-uploads.toptal.io/blackfish-uploads/components/seo/content/og_image_file/og_image/1282569/0712-Bad_Practices_in_Database_Design_-_Are_You_Making_These_Mistakes_Dan_Social-754bc73011e057dc76e55a44a954e0c3.png",
-      title: "Data Base",
-      url: "",
-      modirator: ["Dr. Sufian Samara"],
-    },
-  ];
+  // const CoursesData = [
+  //   {
+  //     img: "https://media.geeksforgeeks.org/wp-content/cdn-uploads/20230706095706/intro-data-structure-%E2%80%93-1.png",
+  //     title: "Data Structure and Algorithms",
+  //     url: "",
+  //     modirators: ["Dr. Samer Arandi", "Dr. Raed Alqadi"],
+  //   },
+  //   {
+  //     img: "https://d1ng1bucl7w66k.cloudfront.net/ghost-blog/2022/08/Screen-Shot-2022-08-09-at-7.03.38-AM.png",
+  //     title: "Object Oriented Programming",
+  //     url: "",
+  //     modirators: ["Dr. Ashraf Armosh", "Dr. Manar Qamhia"],
+  //   },
+  //   {
+  //     img: "https://bs-uploads.toptal.io/blackfish-uploads/components/seo/content/og_image_file/og_image/1282569/0712-Bad_Practices_in_Database_Design_-_Are_You_Making_These_Mistakes_Dan_Social-754bc73011e057dc76e55a44a954e0c3.png",
+  //     title: "Data Base",
+  //     url: "",
+  //     modirators: ["Dr. Sufian Samara"],
+  //   },
+  // ];
   const LatestChallenge = [
     {
-      challengeName: "An-Najah Rank test2",
+      Name: "An-Najah Rank test2",
       solved: true,
       statistics: [
         { key: "Difficulty: ", val: "Medium" },
@@ -41,7 +41,7 @@ const ProfileMain = () => {
       url: "#test2",
     },
     {
-      challengeName: "An-Najah Rank test2",
+      Name: "An-Najah Rank test2",
       solved: false,
       statistics: [
         { key: "Difficulty: ", val: "Medium" },
@@ -51,7 +51,7 @@ const ProfileMain = () => {
       url: "#test2",
     },
     {
-      challengeName: "An-Najah Rank test2",
+      Name: "An-Najah Rank test2",
       solved: false,
       statistics: [
         { key: "Difficulty: ", val: "Medium" },
@@ -75,7 +75,7 @@ const ProfileMain = () => {
           />
         </Col>
       </Row>
-      {CoursesData.map((item, index) => (
+      {userCouses.map((item, index) => (
         <Row className={`${clasess.Row} mb-4`} key={index}>
           <Col className={`${clasess.Col}`}>
             <Course {...item} />

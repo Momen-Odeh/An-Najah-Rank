@@ -21,6 +21,12 @@ const useStyles = createUseStyles({
     justifyContent: "space-around",
     // padding: "15px 10px",
   },
+  Link: {
+    textDecoration: "none",
+    "&:hover": {
+      textDecoration: "none",
+    },
+  },
 });
 
 export default useStyles;

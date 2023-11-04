@@ -46,7 +46,7 @@ const ContestsInCourse = ({ contests, isAdmin, handleAddContest }) => {
         )}
       </Row>
       {contests.map((item, index) => (
-        <Row className="m-2 mt-3" key={index}>
+        <Row className=" mt-3" key={index}>
           <Col>
             <ChallengeShow {...item} />
           </Col>

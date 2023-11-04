@@ -18,6 +18,9 @@ const useStyles = createUseStyles({
   IconFail: {
     color: "red",
   },
+  LoaderCol: {
+    textAlign: "center",
+  },
 });
 
 export default useStyles;

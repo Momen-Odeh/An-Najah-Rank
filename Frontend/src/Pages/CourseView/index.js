@@ -53,7 +53,7 @@ const CourseView = () => {
             return {
               ...item,
               Name: item.name,
-              url: `/contest-view/${item.id}`,
+              url: `/courses/${id}/contests/${item.id}`,
               endDate: item.endDate ? new Date(item.endDate) : null,
             };
           }),
@@ -89,8 +89,8 @@ const CourseView = () => {
   ];
   const tabs = [
     {
-      title: "Course",
-      eventKey: "Course",
+      title: "Contests",
+      eventKey: "contests",
       TabComponent: (
         <ContestsInCourse
           contests={course.contests}
@@ -98,7 +98,7 @@ const CourseView = () => {
           handleAddContest={handleAddContest}
         />
       ),
-      urlPattern: `/course-view/${id}/course`,
+      urlPattern: `/courses/${id}/contests`,
     },
     {
       title: "Course Students",
@@ -106,12 +106,9 @@ const CourseView = () => {
       TabComponent: (
         <StudentsInCourse students={students} setStudents={setStudents} />
       ),
-      urlPattern: `/course-view/${id}/members`,
+      urlPattern: `/courses/${id}/members`,
     },
   ];
-  const toggleDescription = () => {
-    setShowDescription(!showDescription);
-  };
   const clasess = useStyles();
   return (
     <Container fluid className={clasess.Container}>

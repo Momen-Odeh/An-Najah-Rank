@@ -14,7 +14,7 @@ import { PiCodeBold } from "react-icons/pi";
 import { RxLapTimer } from "react-icons/rx";
 import CountDown from "../../Components/CountDown";
 const ContestView = () => {
-  const { id } = useParams();
+  const { id, contestId } = useParams();
   const [cookies] = useCookies();
   const [challengeContest, setChallengeContest] = useState([]);
   const [contestInfo, setContestInfo] = useState({});
@@ -22,7 +22,7 @@ const ContestView = () => {
   useEffect(() => {
     axios
       .get(
-        `http://127.0.0.1:5000/contest-info?contest_id=${id}&token=${cookies.token}`
+        `http://127.0.0.1:5000/contest-info?contest_id=${contestId}&token=${cookies.token}`
       )
       .then((response) => {
         setChallengeContest(
@@ -35,7 +35,7 @@ const ContestView = () => {
                 { key: "Success Rate: ", val: "100%" },
                 { key: "Max Score: ", val: item.maxScore },
               ],
-              url: `/challenge/${item.challenge_id}/problem`,
+              url: `/courses/${id}/contests/${contestId}/challenges/${item.challenge_id}/problem`,
             };
           })
         );
@@ -101,7 +101,7 @@ const ContestView = () => {
         </Col>
       </Row>
       <Row className={`${clasess.Row} mb-2`}>
-        <Col className={`${clasess.Col}`}>
+        <Col className={`${clasess.Col} ${clasess.ColDWN}`}>
           <CountDown endDate={new Date(contestInfo.endTime)} />
         </Col>
       </Row>

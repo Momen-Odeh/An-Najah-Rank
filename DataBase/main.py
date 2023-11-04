@@ -1,10 +1,10 @@
 from flask import request, jsonify
-from EmailAuth.emailConnection import sendEmail
 from FlaskSetUp import app
+from flask_cors import CORS
+from EmailAuth.emailConnection import sendEmail
 from APIs.registration import register_user
 from APIs.login import login_user
 from authentication import get_Data_from_token
-from flask_cors import CORS
 from EmailAuth.createVerificationCode import createVerificationCode
 from EmailAuth.verifyCode import verifyCode, deleteCode, updateUserStatusAuth
 from EmailAuth.updatePassword import updatePassword
@@ -24,6 +24,8 @@ from APIs.challengesCoursesAdministration import getChallengesForOwner
 from APIs.contestsForCourse import getContestForCourse
 from authentication import check_token
 from APIs.admin import get_professor_pending
+from APIs.UserCourses import getUserCourses
+
 CORS(app)
 
 
