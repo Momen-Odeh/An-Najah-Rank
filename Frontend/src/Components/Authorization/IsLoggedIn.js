@@ -4,11 +4,13 @@ import { Navigate, useNavigate } from "react-router-dom";
 import userContext from "../../Utils/userContext";
 import axios from "axios";
 import { toast } from "react-toastify";
-const IsLoggedIn = ({ moveTo, children }) => {
+import { toastError } from "../../Utils/toast";
+const IsLoggedIn = ({ moveTo, children, isAdmin }) => {
   const [cookies, setCookies] = useCookies();
   const navigate = useNavigate();
   const { activeUser, setActiveUser } = useContext(userContext);
   useEffect(() => {
+    // console.log("Admin *******", isAdmin);
     axios
       .get("http://localhost:5000/checkToken", {
         params: {
@@ -16,22 +18,22 @@ const IsLoggedIn = ({ moveTo, children }) => {
         },
       })
       .then((response) => {
-        setActiveUser(response.data);
+        if (isAdmin) {
+          if (response.data.role === "professor") {
+            setActiveUser(response.data);
+          } else {
+            toastError("professor access only");
+            navigate("/");
+          }
+        } else {
+          setActiveUser(response.data);
+        }
       })
       .catch((error) => {
-        toast.error("unauthorized access", {
-          position: "bottom-left",
-          autoClose: 10000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "light",
-        });
+        toastError("unauthorized access");
         navigate("/" + moveTo);
       });
-  }, []);
+  }, [isAdmin]);
   return children;
 };
 

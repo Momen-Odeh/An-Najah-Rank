@@ -22,6 +22,7 @@ import Contests from "../Pages/Contests";
 import Course from "../Pages/Course";
 import Settings from "../Pages/Settings";
 import Admin from "../Pages/Admin";
+import IsAdmin from "../Components/IsAdmin";
 // const AboutUs = lazy(() => import("../Pages/AboutUs/SubComponents/AboutUs"))
 
 export const routeNames = {
@@ -52,8 +53,7 @@ export const routes = [
     title: routeNames.HOME,
     component: (
       <IsLoggedIn moveTo={"log-in"}>
-        {" "}
-        <Home />{" "}
+        <Home />
       </IsLoggedIn>
     ),
   },
@@ -105,43 +105,6 @@ export const routes = [
       </IsLoggedIn>
     ),
   },
-
-  // {
-  //   path: "/challenge/:id",
-  //   title: routeNames.CHALLENGE,
-  //   component: (
-  //     <IsLoggedIn moveTo={"log-in"}>
-  //       {" "}
-  //       <Outlet />{" "}
-  //     </IsLoggedIn>
-  //   ),
-  //   subRoutes: [
-  //     {
-  //       index: true,
-  //       component: <MoveToPath endPath={"problem"} />,
-  //     },
-  //     {
-  //       title: "problem",
-  //       path: "problem",
-  //       component: <Challenge />,
-  //     },
-  //     {
-  //       title: "submissions",
-  //       path: "submissions",
-  //       component: <Challenge />,
-  //     },
-  //     {
-  //       title: "leaderboard",
-  //       path: "leaderboard",
-  //       component: <Challenge />,
-  //     },
-  //     {
-  //       title: "discussions",
-  //       path: "discussions",
-  //       component: <Challenge />,
-  //     },
-  //   ],
-  // },
   {
     path: "/courses",
     title: routeNames.COURSE_VIEW,
@@ -269,7 +232,7 @@ export const routes = [
     path: "/administration",
     title: routeNames.ADMINISTRATION,
     component: (
-      <IsLoggedIn moveTo={"log-in"}>
+      <IsLoggedIn moveTo={"log-in"} isAdmin={true}>
         <Outlet />
       </IsLoggedIn>
     ),
