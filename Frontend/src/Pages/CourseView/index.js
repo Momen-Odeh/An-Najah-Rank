@@ -14,23 +14,15 @@ import { useEffect } from "react";
 import { AiFillFileText } from "react-icons/ai";
 import axios from "axios";
 import useStyles from "./style";
+import { useCookies } from "react-cookie";
 const CourseView = () => {
   const [showDescription, setShowDescription] = useState(false);
   const { id } = useParams();
   const [course, setCourse] = useState({
-    contests: [
-      // {
-      //   Name: "An-Najah Rank test1",
-      //   solved: true,
-      //   statistics: [
-      //     { key: "Solved Rate: ", val: "50%" },
-      //     { key: "My Score: ", val: 100 },
-      //   ],
-      //   url: "#test1",
-      //   endDate: new Date(2023, 8, 30, 17, 0, 0),
-      // },
-    ],
+    contests: [],
   });
+  const [cookies] = useCookies();
+  const [isAdmin, setIsAdmin] = useState();
 
   const [students, setStudents] = useState([]);
   useEffect(() => {
@@ -38,10 +30,12 @@ const CourseView = () => {
       .get("http://127.0.0.1:5000/course-info", {
         params: {
           courseNumber: id,
+          token: cookies.token,
         },
       })
       .then((response) => {
         const { name, description, backgroundImage } = response.data.course;
+        setIsAdmin(response.data.userInfo.role === "professor");
         setCourse({
           ...course,
           name,
@@ -65,7 +59,6 @@ const CourseView = () => {
         console.log(error);
       });
   }, []);
-  const isAdmin = true;
 
   const handleAddContest = (name) => {
     const newContest = {

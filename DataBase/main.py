@@ -26,8 +26,15 @@ from authentication import check_token
 from APIs.admin import get_professor_pending
 from APIs.UserCourses import getUserCourses
 
+from authAPIs import validate_token
+
 CORS(app)
 
+@app.route('/flask')
+def index():
+    # Access the token data from the request object
+    token_data = getattr(request, 'token_data', None)
+    return jsonify({'message': 'Welcome to the API!', 'token_data': token_data})
 
 
 if __name__ == "__main__":
