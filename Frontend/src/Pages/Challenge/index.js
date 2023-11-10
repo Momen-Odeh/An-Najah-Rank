@@ -54,7 +54,7 @@ const Challenge = ({}) => {
   ];
   useEffect(() => {
     axios
-      .get("http://127.0.0.1:5000/challenge/" + challengeId)
+      .get("/challenge/" + challengeId)
       .then((res) => {
         setChallengeData(res.data);
         console.log(res);

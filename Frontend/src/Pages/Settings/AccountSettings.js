@@ -43,7 +43,7 @@ const AccountSettings = ({}) => {
         const formData = new FormData();
         formData.append("image", accountInfo.UploadeImg);
         axios
-          .put("http://127.0.0.1:5000/userImg?token=" + cookies.token, formData)
+          .put("/userImg", formData)
           .then((res) => {
             console.log(res);
           })
@@ -63,7 +63,7 @@ const AccountSettings = ({}) => {
       }
       if (accountInfo.UploadeImg === null) {
         axios
-          .put("http://127.0.0.1:5000/user?token=" + cookies.token, {
+          .put("/user", {
             keys: ["fullName", "img"],
             values: [accountInfo.fullName, null],
           })
@@ -95,7 +95,7 @@ const AccountSettings = ({}) => {
           });
       } else {
         axios
-          .put("http://127.0.0.1:5000/user?token=" + cookies.token, {
+          .put("/user", {
             keys: ["fullName"],
             values: [accountInfo.fullName],
           })
@@ -161,12 +161,9 @@ const AccountSettings = ({}) => {
     });
     if (validatePassword(errorMsg.deleteAccountPassword)) {
       axios
-        .delete(
-          "http://127.0.0.1:5000/user?token=" +
-            cookies.token +
-            "&password=" +
-            errorMsg.deleteAccountPassword
-        )
+        .delete("/user", {
+          params: { password: errorMsg.deleteAccountPassword },
+        })
         .then((response) => {
           console.log(response);
           removeCookie("token");

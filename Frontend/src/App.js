@@ -13,7 +13,17 @@ import { routes, generateRoutes } from "./Utils/Utils";
 import NotFound from "./Components/NotFound";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import axios from "axios";
+import BaseURI from "./Utils/BaseURI";
+import { useCookies } from "react-cookie";
 function App() {
+  const [cookies] = useCookies();
+  axios.defaults.baseURL = BaseURI;
+  axios.defaults.params = {
+    token: cookies.token,
+  };
+  axios.defaults.headers.common["Authorization"] = cookies.token;
+  axios.defaults.headers.post["Content-Type"] = "application/json";
   const router = createBrowserRouter(
     createRoutesFromElements(
       <Route element={<PageLayout />} errorElement={<NotFound />}>

@@ -92,10 +92,7 @@ const ContestChallenges = ({ challengesData, challengesContest }) => {
       };
       try {
         setLoading(true);
-        await axios.post(
-          "http://localhost:5000/contests-challenges",
-          challengeContest
-        );
+        await axios.post("/contests-challenges", challengeContest);
         setTableData([...TableData, { ...newChallenge, id: challenge_id }]);
         SetNewChallenge({
           id: null,
@@ -135,9 +132,9 @@ const ContestChallenges = ({ challengesData, challengesContest }) => {
   const handleRemoveTableData = async (indexEx) => {
     setLoading(true);
     try {
-      await axios.delete(
-        `http://localhost:5000/contests-challenges?challenge_id=${TableData[indexEx].id}&contest_id=${contestId}`
-      );
+      await axios.delete(`http://localhost:5000/contests-challenges`, {
+        params: { challenge_id: TableData[indexEx].id, contest_id: contestId },
+      });
       setTableData(TableData.filter((element, index) => index !== indexEx));
       setLoading(false);
       setDeleteModal({ ...deleteModal, show: false });
@@ -177,10 +174,7 @@ const ContestChallenges = ({ challengesData, challengesContest }) => {
       };
       try {
         setLoading(true);
-        await axios.put(
-          `http://localhost:5000/contests-challenges`,
-          challengeContest
-        );
+        await axios.put(`/contests-challenges`, challengeContest);
         TableData[showCreateChallenge.index].name = newChallenge.name;
         TableData[showCreateChallenge.index].maxScore = newChallenge.maxScore;
         TableData[showCreateChallenge.index].id = challenge_id;

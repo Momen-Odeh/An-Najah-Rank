@@ -12,14 +12,14 @@ const Profile = () => {
   const [cookies] = useCookies();
   useEffect(() => {
     axios
-      .get("http://127.0.0.1:5000/user?token=" + cookies.token)
+      .get("/user")
       .then((response) => {
         const imageSrc =
           response.data.img && `data:image/jpeg;base64,${response.data.img}`;
         setAccountInfo({ ...response.data, img: imageSrc });
 
         axios
-          .get("http://127.0.0.1:5000/userCourses?token=" + cookies.token)
+          .get("/userCourses")
           .then((response) => {
             console.log(response.data.courses);
             setUserCouses(

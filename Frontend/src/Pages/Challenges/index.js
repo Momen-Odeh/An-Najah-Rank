@@ -6,7 +6,7 @@ import Text from "../../Components/Text";
 import { Col, Container, Row } from "react-bootstrap";
 import TestCases from "../../Components/TestCases";
 import { useParams } from "react-router-dom";
-import Axios from "axios";
+import axios from "axios";
 import useStyles from "./style";
 const Challenges = () => {
   const { id } = useParams();
@@ -22,7 +22,8 @@ const Challenges = () => {
   });
   const [testCasesData, setTestCasesData] = useState([]);
   useEffect(() => {
-    Axios.get("http://127.0.0.1:5000/challenge/" + id)
+    axios
+      .get("/challenge/" + id)
       .then((res) => {
         console.log(res);
         setDetails({

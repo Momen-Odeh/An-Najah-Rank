@@ -30,7 +30,11 @@ const Course = () => {
   const [contests, setContests] = useState([]);
   useEffect(() => {
     axios
-      .get(`http://localhost:5000/course-info?courseNumber=${id}`)
+      .get(`/course-info`, {
+        params: {
+          courseNumber: id,
+        },
+      })
       .then((res) => {
         setDetails({
           ...details,

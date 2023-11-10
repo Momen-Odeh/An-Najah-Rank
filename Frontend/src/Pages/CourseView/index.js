@@ -27,15 +27,15 @@ const CourseView = () => {
   const [students, setStudents] = useState([]);
   useEffect(() => {
     axios
-      .get("http://127.0.0.1:5000/course-info", {
+      .get("/course-info", {
         params: {
           courseNumber: id,
-          token: cookies.token,
         },
       })
       .then((response) => {
         const { name, description, backgroundImage } = response.data.course;
-        setIsAdmin(response.data.userInfo.role === "professor");
+        // console.log(response.data.userInfo.role);
+        setIsAdmin(true); //response.data.userInfo.role === "professor");
         setCourse({
           ...course,
           name,

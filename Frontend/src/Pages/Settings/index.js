@@ -21,7 +21,7 @@ const Settings = () => {
   const [cookies] = useCookies();
   useEffect(() => {
     axios
-      .get("http://127.0.0.1:5000/user?token=" + cookies.token)
+      .get("/user")
       .then((response) => {
         const imageSrc =
           response.data.img && `data:image/jpeg;base64,${response.data.img}`;

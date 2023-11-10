@@ -35,13 +35,10 @@ const StudentsInCourse = ({ students, setStudents }) => {
     if (validateUniversityNumber(student.registrationNumber)) {
       try {
         setLoading(true);
-        const result = await axios.post(
-          `http://localhost:5000/student_enrollments`,
-          {
-            studentNumber: student.registrationNumber,
-            courseNumber: id,
-          }
-        );
+        const result = await axios.post(`/student_enrollments`, {
+          studentNumber: student.registrationNumber,
+          courseNumber: id,
+        });
         setStudents([
           ...students,
           {
@@ -67,9 +64,12 @@ const StudentsInCourse = ({ students, setStudents }) => {
   const handleDelete = async () => {
     const { index } = deleteModal;
     setLoading(true);
-    await axios.delete(
-      `http://localhost:5000/student_enrollments?courseNumber=${id}&studentNumber=${students[index].registrationNumber}`
-    );
+    await axios.delete(`/student_enrollments`, {
+      params: {
+        courseNumber: id,
+        studentNumber: students[index].registrationNumber,
+      },
+    });
     setStudents(students.filter((item, idx) => idx !== index));
     setDeleteModal({ show: false });
     setLoading(false);

@@ -34,7 +34,7 @@ const Moderators = ({ Owner, moderatorsData, suggestionModerators }) => {
         );
         if (newModerator[0]) {
           setLoading(true);
-          await axios.post(`http://localhost:5000/course_moderators`, {
+          await axios.post(`/course_moderators`, {
             courseNumber: id,
             stuffNumber: newModerator[0].universityNumber,
           });
@@ -56,9 +56,12 @@ const Moderators = ({ Owner, moderatorsData, suggestionModerators }) => {
     const updatedModerators = moderators.filter((mo, index) => index !== idx);
     try {
       setLoading(true);
-      await axios.delete(
-        `http://localhost:5000/course_moderators?courseNumber=${id}&stuffNumber=${moderators[idx].universityNumber}`
-      );
+      await axios.delete(`/course_moderators`, {
+        params: {
+          courseNumber: id,
+          stuffNumber: moderators[idx].universityNumber,
+        },
+      });
       setModerators(updatedModerators);
       setLoading(false);
       setDeleteModal({ show: false });

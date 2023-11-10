@@ -120,29 +120,25 @@ const CourseDetails = ({ operation, data = null, setData }) => {
           const studentsUniversityNumber = details.students
             .filter((_, index) => index !== 0)
             .map((item) => item[idIndex]);
-          await axios.post(`http://localhost:5000/courses`, {
+          await axios.post(`/courses`, {
             courseNumber: details.number,
             name: details.name,
             description: details.description,
             backgroundImage: details.image,
-            token: cookies.token,
             studentsUniversityNumber: studentsUniversityNumber,
           });
           const formData = new FormData();
           formData.append("image", details.uploadImg);
-          await axios.put(
-            "http://localhost:5000/courseImg/" + details.number,
-            formData
-          );
+          await axios.put("/courseImg/" + details.number, formData);
         } else {
-          await axios.put(`http://localhost:5000/courses/${id}`, {
+          await axios.put(`/courses/${id}`, {
             name: details.name,
             description: details.description,
           });
           if (details.uploadImg) {
             const formData = new FormData();
             formData.append("image", details.uploadImg);
-            await axios.put("http://localhost:5000/courseImg/" + id, formData);
+            await axios.put("/courseImg/" + id, formData);
           }
           setData(details);
         }

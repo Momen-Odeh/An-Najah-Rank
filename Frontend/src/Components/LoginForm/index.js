@@ -8,7 +8,7 @@ import ButtonRegister from "../ButtonRegister";
 import useStyles from "./style";
 import { Link, useNavigate } from "react-router-dom";
 import handelStateChanges from "../../Utils/handelStateChanges";
-import axios from "../../Utils/axiosConfig";
+import axios from "axios";
 import { useCookies } from "react-cookie";
 import { useUserContext } from "../../Utils/userContext";
 import { validateEmail, validatePassword } from "../../Utils/Validation";
@@ -49,10 +49,11 @@ const LogInForm = () => {
             password: loginValue.password,
           },
         });
+        console.log(response);
         setCookie("token", response.data.token);
-        axios.defaults.params = {
-          token: response.data.token,
-        };
+        // axios.defaults.params = {
+        //   token: response.data.token,
+        // };
         navigate("/");
       } catch (error) {
         if (error.response?.status === 404) {

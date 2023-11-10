@@ -13,7 +13,6 @@ import Breadcrumbs from "../../Components/Breadcrumbs";
 import userContext from "../../Utils/userContext";
 import { useContext } from "react";
 //
-import BaseURI from "../../Utils/BaseURI";
 const Administration = () => {
   const [cookies, setCookies] = useCookies();
 
@@ -22,11 +21,9 @@ const Administration = () => {
     challenges: [],
   });
   useEffect(() => {
-    axios
-      .get(`http://localhost:5000/challenges-for-owner?token=${cookies.token}`)
-      .then((res) => {
-        setData(res.data);
-      });
+    axios.get(`/challenges-for-owner`).then((res) => {
+      setData(res.data);
+    });
   }, []);
   const tabs = [
     {

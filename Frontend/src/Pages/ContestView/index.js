@@ -21,9 +21,7 @@ const ContestView = () => {
   const clasess = useStyles();
   useEffect(() => {
     axios
-      .get(
-        `http://127.0.0.1:5000/contest-info?contest_id=${contestId}&token=${cookies.token}`
-      )
+      .get(`/contest-info`, { params: { contest_id: contestId } })
       .then((response) => {
         setChallengeContest(
           response.data.ContestChallenges.map((item, index) => {
@@ -42,16 +40,12 @@ const ContestView = () => {
         setContestInfo(response.data.contest);
       });
   }, []);
-  const path = [
-    { title: "OOP Coures", url: "#" },
-    { title: contestInfo.name, url: "#" },
-  ];
 
   return (
     <Container fluid className={clasess.Container}>
       <Row className={`${clasess.Row} mb-5`}>
         <Col className={`${clasess.Col}`}>
-          <Breadcrumbs path={path} />
+          <Breadcrumbs />
         </Col>
       </Row>
       <Row className={`${clasess.Row} mb-5`}>
