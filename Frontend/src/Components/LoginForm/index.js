@@ -8,7 +8,7 @@ import ButtonRegister from "../ButtonRegister";
 import useStyles from "./style";
 import { Link, useNavigate } from "react-router-dom";
 import handelStateChanges from "../../Utils/handelStateChanges";
-import Axios from "axios";
+import axios from "../../Utils/axiosConfig";
 import { useCookies } from "react-cookie";
 import { useUserContext } from "../../Utils/userContext";
 import { validateEmail, validatePassword } from "../../Utils/Validation";
@@ -43,13 +43,16 @@ const LogInForm = () => {
       validateEmail(loginValue.email)
     ) {
       try {
-        const response = await Axios.get("http://localhost:5000/login", {
+        const response = await axios.get("/login", {
           params: {
             email: loginValue.email,
             password: loginValue.password,
           },
         });
         setCookie("token", response.data.token);
+        axios.defaults.params = {
+          token: response.data.token,
+        };
         navigate("/");
       } catch (error) {
         if (error.response?.status === 404) {
