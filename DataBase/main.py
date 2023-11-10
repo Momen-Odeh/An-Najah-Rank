@@ -1,6 +1,5 @@
 from flask import request, jsonify
 from FlaskSetUp import app
-from flask_cors import CORS
 from EmailAuth.emailConnection import sendEmail
 from APIs.registration import register_user
 from APIs.login import login_user
@@ -28,13 +27,11 @@ from APIs.UserCourses import getUserCourses
 
 from authAPIs import validate_token
 
-CORS(app)
 
-@app.route('/flask')
+@app.route('/flask', methods=['GET'])
 def index():
     # Access the token data from the request object
-    token_data = getattr(request, 'token_data', None)
-    return jsonify({'message': 'Welcome to the API!', 'token_data': token_data})
+    return jsonify({'message': getattr(request, 'tokenData', None)})
 
 
 if __name__ == "__main__":

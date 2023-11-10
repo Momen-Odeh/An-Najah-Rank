@@ -8,7 +8,7 @@ from authentication import get_Data_from_token
 def add_challenge():
     try:
         data = request.get_json()
-        tokenData = get_Data_from_token(data['token'])
+        tokenData = getattr(request, 'tokenData', None)
         ownerUniversityNumber = tokenData['universityNumber']
         converted_tags = json.dumps(data['tags'])
         result = insert_data(

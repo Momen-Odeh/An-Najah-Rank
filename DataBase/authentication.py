@@ -5,6 +5,8 @@ SECRET_KEY = 'Noor_Aldeen_$%!~_@2002@_^&*'
 
 def get_Data_from_token(token):
     try:
+        if not token:
+            return jsonify({'error': 'Token is missing'}), 401
         decoded_token = jwt.decode(token, SECRET_KEY, algorithms=['HS256'])
         return {'valid': True, 'email': decoded_token['email'], 'universityNumber': decoded_token['universityNumber'], 'name': decoded_token['name'], 'role': decoded_token['role']}
     except jwt.ExpiredSignatureError:

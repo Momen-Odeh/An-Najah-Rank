@@ -8,7 +8,7 @@ import json
 @app.route('/contest-info', methods=['GET'])
 def get_contests_info():
     try:
-        tokenData = get_Data_from_token(request.args.get('token'))
+        tokenData = getattr(request, 'tokenData', None)
         print("token", tokenData)
         ownerUniversityNumber = tokenData['universityNumber']
         query = f"""
