@@ -19,9 +19,9 @@ import { useCookies } from "react-cookie";
 function App() {
   const [cookies] = useCookies();
   axios.defaults.baseURL = BaseURI;
-  axios.defaults.params = {
-    token: cookies.token,
-  };
+  // axios.defaults.params = {
+  //   token: cookies.token,
+  // };
   axios.defaults.headers.common["Authorization"] = cookies.token;
   axios.defaults.headers.post["Content-Type"] = "application/json";
   const router = createBrowserRouter(

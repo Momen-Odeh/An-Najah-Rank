@@ -1,4 +1,4 @@
-from flask import request, jsonify,abort
+from flask import request, jsonify,abort, make_response
 from FlaskSetUp import app
 from authentication import get_Data_from_token
 
@@ -9,8 +9,9 @@ def should_skip_token_validation():
     return request.path in excluded_routes
 
 def validate_token():
-    token = request.args.get('token')
-    if token is None or len(token ) == 0:
+    token = request.headers.get('Authorization') #request.args.get('token')
+    print(token)
+    if token is None or len(token) == 0:
         return False
 
     decodeToken = get_Data_from_token(token)
@@ -22,6 +23,12 @@ def validate_token():
 def before_request():
     if should_skip_token_validation():
         return
+    if request.method == "OPTIONS":
+        response = make_response()
+        response.headers.add("Access-Control-Allow-Origin", "*")
+        response.headers.add("Access-Control-Allow-Headers", "Content-Type,Authorization")
+        response.headers.add("Access-Control-Allow-Methods", "GET,POST")
+        return response
     valid = validate_token()
     print("MIDDLEWARE","valid",valid ,request.path, "token ==>", request.args.get('token'))
     if not valid:
