@@ -1,5 +1,5 @@
-from flask import request, jsonify
-from FlaskSetUp import app
+from flask import request, jsonify, render_template
+from FlaskSetUp import app, socketio
 from flask_cors import CORS
 from EmailAuth.emailConnection import sendEmail
 from APIs.registration import register_user
@@ -25,10 +25,8 @@ from APIs.contestsForCourse import getContestForCourse
 from authentication import check_token
 from APIs.admin import get_professor_pending
 from APIs.UserCourses import getUserCourses
-
+import Notification.notification
 CORS(app)
 
-
-
-if __name__ == "__main__":
-    app.run(debug=True)
+if __name__ == '__main__':
+    socketio.run(app, debug=True, allow_unsafe_werkzeug=True)
