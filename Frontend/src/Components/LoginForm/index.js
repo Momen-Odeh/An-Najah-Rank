@@ -9,14 +9,12 @@ import useStyles from "./style";
 import { Link, useNavigate } from "react-router-dom";
 import handelStateChanges from "../../Utils/handelStateChanges";
 import axios from "axios";
-import { useCookies } from "react-cookie";
-import { useUserContext } from "../../Utils/userContext";
+import Cookies from "js-cookie";
 import { validateEmail, validatePassword } from "../../Utils/Validation";
 import { toast } from "react-toastify";
 import Loader from "react-spinners/ClipLoader";
 const LogInForm = () => {
   const navigate = useNavigate();
-  const [cookies, setCookie, removeCookie] = useCookies(["token"]);
   const [loginValue, setLoginValue] = useState({ email: "", password: "" });
   const [errorMsg, setErrorMsg] = useState({
     email: null,
@@ -50,10 +48,10 @@ const LogInForm = () => {
           },
         });
         console.log(response);
-        setCookie("token", response.data.token);
-        // axios.defaults.params = {
-        //   token: response.data.token,
-        // };
+        Cookies.set("token", response.data.token, {
+          expires: 30,
+          path: "/",
+        });
         navigate("/");
       } catch (error) {
         if (error.response?.status === 404) {

@@ -48,6 +48,9 @@ const Course = () => {
         setModerators(res.data.moderators);
         setSuggestionModerators(res.data.suggestionModerators);
         setContests(res.data.contests);
+      })
+      .catch((error) => {
+        console.log(error);
       });
   }, []);
   // console.log(suggestionModerators);

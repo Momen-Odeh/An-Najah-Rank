@@ -2,9 +2,9 @@ import React, { useState, useRef } from "react";
 import { Nav, Overlay } from "react-bootstrap";
 import { AiOutlineUser } from "react-icons/ai";
 import { SlArrowDown } from "react-icons/sl";
-import { useCookies } from "react-cookie";
 import { useNavigate } from "react-router-dom";
 import useStyle from "./Style";
+import Cookies from "js-cookie";
 const UserChoices = ({ userChoices }) => {
   const classes = useStyle();
   const [showChoices, setShowChoices] = useState(false);
@@ -17,11 +17,10 @@ const UserChoices = ({ userChoices }) => {
     setShowChoices(false);
   };
   const navigate = useNavigate();
-  const [cookies, setCookie, removeCookie] = useCookies([]);
   const logOutSystem = () => {
-    const cookieKeys = Object.keys(cookies);
-    cookieKeys.forEach((cookieKey) => {
-      removeCookie(cookieKey, { path: "/" });
+    const cookieNames = Object.keys(Cookies.get());
+    cookieNames.forEach((cookieName) => {
+      Cookies.remove(cookieName, { path: "/" });
     });
     navigate("/log-in");
   };

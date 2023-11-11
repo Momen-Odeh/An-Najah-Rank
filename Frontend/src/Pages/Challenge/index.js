@@ -15,6 +15,7 @@ import ChallengeContext from "../../Utils/ChallengeContext";
 import { FaCheck } from "react-icons/fa";
 import { ImCross } from "react-icons/im";
 import TestCaseProblem from "../../Components/TestCaseProblem";
+import { toastError } from "../../Utils/toast";
 
 const Challenge = ({}) => {
   const clasess = useStyles();
@@ -54,38 +55,36 @@ const Challenge = ({}) => {
   ];
   useEffect(() => {
     axios
-      .get("/challenge/" + challengeId)
-      .then((res) => {
-        setChallengeData(res.data);
-        console.log(res);
-        // const ArrTest = res.data.testCases.map((item, index) => {
-        //   return {
-        //     eventKey: "TestCase " + index,
-        //     title: (
-        //       <span>
-        //         TestCase {index}{" "}
-        //         {/* <FaCheck className={`${clasess.Icon} ${clasess.IconPass}`} /> */}
-        //       </span>
-        //     ),
-        //     TabComponent: (
-        //       <TestCaseProblem
-        //         input={item.input_data}
-        //         outputExpect={item.output_data}
-        //         outputReal={50}
-        //         compilerMsg={"Correct Answer"}
-        //       />
-        //     ),
-        //   };
-        // });
-        // console.log(ArrTest);
-        // setTestCases({
-        //   ...testCases,
-        //   tabContent: ArrTest,
-        // });
+      .get("/accessCourse", {
+        params: {
+          courseNumber: id,
+        },
       })
-      .catch((e) => {
-        console.log(e.response);
-        // navigate("/NotFound");
+      .then((response1) => {
+        axios
+          .get("/challenge/" + challengeId)
+          .then((res) => {
+            setChallengeData(res.data);
+            console.log(res);
+          })
+          .catch((e) => {
+            console.log(e.response);
+            if (e.response.status === 401) {
+              navigate("/log-in");
+              toastError("Invalid Access");
+            }
+          });
+      })
+      .catch((error1) => {
+        console.log(error1);
+        if (error1.response.status === 401) {
+          toastError("Invalid Access");
+          if (error1.response.data.Valid === undefined) {
+            navigate("/log-in");
+          } else {
+            navigate("/");
+          }
+        }
       });
   }, []);
   return (

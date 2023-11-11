@@ -10,7 +10,6 @@ def should_skip_token_validation():
 
 def validate_token():
     token = request.headers.get('Authorization') #request.args.get('token')
-    print(token)
     if token is None or len(token) == 0:
         return False
 
@@ -30,6 +29,6 @@ def before_request():
         response.headers.add("Access-Control-Allow-Methods", "GET,POST,PUT,DELETE")
         return response
     valid = validate_token()
-    print("MIDDLEWARE","valid",valid ,request.path, "token ==>", request.args.get('token'))
+    print("MIDDLEWARE: ","valid ==>",valid ,"path ==>",request.path, "token ==>", request.headers.get('Authorization'))
     if not valid:
         abort(401)

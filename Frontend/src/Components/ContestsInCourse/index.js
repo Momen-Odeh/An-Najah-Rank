@@ -6,8 +6,14 @@ import Text from "../Text";
 import ChallengeShow from "../ChallengeShow";
 
 import InputFiledRank from "../InputFiledRank";
-
-const ContestsInCourse = ({ contests, isAdmin, handleAddContest }) => {
+import { useNavigate } from "react-router-dom";
+const ContestsInCourse = ({
+  contests,
+  isAdmin,
+  handleAddContest,
+  courseId,
+}) => {
+  const navigate = useNavigate();
   const [showAddModal, setShowAddModal] = useState(false);
   const [contest, setContest] = useState({
     contestName: "",
@@ -38,8 +44,7 @@ const ContestsInCourse = ({ contests, isAdmin, handleAddContest }) => {
               text={"Add Contest"}
               hoverBackgroundColor="#0e141e"
               onClick={() => {
-                // setShowAddModal(true)
-                //navigate to create contest
+                navigate(`/administration/courses/${courseId}/contests`);
               }}
             />
           </Col>

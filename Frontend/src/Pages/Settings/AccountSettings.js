@@ -12,11 +12,11 @@ import { useState } from "react";
 import handelStateChanges from "../../Utils/handelStateChanges";
 import SettingsContext from "../../Utils/SettingsContext";
 import axios from "axios";
-import { useCookies } from "react-cookie";
 import Loader from "react-spinners/ClipLoader";
 import { toast } from "react-toastify";
 import { validatePassword } from "../../Utils/Validation";
 import { useNavigate } from "react-router-dom";
+import Cookies from "js-cookie";
 const AccountSettings = ({}) => {
   const clasess = useStyles();
   const navigate = useNavigate();
@@ -28,7 +28,6 @@ const AccountSettings = ({}) => {
     deleteAccount: null,
     deleteAccountPassword: "",
   });
-  const [cookies, removeCookie] = useCookies();
   const handelSaveChanges = () => {
     setErrorMsg({
       ...errorMsg,
@@ -166,7 +165,12 @@ const AccountSettings = ({}) => {
         })
         .then((response) => {
           console.log(response);
-          removeCookie("token");
+          const cookieNames = Object.keys(Cookies.get());
+
+          // Remove each cookie
+          cookieNames.forEach((cookieName) => {
+            Cookies.remove(cookieName, { path: "/" });
+          });
           navigate("/log-in");
         })
         .catch((error) => {

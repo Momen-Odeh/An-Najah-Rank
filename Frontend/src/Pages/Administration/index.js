@@ -21,9 +21,14 @@ const Administration = () => {
     challenges: [],
   });
   useEffect(() => {
-    axios.get(`/challenges-for-owner`).then((res) => {
-      setData(res.data);
-    });
+    axios
+      .get(`/challenges-for-owner`)
+      .then((res) => {
+        setData(res.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   }, []);
   const tabs = [
     {

@@ -7,9 +7,11 @@ import { FiLock } from "react-icons/fi";
 import AccountSettings from "./AccountSettings";
 import PasswordSettings from "./PasswordSettings";
 import axios from "axios";
-import { useCookies } from "react-cookie";
 import SettingsContext from "../../Utils/SettingsContext";
+import { useNavigate } from "react-router-dom";
+import { toastError } from "../../Utils/toast";
 const Settings = () => {
+  const navigate = useNavigate();
   const [accountInfo, setAccountInfo] = useState({});
   const [loading, setLoading] = useState(false);
   const [updatePassword, setUpdatePassword] = useState({
@@ -18,7 +20,6 @@ const Settings = () => {
     confirmPassword: "",
   });
   const classes = useStyles();
-  const [cookies] = useCookies();
   useEffect(() => {
     axios
       .get("/user")
@@ -29,6 +30,10 @@ const Settings = () => {
       })
       .catch((error) => {
         console.error("Error fetching image:", error);
+        if (error.response.status === 401) {
+          toastError("unauthorized access");
+          navigate("/log-in");
+        }
       });
   }, []);
   const [settingsContent, setSettingsContent] = useState({

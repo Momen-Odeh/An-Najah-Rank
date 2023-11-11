@@ -8,7 +8,7 @@ import io
 @app.route('/course-info', methods=['GET'])
 def get_course_info():
     try:
-
+        tokenData = getattr(request, 'tokenData', None)
         query = f"""
                     SELECT *
                     FROM courses 
@@ -27,6 +27,7 @@ def get_course_info():
         cursor = connection.cursor()
         cursor.execute(query)
         Owner = cursor.fetchone()
+        Owner=(Owner[0],Owner[1],course[3])
         courseData = {
             "courseNumber": course[0],
             "name": course[1],
@@ -107,6 +108,26 @@ def get_course_info():
             'moderators': moderators,
             "contests": contests
         }
+        print("---------",tokenData['universityNumber'],students,moderators,Owner)
+
+        # ValidAccess= False
+        # if (Owner[2] == tokenData['universityNumber']):
+        #     ValidAccess=True
+        #
+        # if not ValidAccess:
+        #     for student in students:
+        #         if student['registrationNumber'] == tokenData['universityNumber']:
+        #             ValidAccess = True
+        #             break
+        #
+        # if not ValidAccess:
+        #     for moderator in moderators:
+        #         if moderator['universityNumber'] == tokenData['universityNumber']:
+        #             ValidAccess = True
+        #             break
+        # if ValidAccess:
         return jsonify(response_data), 200
+        # else:
+        #     return {"error":"UNAUTHORIZED"},401
     except Exception as e:
         return {'message': str(e)}, 409

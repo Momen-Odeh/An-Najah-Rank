@@ -1,12 +1,10 @@
 import React, { useContext, useEffect } from "react";
-import { useCookies } from "react-cookie";
 import { Navigate, useNavigate } from "react-router-dom";
 import userContext from "../../Utils/userContext";
 import axios from "axios";
-import { toast } from "react-toastify";
 import { toastError } from "../../Utils/toast";
+import Cookies from "js-cookie";
 const IsLoggedIn = ({ moveTo, children, isAdmin }) => {
-  const [cookies, setCookies] = useCookies();
   const navigate = useNavigate();
   const { activeUser, setActiveUser } = useContext(userContext);
   useEffect(() => {
@@ -14,12 +12,15 @@ const IsLoggedIn = ({ moveTo, children, isAdmin }) => {
     axios
       .get("http://localhost:5000/checkToken", {
         params: {
-          token: cookies.token,
+          token: Cookies.get("token"),
         },
       })
       .then((response) => {
         if (isAdmin) {
-          if (response.data.role === "professor") {
+          if (
+            response.data.role === "professor" ||
+            response.data.role === "admin"
+          ) {
             setActiveUser(response.data);
           } else {
             toastError("professor access only");
@@ -30,6 +31,7 @@ const IsLoggedIn = ({ moveTo, children, isAdmin }) => {
         }
       })
       .catch((error) => {
+        console.log(error);
         toastError("unauthorized access");
         navigate("/" + moveTo);
       });

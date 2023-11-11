@@ -24,6 +24,7 @@ from APIs.contestsForCourse import getContestForCourse
 from authentication import check_token
 from APIs.admin import get_professor_pending
 from APIs.UserCourses import getUserCourses
+from APIs.AccessCourse import accessCourse
 
 from authAPIs import validate_token
 
