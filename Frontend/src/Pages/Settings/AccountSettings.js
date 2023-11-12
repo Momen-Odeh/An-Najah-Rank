@@ -172,6 +172,7 @@ const AccountSettings = ({}) => {
             Cookies.remove(cookieName, { path: "/" });
           });
           navigate("/log-in");
+          window.location.reload();
         })
         .catch((error) => {
           console.log(error);

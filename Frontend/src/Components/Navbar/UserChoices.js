@@ -23,6 +23,7 @@ const UserChoices = ({ userChoices }) => {
       Cookies.remove(cookieName, { path: "/" });
     });
     navigate("/log-in");
+    window.location.reload();
   };
   return (
     <Nav.Item>
