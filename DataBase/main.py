@@ -26,8 +26,9 @@ from authentication import check_token
 from APIs.admin import get_professor_pending
 from APIs.UserCourses import getUserCourses
 import Notification.notification
-from fileManagment.uploadFile import upload_image
 CORS(app)
+
+
 
 if __name__ == '__main__':
     socketio.run(app, debug=True, allow_unsafe_werkzeug=True)
