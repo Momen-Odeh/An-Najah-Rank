@@ -23,6 +23,7 @@ import Course from "../Pages/Course";
 import Settings from "../Pages/Settings";
 import Admin from "../Pages/Admin";
 import NotificationComponent from "../Components/Notification";
+import UploadFile from "../Components/UploadFile";
 // const AboutUs = lazy(() => import("../Pages/AboutUs/SubComponents/AboutUs"))
 
 export const routeNames = {
@@ -259,6 +260,11 @@ export const routes = [
     path: "/notification",
     title: "Notification",
     component: <NotificationComponent />,
+  },
+  {
+    path: "/upload-file",
+    title: "upload file",
+    component: <UploadFile />,
   },
   /******************************************* /admin ***********************************/
   {
