@@ -20,6 +20,7 @@ const UploadFile = () => {
 
       if (response.ok) {
         const data = await response.json();
+        setImageUrl(data.url);
         console.log("Image URL:", data.url);
       } else {
         console.error("Failed to upload image.");
@@ -38,7 +39,11 @@ const UploadFile = () => {
       {imageUrl && (
         <div>
           <h2>Uploaded Image:</h2>
-          <img src={imageUrl} alt="Uploaded" style={{ maxWidth: "100%" }} />
+          <img
+            src={imageUrl}
+            alt="Uploaded"
+            style={{ maxWidth: "100%", maxHeight: "400px" }}
+          />
         </div>
       )}
     </div>
