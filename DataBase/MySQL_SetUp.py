@@ -1,8 +1,7 @@
 from dataBaseConnection import connect_to_database
-host = 'localhost'
-user = 'root'
-# password = 'Momen@119'
-password = 'Noor@2002'
+host = 'an-najah-rank.c2rjncawk2d7.eu-north-1.rds.amazonaws.com'
+user = 'admin'
+password = 'AnNajahRank119'
 database = 'an-najah rank'
 connection = connect_to_database(host, user, password, database)
 connection.autocommit = True
