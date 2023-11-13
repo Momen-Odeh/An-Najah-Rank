@@ -12,11 +12,11 @@ import { useState } from "react";
 import handelStateChanges from "../../Utils/handelStateChanges";
 import SettingsContext from "../../Utils/SettingsContext";
 import axios from "axios";
-import { useCookies } from "react-cookie";
 import Loader from "react-spinners/ClipLoader";
 import { toast } from "react-toastify";
 import { validatePassword } from "../../Utils/Validation";
 import { useNavigate } from "react-router-dom";
+import Cookies from "js-cookie";
 const AccountSettings = ({}) => {
   const clasess = useStyles();
   const navigate = useNavigate();
@@ -28,7 +28,6 @@ const AccountSettings = ({}) => {
     deleteAccount: null,
     deleteAccountPassword: "",
   });
-  const [cookies, removeCookie] = useCookies();
   const handelSaveChanges = () => {
     setErrorMsg({
       ...errorMsg,
@@ -43,7 +42,7 @@ const AccountSettings = ({}) => {
         const formData = new FormData();
         formData.append("image", accountInfo.UploadeImg);
         axios
-          .put("http://127.0.0.1:5000/userImg?token=" + cookies.token, formData)
+          .put("/userImg", formData)
           .then((res) => {
             console.log(res);
           })
@@ -63,7 +62,7 @@ const AccountSettings = ({}) => {
       }
       if (accountInfo.UploadeImg === null) {
         axios
-          .put("http://127.0.0.1:5000/user?token=" + cookies.token, {
+          .put("/user", {
             keys: ["fullName", "img"],
             values: [accountInfo.fullName, null],
           })
@@ -95,7 +94,7 @@ const AccountSettings = ({}) => {
           });
       } else {
         axios
-          .put("http://127.0.0.1:5000/user?token=" + cookies.token, {
+          .put("/user", {
             keys: ["fullName"],
             values: [accountInfo.fullName],
           })
@@ -161,16 +160,19 @@ const AccountSettings = ({}) => {
     });
     if (validatePassword(errorMsg.deleteAccountPassword)) {
       axios
-        .delete(
-          "http://127.0.0.1:5000/user?token=" +
-            cookies.token +
-            "&password=" +
-            errorMsg.deleteAccountPassword
-        )
+        .delete("/user", {
+          params: { password: errorMsg.deleteAccountPassword },
+        })
         .then((response) => {
           console.log(response);
-          removeCookie("token");
+          const cookieNames = Object.keys(Cookies.get());
+
+          // Remove each cookie
+          cookieNames.forEach((cookieName) => {
+            Cookies.remove(cookieName, { path: "/" });
+          });
           navigate("/log-in");
+          window.location.reload();
         })
         .catch((error) => {
           console.log(error);

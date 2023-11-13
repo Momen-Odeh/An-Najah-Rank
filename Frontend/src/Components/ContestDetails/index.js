@@ -7,7 +7,7 @@ import "react-datetime/css/react-datetime.css";
 import TextEditor from "../TextEditor";
 import ButtonRank from "../ButtonRank";
 import AlertComponent from "../Alert";
-import Axios from "axios";
+import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 import { useCookies } from "react-cookie";
 import { useEffect } from "react";
@@ -95,25 +95,20 @@ const ContestsDetalis = ({ operation, data = null }) => {
         setLoading(true);
         if (operation === "create") {
           setErrorMsg({ ...errorMsg, endTime: null });
-          const response = await Axios.post("http://localhost:5000/contests", {
+          const response = await axios.post("/contests", {
             ...contest,
             courseNumber: id,
           });
           const params = new URLSearchParams({ ...contest, courseNumber: id });
           console.log({ ...contest, courseNumber: id });
-          const res = await Axios.get(
-            "http://localhost:5000/contest_id?" + params.toString()
-          );
+          const res = await axios.get("/contest_id?" + params.toString());
           navigate(
             `/administration/courses/${id}/contests/${res?.data?.message}/challenges`
           );
           setLoading(false);
         } else {
           setErrorMsg({ ...errorMsg, endTime: null });
-          const response = await Axios.put(
-            `http://localhost:5000/contests/${contestId}`,
-            contest
-          );
+          const response = await axios.put(`/contests/${contestId}`, contest);
           navigate(
             `/administration/courses/${id}/contests/${contestId}/challenges`
           );

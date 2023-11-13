@@ -7,9 +7,12 @@ import ManageChallenges from "../../Components/ManageChallenges";
 import ManageContests from "../../Components/ManageContests";
 import ManageCourses from "../../Components/ManageCourses";
 import Text from "../../Components/Text";
-
 import useStyles from "./style";
 import Breadcrumbs from "../../Components/Breadcrumbs";
+//
+import userContext from "../../Utils/userContext";
+import { useContext } from "react";
+//
 const Administration = () => {
   const [cookies, setCookies] = useCookies();
 
@@ -19,9 +22,12 @@ const Administration = () => {
   });
   useEffect(() => {
     axios
-      .get(`http://localhost:5000/challenges-for-owner?token=${cookies.token}`)
+      .get(`/challenges-for-owner`)
       .then((res) => {
         setData(res.data);
+      })
+      .catch((error) => {
+        console.log(error);
       });
   }, []);
   const tabs = [
@@ -38,8 +44,8 @@ const Administration = () => {
       urlPattern: "/administration/challenges",
     },
   ];
-
   const clasess = useStyles();
+
   return (
     <Container fluid className={clasess.Container}>
       <Row className={`${clasess.Row} mb-2`}>

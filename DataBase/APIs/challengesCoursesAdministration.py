@@ -8,7 +8,7 @@ from authentication import get_Data_from_token
 @app.route('/challenges-for-owner', methods=['GET'])
 def getChallengesForOwner():
     try:
-        tokenData = get_Data_from_token(request.args.get('token'))
+        tokenData = getattr(request, 'tokenData', None)
         ownerUniversityNumber = tokenData['universityNumber']
         name = tokenData['name']
 

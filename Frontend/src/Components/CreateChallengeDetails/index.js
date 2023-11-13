@@ -4,7 +4,7 @@ import Text from "../Text";
 import TextEditor from "../TextEditor";
 import Tags from "../Tags";
 import ButtonRank from "../ButtonRank";
-import Axios from "axios";
+import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 import { useEffect } from "react";
 import { useCookies } from "react-cookie";
@@ -60,7 +60,6 @@ const CreateChallengeDetails = ({ operation, data }) => {
       constraints: details.constraints,
       output_format: details.outputFormat,
       tags: details.tags.length === 0 ? null : details.tags,
-      token: cookies?.token,
     };
     setErrorMsg({
       name:
@@ -100,25 +99,17 @@ const CreateChallengeDetails = ({ operation, data }) => {
       setLoading(true);
       try {
         if (operation === "create") {
-          const response = await Axios.post(
-            "http://localhost:5000/challenges",
-            challenge
-          );
+          const response = await axios.post("/challenges", challenge);
           challenge = {
             ...challenge,
             tags:
               details.tags.length === 0 ? null : JSON.stringify(details.tags),
           };
           const params = new URLSearchParams(challenge);
-          const res = await Axios.get(
-            "http://localhost:5000/challenge_id?" + params.toString()
-          );
+          const res = await axios.get("/challenge_id?" + params.toString());
           navigate(`/administration/challenges/${res.data.message}/test-cases`);
         } else {
-          const response = await Axios.put(
-            `http://localhost:5000/challenges/${id}`,
-            challenge
-          );
+          const response = await axios.put(`/challenges/${id}`, challenge);
           navigate(`/administration/challenges/${id}/test-cases`);
         }
         setLoading(false);

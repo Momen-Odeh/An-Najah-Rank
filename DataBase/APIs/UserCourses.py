@@ -9,7 +9,7 @@ import base64
 @app.route('/userCourses', methods=['GET'])
 def getUserCourses():
     try:
-        tokenData = get_Data_from_token(request.args.get('token'))
+        tokenData = getattr(request, 'tokenData', None)
         sql = f"""
         SELECT
         courses.courseNumber,

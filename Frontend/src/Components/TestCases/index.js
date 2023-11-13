@@ -6,7 +6,7 @@ import TabTable from "../TabTable";
 import { HiPencil } from "react-icons/hi";
 import { BiCheckbox, BiCheckCircle, BiTrash } from "react-icons/bi";
 import useStyle from "./Style";
-import Axios from "axios";
+import axios from "axios";
 import AlertComponent from "../Alert";
 import { useParams } from "react-router-dom";
 import { validateNumber } from "../../Utils/Validation";
@@ -142,10 +142,7 @@ const TestCases = memo(({ operation, testCasesData }) => {
             : null,
         };
         try {
-          await Axios.put(
-            `http://localhost:5000/test_cases/${updatedTestCases[index].id}`,
-            data
-          );
+          await axios.put(`/test_cases/${updatedTestCases[index].id}`, data);
           setLoading(false);
         } catch (error) {
           console.log(error);
@@ -162,9 +159,7 @@ const TestCases = memo(({ operation, testCasesData }) => {
     let updatedTestCases = [...testCases];
     try {
       setLoading(true);
-      await Axios.delete(
-        `http://localhost:5000/test_cases/${updatedTestCases[index].id}`
-      );
+      await axios.delete(`/test_cases/${updatedTestCases[index].id}`);
       updatedTestCases.splice(index, 1);
       updatedTestCases = updatedTestCases.map((item, index) => ({
         ...item,
@@ -197,15 +192,10 @@ const TestCases = memo(({ operation, testCasesData }) => {
     };
     setShowAlert(false);
     try {
-      const response = await Axios.post(
-        "http://localhost:5000/test_cases",
-        dataToAdd
-      );
+      const response = await axios.post("/test_cases", dataToAdd);
       const params = new URLSearchParams(dataToAdd);
       console.log(dataToAdd);
-      const res = await Axios.get(
-        "http://localhost:5000/test_cases?" + params.toString()
-      );
+      const res = await axios.get("/test_cases?" + params.toString());
       console.log(res.data.message);
       return res.data.message;
     } catch (error) {

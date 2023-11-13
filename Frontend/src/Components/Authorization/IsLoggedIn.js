@@ -1,37 +1,41 @@
 import React, { useContext, useEffect } from "react";
-import { useCookies } from "react-cookie";
 import { Navigate, useNavigate } from "react-router-dom";
 import userContext from "../../Utils/userContext";
 import axios from "axios";
-import { toast } from "react-toastify";
-const IsLoggedIn = ({ moveTo, children }) => {
-  const [cookies, setCookies] = useCookies();
+import { toastError } from "../../Utils/toast";
+import Cookies from "js-cookie";
+const IsLoggedIn = ({ moveTo, children, isAdmin }) => {
   const navigate = useNavigate();
   const { activeUser, setActiveUser } = useContext(userContext);
   useEffect(() => {
+    // console.log("Admin *******", isAdmin);
     axios
       .get("http://localhost:5000/checkToken", {
         params: {
-          token: cookies.token,
+          token: Cookies.get("token"),
         },
       })
       .then((response) => {
-        setActiveUser(response.data);
+        if (isAdmin) {
+          if (
+            response.data.role === "professor" ||
+            response.data.role === "admin"
+          ) {
+            setActiveUser(response.data);
+          } else {
+            toastError("professor access only");
+            navigate("/");
+          }
+        } else {
+          setActiveUser(response.data);
+        }
       })
       .catch((error) => {
-        toast.error("unauthorized access", {
-          position: "bottom-left",
-          autoClose: 10000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "light",
-        });
+        console.log(error);
+        toastError("unauthorized access");
         navigate("/" + moveTo);
       });
-  }, []);
+  }, [isAdmin]);
   return children;
 };
 

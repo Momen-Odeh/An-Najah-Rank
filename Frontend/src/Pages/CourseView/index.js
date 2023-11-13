@@ -1,8 +1,6 @@
-import React from "react";
+import React, { useContext } from "react";
 import { useState } from "react";
-import { Col, Collapse, Container, Row } from "react-bootstrap";
-import { BiSolidRightArrow } from "react-icons/bi";
-import { Link } from "react-router-dom";
+import { Col, Container, Row } from "react-bootstrap";
 import Breadcrumbs from "../../Components/Breadcrumbs";
 import ContestsInCourse from "../../Components/ContestsInCourse";
 import Text from "../../Components/Text";
@@ -14,58 +12,18 @@ import { useEffect } from "react";
 import { AiFillFileText } from "react-icons/ai";
 import axios from "axios";
 import useStyles from "./style";
+import userContext from "../../Utils/userContext";
+import { useNavigate } from "react-router-dom";
+import { toastError } from "../../Utils/toast";
 const CourseView = () => {
-  const [showDescription, setShowDescription] = useState(false);
+  const context = useContext(userContext);
+  const { activeUser } = context;
+  const navigate = useNavigate();
   const { id } = useParams();
   const [course, setCourse] = useState({
-    contests: [
-      // {
-      //   Name: "An-Najah Rank test1",
-      //   solved: true,
-      //   statistics: [
-      //     { key: "Solved Rate: ", val: "50%" },
-      //     { key: "My Score: ", val: 100 },
-      //   ],
-      //   url: "#test1",
-      //   endDate: new Date(2023, 8, 30, 17, 0, 0),
-      // },
-    ],
+    contests: [],
   });
-
   const [students, setStudents] = useState([]);
-  useEffect(() => {
-    axios
-      .get("http://127.0.0.1:5000/course-info", {
-        params: {
-          courseNumber: id,
-        },
-      })
-      .then((response) => {
-        const { name, description, backgroundImage } = response.data.course;
-        setCourse({
-          ...course,
-          name,
-          description,
-          backgroundImage: backgroundImage
-            ? `data:image/jpeg;base64,${backgroundImage}`
-            : "https://wallpapercrafter.com/desktop/161398-low-poly-digital-art-network-dots-abstract-lines-red-cyan.png",
-          contests: response.data.contests.map((item) => {
-            return {
-              ...item,
-              Name: item.name,
-              url: `/courses/${id}/contests/${item.id}`,
-              endDate: item.endDate ? new Date(item.endDate) : null,
-            };
-          }),
-        });
-        setStudents(response.data.students);
-        // console.log(response.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }, []);
-  const isAdmin = true;
 
   const handleAddContest = (name) => {
     const newContest = {
@@ -83,10 +41,6 @@ const CourseView = () => {
     setCourse(updatedCourse);
   };
 
-  const path = [
-    { title: "Courses", url: "#Courses" },
-    { title: course.name, url: "#" },
-  ];
   const tabs = [
     {
       title: "Contests",
@@ -94,8 +48,11 @@ const CourseView = () => {
       TabComponent: (
         <ContestsInCourse
           contests={course.contests}
-          isAdmin={isAdmin}
+          isAdmin={
+            activeUser.role === "professor" || activeUser.role === "admin"
+          }
           handleAddContest={handleAddContest}
+          courseId={id}
         />
       ),
       urlPattern: `/courses/${id}/contests`,
@@ -109,6 +66,60 @@ const CourseView = () => {
       urlPattern: `/courses/${id}/members`,
     },
   ];
+
+  useEffect(() => {
+    axios
+      .get("/accessCourse", {
+        params: {
+          courseNumber: id,
+        },
+      })
+      .then((response1) => {
+        axios
+          .get("/course-info", {
+            params: {
+              courseNumber: id,
+            },
+          })
+          .then((response) => {
+            const { name, description, backgroundImage } = response.data.course;
+            const { students, moderators } = response.data;
+            setStudents(students);
+
+            setCourse({
+              ...course,
+              name,
+              description,
+              backgroundImage: backgroundImage
+                ? `data:image/jpeg;base64,${backgroundImage}`
+                : "https://wallpapercrafter.com/desktop/161398-low-poly-digital-art-network-dots-abstract-lines-red-cyan.png",
+              contests: response.data.contests.map((item) => {
+                return {
+                  ...item,
+                  Name: item.name,
+                  url: `/courses/${id}/contests/${item.id}`,
+                  endDate: item.endDate ? new Date(item.endDate) : null,
+                };
+              }),
+            });
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      })
+      .catch((error1) => {
+        console.log(error1);
+        if (error1.response.status === 401) {
+          toastError("Invalid Access");
+          if (error1.response.data.Valid === undefined) {
+            navigate("/log-in");
+          } else {
+            navigate("/");
+          }
+        }
+      });
+  }, []);
+
   const clasess = useStyles();
   return (
     <Container fluid className={clasess.Container}>
@@ -125,7 +136,7 @@ const CourseView = () => {
       )}
       <Row className={`${clasess.Row} mb-2`}>
         <Col className={`${clasess.Col}`}>
-          <Breadcrumbs path={path} />
+          <Breadcrumbs />
         </Col>
       </Row>
       <Row className={`${clasess.Row} mb-4`}>
@@ -162,24 +173,26 @@ const CourseView = () => {
           />
         </Col>
       </Row>
-      <Row className={`${clasess.Row} mb-2`}>
-        <Col className={`${clasess.Col}`}>
-          <ChallengeTabs ListTabs={tabs} />
-        </Col>
-      </Row>
-      {/* {isAdmin ? (
+
+      {activeUser.role === "professor" || activeUser.role === "admin" ? (
         <Row className={`${clasess.Row} mb-2`}>
           <Col className={`${clasess.Col}`}>
             <ChallengeTabs ListTabs={tabs} />
           </Col>
         </Row>
       ) : (
-        <ContestsInCourse
-          contests={course.contests}
-          isAdmin={isAdmin}
-          handleAddContest={handleAddContest}
-        />
-      )} */}
+        <Row className={`${clasess.Row} mb-2`}>
+          <Col className={`${clasess.Col}`}>
+            <ContestsInCourse
+              contests={course.contests}
+              isAdmin={
+                activeUser.role === "professor" || activeUser.role === "admin"
+              }
+              handleAddContest={handleAddContest}
+            />
+          </Col>
+        </Row>
+      )}
     </Container>
   );
 };

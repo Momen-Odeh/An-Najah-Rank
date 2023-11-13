@@ -6,8 +6,8 @@ from authentication import get_Data_from_token
 @app.route('/courses', methods=['POST'])
 def add_course():
     try:
+        tokenData = getattr(request, 'tokenData', None)
         data = request.get_json()
-        tokenData = get_Data_from_token(data['token'])
         ownerUniversityNumber = tokenData['universityNumber']
         result = insert_data(
             connection,

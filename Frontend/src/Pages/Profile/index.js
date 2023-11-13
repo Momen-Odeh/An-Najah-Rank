@@ -4,22 +4,23 @@ import useStyles from "./style";
 import ProfileAside from "../../Components/ProfileAside";
 import ProfileMain from "../../Components/ProfileMain";
 import axios from "axios";
-import { useCookies } from "react-cookie";
+import { toastError } from "../../Utils/toast";
+import { useNavigate } from "react-router-dom";
 const Profile = () => {
   const clasess = useStyles();
   const [accountInfo, setAccountInfo] = useState({});
   const [userCouses, setUserCouses] = useState([]);
-  const [cookies] = useCookies();
+  const navigate = useNavigate();
   useEffect(() => {
     axios
-      .get("http://127.0.0.1:5000/user?token=" + cookies.token)
+      .get("/user")
       .then((response) => {
         const imageSrc =
           response.data.img && `data:image/jpeg;base64,${response.data.img}`;
         setAccountInfo({ ...response.data, img: imageSrc });
 
         axios
-          .get("http://127.0.0.1:5000/userCourses?token=" + cookies.token)
+          .get("/userCourses")
           .then((response) => {
             console.log(response.data.courses);
             setUserCouses(
@@ -34,6 +35,10 @@ const Profile = () => {
       })
       .catch((error) => {
         console.log("Error fetching image:", error);
+        if (error.response.status === 401) {
+          toastError("unauthorized access");
+          navigate("/log-in");
+        }
       });
   }, []);
   return (

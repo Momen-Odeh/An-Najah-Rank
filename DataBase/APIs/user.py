@@ -10,7 +10,7 @@ import base64
 @app.route('/user', methods=['GET'])
 def getUserInfo():
     try:
-        tokenData = get_Data_from_token(request.args.get('token'))
+        tokenData = getattr(request, 'tokenData', None)
         result = fetch_results(
             execute_query(connection, f"SELECT * FROM `an-najah rank`.user where email = '{tokenData['email']}';")
         )
@@ -39,7 +39,7 @@ def getUserInfo():
         }), 400
 @app.route('/userImg', methods=['PUT']) #must add token to the API
 def UpdateUserImg():
-    tokenData = get_Data_from_token(request.args.get('token'))
+    tokenData = getattr(request, 'tokenData', None)
     try:
         image = request.files['image']
         imageData = image.read()
@@ -58,7 +58,7 @@ def UpdateUserImg():
 def UpdateUser():
     try:
         data = request.get_json()
-        tokenData = get_Data_from_token(request.args.get('token'))
+        tokenData = getattr(request, 'tokenData', None)
         print(data['keys'])
         print(data['values'])
         update_data(connection, 'user', data['keys'], data['values'], f"(email = '{tokenData['email']}')")
@@ -74,7 +74,7 @@ def UpdateUser():
 @app.route('/user', methods=['DELETE']) #must add token to the API
 def DeleteUser():
     try:
-        tokenData = get_Data_from_token(request.args.get('token'))
+        tokenData = getattr(request, 'tokenData', None)
         password = request.args.get('password')
         result = fetch_results(execute_query(connection,f"SELECT * FROM `an-najah rank`.user where email = '{tokenData['email']}';"))
         if (check_password_hash(result[0][5], password)):
@@ -110,7 +110,7 @@ def getUserImg(email):
 def updatePasswordSettings():
     if request.is_json:
         try:
-            tokenData = get_Data_from_token(request.args.get('token'))
+            tokenData = getattr(request, 'tokenData', None)
             data = request.get_json()
             email = tokenData['email']
             currentPassword = data['currentPassword']

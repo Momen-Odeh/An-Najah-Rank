@@ -1,3 +1,5 @@
+from flask import request, jsonify
+from FlaskSetUp import app
 from flask import request, jsonify, render_template
 from FlaskSetUp import app, socketio
 from flask_cors import CORS
@@ -25,8 +27,14 @@ from APIs.contestsForCourse import getContestForCourse
 from authentication import check_token
 from APIs.admin import get_professor_pending
 from APIs.UserCourses import getUserCourses
+from APIs.AccessCourse import accessCourse
+from authAPIs import validate_token
 import Notification.notification
-CORS(app)
+
+@app.route('/flask', methods=['GET'])
+def index():
+    # Access the token data from the request object
+    return jsonify({'message': getattr(request, 'tokenData', None)})
 
 if __name__ == '__main__':
     socketio.run(app, debug=True, allow_unsafe_werkzeug=True)

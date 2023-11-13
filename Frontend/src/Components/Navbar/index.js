@@ -16,13 +16,14 @@ const Header = ({ activeTab }) => {
     { id: 2, title: "Settings", link: "/settings" },
     { id: 3, title: "Submissions", link: "#Submissions" },
     { id: 4, title: "Administration", link: "/administration/courses" },
-    { id: 5, title: "Logout", link: "#Logout" },
+    { id: 5, title: "Logout", link: "log-in" },
   ]);
   const signInPath = routes.filter(
     (item) => item.title === routeNames.LOG_IN
   )[0].path;
   const homePath = routes.filter((item) => item.title === routeNames.HOME)[0]
     .path;
+
   return (
     <Navbar
       collapseOnSelect
@@ -66,7 +67,10 @@ const Header = ({ activeTab }) => {
                 <Nav.Link
                   key={choice.id}
                   className={`${classes.hoveringColor}`}
-                  onClick={() => navigate(choice.link)}
+                  onClick={() => {
+                    console.log("choice.id == 5");
+                    navigate(choice.link);
+                  }}
                 >
                   {choice.title}
                 </Nav.Link>

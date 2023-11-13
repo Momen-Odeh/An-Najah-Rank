@@ -27,9 +27,9 @@ const Contests = () => {
   const [challengesContest, setChallengesContest] = useState([]);
   useEffect(() => {
     axios
-      .get(
-        `http://localhost:5000/contest-info?contest_id=${contestId}&token=${cookies.token}`
-      )
+      .get(`/contest-info`, {
+        params: { contest_id: contestId },
+      })
       .then((res) => {
         setDetails({
           name: res.data.contest.name,
@@ -55,17 +55,6 @@ const Contests = () => {
       .catch((error) => {});
   }, []);
 
-  const path = [
-    {
-      title: "Manage Contests",
-      url: `/administration/courses/${id}/contests`,
-    },
-    {
-      title: details.name,
-      url: "#",
-    },
-  ];
-
   const tabContent = [
     {
       eventKey: "Details",
@@ -89,7 +78,7 @@ const Contests = () => {
     <Container fluid className={clasess.Container}>
       <Row className={`mt-2 ${clasess.maxWidth}`}>
         <Col>
-          <Breadcrumbs path={path} />
+          <Breadcrumbs />
         </Col>
       </Row>
       <Row className={`mb-4 ${clasess.maxWidth}`}>

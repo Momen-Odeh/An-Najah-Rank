@@ -10,6 +10,7 @@ import axios from "axios";
 import TestCaseProblem from "../TestCaseProblem";
 import { FaCheck } from "react-icons/fa";
 import { ImCross } from "react-icons/im";
+import BackEndURI from "../../Utils/BackEndURI";
 const defaultLang = {
   java: `  import java.io.*;
   import java.util.*;
@@ -137,7 +138,7 @@ const CodeEditor = () => {
           context.setLoading(true);
           context.testCases.setVal({ ...context.testCases.val, show: false });
           console.log("Send Request");
-          const codeResult = await axios.post("http://127.0.0.1:5001/" + lang, {
+          const codeResult = await axios.post(BackEndURI + "/" + lang, {
             code: textCode,
           });
           console.log("Get Result", codeResult.data);

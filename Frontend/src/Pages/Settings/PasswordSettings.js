@@ -45,13 +45,9 @@ const PasswordSettings = () => {
       if (updatePassword.newPassword === updatePassword.confirmPassword) {
         setLoading(true);
         axios
-          .put(
-            "http://127.0.0.1:5000/updatePasswordSettings?token=" +
-              cookies.token,
-            {
-              ...updatePassword,
-            }
-          )
+          .put("/updatePasswordSettings", {
+            ...updatePassword,
+          })
           .then((response) => {
             console.log(response.data);
             setUpdatePassword({

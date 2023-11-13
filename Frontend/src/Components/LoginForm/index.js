@@ -8,15 +8,13 @@ import ButtonRegister from "../ButtonRegister";
 import useStyles from "./style";
 import { Link, useNavigate } from "react-router-dom";
 import handelStateChanges from "../../Utils/handelStateChanges";
-import Axios from "axios";
-import { useCookies } from "react-cookie";
-import { useUserContext } from "../../Utils/userContext";
+import axios from "axios";
+import Cookies from "js-cookie";
 import { validateEmail, validatePassword } from "../../Utils/Validation";
 import { toast } from "react-toastify";
 import Loader from "react-spinners/ClipLoader";
 const LogInForm = () => {
   const navigate = useNavigate();
-  const [cookies, setCookie, removeCookie] = useCookies(["token"]);
   const [loginValue, setLoginValue] = useState({ email: "", password: "" });
   const [errorMsg, setErrorMsg] = useState({
     email: null,
@@ -43,13 +41,17 @@ const LogInForm = () => {
       validateEmail(loginValue.email)
     ) {
       try {
-        const response = await Axios.get("http://localhost:5000/login", {
+        const response = await axios.get("/login", {
           params: {
             email: loginValue.email,
             password: loginValue.password,
           },
         });
-        setCookie("token", response.data.token);
+        console.log(response);
+        Cookies.set("token", response.data.token, {
+          expires: 30,
+          path: "/",
+        });
         navigate("/");
       } catch (error) {
         if (error.response?.status === 404) {
