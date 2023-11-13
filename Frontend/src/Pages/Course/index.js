@@ -41,7 +41,7 @@ const Course = () => {
           number: res.data.course.courseNumber,
           name: res.data.course.name,
           description: res.data.course.description,
-          image: `data:image/jpeg;base64,${res.data.course.backgroundImage}`,
+          image: res.data.course.backgroundImage,
           students: res.data.students,
         });
         setOwnerInfo(res.data.course.owner);

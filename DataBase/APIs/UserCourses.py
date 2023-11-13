@@ -2,6 +2,7 @@ from flask import request, jsonify
 from FlaskSetUp import app
 from MySQL_SetUp import connection
 from dataBaseConnection import execute_query,fetch_results
+from fileManagment.getFileAWS import get_file_from_AWS
 import json
 from authentication import get_Data_from_token
 import base64
@@ -39,7 +40,7 @@ def getUserCourses():
                 "modirators":item[5].split(',')
             }
                 if item[4] is not None:
-                    response["img"] = "data:image/jpeg;base64,"+base64.b64encode(item[4]).decode('utf-8')
+                    response["img"] = get_file_from_AWS(item[4])
                 coursesData.append(response)
 
             return {"status":"found courses","courses":coursesData}, 200

@@ -4,6 +4,7 @@ from dataBaseConnection import execute_query, fetch_results
 from MySQL_SetUp import connection
 import base64
 from APIs.contestsForCourse import getContestForCourse
+from fileManagment.getFileAWS import get_file_from_AWS
 import io
 @app.route('/course-info', methods=['GET'])
 def get_course_info():
@@ -36,7 +37,7 @@ def get_course_info():
             "backgroundImage": None
         }
         if course[4] is not None:
-            courseData["backgroundImage"] = base64.b64encode(course[4]).decode('utf-8')
+            courseData["backgroundImage"] = get_file_from_AWS(course[4])#base64.b64encode(course[4]).decode('utf-8')
         query = f"""
                     SELECT *
                     FROM user 

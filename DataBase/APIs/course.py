@@ -1,8 +1,9 @@
 from FlaskSetUp import app
 from flask import request, jsonify
-from dataBaseConnection import insert_data, update_data, delete_data
+from dataBaseConnection import insert_data, update_data, delete_data, execute_query, fetch_results
 from MySQL_SetUp import connection
-from authentication import get_Data_from_token
+from fileManagment.uploadFile import upload_file
+from fileManagment.deleteFileAWS import delete_file_from_AWS
 @app.route('/courses', methods=['POST'])
 def add_course():
     try:
@@ -35,8 +36,18 @@ def UpdateCorseImg(courseNumber):
         image = request.files['image']
         if image.filename == '':
             return "No selected file", 400
-        imageData = image.read()
-        update_data(connection, 'courses', ["backgroundImage"], (imageData), f"(courseNumber = '{courseNumber}')")
+        # imageData = image.read()
+        result = fetch_results(
+            execute_query(connection,
+                          f"SELECT * FROM `an-najah rank`.courses where courseNumber = '{courseNumber}';")
+        )
+        if result[0][4] is not None or result[0][4] != "":
+            delete_file_from_AWS(result[0][4])
+
+        # imageData = image.read()
+        # print("imageData")
+        key = upload_file(image, f"images/courseImages/{courseNumber}")
+        update_data(connection, 'courses', ["backgroundImage"], (key), f"(courseNumber = '{courseNumber}')")
         return jsonify({
             "status": "Update image successfully",
         }), 200

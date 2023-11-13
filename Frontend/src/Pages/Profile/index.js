@@ -15,9 +15,7 @@ const Profile = () => {
     axios
       .get("/user")
       .then((response) => {
-        const imageSrc =
-          response.data.img && `data:image/jpeg;base64,${response.data.img}`;
-        setAccountInfo({ ...response.data, img: imageSrc });
+        setAccountInfo({ ...response.data });
 
         axios
           .get("/userCourses")
