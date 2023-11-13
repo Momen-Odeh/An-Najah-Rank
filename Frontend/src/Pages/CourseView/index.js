@@ -55,7 +55,7 @@ const CourseView = () => {
           courseId={id}
         />
       ),
-      urlPattern: `/courses/${id}/contests`,
+      // urlPattern: `/courses/${id}/contests`,
     },
     {
       title: "Course Students",
@@ -63,7 +63,7 @@ const CourseView = () => {
       TabComponent: (
         <StudentsInCourse students={students} setStudents={setStudents} />
       ),
-      urlPattern: `/courses/${id}/members`,
+      // urlPattern: `/courses/${id}/contests`,
     },
   ];
 
