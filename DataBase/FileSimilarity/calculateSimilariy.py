@@ -69,16 +69,14 @@ def getSimilarityURL(contestId, challengeId):
     downloadSubmitionFileAWS(submitionFileName,submitionsKeys)
     # ******************************************************************************************************************
     file_list = [f for f in os.listdir(submitionFileName) if os.path.isfile(os.path.join(submitionFileName, f))]
-    print("***********************************5555555555********************************")
     # add files on moss generate similarity uri
     dataURL = similarityDataByMOSS(submitionFileName,file_list)
-    print("***********************************6666666666********************************")
     # ************************************************ remove directory ************************************************
     shutil.rmtree(submitionFileName) #remove directory with content
     # ******************************************************************************************************************
     return dataURL
 def calculateSimilariy(contestId, challengeId):
-    url = getSimilarityURL(contestId, challengeId)#"http://moss.stanford.edu/results/4/8505676147501"
+    url = "http://moss.stanford.edu/results/3/4528236255023"#getSimilarityURL(contestId, challengeId)#
     similarityFiles = pd.read_html(url)
     response = similarityFiles[0].values
     filesNames = set()  # [uniqeFileNames,]
@@ -90,6 +88,11 @@ def calculateSimilariy(contestId, challengeId):
         lines = []
         for line in matchLines[0].values:
             lines.append([line[0], line[2]])
+
+        splitStr = seprate1[0].split("/")
+        seprate1[0] = splitStr[len(splitStr) - 1].split(".")[0]
+        splitStr = seprate2[0].split("/")
+        seprate2[0] = splitStr[len(splitStr) - 1].split(".")[0]
 
         similarityFilesData.append([index, seprate1[0], seprate1[1], seprate2[0], seprate2[1], rowFile[2], lines])
         filesNames.add(seprate1[0])

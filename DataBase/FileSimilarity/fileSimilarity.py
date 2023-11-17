@@ -7,6 +7,116 @@ from fileManagment.deleteFileAWS import delete_file_from_AWS
 from FileSimilarity.calculateSimilariy import calculateSimilariy
 import pandas as pd
 
+# {
+    #     "challengeId": "30",
+    #     "contestId": "67",
+    #     "filesSimilarity": [
+    #         {
+    #             "SimilarFiles": [
+    #                 {
+    #                     "linesMatch": [
+    #                         {
+    #                             "f1Lines": "26-51",
+    #                             "f2Lines": "15-36"
+    #                         },
+    #                         {
+    #                             "f1Lines": "1-7",
+    #                             "f2Lines": "1-7"
+    #                         }
+    #                     ],
+    #                     "numLinesSimilar": 33,
+    #                     "similarFileName": "Mohammad_zaied-11924574",
+    #                     "similarPercentage": "65%"
+    #                 },
+    #                 {
+    #                     "linesMatch": [
+    #                         {
+    #                             "f1Lines": "1-7",
+    #                             "f2Lines": "1-7"
+    #                         }
+    #                     ],
+    #                     "numLinesSimilar": 7,
+    #                     "similarFileName": "Noor_Aldeen_Muneer_Barham_Abu_Shehadeh-11749582",
+    #                     "similarPercentage": "12%"
+    #                 }
+    #             ],
+    #             "fileName": "Momen_Hasan_Odeh-11923929",
+    #             "totalNumSimilarityLine": 33,
+    #             "totalSimilarRange": [
+    #                 "1-7",
+    #                 "26-51"
+    #             ]
+    #         },
+    #         {
+    #             "SimilarFiles": [
+    #                 {
+    #                     "linesMatch": [
+    #                         {
+    #                             "f1Lines": "1-7",
+    #                             "f2Lines": "1-7"
+    #                         }
+    #                     ],
+    #                     "numLinesSimilar": 7,
+    #                     "similarFileName": "Momen_Hasan_Odeh-11923929",
+    #                     "similarPercentage": "19%"
+    #                 },
+    #                 {
+    #                     "linesMatch": [
+    #                         {
+    #                             "f1Lines": "1-7",
+    #                             "f2Lines": "1-7"
+    #                         }
+    #                     ],
+    #                     "numLinesSimilar": 7,
+    #                     "similarFileName": "Mohammad_zaied-11924574",
+    #                     "similarPercentage": "19%"
+    #                 }
+    #             ],
+    #             "fileName": "Noor_Aldeen_Muneer_Barham_Abu_Shehadeh-11749582",
+    #             "totalNumSimilarityLine": 7,
+    #             "totalSimilarRange": [
+    #                 "1-7"
+    #             ]
+    #         },
+    #         {
+    #             "SimilarFiles": [
+    #                 {
+    #                     "linesMatch": [
+    #                         {
+    #                             "f1Lines": "15-36",
+    #                             "f2Lines": "26-51"
+    #                         },
+    #                         {
+    #                             "f1Lines": "1-7",
+    #                             "f2Lines": "1-7"
+    #                         }
+    #                     ],
+    #                     "numLinesSimilar": 33,
+    #                     "similarFileName": "Momen_Hasan_Odeh-11923929",
+    #                     "similarPercentage": "90%"
+    #                 },
+    #                 {
+    #                     "linesMatch": [
+    #                         {
+    #                             "f1Lines": "1-7",
+    #                             "f2Lines": "1-7"
+    #                         }
+    #                     ],
+    #                     "numLinesSimilar": 7,
+    #                     "similarFileName": "Noor_Aldeen_Muneer_Barham_Abu_Shehadeh-11749582",
+    #                     "similarPercentage": "16%"
+    #                 }
+    #             ],
+    #             "fileName": "Mohammad_zaied-11924574",
+    #             "totalNumSimilarityLine": 29,
+    #             "totalSimilarRange": [
+    #                 "1-7",
+    #                 "15-36"
+    #             ]
+    #         }
+    #     ]
+    # }
+
 @app.route('/file-Similarity', methods=['POST'])
 def FileSimilarity():
     try:
@@ -62,6 +172,7 @@ def getFileSimilarity():
         return fileContent,200
     except Exception as e:
         return {"error": e}, 409
+
 
 @app.route('/pdTest', methods=['GET'])
 def getFileSimilarityss():
