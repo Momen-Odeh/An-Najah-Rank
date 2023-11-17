@@ -3,7 +3,7 @@ import json
 from fileManagment.uploadFile import upload_file
 from  fileManagment.getFileContent import get_file_content
 def storeSimilarityAWS(fileContent,contestId,challengeId):
-    fullPath = os.path.abspath(os.path.join("FileSimilarity/similarity", f"file.json"))
+    fullPath = os.path.abspath(os.path.join("FileSimilarity", f"file.json"))
     print(f"Full path: {fullPath}")
     with open(fullPath, "w", encoding="utf-8") as file:
         file.write(json.dumps(fileContent))
