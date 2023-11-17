@@ -1,0 +1,5 @@
+
+def storeSimilarityAWS():
+
+    return True
+
