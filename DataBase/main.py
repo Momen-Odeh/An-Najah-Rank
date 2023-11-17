@@ -29,7 +29,7 @@ from APIs.admin import get_professor_pending
 from APIs.UserCourses import getUserCourses
 from APIs.AccessCourse import accessCourse
 from authAPIs import validate_token
-from  FileSimilarity import  fileSimilarity
+from FileSimilarity import fileSimilarity
 import Notification.notification
 
 @app.route('/flask', methods=['GET'])
