@@ -37,7 +37,7 @@ class Moss:
     server = 'moss.stanford.edu'
     port = 7690
 
-    def __init__(self, user_id, language="c"):
+    def __init__(self, user_id=549392426, language="java"):
         self.user_id = user_id
         self.options = {
             "l": "c",
@@ -88,7 +88,21 @@ class Moss:
     def getLanguages(self):
         return self.languages
 
+
     def uploadFile(self, s, file_path, display_name, file_id, on_send):
+        lang = file_path.split('.')[-1]
+        if lang == "py":
+            lang = "python"
+        elif lang == "js":
+            lang = "javascript"
+        elif lang == "cpp":
+            lang = "cc"
+
+        # print("the language is ", lang)
+        # print("file path is ", file_path)
+        if lang not in self.languages:
+            lang = "java"
+
         if display_name is None:
             # If no display name added by user, default to file path
             # Display name cannot accept \, replacing it with /
@@ -97,7 +111,7 @@ class Moss:
         size = os.path.getsize(file_path)
         message = "file {0} {1} {2} {3}\n".format(
             file_id,
-            self.options['l'],
+            lang,
             size,
             display_name
         )

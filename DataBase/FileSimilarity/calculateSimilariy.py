@@ -41,8 +41,7 @@ def downloadSubmitionFileAWS(submitionFileName,submitionsKeys):
         s3.download_file(S3_BUCKET, key, localFilePath)
 
 def similarityDataByMOSS(basePath,filesName):
-    userid = 549392426
-    m = moss.Moss(userid, "java")
+    m = moss.Moss()
     for fileName in filesName:
         m.addFile(basePath+"/"+fileName)
     url = m.send(lambda file_path, display_name: print('*', end='', flush=True))
@@ -76,7 +75,7 @@ def getSimilarityURL(contestId, challengeId):
     # ******************************************************************************************************************
     return dataURL
 def calculateSimilariy(contestId, challengeId):
-    url = "http://moss.stanford.edu/results/3/4528236255023"#getSimilarityURL(contestId, challengeId)#
+    url = getSimilarityURL(contestId, challengeId)#"http://moss.stanford.edu/results/3/4528236255023"#
     similarityFiles = pd.read_html(url)
     response = similarityFiles[0].values
     filesNames = set()  # [uniqeFileNames,]
