@@ -32,6 +32,9 @@ from authAPIs import validate_token
 from APIs.student_submissions import add_challenge_student
 from APIs.getSubmission import get_submission_info
 from APIs.runCode import run_challenge_code
+from FileSimilarity import fileSimilarity
+import Notification.notification
+
 @app.route('/flask', methods=['GET'])
 def index():
     # Access the token data from the request object
