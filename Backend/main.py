@@ -41,7 +41,7 @@ def applayPython():
     else:
         return jsonify({"error": "Request body must contain JSON data"}), 400
 
-@app.route('/JS', methods=['POST'])
+@app.route('/javascript', methods=['POST'])
 def applayJs():
     if request.is_json:
         try:
@@ -54,7 +54,7 @@ def applayJs():
     else:
         return jsonify({"error": "Request body must contain JSON data"}), 400
 
-@app.route('/RE', methods=['POST'])
+@app.route('/regularexpression', methods=['POST'])
 def applayRE():
     if request.is_json:
         try:

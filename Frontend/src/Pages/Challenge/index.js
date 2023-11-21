@@ -16,10 +16,11 @@ import { FaCheck } from "react-icons/fa";
 import { ImCross } from "react-icons/im";
 import TestCaseProblem from "../../Components/TestCaseProblem";
 import { toastError } from "../../Utils/toast";
+import Submission from "../../Components/Submission";
 
 const Challenge = ({}) => {
   const clasess = useStyles();
-  const { id, contestId, challengeId } = useParams();
+  const { id, contestId, challengeId, submissionId } = useParams();
   const navigate = useNavigate();
   const [challengeData, setChallengeData] = useState({});
   const [testCases, setTestCases] = useState({
@@ -27,6 +28,7 @@ const Challenge = ({}) => {
     tabContent: [],
   });
   const [loading, setLoading] = useState(false);
+  const [loadingPage, setLoadingPage] = useState(false);
   const tabContent = [
     {
       eventKey: "Problem",
@@ -39,6 +41,8 @@ const Challenge = ({}) => {
       title: "Submissions",
       TabComponent: <SubmitionTab />,
       urlPattern: `/courses/${id}/contests/${contestId}/challenges/${challengeId}/submissions`,
+      innerTabComponent: <Submission />,
+      innerTabUrl: `/courses/${id}/contests/${contestId}/challenges/${challengeId}/submissions/${submissionId}`,
     },
     {
       eventKey: "Leaderboard",
@@ -62,10 +66,11 @@ const Challenge = ({}) => {
       })
       .then((response1) => {
         axios
-          .get("/challenge/" + challengeId)
+          .get("/challenge/" + challengeId, { timeout: 1000000 })
           .then((res) => {
             setChallengeData(res.data);
             console.log(res);
+            setLoadingPage(true);
           })
           .catch((e) => {
             console.log(e.response);
@@ -113,9 +118,7 @@ const Challenge = ({}) => {
           </Col>
         </Row>
         <Row className={`mb-4 ${clasess.maxWidth}`}>
-          <Col>
-            <ChallengeTabs ListTabs={tabContent} />
-          </Col>
+          <Col>{loadingPage && <ChallengeTabs ListTabs={tabContent} />}</Col>
         </Row>
       </Container>
     </ChallengeContext.Provider>

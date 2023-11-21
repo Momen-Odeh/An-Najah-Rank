@@ -18,16 +18,23 @@ const ChallengeTabs = ({ ListTabs, PaddingTop = "30px" }) => {
       setActiveTab(tab.eventKey);
     }
   };
+  const [activeItem, setActiveItem] = useState(null);
+
   useEffect(() => {
     const currentPathname = location.pathname;
     for (const tab of ListTabs) {
-      if (currentPathname.includes(tab.urlPattern)) {
+      if (tab.innerTabUrl && currentPathname.includes(tab.innerTabUrl)) {
         setActiveTab(tab.eventKey);
+        setActiveItem(tab.eventKey);
+        break;
+      } else if (currentPathname.includes(tab.urlPattern)) {
+        setActiveTab(tab.eventKey);
+        setActiveItem(null);
         break;
       }
     }
   }, [location.pathname]);
-
+  console.log(activeItem);
   return (
     <Tabs
       className={classes.Tabs}
@@ -43,7 +50,7 @@ const ChallengeTabs = ({ ListTabs, PaddingTop = "30px" }) => {
           tabClassName={classes.Tab}
           className={classes.InnerTab}
         >
-          {item.TabComponent}
+          {activeItem ? item.innerTabComponent : item.TabComponent}
         </Tab>
       ))}
     </Tabs>

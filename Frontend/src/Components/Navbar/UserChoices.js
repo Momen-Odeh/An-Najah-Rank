@@ -22,6 +22,7 @@ const UserChoices = ({ userChoices }) => {
     cookieNames.forEach((cookieName) => {
       Cookies.remove(cookieName, { path: "/" });
     });
+    localStorage.clear();
     navigate("/log-in");
     window.location.reload();
   };
