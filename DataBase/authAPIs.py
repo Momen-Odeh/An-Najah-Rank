@@ -26,7 +26,7 @@ def before_request():
         response = make_response()
         response.headers.add("Access-Control-Allow-Origin", "*")
         response.headers.add("Access-Control-Allow-Headers", "Content-Type,Authorization")
-        response.headers.add("Access-Control-Allow-Methods", "GET,POST,PUT,DELETE")
+        response.headers.add("Access-Control-Allow-Methods", "GET,POST,PUT,DELETE,OPTIONS")
         return response
     valid = validate_token()
     print("MIDDLEWARE: ","valid ==>",valid ,"path ==>",request.path, "token ==>", request.headers.get('Authorization'))
