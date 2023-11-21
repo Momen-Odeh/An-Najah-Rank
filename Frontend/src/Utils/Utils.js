@@ -16,14 +16,13 @@ import CourseView from "../Pages/CourseView";
 import Administration from "../Pages/Administration";
 import IsLoggedIn from "../Components/Authorization/IsLoggedIn";
 import Challenges from "../Pages/Challenges";
-import MoveToPath from "../Components/MoveToPath";
 import Profile from "../Pages/Profile";
 import Contests from "../Pages/Contests";
 import Course from "../Pages/Course";
 import Settings from "../Pages/Settings";
 import Admin from "../Pages/Admin";
 import NotificationComponent from "../Components/Notification";
-import UploadFile from "../Components/UploadFile";
+import Submission from "../Components/Submission";
 // const AboutUs = lazy(() => import("../Pages/AboutUs/SubComponents/AboutUs"))
 
 export const routeNames = {
@@ -165,7 +164,18 @@ export const routes = [
                           {
                             title: "submissions",
                             path: "submissions",
-                            component: <Challenge />,
+                            component: <Outlet />,
+                            subRoutes: [
+                              {
+                                index: true,
+                                component: <Challenge />,
+                              },
+                              {
+                                title: "problem",
+                                path: ":submissionId",
+                                component: <Challenge />,
+                              },
+                            ],
                           },
                           {
                             title: "leaderboard",
@@ -195,15 +205,15 @@ export const routes = [
     ],
   },
   //**************************************************/courses**************************************************************/
+  // {
+  //   path: "/notification",
+  //   title: "Notification",
+  //   component: <NotificationComponent />,
+  // },
   {
-    path: "/notification",
-    title: "Notification",
-    component: <NotificationComponent />,
-  },
-  {
-    path: "/upload-file",
-    title: "upload file",
-    component: <UploadFile />,
+    path: "/Submission",
+    title: "Submission",
+    component: <Submission />,
   },
   /******************************************* /admin ***********************************/
   {
