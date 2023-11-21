@@ -22,18 +22,18 @@ def compileCCode(cFilePath,folderPath):
 # Run compiled C code
 def runCCode(folderPath, input_data):
     try:
-        result= None
+        result = []
         if(input_data):
-            result = subprocess.run([folderPath], input=input_data, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+            for input in input_data:
+                result.append(subprocess.run([folderPath], input=input, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True))
         else:
-            result = subprocess.run([folderPath], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+            result.append(subprocess.run([folderPath], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True))
 
-        if result.returncode == 0:
-            return result.stdout, None
-        else:
-            return None, result.stderr
+        results = [[r.returncode == 0, r.stdout, r.stderr] for r in result]
+
+        return results
     except subprocess.CalledProcessError as e:
-        return None, e.stderr
+        return [(False, None, e.stderr)]
 
 def compileAndRunCCode(code, input_data):
     try:
@@ -42,11 +42,8 @@ def compileAndRunCCode(code, input_data):
         folderPath += "/output"
         success, std = compileCCode(codePath, folderPath)
         if success:
-            stdout, stderr = runCCode(folderPath, input_data)
-            if stdout is not None:
-                return jsonify({'output': stdout})
-            else:
-                return jsonify({'error': 'Runtime error', 'stderr': stderr}), 500
+            output = runCCode(folderPath, input_data)
+            return jsonify({'output': output}), 200
         else:
             return jsonify({'error': 'Compile time error', 'stderr': std}), 400
     except Exception as e:
