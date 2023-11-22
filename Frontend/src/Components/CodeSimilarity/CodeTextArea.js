@@ -7,7 +7,7 @@ const CodeTextArea = ({ text }) => {
   useEffect(() => {
     if (typeof text == "string") {
       const lines = text.split("\n").length;
-      const newHeight = Math.max(100, lines * 30);
+      const newHeight = Math.max(480, lines * 27.75);
       setTextareaHeight(`${newHeight}px`);
     }
   }, [text]);
@@ -34,33 +34,29 @@ const CodeTextArea = ({ text }) => {
 
   //
   return (
-    <Row>
-      <Col>
-        <div className={classes.textAreaContainer}>
-          <div className={classes.lineNumbers}>
-            {typeof text == "string" &&
-              Array.from({ length: splitLines.length }, (_, index) => (
-                <div key={index} className={classes.lineNumber}>
-                  {index + 1}
-                </div>
-              ))}
-          </div>
+    <div className={classes.textAreaContainer}>
+      <div className={classes.lineNumbers}>
+        {typeof text == "string" &&
+          Array.from({ length: splitLines.length }, (_, index) => (
+            <div key={index} className={classes.lineNumber}>
+              {index + 1}
+            </div>
+          ))}
+      </div>
 
-          <div
-            // contentEditable={true}
-            dangerouslySetInnerHTML={{ __html: highlightedContent.join("") }}
-            className={classes.textarea}
-            style={{
-              borderLeft: "1px solid #ccc",
-              padding: "6px",
-              paddingLeft: "10px",
-              minHeight: "100px",
-              height: textareaHeight,
-            }}
-          />
-        </div>
-      </Col>
-    </Row>
+      <div
+        // contentEditable={true}
+        dangerouslySetInnerHTML={{ __html: highlightedContent.join("") }}
+        className={classes.textarea}
+        style={{
+          borderLeft: "1px solid #ccc",
+          padding: "6px",
+          paddingLeft: "10px",
+          minHeight: "100px",
+          height: textareaHeight,
+        }}
+      />
+    </div>
   );
 };
 

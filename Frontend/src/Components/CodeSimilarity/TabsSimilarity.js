@@ -1,50 +1,62 @@
 import React, { useEffect, useState } from "react";
 import useStyles from "./tabsSimilarityStyles";
 import { Tab, Tabs } from "react-bootstrap";
-import { useLocation, useNavigate } from "react-router-dom";
-import { tab } from "@testing-library/user-event/dist/tab";
+import { TfiMoreAlt } from "react-icons/tfi";
+import AllTabs from "./AllTabs";
 
 const TabsSimilarity = ({ ListTabs, PaddingTop = "30px" }) => {
-  const navigate = useNavigate();
   const classes = useStyles({ PaddingTop });
-  const location = useLocation();
   const [activeTab, setActiveTab] = useState(ListTabs[0]?.eventKey);
+  const [expandTabs, setExpandTabs] = useState(false);
+  const usageTab = ListTabs.map((item) => (
+    <Tab
+      eventKey={item.eventKey}
+      title={item.title}
+      tabClassName={classes.Tab}
+      className={classes.InnerTab}
+    >
+      {item.TabComponent}
+    </Tab>
+  ));
+  const [tabsShows, setTabsShows] = useState([usageTab[0]]);
 
+  const expTab = (
+    <Tab
+      eventKey={"Expand Tabs"}
+      title={<TfiMoreAlt />}
+      tabClassName={classes.Tab}
+      className={classes.InnerTab}
+    >
+      <AllTabs
+        tabsObj={ListTabs}
+        tabs={usageTab}
+        setTabsShows={setTabsShows}
+        tabsShows={tabsShows}
+        setActiveTab={setActiveTab}
+      />
+    </Tab>
+  );
   const handleTabSelect = (selectedTabKey) => {
-    const selectedTab = ListTabs.find((tab) => tab.eventKey === selectedTabKey);
-    if (selectedTab && selectedTab.urlPattern) {
-      navigate(selectedTab.urlPattern);
-    } else {
-      setActiveTab(tab.eventKey);
+    console.log(selectedTabKey);
+    if (selectedTabKey === "Expand Tabs") {
+      setActiveTab("tab1");
+      setExpandTabs(!expandTabs);
     }
+    setActiveTab(selectedTabKey);
   };
+
   useEffect(() => {
-    const currentPathname = location.pathname;
-    for (const tab of ListTabs) {
-      if (currentPathname.includes(tab.urlPattern)) {
-        setActiveTab(tab.eventKey);
-        break;
-      }
-    }
-  }, [location.pathname]);
+    if (ListTabs.length > 1) setTabsShows([tabsShows[0], expTab]);
+  }, [activeTab]);
+
   return (
     <Tabs
       className={classes.Tabs}
       activeKey={activeTab}
       onSelect={handleTabSelect}
-      id="challenge-tabs"
+      act
     >
-      {ListTabs.map((item, index) => (
-        <Tab
-          key={index}
-          eventKey={item.eventKey}
-          title={item.title}
-          tabClassName={classes.Tab}
-          className={classes.InnerTab}
-        >
-          {item.TabComponent}
-        </Tab>
-      ))}
+      {tabsShows}
     </Tabs>
   );
 };

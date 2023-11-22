@@ -29,30 +29,144 @@ const CodeSimilarity = () => {
     }`;
   const tabContent = [
     {
-      eventKey: "Problem",
-      title: "Problem",
-      TabComponent: <h1>Problem</h1>,
+      eventKey: "tab1",
+      title: "Noor AbuShadeh - 119239513 (22%)",
+      TabComponent: <CodeTextArea text={MyCodeStr} />,
     },
     {
-      eventKey: "Submissions",
-      title: "Submissions",
-      TabComponent: <h1>Submissions</h1>,
+      eventKey: "tab2",
+      title: "Mohee qwariqe - 11821535 (15%)",
+      TabComponent: <CodeTextArea text={"int x"} />,
     },
     {
-      eventKey: "Leaderboard",
-      title: "Leaderboard",
-      TabComponent: <h1>Leaderboard</h1>,
+      eventKey: "tab3",
+      title: "Obida Aws - 11927596 (13%)",
+      TabComponent: <CodeTextArea text={"int vv "} />,
     },
     {
-      eventKey: "Discussions",
-      title: "Discussions",
-      TabComponent: <h1>Discussions</h1>,
+      eventKey: "tab4",
+      title: "Abdallah Adas - 11921856 (10%)",
+      TabComponent: <CodeTextArea text={"int gg "} />,
     },
-    // {
-    //   eventKey: "ss",
-    //   title: "dd",
-    //   TabComponent: <h1>Discussions</h1>,
-    // },
+    {
+      eventKey: "tab5",
+      title: "Rami Salman - 11721856 (8%)",
+      TabComponent: <CodeTextArea text={"int ww "} />,
+    },
+    {
+      eventKey: "tab6",
+      title: "Layan Zahdeh - 11821856 (5%)",
+      TabComponent: (
+        <CodeTextArea
+          text={`1
+          2
+          3
+          4
+          5
+          6
+          7
+          8
+          2
+      3
+      4
+      5
+      6
+      7
+      8
+      2
+      3
+      4
+      5
+      6
+      7
+      8 
+      2
+      3
+      4
+      5
+      6
+      7
+      8
+      2
+      3
+      4
+      5
+      6
+      7
+      8
+      2
+      3
+      4
+      5
+      6
+      7
+      8
+      2
+      3
+      4
+      5
+      6
+      7
+      8
+      2
+      3
+      4
+      5
+      6
+      7
+      8
+      2
+      3
+      4
+      5
+      6
+      7
+      8
+      2
+      3
+      4
+      5
+      6
+      7
+      8
+      2
+      3
+      4
+      5
+      6
+      7
+      8
+      2
+      3
+      4
+      5
+      6
+      7
+      8
+      2
+      3
+      4
+      5
+      6
+      7
+      8
+      2
+      3
+      4
+      5
+      6
+      7
+      8`}
+        />
+      ),
+    },
+  ];
+  const Mytab = [
+    {
+      eventKey: "tab1",
+      title: "Momen Hassan Odeh-11923929 (66%)",
+      TabComponent: <CodeTextArea text={MyCodeStr} />,
+    },
   ];
   const classes = useStyles();
   return (
@@ -66,7 +180,7 @@ const CodeSimilarity = () => {
       <br />
       <Row className={classes.Row}>
         <Col className={`${classes.Col} ${classes.MyCode}`}>
-          <CodeTextArea text={MyCodeStr} />
+          <TabsSimilarity ListTabs={Mytab} PaddingTop="0" />
         </Col>
         <Col className={`${classes.Col} ${classes.SimilarCodes}`}>
           <TabsSimilarity ListTabs={tabContent} PaddingTop="0" />
