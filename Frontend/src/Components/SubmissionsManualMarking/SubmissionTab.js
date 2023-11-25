@@ -6,10 +6,24 @@ import Text from "../Text";
 import InputFiledRank from "../InputFiledRank";
 import ButtonRank from "../ButtonRank";
 import { useState } from "react";
+import axios from "axios";
+import { toastError, toastSuccess } from "../../Utils/toast";
 
 const SubmissionTab = ({ submissionData }) => {
   const classes = useStyle();
   const [score, setScore] = useState(submissionData.score);
+  const handleUpdateScore = () => {
+    axios
+      .put(`/update-submission-score/${submissionData.submissionId}`, {
+        submissionResult: score,
+      })
+      .then((res) => {
+        toastSuccess("updated successfully");
+      })
+      .catch((error) => {
+        toastError(error);
+      });
+  };
   return (
     <Container>
       <Card>
@@ -60,7 +74,7 @@ const SubmissionTab = ({ submissionData }) => {
             </Col>
             {submissionData.manualMark && (
               <Col className="d-flex justify-content-end">
-                <ButtonRank text={"Save Changes"} />
+                <ButtonRank text={"Save Changes"} onClick={handleUpdateScore} />
               </Col>
             )}
           </Row>
