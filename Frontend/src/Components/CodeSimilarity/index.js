@@ -38,7 +38,10 @@ const CodeSimilarity = () => {
           title: leftUserData.title,
           //leftUserData.mathchs[rightIndex]
           TabComponent: (
-            <CodeTextArea text={leftUserData.code} range={range[rightIndex]} />
+            <CodeTextArea
+              text={leftUserData.code}
+              range={leftUserData.mathchs[rightIndex]}
+            />
           ),
         },
       ]);
