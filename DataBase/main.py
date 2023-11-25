@@ -35,6 +35,8 @@ from APIs.runCode import run_challenge_code
 from FileSimilarity import fileSimilarity
 from APIs.getStudentSubmissions import get_submissions_manual_marking
 from APIs.submissionsStudents import get_submissions_students
+from APIs.updateSubmissionScore import update_submission_score
+from APIs.studentsLeadboard import get_students_leadboard
 import Notification.notification
 
 @app.route('/flask', methods=['GET'])

@@ -5,9 +5,9 @@ from flask import request, jsonify
 @app.route('/submissions-students', methods=['GET'])
 def get_submissions_students():
     try:
-        # tokenData = getattr(request, 'tokenData', None)
-        role = 'admin'  # tokenData['role']
-        if role != 'admin':
+        tokenData = getattr(request, 'tokenData', None)
+        role = tokenData['role']
+        if role != 'professor':
             return {'message': ""}, 401
         course_id = request.args.get('courseId')
         contest_id = request.args.get('contestId')

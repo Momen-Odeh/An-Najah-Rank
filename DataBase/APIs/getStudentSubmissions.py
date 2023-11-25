@@ -8,9 +8,9 @@ from APIs.student_submissions import get_test_cases
 @app.route('/submissions-manual-marking', methods=['GET'])
 def get_submissions_manual_marking():
     try:
-        # tokenData = getattr(request, 'tokenData', None)
-        role = 'admin'  # tokenData['role']
-        if role != 'admin':
+        tokenData = getattr(request, 'tokenData', None)
+        role = tokenData['role']
+        if role != 'professor':
             return {'message': ""}, 401
         student_university_number = request.args.get('studentUniversityNumber')
         course_id = request.args.get('courseId')
