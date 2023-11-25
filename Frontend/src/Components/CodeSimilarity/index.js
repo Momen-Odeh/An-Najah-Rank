@@ -93,14 +93,22 @@ const CodeSimilarity = () => {
           if (error?.response?.data?.message === "unauthorized role") {
             toastError("Unautharized accesss");
             navigate("..");
-          } else if (
-            error?.response?.data?.message === "not found similarity file"
-          ) {
-            toastError("No similarity with this id");
-            navigate("..");
           } else {
             toastError("Unautharized accesss");
             navigate("/log-in");
+          }
+        } else if (error?.response?.status === 404) {
+          if (
+            error?.response?.data?.message === "not found similarity file" ||
+            error?.response?.data?.message === "Not found user"
+          ) {
+            toastError("No similarity data");
+            navigate("..");
+          } else if (
+            error?.response?.data?.message === "not found contest or challenge"
+          ) {
+            toastError("Not found");
+            navigate("..");
           }
         }
       });
