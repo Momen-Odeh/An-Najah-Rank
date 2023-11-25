@@ -2,24 +2,23 @@ import React, { useEffect, useState } from "react";
 import useStyles from "./style";
 import { Tab, Tabs } from "react-bootstrap";
 import { useLocation, useNavigate } from "react-router-dom";
-import { tab } from "@testing-library/user-event/dist/tab";
 
-const ChallengeTabs = ({ ListTabs, PaddingTop = "30px" }) => {
+const ChallengeTabs = ({ ListTabs, PaddingTop = "30px", setActive = null }) => {
   const navigate = useNavigate();
   const classes = useStyles({ PaddingTop });
   const location = useLocation();
   const [activeTab, setActiveTab] = useState(ListTabs[0]?.eventKey);
 
   const handleTabSelect = (selectedTabKey) => {
-    const selectedTab = ListTabs.find((tab) => tab.eventKey === selectedTabKey);
+    const selectedTab = ListTabs.find((tab) => tab.eventKey == selectedTabKey);
     if (selectedTab && selectedTab.urlPattern) {
       navigate(selectedTab.urlPattern);
     } else {
-      setActiveTab(tab.eventKey);
+      setActiveTab(selectedTabKey);
     }
   };
   const [activeItem, setActiveItem] = useState(null);
-
+  if (setActive) setActive(activeTab);
   useEffect(() => {
     const currentPathname = location.pathname;
     for (const tab of ListTabs) {
@@ -34,7 +33,6 @@ const ChallengeTabs = ({ ListTabs, PaddingTop = "30px" }) => {
       }
     }
   }, [location.pathname]);
-  console.log(activeItem);
   return (
     <Tabs
       className={classes.Tabs}

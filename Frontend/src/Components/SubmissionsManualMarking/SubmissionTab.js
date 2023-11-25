@@ -1,11 +1,15 @@
 import { Editor } from "@monaco-editor/react";
 import React from "react";
-import { Card, Col, Container, FormControl, Row } from "react-bootstrap";
+import { Card, Col, Container, Row } from "react-bootstrap";
 import useStyle from "./style";
 import Text from "../Text";
+import InputFiledRank from "../InputFiledRank";
+import ButtonRank from "../ButtonRank";
+import { useState } from "react";
 
 const SubmissionTab = ({ submissionData }) => {
   const classes = useStyle();
+  const [score, setScore] = useState(submissionData.score);
   return (
     <Container>
       <Card>
@@ -35,20 +39,30 @@ const SubmissionTab = ({ submissionData }) => {
             </Col>
           </Row>
           <Row className={`${classes.date} mt-2`}>
-            <Col>
+            <Col className="d-flex align-items-center">
               <Text
-                text={"Score: " + submissionData?.score}
+                text={"Score out of 100: "}
                 fontFamily="OpenSans"
                 size="18px"
                 color="#39424e"
                 wegiht="600"
               />
-              <FormControl
-                type="number"
-                placeholder="Enter a number"
-                value={submissionData?.score}
-              />
+              <Row className={classes.score}>
+                <InputFiledRank
+                  disabled={!submissionData.manualMark}
+                  value={score}
+                  textAlign="center"
+                  onChange={(e) => {
+                    setScore(e.target.value);
+                  }}
+                />
+              </Row>
             </Col>
+            {submissionData.manualMark && (
+              <Col className="d-flex justify-content-end">
+                <ButtonRank text={"Save Changes"} />
+              </Col>
+            )}
           </Row>
         </Card.Body>
       </Card>

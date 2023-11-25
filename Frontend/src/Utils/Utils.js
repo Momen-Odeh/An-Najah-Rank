@@ -22,8 +22,7 @@ import Course from "../Pages/Course";
 import Settings from "../Pages/Settings";
 import Admin from "../Pages/Admin";
 import NotificationComponent from "../Components/Notification";
-import Submission from "../Components/Submission";
-import SubmissionsProfessor from "../Components/SubmissionsProfessor";
+import SubmissionsManualMarking from "../Components/SubmissionsManualMarking";
 // const AboutUs = lazy(() => import("../Pages/AboutUs/SubComponents/AboutUs"))
 
 export const routeNames = {
@@ -212,9 +211,9 @@ export const routes = [
   //   component: <NotificationComponent />,
   // },
   {
-    path: "/SubmissionsProfessor",
-    title: "SubmissionsProfessor",
-    component: <SubmissionsProfessor />,
+    path: "/SubmissionsManualMarking",
+    title: "SubmissionsManualMarking",
+    component: <SubmissionsManualMarking />,
   },
   /******************************************* /admin ***********************************/
   {

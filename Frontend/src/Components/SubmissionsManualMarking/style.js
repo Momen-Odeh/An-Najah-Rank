@@ -18,6 +18,21 @@ const useStyle = createUseStyles({
   testCaseResult: {
     minWidth: "200px",
   },
+  score: {
+    marginLeft: "3px",
+    width: "80px",
+  },
+  Icon: {
+    textAlign: "center",
+    marginLeft: "5px",
+    fontSize: "15px",
+  },
+  IconPass: {
+    color: "green",
+  },
+  IconFail: {
+    color: "red",
+  },
 });
 
 export default useStyle;
