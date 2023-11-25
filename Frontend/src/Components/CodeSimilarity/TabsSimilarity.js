@@ -6,7 +6,6 @@ import AllTabs from "./AllTabs";
 
 const TabsSimilarity = ({ ListTabs, PaddingTop = "30px", setRightIndex }) => {
   const classes = useStyles({ PaddingTop });
-  if (!setRightIndex) console.log("$$$$$$$$$$$$$$$$$$$$$$$$", ListTabs);
   const [usageTab, setUsageTab] = useState(
     ListTabs.map((item, index) => (
       <Tab
@@ -67,10 +66,8 @@ const TabsSimilarity = ({ ListTabs, PaddingTop = "30px", setRightIndex }) => {
 
   useEffect(() => {
     if (setRightIndex && activeTab !== "Expand Tabs") {
-      // console.log(";;;;;;;;;;;", activeTab?.split("-")[1]); //tab-1
       setRightIndex(activeTab?.split("-")[1]);
     }
-    // console.log(activeTab);
     if (ListTabs.length > 1) setTabsShows([tabsShows[0], expTab]);
   }, [activeTab]);
 

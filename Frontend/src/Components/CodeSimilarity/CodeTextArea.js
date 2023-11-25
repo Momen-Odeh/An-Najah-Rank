@@ -10,22 +10,9 @@ const CodeTextArea = ({ text, range }) => {
       setTextareaHeight(`${newHeight}px`);
     }
   }, [text]);
-  // console.log("Range ====> ", range);
-  //
-  // useEffect(() => {
-  //   console.log("Range ====> ", range);
-  // }, [range]);
 
   let splitLines = text?.split("\n");
   const colors = ["red", "green", "orange", "blue", "purple", "teal"];
-  // const colorRange = [
-  //   { range: "1-2", color: "red" },
-  //   { range: "3-4", color: "green" },
-  //   { range: "5-6", color: "orange" },
-  //   { range: "7-9", color: "blue" },
-  //   { range: "10-11", color: "purple" },
-  //   { range: "12-15", color: "teal" },
-  // ];
   const highlightedContent = splitLines.map((line, index) => {
     // const val
     for (let index1 = 0; index1 < range.length; index1++) {
@@ -34,7 +21,6 @@ const CodeTextArea = ({ text, range }) => {
         return `<span style="color: ${colors[index1]}">${line}</span><br>`;
       }
     }
-    // console.log(index, "black");
     return `<span style="color: ${"black"}">${line}</span><br>`;
   });
 

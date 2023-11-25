@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import useStyles from "./style";
 import { Col, Container, Row } from "react-bootstrap";
 import CodeTextArea from "./CodeTextArea";
@@ -26,17 +26,12 @@ const CodeSimilarity = () => {
   const [leftUserData, setLeftUserData] = useState();
   const [loadData, setLoadData] = useState(false);
 
-  const i = useRef(0);
-  const range = [["1-2"], ["2-3"], ["3-4"], ["4-5"], ["5-6"], ["6-7"], ["7-8"]];
   useEffect(() => {
     if (loadData) {
-      // console.log(leftUserData.mathchs[rightIndex]);
-      // console.log(rightIndex);
       setLeftUser([
         {
           eventKey: leftUserData.eventKey,
           title: leftUserData.title,
-          //leftUserData.mathchs[rightIndex]
           TabComponent: (
             <CodeTextArea
               text={leftUserData.code}
@@ -47,7 +42,6 @@ const CodeSimilarity = () => {
       ]);
     }
   }, [rightIndex, leftUserData, loadData]);
-  console.log("--> ", leftUser);
   useEffect(() => {
     axios
       .get("/userSimilarity", {
@@ -109,10 +103,10 @@ const CodeSimilarity = () => {
         </Col>
       </Row>
       <Row className={classes.Row}>
-        <Col className={`${classes.Col} ${classes.MyCode}`}>
+        <Col className={`${classes.Col} ${classes.MyCode}`} md="6">
           <TabsSimilarity ListTabs={leftUser} PaddingTop="0" />
         </Col>
-        <Col className={`${classes.Col} ${classes.SimilarCodes}`}>
+        <Col className={`${classes.Col} ${classes.SimilarCodes}`} md="6">
           <TabsSimilarity
             ListTabs={rightUsers}
             PaddingTop="0"

@@ -15,6 +15,9 @@ const useStyles = createUseStyles({
     height: "500px",
     minWidth: "300px",
     overflow: "scroll",
+    whiteSpace: "nowrap",
+    // width: "100%",
+
     // backgroundColor: "red",
   },
   lineNumbers: {
@@ -29,17 +32,10 @@ const useStyles = createUseStyles({
     userSelect: "none",
   },
   textarea: {
-    // border: "none",
-    // resize: "none",
-    // minHeight: "100px",
-    // overflow: "hidden",
+    // maxWidth: "590px",
     lineHeight: "1.73",
     fontWeight: "600",
     fontFamily: "'Source Code Pro', monospace",
-    // "&:focus": {
-    //   boxShadow: "none !important",
-    // },
-    // height: "400px",
   },
 });
 
