@@ -171,7 +171,18 @@ export const routes = [
                           {
                             title: "submissions",
                             path: "submissions",
-                            component: <Challenge />,
+                            component: <Outlet />,
+                            subRoutes: [
+                              {
+                                index: true,
+                                component: <Challenge />,
+                              },
+                              {
+                                title: "code Similarity",
+                                path: ":userId/code-similarity",
+                                component: <CodeSimilarity />,
+                              },
+                            ],
                           },
                           {
                             title: "leaderboard",

@@ -6,8 +6,11 @@ import TabsSimilarity from "./TabsSimilarity";
 import GeneralInfoCodeSimilarity from "./GeneralInfoCodeSimilarity";
 import Text from "../Text";
 import axios from "axios";
+import { useParams } from "react-router-dom";
 const CodeSimilarity = () => {
   const classes = useStyles();
+  const { userId, contestId, challengeId } = useParams();
+  // console.log(userId, contestId, challengeId);
   const [leftUser, setLeftUser] = useState([
     {
       eventKey: "tab-0",
@@ -46,9 +49,9 @@ const CodeSimilarity = () => {
     axios
       .get("/userSimilarity", {
         params: {
-          contestId: 67,
-          challengeId: 30,
-          userId: 11923929,
+          contestId: contestId,
+          challengeId: challengeId,
+          userId: userId,
         },
       })
       .then((response) => {
