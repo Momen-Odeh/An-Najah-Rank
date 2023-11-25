@@ -179,7 +179,12 @@ export const routes = [
                               },
                               {
                                 title: "code Similarity",
-                                path: ":userId/code-similarity",
+                                path: "code-similarity",
+                                component: <Navigate to={".."} />,
+                              },
+                              {
+                                title: "code Similarity with user id",
+                                path: "code-similarity/:userId",
                                 component: <CodeSimilarity />,
                               },
                             ],

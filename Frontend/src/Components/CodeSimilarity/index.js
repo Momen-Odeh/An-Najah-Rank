@@ -7,9 +7,13 @@ import GeneralInfoCodeSimilarity from "./GeneralInfoCodeSimilarity";
 import Text from "../Text";
 import axios from "axios";
 import { useParams } from "react-router-dom";
+import Breadcrumbs from "../Breadcrumbs";
+import { useNavigate } from "react-router-dom";
+import { toastError } from "../../Utils/toast";
 const CodeSimilarity = () => {
   const classes = useStyles();
   const { userId, contestId, challengeId } = useParams();
+  const navigate = useNavigate();
   // console.log(userId, contestId, challengeId);
   const [leftUser, setLeftUser] = useState([
     {
@@ -85,12 +89,31 @@ const CodeSimilarity = () => {
       })
       .catch((error) => {
         console.log(error);
+        if (error?.response?.status === 401) {
+          if (error?.response?.data.message === "unauthorized role") {
+            toastError("Unautharized accesss");
+            navigate("..");
+          } else if (
+            error?.response?.data.message === "not found similarity file"
+          ) {
+            toastError("No similarity with this id");
+            navigate("..");
+          } else {
+            toastError("Unautharized accesss");
+            navigate("/log-in");
+          }
+        }
       });
   }, []);
 
   return (
     <Container fluid className={classes.Container}>
-      <Row className={classes.RowCont}>
+      <Row className={`${classes.RowCont}`}>
+        <Col>
+          <Breadcrumbs />
+        </Col>
+      </Row>
+      <Row className={`${classes.RowCont} mt-5 mb-4`}>
         <Col className={`${classes.Col} ${classes.ColCenter}`}>
           <Text
             text={"Code Similarity Summary"}
@@ -98,11 +121,6 @@ const CodeSimilarity = () => {
             size="26px"
             wegiht="600"
           />
-        </Col>
-      </Row>
-      <Row className={classes.RowCont}>
-        <Col className={classes.Col}>
-          <GeneralInfoCodeSimilarity />
         </Col>
       </Row>
       <Row className={classes.Row}>

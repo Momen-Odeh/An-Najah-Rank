@@ -4,7 +4,7 @@ from authentication import get_Data_from_token
 
 excluded_routes = ['/checkToken', '/login', '/forgetPassword',
                    '/verfiyCode', '/updatePassword', '/register',
-                   '/userStatusAuth','/file-Similarity',"/userSimilarity"]
+                   '/userStatusAuth','/file-Similarity']
 def should_skip_token_validation():
     return request.path in excluded_routes
 
