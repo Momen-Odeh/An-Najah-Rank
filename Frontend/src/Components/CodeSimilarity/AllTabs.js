@@ -14,8 +14,11 @@ const AllTabs = ({ tabs, tabsObj, setTabsShows, setActiveTab, tabsShows }) => {
         <Row
           className={classes.AllTabsRow}
           onClick={() => handelMainTab(index)}
+          key={index}
         >
-          <Col className={classes.AllTabsCol}>{item.title}</Col>
+          <Col key={index} className={classes.AllTabsCol}>
+            {item.title}
+          </Col>
         </Row>
       ))}
     </Container>

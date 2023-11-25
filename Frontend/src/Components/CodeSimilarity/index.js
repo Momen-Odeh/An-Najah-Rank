@@ -1,189 +1,120 @@
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 import useStyles from "./style";
 import { Col, Container, Row } from "react-bootstrap";
 import CodeTextArea from "./CodeTextArea";
-import TabTable from "../TabTable";
-import ChallengeTabs from "../ChallengTabs";
 import TabsSimilarity from "./TabsSimilarity";
+import GeneralInfoCodeSimilarity from "./GeneralInfoCodeSimilarity";
+import Text from "../Text";
+import axios from "axios";
 const CodeSimilarity = () => {
-  const MyCodeStr = `int x (){
-        return x+y; 
-    }
-    void main(){
-        int c=0;
-        int qq =w ;
-
-        cin >> x++;
-    }
-    void main(){
-        int c=0;
-        int qq =w ;
-
-        cin >> x++;
-    }
-    void main(){
-        int c=0;
-        int qq =w ;
-
-        cin >> x++;
-    }`;
-  const tabContent = [
-    {
-      eventKey: "tab1",
-      title: "Noor AbuShadeh - 119239513 (22%)",
-      TabComponent: <CodeTextArea text={MyCodeStr} />,
-    },
-    {
-      eventKey: "tab2",
-      title: "Mohee qwariqe - 11821535 (15%)",
-      TabComponent: <CodeTextArea text={"int x"} />,
-    },
-    {
-      eventKey: "tab3",
-      title: "Obida Aws - 11927596 (13%)",
-      TabComponent: <CodeTextArea text={"int vv "} />,
-    },
-    {
-      eventKey: "tab4",
-      title: "Abdallah Adas - 11921856 (10%)",
-      TabComponent: <CodeTextArea text={"int gg "} />,
-    },
-    {
-      eventKey: "tab5",
-      title: "Rami Salman - 11721856 (8%)",
-      TabComponent: <CodeTextArea text={"int ww "} />,
-    },
-    {
-      eventKey: "tab6",
-      title: "Layan Zahdeh - 11821856 (5%)",
-      TabComponent: (
-        <CodeTextArea
-          text={`1
-          2
-          3
-          4
-          5
-          6
-          7
-          8
-          2
-      3
-      4
-      5
-      6
-      7
-      8
-      2
-      3
-      4
-      5
-      6
-      7
-      8 
-      2
-      3
-      4
-      5
-      6
-      7
-      8
-      2
-      3
-      4
-      5
-      6
-      7
-      8
-      2
-      3
-      4
-      5
-      6
-      7
-      8
-      2
-      3
-      4
-      5
-      6
-      7
-      8
-      2
-      3
-      4
-      5
-      6
-      7
-      8
-      2
-      3
-      4
-      5
-      6
-      7
-      8
-      2
-      3
-      4
-      5
-      6
-      7
-      8
-      2
-      3
-      4
-      5
-      6
-      7
-      8
-      2
-      3
-      4
-      5
-      6
-      7
-      8
-      2
-      3
-      4
-      5
-      6
-      7
-      8
-      2
-      3
-      4
-      5
-      6
-      7
-      8`}
-        />
-      ),
-    },
-  ];
-  const Mytab = [
-    {
-      eventKey: "tab1",
-      title: "Momen Hassan Odeh-11923929 (66%)",
-      TabComponent: <CodeTextArea text={MyCodeStr} />,
-    },
-  ];
   const classes = useStyles();
+  const [leftUser, setLeftUser] = useState([
+    {
+      eventKey: "tab-0",
+      title: null,
+      TabComponent: null,
+    },
+  ]);
+  const [rightUsers, setRightUsers] = useState([
+    {
+      eventKey: "tab-0",
+      title: null,
+      TabComponent: null,
+    },
+  ]);
+  const [rightIndex, setRightIndex] = useState(0);
+  const [leftUserData, setLeftUserData] = useState();
+  const [loadData, setLoadData] = useState(false);
+
+  const i = useRef(0);
+  const range = [["1-2"], ["2-3"], ["3-4"], ["4-5"], ["5-6"], ["6-7"], ["7-8"]];
+  useEffect(() => {
+    if (loadData) {
+      // console.log(leftUserData.mathchs[rightIndex]);
+      // console.log(rightIndex);
+      setLeftUser([
+        {
+          eventKey: leftUserData.eventKey,
+          title: leftUserData.title,
+          //leftUserData.mathchs[rightIndex]
+          TabComponent: (
+            <CodeTextArea text={leftUserData.code} range={range[rightIndex]} />
+          ),
+        },
+      ]);
+    }
+  }, [rightIndex, leftUserData, loadData]);
+  console.log("--> ", leftUser);
+  useEffect(() => {
+    axios
+      .get("/userSimilarity", {
+        params: {
+          contestId: 67,
+          challengeId: 30,
+          userId: 11923929,
+        },
+      })
+      .then((response) => {
+        console.log(response.data);
+
+        setLeftUserData({
+          eventKey: "tab-0",
+          title: response.data.fileName + ` (${response.data.similarity}%)`,
+          code: response.data.code,
+          mathchs: response.data.SimilarFiles.map((item) =>
+            item.linesMatch.map((item2) => item2.f1Lines)
+          ),
+        });
+        setLoadData(true);
+
+        setRightUsers(
+          response.data.SimilarFiles.map((item, index) => {
+            return {
+              eventKey: "tab-" + index,
+              title: item.similarFileName + ` (${item.similarPercentage})`,
+              TabComponent: (
+                <CodeTextArea
+                  text={item.code}
+                  key={index}
+                  range={item.linesMatch.map((item2) => item2.f2Lines)}
+                />
+              ),
+            };
+          })
+        );
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
+
   return (
     <Container fluid className={classes.Container}>
-      <Row>
-        <Col className={classes.Col}>General Info</Col>
+      <Row className={classes.RowCont}>
+        <Col className={`${classes.Col} ${classes.ColCenter}`}>
+          <Text
+            text={"Code Similarity Summary"}
+            fontFamily="Open Sans"
+            size="26px"
+            wegiht="600"
+          />
+        </Col>
       </Row>
-      <br />
-      <br />
-      <br />
-      <br />
+      <Row className={classes.RowCont}>
+        <Col className={classes.Col}>
+          <GeneralInfoCodeSimilarity />
+        </Col>
+      </Row>
       <Row className={classes.Row}>
         <Col className={`${classes.Col} ${classes.MyCode}`}>
-          <TabsSimilarity ListTabs={Mytab} PaddingTop="0" />
+          <TabsSimilarity ListTabs={leftUser} PaddingTop="0" />
         </Col>
         <Col className={`${classes.Col} ${classes.SimilarCodes}`}>
-          <TabsSimilarity ListTabs={tabContent} PaddingTop="0" />
+          <TabsSimilarity
+            ListTabs={rightUsers}
+            PaddingTop="0"
+            setRightIndex={setRightIndex}
+          />
         </Col>
       </Row>
     </Container>

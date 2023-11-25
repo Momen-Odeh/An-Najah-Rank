@@ -3,16 +3,31 @@ import { createUseStyles } from "react-jss";
 const useStyles = createUseStyles({
   Container: {
     // backgroundColor: "gray",
+    maxWidth: "1200px",
+    padding: "30px 10px",
+  },
+  RowCont: {
+    padding: "0",
+    margin: "0",
   },
   Row: {
     // backgroundColor: "pink",
+    padding: "0",
+    margin: "0",
     backgroundColor: "#f5f5f5",
     // borderBottom: "2px solid #dddddd",
+    // gap: "5px",
+    boxShadow: "0 3px 10px 0 rgba(0,0,0,.1)",
   },
   Col: {
     padding: "0",
     margin: "0",
   },
+  ColCenter: {
+    textAlign: "center",
+    marginBottom: "30px",
+  },
+
   MyCode: {
     // backgroundColor: "cyan",
   },

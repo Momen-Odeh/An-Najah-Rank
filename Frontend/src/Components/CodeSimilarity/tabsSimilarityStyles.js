@@ -10,6 +10,7 @@ const useStyles = createUseStyles({
     borderTopLeftRadius: "5px",
     paddingBottom: "1px",
     // columnGap: "50px",
+    fontWeight: "600",
   },
   Tab: {
     color: "#39424e",

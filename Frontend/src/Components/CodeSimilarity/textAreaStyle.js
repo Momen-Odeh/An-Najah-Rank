@@ -34,6 +34,7 @@ const useStyles = createUseStyles({
     // minHeight: "100px",
     // overflow: "hidden",
     lineHeight: "1.73",
+    fontWeight: "600",
     fontFamily: "'Source Code Pro', monospace",
     // "&:focus": {
     //   boxShadow: "none !important",

@@ -4,20 +4,23 @@ import { Tab, Tabs } from "react-bootstrap";
 import { TfiMoreAlt } from "react-icons/tfi";
 import AllTabs from "./AllTabs";
 
-const TabsSimilarity = ({ ListTabs, PaddingTop = "30px" }) => {
+const TabsSimilarity = ({ ListTabs, PaddingTop = "30px", setRightIndex }) => {
   const classes = useStyles({ PaddingTop });
+
+  const [usageTab, setUsageTab] = useState(
+    ListTabs.map((item, index) => (
+      <Tab
+        eventKey={item.eventKey}
+        title={item.title}
+        tabClassName={classes.Tab}
+        className={classes.InnerTab}
+        key={index}
+      >
+        {item.TabComponent}
+      </Tab>
+    ))
+  );
   const [activeTab, setActiveTab] = useState(ListTabs[0]?.eventKey);
-  const [expandTabs, setExpandTabs] = useState(false);
-  const usageTab = ListTabs.map((item) => (
-    <Tab
-      eventKey={item.eventKey}
-      title={item.title}
-      tabClassName={classes.Tab}
-      className={classes.InnerTab}
-    >
-      {item.TabComponent}
-    </Tab>
-  ));
   const [tabsShows, setTabsShows] = useState([usageTab[0]]);
 
   const expTab = (
@@ -26,6 +29,7 @@ const TabsSimilarity = ({ ListTabs, PaddingTop = "30px" }) => {
       title={<TfiMoreAlt />}
       tabClassName={classes.Tab}
       className={classes.InnerTab}
+      // key={1} //Must add key here to remove the warning !
     >
       <AllTabs
         tabsObj={ListTabs}
@@ -36,25 +40,45 @@ const TabsSimilarity = ({ ListTabs, PaddingTop = "30px" }) => {
       />
     </Tab>
   );
-  const handleTabSelect = (selectedTabKey) => {
-    console.log(selectedTabKey);
-    if (selectedTabKey === "Expand Tabs") {
-      setActiveTab("tab1");
-      setExpandTabs(!expandTabs);
-    }
-    setActiveTab(selectedTabKey);
-  };
-
   useEffect(() => {
+    setUsageTab(
+      ListTabs.map((item, index) => (
+        <Tab
+          eventKey={item.eventKey}
+          title={item.title}
+          tabClassName={classes.Tab}
+          className={classes.InnerTab}
+          key={index}
+        >
+          {item.TabComponent}
+        </Tab>
+      ))
+    );
+    setActiveTab(ListTabs[0]?.eventKey);
+    if (ListTabs.length > 1) {
+      setTabsShows([usageTab[0], expTab]);
+    } else {
+      setTabsShows(usageTab[0]);
+    }
+  }, [ListTabs]);
+  useEffect(() => {
+    if (setRightIndex && activeTab !== "Expand Tabs") {
+      // console.log(";;;;;;;;;;;", activeTab?.split("-")[1]); //tab-1
+      setRightIndex(activeTab?.split("-")[1]);
+    }
+    // console.log(activeTab);
     if (ListTabs.length > 1) setTabsShows([tabsShows[0], expTab]);
   }, [activeTab]);
+
+  const handleTabSelect = (selectedTabKey) => {
+    setActiveTab(selectedTabKey);
+  };
 
   return (
     <Tabs
       className={classes.Tabs}
       activeKey={activeTab}
       onSelect={handleTabSelect}
-      act
     >
       {tabsShows}
     </Tabs>
