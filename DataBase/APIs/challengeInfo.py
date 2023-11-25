@@ -7,8 +7,13 @@ import json
 @app.route('/challenge/<id>', methods=['GET'])
 def getChallenge(id):
     try:
-        result = fetch_results(execute_query(connection,f"SELECT * FROM `an-najah rank`.challenges where id = {id};"),)
-        resultTestCases = fetch_results(execute_query(connection, f"SELECT * FROM `an-najah rank`.test_cases where challenge_id = {id};"), )
+        print('--------------AAAAAAA-----------------')
+        cursor = connection.cursor()
+        cursor.execute(f"SELECT * FROM challenges where id = {id}")
+        result = cursor.fetchone()
+        print(result)
+        print('-------------------------------')
+        resultTestCases = fetch_results(execute_query(connection, f"SELECT * FROM test_cases where challenge_id = {id} AND is_sample = 1;"), )
         test_case_objects = []
         for row in resultTestCases:
             test_case = {
@@ -27,17 +32,17 @@ def getChallenge(id):
             # id, name, description, difficulty, problem_statement, input_format, constraints, output_format, tags, created_at, updated_at
             return {
                     "status": f"ok",
-                    "id": result[0][0],
-                    "name":result[0][1],
-                    "description": result[0][2],
-                    "difficulty":result[0][3],
-                    "problem_statement": result[0][4],
-                    "inputFormat": result[0][5],
-                    "constraints": result[0][6],
-                    "outputFormat": result[0][7],
-                    "tags": json.loads(result[0][8]),
-                    "created_at": result[0][9],
-                    "updated_at": result[0][10],
+                    "id": result[0],
+                    "name":result[1],
+                    "description": result[2],
+                    "difficulty":result[3],
+                    "problem_statement": result[4],
+                    "inputFormat": result[5],
+                    "constraints": result[6],
+                    "outputFormat": result[7],
+                    "tags": json.loads(result[8]),
+                    "created_at": result[9],
+                    "updated_at": result[10],
                     "testCases":test_case_objects
                             }, 200
         else:

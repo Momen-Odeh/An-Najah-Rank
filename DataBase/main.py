@@ -1,7 +1,7 @@
 from flask import request, jsonify
 from FlaskSetUp import app
 from flask import request, jsonify, render_template
-from FlaskSetUp import app, socketio
+from FlaskSetUp import app
 from flask_cors import CORS
 from EmailAuth.emailConnection import sendEmail
 from APIs.registration import register_user
@@ -29,6 +29,9 @@ from APIs.admin import get_professor_pending
 from APIs.UserCourses import getUserCourses
 from APIs.AccessCourse import accessCourse
 from authAPIs import validate_token
+from APIs.student_submissions import add_challenge_student
+from APIs.getSubmission import get_submission_info
+from APIs.runCode import run_challenge_code
 from FileSimilarity import fileSimilarity
 import Notification.notification
 
@@ -38,4 +41,5 @@ def index():
     return jsonify({'message': getattr(request, 'tokenData', None)})
 
 if __name__ == '__main__':
-    socketio.run(app, debug=True, allow_unsafe_werkzeug=True)
+    # socketio.run(app, debug=True, allow_unsafe_werkzeug=True)
+    app.run(debug=True)

@@ -11,6 +11,9 @@ import TestCaseProblem from "../TestCaseProblem";
 import { FaCheck } from "react-icons/fa";
 import { ImCross } from "react-icons/im";
 import BackEndURI from "../../Utils/BackEndURI";
+import { useNavigate, useParams } from "react-router-dom";
+import { toastError } from "../../Utils/toast";
+
 const defaultLang = {
   java: `  import java.io.*;
   import java.util.*;
@@ -67,20 +70,18 @@ const choices = [
   { title: "C++", value: "cpp" },
   { title: "Python", value: "python" },
   { title: "JavaScript", value: "javascript" },
+  { title: "Regular Expression", value: "regularexpression" },
 ];
 
 const CodeEditor = () => {
   const classes = useStyles();
+  const { id, contestId, challengeId } = useParams();
+  const navigate = useNavigate();
   const [dark, setDark] = useState(false);
   const [language, setLanguage] = useState("java");
   const [textHeight, setTextHeight] = useState("400px");
   const [textCode, setTextCode] = useState("");
   const context = useContext(ChallengeContext);
-  // useEffect(() => {
-  //   const lines = textCode.split("\n").length;
-  //   const newHeight = Math.max(200, lines * 30);
-  //   setTextHeight(`${newHeight}px`);
-  // }, [textCode]);
   const genrateTab = (arr) => {
     return arr.map((item, index) => {
       if (item.output_real !== undefined) {
@@ -131,44 +132,59 @@ const CodeEditor = () => {
       }
     });
   };
-  const handleCodeApi = async (ArrTestCases, lang) => {
-    return await Promise.all(
-      ArrTestCases.map(async (item, index) => {
-        try {
-          context.setLoading(true);
-          context.testCases.setVal({ ...context.testCases.val, show: false });
-          console.log("Send Request");
-          const codeResult = await axios.post(BackEndURI + "/" + lang, {
-            code: textCode,
-          });
-          console.log("Get Result", codeResult.data);
-          context.setLoading(false);
-          context.testCases.setVal({ ...context.testCases.val, show: true });
-          return {
-            ...item,
-            output_real: codeResult.data.output,
-            correctAns: item.output_data == codeResult.data.output,
-          };
-        } catch (err) {
-          const { error, stderr } = err.response.data;
-          console.log("Error Type:", error, "&&", "stderr:", stderr);
-          context.setLoading(false);
-          context.testCases.setVal({ ...context.testCases.val, show: true });
-          return {
-            ...item,
-            errorType: error,
-            stderr: stderr,
-          };
-        }
+  const handleCodeApi = async (ArrTestCases) => {
+    let responseData = [];
+    context.setLoading(true);
+    return await axios
+      .post("/run_challenge_code", {
+        code: textCode,
+        language: language,
+        challengeId: challengeId,
       })
-    );
+      .then((res) => {
+        responseData = res.data.dataResponse;
+        console.log(responseData);
+        if (responseData.length > 0)
+          return ArrTestCases?.map((item, index) => {
+            console.log("Send Request");
+            console.log("Get Result", responseData[index]);
+            context.setLoading(false);
+            context.testCases.setVal({ ...context.testCases.val, show: true });
+            if (responseData[index][0]) {
+              return {
+                ...item,
+                output_real: responseData[index][1],
+                correctAns:
+                  item.output_data.trim() == responseData[index][1].trim(),
+              };
+            } else {
+              return {
+                ...item,
+                errorType: "Run Time Error",
+                stderr: responseData[index][2],
+              };
+            }
+          });
+      })
+      .catch((err) => {
+        context.setLoading(false);
+        const stderr = err.response?.data.stderr;
+        console.log("stderr: " + stderr);
+        console.log("Error Type:", "Run Time Error", "&&", "stderr:", stderr);
+        context.setLoading(false);
+        context.testCases.setVal({ ...context.testCases.val, show: true });
+        return [
+          {
+            ...ArrTestCases[0],
+            errorType: "Compile Time Error",
+            stderr: stderr,
+          },
+        ];
+      });
   };
-  const buildTableUI = async (lang) => {
+  const buildTableUI = async () => {
     const { testCases } = context.challengeData;
-    const runTestCases = await handleCodeApi(
-      testCases.filter((x) => x.is_sample === 1),
-      lang
-    );
+    const runTestCases = await handleCodeApi(testCases);
     console.log("runTestCases ===== ", runTestCases);
 
     const TabsRes = genrateTab(runTestCases);
@@ -179,8 +195,6 @@ const CodeEditor = () => {
     });
   };
   const handleRunCode = async () => {
-    // console.log("1111111111111", language);
-    // console.log("2222222222222", textCode);
     switch (language) {
       case "java":
         buildTableUI("java");
@@ -193,16 +207,54 @@ const CodeEditor = () => {
         buildTableUI("python");
         break;
       case "javascript":
-        buildTableUI("JS");
+        buildTableUI("javascript");
         break;
       default:
         break;
     }
   };
-  const handleSubmitCode = async () => {};
+  const handleSubmitCode = async () => {
+    axios
+      .post(BackEndURI + "/student-challenge-submissions", {
+        code: textCode,
+        language: language,
+        challengeId: challengeId,
+        courseNumber: id,
+        contestId: contestId,
+      })
+      .then((res) => {
+        const submissionId = res.data.submissionId;
+        navigate(
+          `/courses/${id}/contests/${contestId}/challenges/${challengeId}/submissions/${submissionId}`
+        );
+      })
+      .catch((error) => {
+        toastError("there is an error resubmit your code");
+      });
+  };
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
-    setTextCode(defaultLang[language]);
+    if (localStorage.getItem("challenge " + challengeId)) {
+      const storedData = JSON.parse(
+        localStorage.getItem("challenge " + challengeId)
+      );
+      console.log(storedData.language);
+      setLanguage(storedData.language);
+      setTextCode(storedData.code);
+    } else {
+      setTextCode(defaultLang[language]);
+    }
+    setLoading(false);
   }, []);
+  if (!loading) {
+    localStorage.setItem(
+      "challenge " + challengeId,
+      JSON.stringify({
+        language: language,
+        code: textCode,
+      })
+    );
+  }
   return (
     <Container fluid className={classes.Container}>
       <Row className={`${classes.Row} ${classes.RowSelect}`}>
@@ -219,7 +271,13 @@ const CodeEditor = () => {
           />
           <SelectionGroup
             choices={choices}
-            language={{ value: language, setValue: setLanguage }}
+            language={{
+              value: language,
+              setValue: (val) => {
+                setLanguage(val);
+                setTextCode(defaultLang[val]);
+              },
+            }}
           />
         </Col>
       </Row>
@@ -231,7 +289,7 @@ const CodeEditor = () => {
             defaultLanguage="java"
             defaultValue={defaultLang[language]}
             language={language}
-            value={defaultLang[language]}
+            value={textCode}
             theme={dark ? "vs-dark" : ""}
             onChange={(e) => {
               setTextCode(e);
