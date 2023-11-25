@@ -175,6 +175,16 @@ export const routes = [
                                 path: ":submissionId",
                                 component: <Challenge />,
                               },
+                              {
+                                title: "studentSubmissions",
+                                path: "manual-mark",
+                                component: <Navigate to={".."} />,
+                              },
+                              {
+                                title: "studentSubmissions",
+                                path: "manual-mark/:studentId",
+                                component: <SubmissionsManualMarking />,
+                              },
                             ],
                           },
                           {

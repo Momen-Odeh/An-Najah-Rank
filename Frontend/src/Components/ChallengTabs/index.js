@@ -8,7 +8,6 @@ const ChallengeTabs = ({ ListTabs, PaddingTop = "30px", setActive = null }) => {
   const classes = useStyles({ PaddingTop });
   const location = useLocation();
   const [activeTab, setActiveTab] = useState(ListTabs[0]?.eventKey);
-
   const handleTabSelect = (selectedTabKey) => {
     const selectedTab = ListTabs.find((tab) => tab.eventKey == selectedTabKey);
     if (selectedTab && selectedTab.urlPattern) {

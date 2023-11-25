@@ -6,7 +6,6 @@ import Breadcrumbs from "../../Components/Breadcrumbs";
 import TextRegister from "../../Components/Text";
 import ChallengeTabs from "../../Components/ChallengTabs";
 import ProblemDescription from "../../Components/ProblemDescription";
-import SubmitionTab from "../../Components/SubmitionTab";
 import LeadboardTab from "../../Components/LeadboardTab";
 import useStyles from "./style";
 import { useParams, useNavigate } from "react-router-dom";
@@ -17,6 +16,7 @@ import { ImCross } from "react-icons/im";
 import TestCaseProblem from "../../Components/TestCaseProblem";
 import { toastError } from "../../Utils/toast";
 import Submission from "../../Components/Submission";
+import SubmissionProfessor from "../../Components/SubmissionProfessor";
 
 const Challenge = ({}) => {
   const clasess = useStyles();
@@ -39,7 +39,7 @@ const Challenge = ({}) => {
     {
       eventKey: "Submissions",
       title: "Submissions",
-      TabComponent: <SubmitionTab />,
+      TabComponent: <SubmissionProfessor />,
       urlPattern: `/courses/${id}/contests/${contestId}/challenges/${challengeId}/submissions`,
       innerTabComponent: <Submission />,
       innerTabUrl: `/courses/${id}/contests/${contestId}/challenges/${challengeId}/submissions/${submissionId}`,
