@@ -96,7 +96,11 @@ const SubmissionProfessor = () => {
           <span>{maxScore}</span>
         </div>
       ),
-      similarity: item.similarity + "%",
+      similarity: (
+        <span className="d-flex justify-content-center align-items-center me-4">
+          {item.similarity + "%"}
+        </span>
+      ),
       studentSubmissions: (
         <ButtonRank
           text={"View Submissions"}
