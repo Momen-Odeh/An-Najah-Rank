@@ -90,11 +90,11 @@ const CodeSimilarity = () => {
       .catch((error) => {
         console.log(error);
         if (error?.response?.status === 401) {
-          if (error?.response?.data.message === "unauthorized role") {
+          if (error?.response?.data?.message === "unauthorized role") {
             toastError("Unautharized accesss");
             navigate("..");
           } else if (
-            error?.response?.data.message === "not found similarity file"
+            error?.response?.data?.message === "not found similarity file"
           ) {
             toastError("No similarity with this id");
             navigate("..");
