@@ -3,7 +3,6 @@ import useStyles from "./style";
 import { Col, Container, Row } from "react-bootstrap";
 import CodeTextArea from "./CodeTextArea";
 import TabsSimilarity from "./TabsSimilarity";
-import GeneralInfoCodeSimilarity from "./GeneralInfoCodeSimilarity";
 import Text from "../Text";
 import axios from "axios";
 import { useParams } from "react-router-dom";

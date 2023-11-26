@@ -8,28 +8,7 @@ from AWS_SetUp import *
 from fileManagment.getFileExtention import get_file_extension
 from MOSS import moss
 
-# filesNames = ['submission/NoorAldeen.java',
-#               'submission/wwwww.java',
-#               'submission/momenMagic.java',
-#               'submission/momen.java',
-#               'submission/qqqqqqq.java',
-#               'submission/NoorAldeen-Magic.java'
-#               ]
-# similarityFilesData = [
-#     [0, 'submission/NoorAldeen.java', '70%', 'submission/wwwww.java', '97%', 31,
-#      [['22-40', '13-33'], ['1-10', '1-10']]],
-#     [1, 'submission/momenMagic.java', '52%', 'submission/NoorAldeen-Magic.java', '74%', 32,
-#      [['19-36', '24-40'], ['43-56', '6-18']]],
-#     [2, 'submission/momen.java', '35%', 'submission/qqqqqqq.java', '93%', 22, [['44-58', '8-22'], ['1-7', '1-7']]],
-#     [3, 'submission/momen.java', '12%', 'submission/momenMagic.java', '13%', 8, [['1-8', '2-9']]],
-#     [4, 'submission/wwwww.java', '16%', 'submission/qqqqqqq.java', '29%', 7, [['1-7', '1-7']]],
-#     [5, 'submission/momenMagic.java', '12%', 'submission/wwwww.java', '16%', 7, [['2-8', '1-7']]],
-#     [6, 'submission/momenMagic.java', '12%', 'submission/qqqqqqq.java', '29%', 7, [['2-8', '1-7']]],
-#     [7, 'submission/momenMagic.java', '12%', 'submission/NoorAldeen.java', '12%', 7, [['2-8', '1-7']]],
-#     [8, 'submission/momen.java', '10%', 'submission/wwwww.java', '16%', 7, [['1-7', '1-7']]],
-#     [9, 'submission/momen.java', '10%', 'submission/NoorAldeen.java', '12%', 7, [['1-7', '1-7']]],
-#     [10, 'submission/NoorAldeen.java', '12%', 'submission/qqqqqqq.java', '29%', 7, [['1-7', '1-7']]]
-# ]
+
 
 def downloadSubmitionFileAWS(submitionFileName,submitionsKeys):
     os.makedirs(submitionFileName, exist_ok=True) #create directory
