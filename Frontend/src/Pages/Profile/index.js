@@ -42,7 +42,7 @@ const Profile = () => {
   return (
     <Container fluid className={clasess.Container}>
       <Row className={clasess.Row}>
-        <Col className={`${clasess.Col} ${clasess.Aside}`} xs={3}>
+        <Col className={`${clasess.Col} ${clasess.Aside}`} md={3}>
           <ProfileAside accountInfo={accountInfo} />
         </Col>
         <Col className={`${clasess.Col} ${clasess.main}`}>

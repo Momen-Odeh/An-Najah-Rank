@@ -8,12 +8,13 @@ const useStyles = createUseStyles({
   },
   Row: {
     // backgroundColor: "green",
-    gap: "5%",
+    gap: "3%",
+    rowGap: "10px",
   },
   Col: {
     // backgroundColor: "cyan",
-    margin: "0",
-    padding: "0",
+    // margin: "0",
+    // padding: "0",
   },
   Aside: {
     boxShadow: "0 3px 10px 0 rgba(0,0,0,.1)",
