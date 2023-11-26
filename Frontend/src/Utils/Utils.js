@@ -22,6 +22,7 @@ import Course from "../Pages/Course";
 import Settings from "../Pages/Settings";
 import Admin from "../Pages/Admin";
 import NotificationComponent from "../Components/Notification";
+import SubmissionsManualMarking from "../Components/SubmissionsManualMarking";
 import UploadFile from "../Components/UploadFile";
 import CodeSimilarity from "../Components/CodeSimilarity";
 import Submission from "../Components/Submission";
@@ -168,18 +169,18 @@ export const routes = [
                             path: "problem",
                             component: <Challenge />,
                           },
-                          {
-                                title: "problem",
-                                path: ":submissionId",
-                                component: <Challenge />,
-                          },
-                          {
+                          {/*--------------------------------------submission view for students and professors-----------------------*/
                             title: "submissions",
                             path: "submissions",
                             component: <Outlet />,
                             subRoutes: [
                               {
                                 index: true,
+                                component: <Challenge />,
+                              },
+                              {//this is under submissions
+                                title: "specific submission",
+                                path: ":submissionId",
                                 component: <Challenge />,
                               },
                               {
@@ -191,6 +192,16 @@ export const routes = [
                                 title: "code Similarity with user id",
                                 path: "code-similarity/:userId",
                                 component: <CodeSimilarity />,
+                              },
+                              {
+                                title: "manual mark",
+                                path: "manual-mark",
+                                component: <Navigate to={".."} />,
+                              },
+                              {
+                                title: "student Submissions and manual mark",
+                                path: "manual-mark/:studentId",
+                                component: <SubmissionsManualMarking />,
                               },
                             ],
                           },
@@ -228,9 +239,9 @@ export const routes = [
   //   component: <NotificationComponent />,
   // },
   {
-    path: "/Submission",
-    title: "Submission",
-    component: <Submission />,
+    path: "/SubmissionsManualMarking",
+    title: "SubmissionsManualMarking",
+    component: <SubmissionsManualMarking />,
   },
   /******************************************* /admin ***********************************/
   {

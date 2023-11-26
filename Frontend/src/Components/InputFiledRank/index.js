@@ -27,6 +27,7 @@ const InputFiledRank = ({
   options,
   className,
   style,
+  textAlign = null,
 }) => {
   const clasess = useStyles({
     msg,
@@ -81,6 +82,7 @@ const InputFiledRank = ({
             onKeyDown={onKeyDown}
             ref={ref}
             autoComplete={autoComplete}
+            style={{ textAlign: textAlign }}
           />
         )}
 

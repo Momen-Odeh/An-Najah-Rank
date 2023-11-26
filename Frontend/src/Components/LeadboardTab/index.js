@@ -1,55 +1,63 @@
 import React from "react";
-import { FaCheck } from "react-icons/fa";
-import ButtonRank from "../ButtonRank";
 import TabTable from "../TabTable";
-import { Col, Container, Form, Row } from "react-bootstrap";
+import { Col, Container, Row } from "react-bootstrap";
 import useStyles from "./style";
+import { useState } from "react";
+import { useEffect } from "react";
+import axios from "axios";
+import { useParams } from "react-router-dom";
+import InputFiledRank from "../InputFiledRank";
 const LeadboardTab = () => {
   const classes = useStyles();
-  const TableHeader = ["Rank", "User", "Score", "Time", "Country"];
-  const submitions = [
-    {
-      Rank: "1",
-      User: "Momen Odeh",
-      Score: "30.0",
-      Time: "15:00",
-      Country: "Palestine",
-    },
-    {
-      Rank: "1",
-      User: "Noor Aldeen AbuShehadeh",
-      Score: "30.0",
-      Time: "18:00",
-      Country: "Palestine",
-    },
-    {
-      Rank: "1",
-      User: "Mohee Qwariq",
-      Score: "30.0",
-      Time: "19:00",
-      Country: "Palestine",
-    },
-  ];
+  const { id, contestId, challengeId } = useParams();
+  const [submissions, setSubmissions] = useState();
+  const [search, setSearch] = useState("");
+  useEffect(() => {
+    axios
+      .get(
+        `/students-leadboard?courseId=${id}&contestId=${contestId}&challengeId=${challengeId}`
+      )
+      .then((res) => {
+        setSubmissions(res.data.submissions);
+      })
+      .catch((error) => {});
+  }, []);
+
+  const sortedSubmissions = submissions?.slice()?.sort((a, b) => {
+    const scoreComparison = b.score - a.score;
+    if (scoreComparison === 0) {
+      return new Date(a.submissionDate) - new Date(b.submissionDate);
+    }
+    return scoreComparison;
+  });
+
+  const TableHeader = ["Rank", "Student Name", "Score", "Time"];
+  const result = sortedSubmissions
+    ?.filter((item) =>
+      item.studentName?.toLowerCase().includes(search.toLowerCase())
+    )
+    ?.map((item, index) => ({
+      rank: index + 1,
+      studentName: item.studentName,
+      score: item.score,
+      submissionDate: item.submissionDate,
+    }));
 
   return (
     <Container fluid className={classes.Container}>
       <Row className={`${classes.RowHead} mb-3`}>
         <Col className={classes.ColHead}>
-          <Form.Control
+          <InputFiledRank
             type="text"
-            placeholder="Type username"
+            placeholder="Type student name"
             className={classes.Form}
-          />
-          <ButtonRank
-            text={"Search"}
-            backgroundColor="#2ec866"
-            color="#F0F0F4"
+            onChange={(e) => setSearch(e.target.value)}
           />
         </Col>
       </Row>
       <Row>
         <Col>
-          <TabTable TableData={submitions} TableHeader={TableHeader} />
+          <TabTable TableData={result} TableHeader={TableHeader} />
         </Col>
       </Row>
     </Container>

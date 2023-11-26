@@ -30,7 +30,7 @@ const TabTable = ({ TableHeader, TableData, url = null }) => {
     <Table responsive striped className={classes.Table}>
       <thead className={classes.tableHeader}>
         <tr className={classes.tableRow}>
-          {TableHeader.map((item, index) => (
+          {TableHeader?.map((item, index) => (
             <th key={index}>
               <Text text={item} color="#39424E" size="1em" />
             </th>
@@ -39,11 +39,11 @@ const TabTable = ({ TableHeader, TableData, url = null }) => {
       </thead>
       {/* {console.log(url)} */}
       <tbody>
-        {TableData.map((item, index) =>
+        {TableData?.map((item, index) =>
           url ? (
             <tr className={classes.tableRow} key={index}>
               {setValues(Object.values(item))}
-              {values.map((val, indexIN) =>
+              {values?.map((val, indexIN) =>
                 TableHeader[indexIN] === "" ? (
                   <td key={indexIN} className={classes.TableData}>
                     {val}
@@ -60,7 +60,7 @@ const TabTable = ({ TableHeader, TableData, url = null }) => {
           ) : (
             <tr key={index} className={classes.tableRow}>
               {setValues(Object.values(item))}
-              {values.map((val, indexIN) => (
+              {values?.map((val, indexIN) => (
                 <td key={indexIN} className={classes.TableData}>
                   {val}
                 </td>
