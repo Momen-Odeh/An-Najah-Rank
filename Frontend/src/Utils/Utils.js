@@ -240,25 +240,17 @@ export const routes = [
   {
     path: "/admin",
     title: routeNames.ADMIN,
-    component: (
-      //   <IsLoggedIn moveTo={"log-in"}>
-      <Admin />
-      //  </IsLoggedIn>
-    ),
+    component: <Admin />, //guard done
   },
   /******************************************* /administration ***********************************/
   {
     path: "/administration",
     title: routeNames.ADMINISTRATION,
-    component: (
-      //   <IsLoggedIn moveTo={"log-in"} isAdmin={true}>
-      <Outlet />
-      //  </IsLoggedIn>
-    ),
+    component: <Outlet />,
     subRoutes: [
       {
         index: true,
-        component: <Navigate to={"/administration/courses"} />,
+        component: <Administration />,
       },
       /******************************************* /administration/courses ***********************************/
       {
@@ -284,7 +276,7 @@ export const routes = [
             subRoutes: [
               {
                 index: true,
-                component: <Navigate to={"details"} />,
+                component: <Course />,
               },
               {
                 title: "details",

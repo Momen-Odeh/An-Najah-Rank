@@ -23,9 +23,9 @@ def accessContest(courseNumber, contestNumber, universityNumber):
                         SELECT se.studentNumber as registerNumber
                         FROM `an-najah rank`.student_enrollments se
                         JOIN contest_course cc ON se.courseNumber = cc.courseNumber
-                        WHERE cc.courseNumber = '{courseNumber}';
+                        WHERE cc.courseNumber = '{courseNumber}'
                         UNION
-                        SELECT universityNumber as registerNumber from user where role = 'admin'
+                        SELECT universityNumber as registerNumber from user where role = 'admin';
 
                     """
 

@@ -12,14 +12,19 @@ def get_submission_info():
         submission_id = request.args.get('SubmissionId')
         contest_id = request.args.get('contestId')
         challenge_id = request.args.get('challengeId')
-        contest_challenge_details_query = f"SELECT max_score FROM contests_challenges WHERE challenge_id = %s AND contest_id = %s "
+        contest_challenge_details_query = f"SELECT max_score FROM contests_challenges WHERE challenge_id = %s " \
+                                          f"AND contest_id = %s "
 
-        submission_query = f"SELECT * FROM student_submissions WHERE studentUniversityNumber = '{student_university_number}' " \
+        submission_query = f"SELECT * FROM student_submissions WHERE " \
+                           f"studentUniversityNumber = '{student_university_number}' " \
                            f"AND id = '{submission_id}'"
+
         test_cases = f"SELECT status FROM submission_testCases WHERE submissionId = '{submission_id}'"
         cursor = connection.cursor()
         cursor.execute(submission_query)
         result = cursor.fetchone()
+        if not result:
+            return jsonify({"message": "Access Denied"}), 401
         cursor.execute(contest_challenge_details_query,(challenge_id, contest_id))
         maxScore = cursor.fetchone()
         cursor.execute(test_cases)

@@ -11,7 +11,8 @@ def getChallengesForOwner():
         tokenData = getattr(request, 'tokenData', None)
         ownerUniversityNumber = tokenData['universityNumber']
         name = tokenData['name']
-
+        if not (tokenData['role'] == 'professor' or tokenData['role'] == 'admin'):
+            return jsonify({"message": "Access Denied"}), 401
         challenge_query = f"SELECT * FROM challenges WHERE ownerUniversityNumber = {ownerUniversityNumber};"
         challenges = fetch_results(execute_query(connection, challenge_query))
         challenge_objects = []
@@ -53,7 +54,8 @@ def getChallengesForOwner():
             moderated_course = {
                 "id": row[0],
                 "name": row[1],
-                "ownerName": fetch_results(execute_query(connection, f"SELECT fullName FROM user WHERE universityNumber = {row[3]};")),
+                "ownerName": fetch_results(execute_query(connection, f"SELECT fullName FROM user WHERE "
+                                                                     f"universityNumber = {row[3]};")),
                 "moderators": fetch_results(execute_query(connection, f"""
                     SELECT u.fullName
                     FROM user AS u

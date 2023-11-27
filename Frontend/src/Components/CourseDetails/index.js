@@ -11,6 +11,7 @@ import InputFiledRank from "../InputFiledRank";
 import { validateUniversityNumber } from "../../Utils/Validation";
 import { toast } from "react-toastify";
 import LoaderRank from "../LoaderRank";
+import { toastError } from "../../Utils/toast";
 const CourseDetails = ({ operation, data = null, setData }) => {
   const [loading, setLoading] = useState(false);
   const classes = useStyle();
@@ -33,7 +34,25 @@ const CourseDetails = ({ operation, data = null, setData }) => {
   });
 
   useEffect(() => {
-    if (data) setDetails(data);
+    if (operation === "create") {
+      axios
+        .get("/is-admin-or-professor")
+        .then((res) => {
+          if (data) setDetails(data);
+        })
+        .catch((error) => {
+          if (error?.response?.status === 401) {
+            //************* guard done ************************ */
+            if (error?.response?.data?.message === "Access Denied") {
+              toastError("Invalid Access");
+              navigate("/");
+            } else {
+              toastError("Invalid Access");
+              navigate("/log-in");
+            }
+          }
+        });
+    } else if (data) setDetails(data);
   }, [data]);
   const handleChange = (e, nameVal = null, val = null) => {
     if (e) {

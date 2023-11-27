@@ -6,7 +6,7 @@ def accessChallengeProfessor(challengeNumber, universityNumber):
                 SELECT ownerUniversityNumber as universityNumber from challenges WHERE id = '{challengeNumber}' AND 
                 ownerUniversityNumber = '{universityNumber}'
                 union
-                SELECT universityNumber as universityNumber from user where role = 'admin'
+                SELECT universityNumber as universityNumber from user where role = 'admin';
             """
     cursor = connection.cursor()
     cursor.execute(query)

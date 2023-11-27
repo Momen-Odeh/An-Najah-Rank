@@ -7,7 +7,10 @@ import ManageCourses from "../../Components/ManageCourses";
 import Text from "../../Components/Text";
 import useStyles from "./style";
 import Breadcrumbs from "../../Components/Breadcrumbs";
+import { toastError } from "../../Utils/toast";
+import { useNavigate } from "react-router-dom";
 const Administration = () => {
+  const navigate = useNavigate();
   const [data, setData] = useState({
     courses: [],
     challenges: [],
@@ -19,6 +22,16 @@ const Administration = () => {
         setData(res.data);
       })
       .catch((error) => {
+        if (error?.response?.status === 401) {
+          //************* guard done ************************ */
+          if (error?.response?.data?.message === "Access Denied") {
+            toastError("Invalid Access");
+            navigate("/");
+          } else {
+            toastError("Invalid Access");
+            navigate("/log-in");
+          }
+        }
         console.log(error);
       });
   }, []);
@@ -36,12 +49,12 @@ const Administration = () => {
       urlPattern: "/administration/challenges",
     },
   ];
-  const clasess = useStyles();
+  const classes = useStyles();
 
   return (
-    <Container fluid className={clasess.Container}>
-      <Row className={`${clasess.Row} mb-2`}>
-        <Col className={`${clasess.Col}`}>
+    <Container fluid className={classes.Container}>
+      <Row className={`${classes.Row} mb-2`}>
+        <Col className={`${classes.Col}`}>
           <Breadcrumbs />
         </Col>
       </Row>

@@ -6,13 +6,15 @@ import ChallengeTabs from "../../Components/ChallengTabs";
 import ContestsDetalis from "../../Components/ContestDetails";
 import ContestChallenges from "../../Components/ContestChallenges";
 import useStyles from "./style";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useState } from "react";
 import { useEffect } from "react";
 import axios from "axios";
+import { toastError } from "../../Utils/toast";
 const Contests = () => {
   const classes = useStyles();
   const { id, contestId } = useParams();
+  const navigate = useNavigate();
   const [details, setDetails] = useState({
     name: null,
     description: null,
@@ -25,7 +27,7 @@ const Contests = () => {
   useEffect(() => {
     axios
       .get(`/contest-info`, {
-        params: { contest_id: contestId },
+        params: { contest_id: contestId, courseId: id },
       })
       .then((res) => {
         setDetails({
@@ -50,6 +52,16 @@ const Contests = () => {
         );
       })
       .catch((error) => {
+        if (error?.response?.status === 401) {
+          //************* guard done ************************ */
+          if (error?.response?.data?.message === "Access Denied") {
+            toastError("Invalid Access");
+            navigate("/");
+          } else {
+            toastError("Invalid Access");
+            navigate("/log-in");
+          }
+        }
         console.log(error);
       });
   }, []);

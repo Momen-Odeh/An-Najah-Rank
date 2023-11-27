@@ -2,20 +2,23 @@ from FlaskSetUp import app
 from flask import request, jsonify
 from dataBaseConnection import execute_query, fetch_results
 from MySQL_SetUp import connection
-from authentication import get_Data_from_token
+from guard.professorAccess.AccessContestProfessor import accessContestProfessor
 import datetime
 import json
 @app.route('/contest-info', methods=['GET'])
 def get_contests_info():
     try:
         tokenData = getattr(request, 'tokenData', None)
-        print("token", tokenData)
         ownerUniversityNumber = tokenData['universityNumber']
+        courseId = request.args.get('courseId')
+        access = accessContestProfessor(courseId, request.args.get('contest_id'), ownerUniversityNumber)
+        if not access:
+            return jsonify({"message": "Access Denied"}), 401
         query = f"""
                     SELECT *
                     FROM contests 
                     WHERE 
-                    id ={request.args.get('contest_id')}
+                    id ='{request.args.get('contest_id')}';
                 """
         cursor = connection.cursor()
         cursor.execute(query)
@@ -31,10 +34,10 @@ def get_contests_info():
         }
         query = f"""
                     SELECT *
-                    FROM challenges 
-                    WHERE 
-                    ownerUniversityNumber ={ownerUniversityNumber}
+                    FROM challenges ;
                 """
+        # WHERE
+        # ownerUniversityNumber = '{ownerUniversityNumber}'
         cursor = execute_query(connection, query)
         myChallenges = fetch_results(cursor)
 
@@ -42,7 +45,7 @@ def get_contests_info():
                     SELECT c.*, cc.max_score, cc.challenge_id, cc.contest_id
                     FROM challenges AS c
                     JOIN contests_challenges AS cc ON c.id = cc.challenge_id
-                    WHERE cc.contest_id = {request.args.get('contest_id')}
+                    WHERE cc.contest_id = '{request.args.get('contest_id')}';
                 """
         cursor = execute_query(connection, query)
         ContestChallenges = fetch_results(cursor)

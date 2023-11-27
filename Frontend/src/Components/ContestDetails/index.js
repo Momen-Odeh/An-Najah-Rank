@@ -33,7 +33,25 @@ const ContestsDetalis = ({ operation, data = null }) => {
     endTime: null,
   });
   useEffect(() => {
-    if (data) setDetails(data);
+    if (operation === "create") {
+      axios
+        .get("/is-admin-or-professor", { params: { courseId: id } })
+        .then((res) => {
+          if (data) setDetails(data);
+        })
+        .catch((error) => {
+          if (error?.response?.status === 401) {
+            //************* guard done ************************ */
+            if (error?.response?.data?.message === "Access Denied") {
+              toastError("Invalid Access");
+              navigate("/");
+            } else {
+              toastError("Invalid Access");
+              navigate("/log-in");
+            }
+          }
+        });
+    } else if (data) setDetails(data);
   }, [data]);
 
   const handleChange = (e, nameVal = null, val = null) => {

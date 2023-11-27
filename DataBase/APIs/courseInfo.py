@@ -1,20 +1,22 @@
 from FlaskSetUp import app
-from flask import request, jsonify, send_file
+from flask import request, jsonify
 from dataBaseConnection import execute_query, fetch_results
 from MySQL_SetUp import connection
-import base64
 from APIs.contestsForCourse import getContestForCourse
 from fileManagment.getFileAWS import get_file_from_AWS
-import io
+from guard.professorAccess.AccessCourseProfessor import accessCourseProfessor
 @app.route('/course-info', methods=['GET'])
 def get_course_info():
     try:
         tokenData = getattr(request, 'tokenData', None)
+        access = accessCourseProfessor(request.args.get('courseNumber'), tokenData['universityNumber'])
+        if not access:
+            return jsonify({"message": "Access Denied"}), 401
         query = f"""
                     SELECT *
                     FROM courses 
                     WHERE 
-                    courseNumber ={request.args.get('courseNumber')}
+                    courseNumber ={request.args.get('courseNumber')};
                 """
         cursor = connection.cursor()
         cursor.execute(query)
@@ -23,7 +25,7 @@ def get_course_info():
                             SELECT fullName, email
                             FROM user 
                             WHERE 
-                            universityNumber ={course[3]}
+                            universityNumber ={course[3]};
                         """
         cursor = connection.cursor()
         cursor.execute(query)
@@ -37,13 +39,13 @@ def get_course_info():
             "backgroundImage": None
         }
         if course[4] is not None:
-            courseData["backgroundImage"] = get_file_from_AWS(course[4])#base64.b64encode(course[4]).decode('utf-8')
+            courseData["backgroundImage"] = get_file_from_AWS(course[4])
         query = f"""
                     SELECT *
                     FROM user 
                     WHERE 
                     role ='professor'
-                    AND universityNumber != {course[3]}
+                    AND universityNumber != {course[3]};
                 """
         cursor = execute_query(connection, query)
         data = fetch_results(cursor)
@@ -59,7 +61,7 @@ def get_course_info():
                     SELECT u.*
                     FROM user u
                     JOIN student_enrollments se ON u.universityNumber = se.studentNumber
-                    WHERE se.courseNumber = {request.args.get('courseNumber')}
+                    WHERE se.courseNumber = {request.args.get('courseNumber')};
                 """
         cursor = execute_query(connection, query)
         data = fetch_results(cursor)
@@ -90,7 +92,7 @@ def get_course_info():
                     SELECT u.*
                     FROM user u
                     JOIN course_moderators cm ON u.universityNumber = cm.stuffNumber
-                    WHERE cm.courseNumber = {request.args.get('courseNumber')}
+                    WHERE cm.courseNumber = {request.args.get('courseNumber')};
                 """
         cursor = execute_query(connection, query)
         data = fetch_results(cursor)
@@ -109,26 +111,7 @@ def get_course_info():
             'moderators': moderators,
             "contests": contests
         }
-        print("---------",tokenData['universityNumber'],students,moderators,Owner)
-
-        # ValidAccess= False
-        # if (Owner[2] == tokenData['universityNumber']):
-        #     ValidAccess=True
-        #
-        # if not ValidAccess:
-        #     for student in students:
-        #         if student['registrationNumber'] == tokenData['universityNumber']:
-        #             ValidAccess = True
-        #             break
-        #
-        # if not ValidAccess:
-        #     for moderator in moderators:
-        #         if moderator['universityNumber'] == tokenData['universityNumber']:
-        #             ValidAccess = True
-        #             break
-        # if ValidAccess:
         return jsonify(response_data), 200
-        # else:
-        #     return {"error":"UNAUTHORIZED"},401
+
     except Exception as e:
         return {'message': str(e)}, 409

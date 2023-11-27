@@ -67,6 +67,7 @@ const Challenge = () => {
       .catch((e) => {
         console.log(e.response);
         if (e?.response?.status === 401) {
+          //***********************guard done***************************
           if (e?.response?.data?.message === "Access Denied") {
             toastError("Invalid Access");
             navigate("/");
