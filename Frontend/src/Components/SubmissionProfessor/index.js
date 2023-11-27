@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import TabTable from "../TabTable";
 import ButtonRank from "../ButtonRank";
 import SubmitionTab from "../../Components/SubmitionTab";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { useEffect } from "react";
 import axios from "axios";
 import { toastError } from "../../Utils/toast";
@@ -18,21 +18,24 @@ const SubmissionProfessor = () => {
   const [showItem, setShowItem] = useState(null);
   const [search, setSearch] = useState("");
   const [sort, setSort] = useState({ sortOn: null, type: null });
+  const location = useLocation();
+  const currentPath = location.pathname;
   useEffect(() => {
-    axios
-      .get(
-        `/submissions-students?courseId=${id}&contestId=${contestId}&challengeId=${challengeId}`
-      )
-      .then((res) => {
-        setStudentsSubmission(res.data.submissions);
-        setMaxScore(res.data.maxScore);
-        setShowItem(1);
-      })
-      .catch((error) => {
-        if (error?.response?.status == 401) setShowItem(0);
-        else toastError(error);
-      });
-  }, []);
+    if (currentPath.includes("submissions"))
+      axios
+        .get(
+          `/submissions-students?courseId=${id}&contestId=${contestId}&challengeId=${challengeId}`
+        )
+        .then((res) => {
+          setStudentsSubmission(res.data.submissions);
+          setMaxScore(res.data.maxScore);
+          setShowItem(1);
+        })
+        .catch((error) => {
+          if (error?.response?.status == 401) setShowItem(0);
+          else toastError(error);
+        });
+  }, [location.pathname]);
 
   const tableHeader = [
     "Name",
@@ -90,19 +93,26 @@ const SubmissionProfessor = () => {
       StudentName: item.studentName,
       SubmissionDate: item.submissionDate,
       score: (
-        <div className="me-3 d-flex flex-column justify-content-center align-items-center">
+        <div
+          className="me-3 d-flex flex-column justify-content-center align-items-center"
+          key={index}
+        >
           <span>{item.score}</span>
           <hr className={classes.line}></hr>
           <span>{maxScore}</span>
         </div>
       ),
       similarity: (
-        <span className="d-flex justify-content-center align-items-center me-4">
+        <span
+          className="d-flex justify-content-center align-items-center me-4"
+          key={index}
+        >
           {item.similarity + "%"}
         </span>
       ),
       studentSubmissions: (
         <ButtonRank
+          key={index}
           text={"View Submissions"}
           size="small"
           onClick={() =>
@@ -114,6 +124,7 @@ const SubmissionProfessor = () => {
       ),
       studentSimilarity: (
         <ButtonRank
+          key={index}
           text={"View Similarity"}
           size="small"
           onClick={() =>

@@ -5,23 +5,28 @@ import useStyles from "./style";
 import { useState } from "react";
 import { useEffect } from "react";
 import axios from "axios";
-import { useParams } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import InputFiledRank from "../InputFiledRank";
 const LeadboardTab = () => {
   const classes = useStyles();
   const { id, contestId, challengeId } = useParams();
   const [submissions, setSubmissions] = useState();
   const [search, setSearch] = useState("");
+  const location = useLocation();
+  const currentPath = location.pathname;
   useEffect(() => {
-    axios
-      .get(
-        `/students-leadboard?courseId=${id}&contestId=${contestId}&challengeId=${challengeId}`
-      )
-      .then((res) => {
-        setSubmissions(res.data.submissions);
-      })
-      .catch((error) => {});
-  }, []);
+    if (currentPath.includes("leaderboard"))
+      axios
+        .get(
+          `/students-leadboard?courseId=${id}&contestId=${contestId}&challengeId=${challengeId}`
+        )
+        .then((res) => {
+          setSubmissions(res.data.submissions);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+  }, [location.pathname]);
 
   const sortedSubmissions = submissions?.slice()?.sort((a, b) => {
     const scoreComparison = b.score - a.score;

@@ -1,10 +1,7 @@
 import React from "react";
 import useStyles from "./style";
-import { Col, Container, Row } from "react-bootstrap";
 import Text from "../Text";
 import { Link } from "react-router-dom";
-import { FaCheck } from "react-icons/fa";
-import ButtonRank from "../ButtonRank";
 import Table from "react-bootstrap/Table";
 const renderValue = (value) => {
   if (
@@ -37,7 +34,7 @@ const TabTable = ({ TableHeader, TableData, url = null }) => {
           ))}
         </tr>
       </thead>
-      {/* {console.log(url)} */}
+
       <tbody>
         {TableData?.map((item, index) =>
           url ? (

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Container, Row, Col, Form } from "react-bootstrap";
+import { Container, Row, Col } from "react-bootstrap";
 import Text from "../Text";
 import TextEditor from "../TextEditor";
 import Tags from "../Tags";
@@ -7,7 +7,6 @@ import ButtonRank from "../ButtonRank";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 import { useEffect } from "react";
-import { useCookies } from "react-cookie";
 import InputFiledRank from "../InputFiledRank";
 import useStyle from "./style";
 import LoaderRank from "../LoaderRank";
@@ -38,16 +37,13 @@ const CreateChallengeDetails = ({ operation, data }) => {
       setDetails(data);
     }
   }, [data]);
-  const [cookies, setCookies] = useCookies();
   const navigate = useNavigate();
   const handleChange = (e, nameVal = null, val = null) => {
     if (e) {
       const { name, value } = e.target;
-      // console.log(details);
       setDetails({ ...details, [name]: value });
     } else {
       setDetails({ ...details, [nameVal]: val });
-      // console.log(details);
     }
   };
   const handleClick = async () => {
@@ -99,7 +95,7 @@ const CreateChallengeDetails = ({ operation, data }) => {
       setLoading(true);
       try {
         if (operation === "create") {
-          const response = await axios.post("/challenges", challenge);
+          await axios.post("/challenges", challenge);
           challenge = {
             ...challenge,
             tags:
@@ -109,7 +105,7 @@ const CreateChallengeDetails = ({ operation, data }) => {
           const res = await axios.get("/challenge_id?" + params.toString());
           navigate(`/administration/challenges/${res.data.message}/test-cases`);
         } else {
-          const response = await axios.put(`/challenges/${id}`, challenge);
+          await axios.put(`/challenges/${id}`, challenge);
           navigate(`/administration/challenges/${id}/test-cases`);
         }
         setLoading(false);
@@ -123,7 +119,6 @@ const CreateChallengeDetails = ({ operation, data }) => {
   const classes = useStyle();
   return (
     <Container fluid>
-      {/*  */}
       <Row className="mb-3 mt-5">
         <Col xs={"auto"} className={classes.TitleFiled}>
           <Text

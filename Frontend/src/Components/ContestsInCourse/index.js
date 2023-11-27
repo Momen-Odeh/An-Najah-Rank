@@ -1,31 +1,12 @@
-import React, { useState } from "react";
-import { Col, Container, Form, Modal, Row } from "react-bootstrap";
+import React from "react";
+import { Col, Container, Row } from "react-bootstrap";
 import ButtonRank from "../ButtonRank";
-import ChallengeInContest from "../ChallengeInContest";
 import Text from "../Text";
 import ChallengeShow from "../ChallengeShow";
-
-import InputFiledRank from "../InputFiledRank";
 import { useNavigate } from "react-router-dom";
-const ContestsInCourse = ({
-  contests,
-  isAdmin,
-  handleAddContest,
-  courseId,
-}) => {
+const ContestsInCourse = ({ contests, isAdmin, courseId }) => {
   const navigate = useNavigate();
-  const [showAddModal, setShowAddModal] = useState(false);
-  const [contest, setContest] = useState({
-    contestName: "",
-  });
-  const { contestName } = contest;
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setContest({
-      ...contest,
-      [name]: value,
-    });
-  };
+
   return (
     <Container>
       <Row>

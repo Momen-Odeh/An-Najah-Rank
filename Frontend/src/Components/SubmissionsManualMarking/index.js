@@ -58,7 +58,7 @@ const SubmissionsManualMarking = () => {
       return {
         eventKey: "TestCase " + index,
         title: (
-          <span>
+          <span key={index}>
             TestCase {index} ({((item.strength / sumStrength) * 100).toFixed(1)}
             %)
             {submission?.testCaseOutput[index].status ? (
@@ -70,6 +70,7 @@ const SubmissionsManualMarking = () => {
         ),
         TabComponent: (
           <TestCaseProblem
+            key={index}
             title={
               submission?.testCaseOutput[index].status
                 ? "Congratulations, you passed the sample test case."
@@ -85,7 +86,7 @@ const SubmissionsManualMarking = () => {
       return {
         eventKey: "TestCase " + index,
         title: (
-          <span>
+          <span key={index}>
             TestCase {index} ({((item.strength / sumStrength) * 100).toFixed(1)}
             %)
             {<ImCross className={`${classes.Icon} ${classes.IconFail}`} />}
@@ -93,6 +94,7 @@ const SubmissionsManualMarking = () => {
         ),
         TabComponent: (
           <TestCaseProblem
+            key={index}
             title={
               submission?.compileError ? "Compile Time Error" : "Run Time Error"
             }

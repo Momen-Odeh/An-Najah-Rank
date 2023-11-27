@@ -1,21 +1,13 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Col, Container, Row } from "react-bootstrap";
-import { useCookies } from "react-cookie";
 import ChallengeTabs from "../../Components/ChallengTabs";
 import ManageChallenges from "../../Components/ManageChallenges";
-import ManageContests from "../../Components/ManageContests";
 import ManageCourses from "../../Components/ManageCourses";
 import Text from "../../Components/Text";
 import useStyles from "./style";
 import Breadcrumbs from "../../Components/Breadcrumbs";
-//
-import userContext from "../../Utils/userContext";
-import { useContext } from "react";
-//
 const Administration = () => {
-  const [cookies, setCookies] = useCookies();
-
   const [data, setData] = useState({
     courses: [],
     challenges: [],

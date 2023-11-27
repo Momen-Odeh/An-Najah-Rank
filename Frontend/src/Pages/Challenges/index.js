@@ -5,11 +5,13 @@ import Breadcrumbs from "../../Components/Breadcrumbs";
 import Text from "../../Components/Text";
 import { Col, Container, Row } from "react-bootstrap";
 import TestCases from "../../Components/TestCases";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import useStyles from "./style";
+import { toastError } from "../../Utils/toast";
 const Challenges = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
   const [details, setDetails] = useState({
     difficulty: "Easy",
     name: null,
@@ -50,6 +52,10 @@ const Challenges = () => {
         );
       })
       .catch((e) => {
+        if (e?.response?.status === 401) {
+          toastError("Invalid Access");
+          navigate("/");
+        }
         console.log(e.response);
       });
   }, []);

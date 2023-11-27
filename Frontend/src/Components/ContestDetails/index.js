@@ -1,28 +1,21 @@
 import React, { useState } from "react";
-import { Col, Container, Form, Row } from "react-bootstrap";
+import { Col, Container, Row } from "react-bootstrap";
 import useStyle from "./style";
 import Text from "../Text";
-import Datetime from "react-datetime";
-import "react-datetime/css/react-datetime.css";
 import TextEditor from "../TextEditor";
 import ButtonRank from "../ButtonRank";
-import AlertComponent from "../Alert";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
-import { useCookies } from "react-cookie";
 import { useEffect } from "react";
-import moment from "moment";
-import SuggestionsInput from "../SuggestionsInput";
 import InputFiledRank from "../InputFiledRank";
 import CheckRank from "../CheckRank";
 import LoaderRank from "../LoaderRank";
-import { toast } from "react-toastify";
+import { toastError } from "../../Utils/toast";
 
 const ContestsDetalis = ({ operation, data = null }) => {
   const classes = useStyle();
   const navigate = useNavigate();
   const { id, contestId } = useParams();
-  const [cookies, setCookies] = useCookies();
   const [loading, setLoading] = useState(false);
   const [details, setDetails] = useState({
     name: "",
@@ -89,13 +82,12 @@ const ContestsDetalis = ({ operation, data = null }) => {
       const contest = {
         ...details,
         endTime: details.hasEndTime ? details.endTime : null,
-        token: cookies?.token,
       };
       try {
         setLoading(true);
         if (operation === "create") {
           setErrorMsg({ ...errorMsg, endTime: null });
-          const response = await axios.post("/contests", {
+          await axios.post("/contests", {
             ...contest,
             courseNumber: id,
           });
@@ -108,7 +100,7 @@ const ContestsDetalis = ({ operation, data = null }) => {
           setLoading(false);
         } else {
           setErrorMsg({ ...errorMsg, endTime: null });
-          const response = await axios.put(`/contests/${contestId}`, contest);
+          await axios.put(`/contests/${contestId}`, contest);
           navigate(
             `/administration/courses/${id}/contests/${contestId}/challenges`
           );
@@ -116,16 +108,7 @@ const ContestsDetalis = ({ operation, data = null }) => {
         }
       } catch (error) {
         console.log(error);
-        toast.error(error?.response?.data?.message, {
-          position: "bottom-left",
-          autoClose: 10000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "light",
-        });
+        toastError(error?.response?.data?.message);
         setLoading(false);
       }
     }
@@ -220,7 +203,6 @@ const ContestsDetalis = ({ operation, data = null }) => {
         </Col>
       </Row>
 
-      {/*  */}
       <Row className="mb-3">
         <Col xs={"auto"} className={classes.TitleFiled}>
           <Text

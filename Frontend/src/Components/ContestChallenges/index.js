@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import useStyles from "./style";
-import { Col, Container, Form, Modal, Row } from "react-bootstrap";
+import { Col, Container, Modal, Row } from "react-bootstrap";
 import Text from "../Text";
 import { Link, useParams } from "react-router-dom";
 import ButtonRank from "../ButtonRank";
@@ -50,11 +50,7 @@ const ContestChallenges = ({ challengesData, challengesContest }) => {
   useEffect(() => {
     setTableData(challengesContest);
   }, [challengesContest]);
-  const [showAlert, setShowAlert] = useState(false);
-  const [alertData, setAlertData] = useState({
-    message: "",
-    variant: "warning",
-  });
+
   const handleChallengeInfo = () => {
     const challenge_id = challengesData?.filter(
       (item) => item.name + " id= " + item.id === newChallenge.name
@@ -132,7 +128,7 @@ const ContestChallenges = ({ challengesData, challengesContest }) => {
   const handleRemoveTableData = async (indexEx) => {
     setLoading(true);
     try {
-      await axios.delete(`http://localhost:5000/contests-challenges`, {
+      await axios.delete(`/contests-challenges`, {
         params: { challenge_id: TableData[indexEx].id, contest_id: contestId },
       });
       setTableData(TableData.filter((element, index) => index !== indexEx));

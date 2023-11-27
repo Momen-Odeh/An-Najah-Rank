@@ -7,7 +7,7 @@ from authentication import get_Data_from_token
 def add_contest():
     try:
         data = request.get_json()
-        tokenData = get_Data_from_token(data['token'])
+        tokenData = getattr(request, 'tokenData', None)
         ownerUniversityNumber = tokenData['universityNumber']
         print(data['hasEndTime'])
         result = insert_data(
@@ -25,6 +25,8 @@ def add_contest():
 @app.route('/contest_id', methods=['GET'])
 def get_contests_id():
     try:
+        tokenData = getattr(request, 'tokenData', None)
+        ownerUniversityNumber = tokenData['universityNumber']
         sql_query = """
             SELECT id 
             FROM contests 
@@ -38,8 +40,6 @@ def get_contests_id():
         """
         hasEndTime = 1 if request.args.get('hasEndTime') and request.args.get('hasEndTime').lower() == 'true' else 0
         # endTime = None if request.args.get('endTime')== 'null' else request.args.get('endTime')
-        tokenData = get_Data_from_token(request.args.get('token'))
-        ownerUniversityNumber = tokenData['universityNumber']
         params = (
             request.args.get('name'),
             request.args.get('description'),

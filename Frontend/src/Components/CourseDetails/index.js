@@ -6,7 +6,6 @@ import useStyle from "./Style";
 import ButtonRank from "../ButtonRank";
 import { useEffect } from "react";
 import axios from "axios";
-import { useCookies } from "react-cookie";
 import { useNavigate, useParams } from "react-router-dom";
 import InputFiledRank from "../InputFiledRank";
 import { validateUniversityNumber } from "../../Utils/Validation";
@@ -16,7 +15,6 @@ const CourseDetails = ({ operation, data = null, setData }) => {
   const [loading, setLoading] = useState(false);
   const classes = useStyle();
   const navigate = useNavigate();
-  const [cookies, setCookies] = useCookies();
   const { id } = useParams();
   const [details, setDetails] = useState({
     number: null,

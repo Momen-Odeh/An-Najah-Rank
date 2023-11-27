@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { Container, Nav, Navbar } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import useStyle from "./Style";
@@ -11,13 +10,13 @@ import Logo from "./images/logo.jpg";
 const Header = ({ activeTab }) => {
   const classes = useStyle();
   const navigate = useNavigate();
-  const [userChoicesData, setUserChoicesData] = useState([
+  const userChoicesData = [
     { id: 1, title: "Profile", link: "/profile" },
     { id: 2, title: "Settings", link: "/settings" },
     { id: 3, title: "Submissions", link: "#Submissions" },
     { id: 4, title: "Administration", link: "/administration/courses" },
     { id: 5, title: "Logout", link: "log-in" },
-  ]);
+  ];
   const signInPath = routes.filter(
     (item) => item.title === routeNames.LOG_IN
   )[0].path;
@@ -63,9 +62,9 @@ const Header = ({ activeTab }) => {
               Sign in
             </Nav.Link>
             <div className={classes.userChoicesSmall}>
-              {userChoicesData.map((choice) => (
+              {userChoicesData.map((choice, index) => (
                 <Nav.Link
-                  key={choice.id}
+                  key={index}
                   className={`${classes.hoveringColor}`}
                   onClick={() => {
                     console.log("choice.id == 5");

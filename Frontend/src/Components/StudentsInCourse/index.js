@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { useState } from "react";
-import { Col, Container, Form, Modal, Row } from "react-bootstrap";
+import { Col, Container, Row } from "react-bootstrap";
 import { BiTrash } from "react-icons/bi";
 import { useParams } from "react-router-dom";
 import ButtonRank from "../ButtonRank";

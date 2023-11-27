@@ -1,6 +1,6 @@
 import React from "react";
 import { useState } from "react";
-import { Col, Container, Form, Row } from "react-bootstrap";
+import { Col, Container, Row } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import ButtonRank from "../ButtonRank";
 import TabTable from "../TabTable";
@@ -10,10 +10,10 @@ const ManageCourses = ({ courses }) => {
   const navigate = useNavigate();
   const [search, setSearch] = useState("");
   const header = ["Course Name", "Course Owner", "Moderators"];
-  const clasess = useStyles();
+  const classes = useStyles();
   return (
     <Container>
-      <Row className={clasess.RowCreate}>
+      <Row className={classes.RowCreate}>
         <Col>
           <InputFiledRank
             type="text"

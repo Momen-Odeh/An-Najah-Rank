@@ -1,13 +1,11 @@
 from FlaskSetUp import app
 from flask import request, jsonify
-import json
-from dataBaseConnection import insert_data, update_data, delete_data, execute_query, fetch_results
+from dataBaseConnection import update_data, delete_data
 from MySQL_SetUp import connection
-from authentication import get_Data_from_token
 @app.route('/admin', methods=['GET'])
 def get_professor_pending():
     try:
-        tokenData = get_Data_from_token(request.args.get('token'))
+        tokenData = getattr(request, 'tokenData', None)
         role = tokenData['role']
         if role =='admin':
             role = 'professor'
@@ -32,7 +30,7 @@ def get_professor_pending():
 @app.route('/admin/<int:id>', methods=['PUT'])
 def update_professor_status(id):
     try:
-        tokenData = get_Data_from_token(request.get_json()['token'])
+        tokenData = getattr(request, 'tokenData', None)
         role = tokenData['role']
         if role == 'admin':
             condition = 'universityNumber = %s'
@@ -55,7 +53,7 @@ def update_professor_status(id):
 @app.route('/admin/<int:id>', methods=['DELETE'])
 def delete_professor(id):
     try:
-        tokenData = get_Data_from_token(request.args.get('token'))
+        tokenData = getattr(request, 'tokenData', None)
         role = tokenData['role']
         if role == 'admin':
             condition = f'universityNumber = {id}'

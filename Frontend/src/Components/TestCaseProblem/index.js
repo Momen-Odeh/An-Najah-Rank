@@ -3,14 +3,6 @@ import useStyles from "./style";
 import { Col, Container, Row } from "react-bootstrap";
 import Text from "../Text";
 import SampleContainer from "../SampleContainer";
-const sample = {
-  input: `4 
- 5,-80,-5,12
- 6,14,-5,19
- -8,-2,11,12
- 9,-4,16,2`,
-  output: "53",
-};
 const TestCaseProblem = ({
   error,
   title,

@@ -9,13 +9,13 @@ import { FiUser } from "react-icons/fi";
 import ButtonRank from "../ButtonRank";
 import { useNavigate } from "react-router-dom";
 const ProfileAside = ({ accountInfo }) => {
-  const clasess = useStyles();
+  const classes = useStyles();
   const navigate = useNavigate();
   return (
-    <Container fluid className={clasess.Container}>
+    <Container fluid className={classes.Container}>
       <Row>
-        <Col className={`${clasess.Col} `}>
-          <Row className={`${clasess.Row} mb-3`}>
+        <Col className={`${classes.Col} `}>
+          <Row className={`${classes.Row} mb-3`}>
             <Col>
               <Avatar
                 round
@@ -26,8 +26,8 @@ const ProfileAside = ({ accountInfo }) => {
             </Col>
           </Row>
           <Row>
-            <Col className={`${clasess.Col} ${clasess.IconContainer}`}>
-              <FiUser className={clasess.Icon} />
+            <Col className={`${classes.Col} ${classes.IconContainer}`}>
+              <FiUser className={classes.Icon} />
               <Text
                 text={accountInfo.fullName}
                 fontFamily="Open Sans"
@@ -37,8 +37,8 @@ const ProfileAside = ({ accountInfo }) => {
             </Col>
           </Row>
           <Row>
-            <Col className={`${clasess.Col} ${clasess.IconContainer}`}>
-              <AiOutlineNumber className={clasess.Icon} />
+            <Col className={`${classes.Col} ${classes.IconContainer}`}>
+              <AiOutlineNumber className={classes.Icon} />
               <Text
                 text={accountInfo.universityNumber}
                 fontFamily="Open Sans"
@@ -48,8 +48,8 @@ const ProfileAside = ({ accountInfo }) => {
             </Col>
           </Row>
           <Row className="mb-4">
-            <Col className={`${clasess.Col} ${clasess.IconContainer}`}>
-              <TfiEmail className={clasess.Icon} />
+            <Col className={`${classes.Col} ${classes.IconContainer}`}>
+              <TfiEmail className={classes.Icon} />
               <Text
                 text={accountInfo.email}
                 fontFamily="Open Sans"
@@ -59,7 +59,7 @@ const ProfileAside = ({ accountInfo }) => {
             </Col>
           </Row>
           <Row>
-            <Col className={`${clasess.Col} ${clasess.IconContainer}`}>
+            <Col className={`${classes.Col} ${classes.IconContainer}`}>
               <ButtonRank
                 text={"Edit Profile"}
                 width={"100%"}

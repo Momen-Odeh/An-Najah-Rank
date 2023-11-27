@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Container, Row, Col } from "react-bootstrap";
 import Breadcrumbs from "../../Components/Breadcrumbs";
-import ChallengeInContest from "../../Components/ChallengeInContest";
 import Text from "../../Components/Text";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
@@ -17,65 +16,65 @@ const ContestView = () => {
   const { id, contestId } = useParams();
   const [challengeContest, setChallengeContest] = useState([]);
   const [contestInfo, setContestInfo] = useState({});
-  const clasess = useStyles();
+  const classes = useStyles();
   const navigate = useNavigate();
   useEffect(() => {
+    // axios
+    //   .get("/accessCourse", {
+    //     params: {
+    //       courseNumber: id,
+    //     },
+    //   })
+    //   .then((response1) => {
     axios
-      .get("/accessCourse", {
-        params: {
-          courseNumber: id,
-        },
-      })
-      .then((response1) => {
-        axios
-          .get(`/contest-info`, { params: { contest_id: contestId } })
-          .then((response) => {
-            setChallengeContest(
-              response.data.ContestChallenges.map((item, index) => {
-                return {
-                  Name: item.name,
-                  solved: index % 2 === 0 ? true : false,
-                  statistics: [
-                    { key: "Difficulty: ", val: item.difficulty },
-                    { key: "Success Rate: ", val: "100%" },
-                    { key: "Max Score: ", val: item.maxScore },
-                  ],
-                  url: `/courses/${id}/contests/${contestId}/challenges/${item.challenge_id}/problem`,
-                };
-              })
-            );
-            setContestInfo(response.data.contest);
+      .get(`/contest-info`, { params: { contest_id: contestId } })
+      .then((response) => {
+        setChallengeContest(
+          response.data.ContestChallenges.map((item, index) => {
+            return {
+              Name: item.name,
+              solved: index % 2 === 0 ? true : false,
+              statistics: [
+                { key: "Difficulty: ", val: item.difficulty },
+                { key: "Success Rate: ", val: "100%" },
+                { key: "Max Score: ", val: item.maxScore },
+              ],
+              url: `/courses/${id}/contests/${contestId}/challenges/${item.challenge_id}/problem`,
+            };
           })
-          .catch((error) => {
-            if (error.response.status === 401) {
-              navigate("/log-in");
-              toastError("Invalid Access");
-            }
-          });
+        );
+        setContestInfo(response.data.contest);
       })
-      .catch((error1) => {
-        console.log(error1);
-        if (error1.response.status === 401) {
+      .catch((error) => {
+        if (error.response.status === 401) {
+          navigate("/log-in");
           toastError("Invalid Access");
-          if (error1.response.data.Valid === undefined) {
-            navigate("/log-in");
-          } else {
-            navigate("/");
-          }
         }
       });
+    // })
+    // .catch((error1) => {
+    //   console.log(error1);
+    //   if (error1.response.status === 401) {
+    //     toastError("Invalid Access");
+    //     if (error1.response.data.Valid === undefined) {
+    //       navigate("/log-in");
+    //     } else {
+    //       navigate("/");
+    //     }
+    //   }
+    // });
   }, []);
 
   return (
-    <Container fluid className={clasess.Container}>
-      <Row className={`${clasess.Row} mb-5`}>
-        <Col className={`${clasess.Col}`}>
+    <Container fluid className={classes.Container}>
+      <Row className={`${classes.Row} mb-5`}>
+        <Col className={`${classes.Col}`}>
           <Breadcrumbs />
         </Col>
       </Row>
-      <Row className={`${clasess.Row} mb-5`}>
-        <Col className={`${clasess.Col} ${clasess.IconContainer}`}>
-          <BiSolidCategory className={clasess.Icon} />
+      <Row className={`${classes.Row} mb-5`}>
+        <Col className={`${classes.Col} ${classes.IconContainer}`}>
+          <BiSolidCategory className={classes.Icon} />
           <Text
             text={contestInfo.name}
             size="1.8em"
@@ -85,9 +84,9 @@ const ContestView = () => {
           />
         </Col>
       </Row>
-      <Row className={`${clasess.Row} mb-1`}>
-        <Col className={`${clasess.Col} ${clasess.IconContainer}`}>
-          <AiFillFileText className={clasess.Icon} />
+      <Row className={`${classes.Row} mb-1`}>
+        <Col className={`${classes.Col} ${classes.IconContainer}`}>
+          <AiFillFileText className={classes.Icon} />
           <Text
             text={"Description"}
             size="1.3em"
@@ -97,19 +96,19 @@ const ContestView = () => {
           />
         </Col>
       </Row>
-      <Row className={`${clasess.Row} mb-2`}>
-        <Col className={`${clasess.Col} ${clasess.descritionCol}`}>
+      <Row className={`${classes.Row} mb-2`}>
+        <Col className={`${classes.Col} ${classes.descritionCol}`}>
           <span
-            className={clasess.descrition}
+            className={classes.descrition}
             dangerouslySetInnerHTML={{
               __html: contestInfo.description,
             }}
           />
         </Col>
       </Row>
-      <Row className={`${clasess.Row} mb-2`}>
-        <Col className={`${clasess.Col} ${clasess.IconContainer}`}>
-          <RxLapTimer className={clasess.Icon} />
+      <Row className={`${classes.Row} mb-2`}>
+        <Col className={`${classes.Col} ${classes.IconContainer}`}>
+          <RxLapTimer className={classes.Icon} />
           <Text
             text={"Remaining time"}
             size="1.3em"
@@ -119,15 +118,15 @@ const ContestView = () => {
           />
         </Col>
       </Row>
-      <Row className={`${clasess.Row} mb-2`}>
-        <Col className={`${clasess.Col} ${clasess.ColDWN}`}>
+      <Row className={`${classes.Row} mb-2`}>
+        <Col className={`${classes.Col} ${classes.ColDWN}`}>
           <CountDown endDate={new Date(contestInfo.endTime)} />
         </Col>
       </Row>
 
-      <Row className={`${clasess.Row} mb-3`}>
-        <Col className={`${clasess.Col} ${clasess.IconContainer}`}>
-          <PiCodeBold className={clasess.Icon} />
+      <Row className={`${classes.Row} mb-3`}>
+        <Col className={`${classes.Col} ${classes.IconContainer}`}>
+          <PiCodeBold className={classes.Icon} />
           <Text
             text={"Challenges"}
             size="20px"
@@ -138,8 +137,8 @@ const ContestView = () => {
         </Col>
       </Row>
       {challengeContest.map((item, index) => (
-        <Row className={`${clasess.Row} mb-4`} key={index}>
-          <Col className={`${clasess.Col}`}>
+        <Row className={`${classes.Row} mb-4`} key={index}>
+          <Col className={`${classes.Col}`}>
             <ChallengeShow {...item} />
           </Col>
         </Row>

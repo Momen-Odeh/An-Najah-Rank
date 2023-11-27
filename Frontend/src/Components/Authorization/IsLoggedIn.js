@@ -10,7 +10,7 @@ const IsLoggedIn = ({ moveTo, children, isAdmin }) => {
   useEffect(() => {
     // console.log("Admin *******", isAdmin);
     axios
-      .get("http://localhost:5000/checkToken", {
+      .get("/checkToken", {
         params: {
           token: Cookies.get("token"),
         },

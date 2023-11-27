@@ -65,7 +65,6 @@ const ProblemStatement = () => {
           />
         </Col>
       </Row>
-      {/* {console.log(context.challengeData.testCases)} */}
       {context.challengeData?.testCases?.map((itemData, index) => (
         <div key={index}>
           <Row className="mb-1">
@@ -103,7 +102,6 @@ const ProblemStatement = () => {
               </Row>
             </>
           )}
-          {/*  */}
         </div>
       ))}
     </Container>

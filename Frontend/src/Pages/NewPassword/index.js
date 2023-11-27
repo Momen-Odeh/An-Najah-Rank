@@ -5,11 +5,10 @@ import TextRegister from "../../Components/Text";
 import InputFiledRegister from "../../Components/InputFiledRegister";
 import { TfiLock } from "react-icons/tfi";
 import ButtonRegister from "../../Components/ButtonRegister";
-import { Link, Navigate, useNavigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import { routeNames } from "../../Utils/Utils";
 import { useOutletContext } from "react-router-dom";
 import handelStateChanges from "../../Utils/handelStateChanges";
-import AlertComponent from "../../Components/Alert";
 import Loader from "react-spinners/ClipLoader";
 import { toast } from "react-toastify";
 
@@ -49,7 +48,7 @@ const NewPassword = () => {
         console.log(22222222222);
         setLoading(true);
         axios
-          .put("http://127.0.0.1:5000/updatePassword", {
+          .put("/updatePassword", {
             email: sessionStorage.getItem("email"),
             newPassword: newPassword.newPassword,
             confirmPassword: newPassword.confirmPassword,

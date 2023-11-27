@@ -53,8 +53,8 @@ const UserChoices = ({ userChoices }) => {
         onHide={closeUserChoices}
       >
         <div className={classes.userChoicesContainer}>
-          {userChoices.map((userChoice) => (
-            <div key={userChoice.id} className={classes.choiceItem}>
+          {userChoices.map((userChoice, index) => (
+            <div key={index} className={classes.choiceItem}>
               <duv
                 onClick={() => {
                   if (userChoice.title === "Logout") {

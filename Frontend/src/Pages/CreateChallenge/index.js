@@ -26,9 +26,9 @@ const CreateChallenge = () => {
       console.log(details);
     }
   };
-  const clasess = useStyles();
+  const classes = useStyles();
   return (
-    <Container fluid className={clasess.Container}>
+    <Container fluid className={classes.Container}>
       <Row className="m-2">
         <Breadcrumbs />
       </Row>

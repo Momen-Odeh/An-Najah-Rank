@@ -6,16 +6,13 @@ import ChallengeTabs from "../../Components/ChallengTabs";
 import ContestsDetalis from "../../Components/ContestDetails";
 import ContestChallenges from "../../Components/ContestChallenges";
 import useStyles from "./style";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { useState } from "react";
 import { useEffect } from "react";
-import { useCookies } from "react-cookie";
 import axios from "axios";
 const Contests = () => {
-  const navigate = useNavigate();
-  const clasess = useStyles();
+  const classes = useStyles();
   const { id, contestId } = useParams();
-  const [cookies, setCookies] = useCookies();
   const [details, setDetails] = useState({
     name: null,
     description: null,
@@ -52,7 +49,9 @@ const Contests = () => {
           }))
         );
       })
-      .catch((error) => {});
+      .catch((error) => {
+        console.log(error);
+      });
   }, []);
 
   const tabContent = [
@@ -75,18 +74,18 @@ const Contests = () => {
     },
   ];
   return (
-    <Container fluid className={clasess.Container}>
-      <Row className={`mt-2 ${clasess.maxWidth}`}>
+    <Container fluid className={classes.Container}>
+      <Row className={`mt-2 ${classes.maxWidth}`}>
         <Col>
           <Breadcrumbs />
         </Col>
       </Row>
-      <Row className={`mb-4 ${clasess.maxWidth}`}>
+      <Row className={`mb-4 ${classes.maxWidth}`}>
         <Col>
           <Text text={details.name} size="36px" wegiht="500" height="40px" />
         </Col>
       </Row>
-      <Row className={`mb-4 ${clasess.maxWidth}`}>
+      <Row className={`mb-4 ${classes.maxWidth}`}>
         <Col>
           <ChallengeTabs ListTabs={tabContent} />
         </Col>

@@ -53,7 +53,7 @@ const Course = () => {
         console.log(error);
       });
   }, []);
-  // console.log(suggestionModerators);
+
   const tabs = [
     {
       title: "Details",
@@ -99,9 +99,9 @@ const Course = () => {
       urlPattern: `/administration/courses/${id}/contests`,
     },
   ];
-  const clasess = useStyle();
+  const classes = useStyle();
   return (
-    <Container fluid className={clasess.Container}>
+    <Container fluid className={classes.Container}>
       <Row className="m-2">
         <Breadcrumbs />
       </Row>

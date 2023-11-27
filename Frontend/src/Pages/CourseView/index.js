@@ -55,7 +55,6 @@ const CourseView = () => {
           courseId={id}
         />
       ),
-      // urlPattern: `/courses/${id}/contests`,
     },
     {
       title: "Course Students",
@@ -63,85 +62,84 @@ const CourseView = () => {
       TabComponent: (
         <StudentsInCourse students={students} setStudents={setStudents} />
       ),
-      // urlPattern: `/courses/${id}/contests`,
     },
   ];
 
   useEffect(() => {
+    // axios
+    //   .get("/accessCourse", {
+    //     params: {
+    //       courseNumber: id,
+    //     },
+    //   })
+    //   .then((response1) => {
     axios
-      .get("/accessCourse", {
+      .get("/course-info", {
         params: {
           courseNumber: id,
         },
       })
-      .then((response1) => {
-        axios
-          .get("/course-info", {
-            params: {
-              courseNumber: id,
-            },
-          })
-          .then((response) => {
-            const { name, description, backgroundImage } = response.data.course;
-            const { students, moderators } = response.data;
-            setStudents(students);
+      .then((response) => {
+        const { name, description, backgroundImage } = response.data.course;
+        const { students, moderators } = response.data;
+        setStudents(students);
 
-            setCourse({
-              ...course,
-              name,
-              description,
-              backgroundImage: backgroundImage
-                ? backgroundImage
-                : "https://wallpapercrafter.com/desktop/161398-low-poly-digital-art-network-dots-abstract-lines-red-cyan.png",
-              contests: response.data.contests.map((item) => {
-                return {
-                  ...item,
-                  Name: item.name,
-                  url: `/courses/${id}/contests/${item.id}`,
-                  endDate: item.endDate ? new Date(item.endDate) : null,
-                };
-              }),
-            });
-          })
-          .catch((error) => {
-            console.log(error);
-          });
+        setCourse({
+          ...course,
+          name,
+          description,
+          backgroundImage: backgroundImage
+            ? backgroundImage
+            : "https://wallpapercrafter.com/desktop/161398-low-poly-digital-art-network-dots-abstract-lines-red-cyan.png",
+          contests: response.data.contests.map((item) => {
+            return {
+              ...item,
+              Name: item.name,
+              url: `/courses/${id}/contests/${item.id}`,
+              endDate: item.endDate ? new Date(item.endDate) : null,
+            };
+          }),
+        });
       })
-      .catch((error1) => {
-        console.log(error1);
-        if (error1.response.status === 401) {
-          toastError("Invalid Access");
-          if (error1.response.data.Valid === undefined) {
-            navigate("/log-in");
-          } else {
-            navigate("/");
-          }
-        }
+      .catch((error) => {
+        console.log(error);
       });
+    // })
+    // .catch((error1) => {
+    //   console.log(error1);
+    //   if (error1.response.status === 401) {
+    //     toastError("Invalid Access");
+    //     if (error1.response.data.Valid === undefined) {
+    //       navigate("/log-in");
+    //     } else {
+    //       navigate("/");
+    //     }
+    //   }
+    // });
   }, []);
 
-  const clasess = useStyles();
+  const classes = useStyles();
   return (
-    <Container fluid className={clasess.Container}>
+    <Container fluid className={classes.Container}>
       {course.backgroundImage && (
-        <Row className={`${clasess.Row} mb-2 mt-3`}>
-          <Col className={`${clasess.Col}`}>
+        <Row className={`${classes.Row} mb-2 mt-3`}>
+          <Col className={`${classes.Col}`}>
             <img
               src={course.backgroundImage}
               alt="background Img"
-              className={clasess.BGImg}
+              className={classes.BGImg}
             />
           </Col>
         </Row>
       )}
-      <Row className={`${clasess.Row} mb-2`}>
-        <Col className={`${clasess.Col}`}>
+      <Row className={`${classes.Row} mb-2`}>
+        <Col className={`${classes.Col}`}>
           <Breadcrumbs />
         </Col>
       </Row>
-      <Row className={`${clasess.Row} mb-4`}>
-        <Col className={`${clasess.Col} ${clasess.IconContainer}`}>
-          <FaSwatchbook className={clasess.Icon} />
+      <Row className={`${classes.Row} mb-4`}>
+        <Col className={`${classes.Col} ${classes.IconContainer}`}>
+          <FaSwatchbook className={classes.Icon} />
           <Text
             text={course.name}
             size="1.8em"
@@ -151,9 +149,9 @@ const CourseView = () => {
           />
         </Col>
       </Row>
-      <Row className={`${clasess.Row} mb-1`}>
-        <Col className={`${clasess.Col} ${clasess.IconContainer}`}>
-          <AiFillFileText className={clasess.Icon} />
+      <Row className={`${classes.Row} mb-1`}>
+        <Col className={`${classes.Col} ${classes.IconContainer}`}>
+          <AiFillFileText className={classes.Icon} />
           <Text
             text={"Description"}
             size="1.3em"
@@ -163,10 +161,10 @@ const CourseView = () => {
           />
         </Col>
       </Row>
-      <Row className={`${clasess.Row} mb-4`}>
-        <Col className={`${clasess.Col} ${clasess.descritionCol}`}>
+      <Row className={`${classes.Row} mb-4`}>
+        <Col className={`${classes.Col} ${classes.descritionCol}`}>
           <span
-            className={clasess.descrition}
+            className={classes.descrition}
             dangerouslySetInnerHTML={{
               __html: course.description,
             }}
@@ -175,14 +173,14 @@ const CourseView = () => {
       </Row>
 
       {activeUser.role === "professor" || activeUser.role === "admin" ? (
-        <Row className={`${clasess.Row} mb-2`}>
-          <Col className={`${clasess.Col}`}>
+        <Row className={`${classes.Row} mb-2`}>
+          <Col className={`${classes.Col}`}>
             <ChallengeTabs ListTabs={tabs} />
           </Col>
         </Row>
       ) : (
-        <Row className={`${clasess.Row} mb-2`}>
-          <Col className={`${clasess.Col}`}>
+        <Row className={`${classes.Row} mb-2`}>
+          <Col className={`${classes.Col}`}>
             <ContestsInCourse
               contests={course.contests}
               isAdmin={
