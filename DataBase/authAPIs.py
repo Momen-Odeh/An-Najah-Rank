@@ -2,7 +2,7 @@ from flask import request, jsonify,abort, make_response
 from FlaskSetUp import app
 from authentication import get_Data_from_token
 
-excluded_routes = ['/checkToken', '/login', '/forgetPassword',
+excluded_routes = ['/login', '/forgetPassword',
                    '/verfiyCode', '/updatePassword', '/register',
                    '/userStatusAuth','/file-Similarity']
 def should_skip_token_validation():

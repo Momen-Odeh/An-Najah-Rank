@@ -52,11 +52,7 @@ export const routes = [
   {
     path: "/",
     title: routeNames.HOME,
-    component: (
-      //   <IsLoggedIn moveTo={"log-in"}>
-      <Home />
-      //  </IsLoggedIn>
-    ),
+    component: <Home />,
   },
   {
     path: "/profile",
@@ -93,20 +89,16 @@ export const routes = [
     title: routeNames.NEW_PASSWORD,
     component: <NewPassword />,
   },
-  {
-    path: "/enroll-student",
-    title: routeNames.ENROLL_STUDENT,
-    component: <EnrollStudent />,
-  },
+  // {
+  //   path: "/enroll-student",
+  //   title: routeNames.ENROLL_STUDENT,
+  //   component: <EnrollStudent />,
+  // },
   //**************************************************/courses**************************************************************/
   {
     path: "/courses",
     title: routeNames.COURSE_VIEW,
-    component: (
-      // //<IsLoggedIn moveTo={"log-in"}>
-      <Outlet />
-      ////</IsLoggedIn>
-    ),
+    component: <Outlet />,
     subRoutes: [
       {
         index: true,
@@ -231,16 +223,11 @@ export const routes = [
   //   title: "Notification",
   //   component: <NotificationComponent />,
   // },
-  {
-    path: "/SubmissionsManualMarking",
-    title: "SubmissionsManualMarking",
-    component: <SubmissionsManualMarking />,
-  },
   /******************************************* /admin ***********************************/
   {
     path: "/admin",
     title: routeNames.ADMIN,
-    component: <Admin />, //guard done
+    component: <Admin />,
   },
   /******************************************* /administration ***********************************/
   {
@@ -317,7 +304,7 @@ export const routes = [
                     subRoutes: [
                       {
                         index: true,
-                        component: <Navigate to={"details"} />,
+                        component: <Contests />,
                       },
                       {
                         title: "details",
@@ -367,7 +354,7 @@ export const routes = [
             subRoutes: [
               {
                 index: true,
-                component: <Navigate to={"details"} />,
+                component: <Challenges />,
               },
               {
                 title: "details",

@@ -5,11 +5,15 @@ from MySQL_SetUp import connection
 from APIs.contestsForCourse import getContestForCourse
 from fileManagment.getFileAWS import get_file_from_AWS
 from guard.professorAccess.AccessCourseProfessor import accessCourseProfessor
+from guard.AccessCourse import accessCourse
 @app.route('/course-info', methods=['GET'])
 def get_course_info():
     try:
         tokenData = getattr(request, 'tokenData', None)
-        access = accessCourseProfessor(request.args.get('courseNumber'), tokenData['universityNumber'])
+        if request.args.get('courseView'):
+            access = accessCourse(request.args.get('courseNumber'), tokenData['universityNumber'])
+        else:
+            access = accessCourseProfessor(request.args.get('courseNumber'), tokenData['universityNumber'])
         if not access:
             return jsonify({"message": "Access Denied"}), 401
         query = f"""
@@ -109,7 +113,8 @@ def get_course_info():
             'suggestionModerators': suggestionModerators,
             'students': students,
             'moderators': moderators,
-            "contests": contests
+            "contests": contests,
+            "userRole": tokenData['role']
         }
         return jsonify(response_data), 200
 

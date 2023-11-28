@@ -11,9 +11,8 @@ import { useNavigate } from "react-router-dom";
 import { toastError } from "../../Utils/toast";
 const CodeSimilarity = () => {
   const classes = useStyles();
-  const { userId, contestId, challengeId } = useParams();
+  const { userId, id, contestId, challengeId } = useParams();
   const navigate = useNavigate();
-  // console.log(userId, contestId, challengeId);
   const [leftUser, setLeftUser] = useState([
     {
       eventKey: "tab-0",
@@ -54,6 +53,7 @@ const CodeSimilarity = () => {
         params: {
           contestId: contestId,
           challengeId: challengeId,
+          courseId: id,
           userId: userId,
         },
       })
@@ -92,6 +92,11 @@ const CodeSimilarity = () => {
           if (error?.response?.data?.message === "unauthorized role") {
             toastError("Unautharized accesss");
             navigate("..");
+          } else if (
+            error?.response?.data?.message === "unauthorized role professor"
+          ) {
+            toastError("Unautharized accesss");
+            navigate("/");
           } else {
             toastError("Unautharized accesss");
             navigate("/log-in");

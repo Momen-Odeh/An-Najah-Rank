@@ -1,17 +1,21 @@
 from FlaskSetUp import app
 from MySQL_SetUp import connection
 from flask import request, jsonify
+from guard.professorAccess.AccessChallengeView import accessChallengeViewProfessor
 
 @app.route('/submissions-students', methods=['GET'])
 def get_submissions_students():
     try:
         tokenData = getattr(request, 'tokenData', None)
         role = tokenData['role']
-        if role != 'professor':
-            return {'message': ""}, 401
+        if not (role == 'professor' or role == 'admin'):
+            return jsonify({"message": "Access Denied"}), 401
         course_id = request.args.get('courseId')
         contest_id = request.args.get('contestId')
         challenge_id = request.args.get('challengeId')
+        access = accessChallengeViewProfessor(course_id, contest_id, challenge_id, tokenData['universityNumber'])
+        if not access:
+            return jsonify({"message": "Access Denied"}), 401
         contest_challenge_details_query = f"SELECT max_score FROM contests_challenges WHERE challenge_id = %s AND contest_id = %s "
 
         cursor = connection.cursor()

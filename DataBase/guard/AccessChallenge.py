@@ -5,21 +5,21 @@ def accessChallenge(courseNumber, contestNumber, challengeNumber, universityNumb
     query = f"""
                         WITH contest_course AS (
                         SELECT courseNumber
-						FROM `an-najah rank`.contests WHERE id = (SELECT contest_id FROM contests_challenges WHERE
+						FROM contests WHERE id = (SELECT contest_id FROM contests_challenges WHERE
 						challenge_id = '{challengeNumber}' and contest_id = '{contestNumber}')
                         )
                         SELECT cm.stuffNumber as registerNumber
-                        FROM `an-najah rank`.course_moderators cm
+                        FROM course_moderators cm
                         JOIN contest_course cc ON cm.courseNumber = cc.courseNumber
                         WHERE cc.courseNumber = '{courseNumber}'
                         UNION
                         SELECT c.ownerUniversityNumber as registerNumber
-                        FROM `an-najah rank`.courses c
+                        FROM courses c
                         JOIN contest_course cc ON c.courseNumber = cc.courseNumber
                         WHERE cc.courseNumber = '{courseNumber}'
                         UNION
                         SELECT se.studentNumber as registerNumber
-                        FROM `an-najah rank`.student_enrollments se
+                        FROM student_enrollments se
                         JOIN contest_course cc ON se.courseNumber = cc.courseNumber
                         WHERE cc.courseNumber = '{courseNumber}'
                         UNION

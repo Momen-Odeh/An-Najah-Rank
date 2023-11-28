@@ -4,20 +4,22 @@ from flask import request, jsonify
 from fileManagment.getLanguageType import get_language_type
 from fileManagment.getFileContent import get_file_content
 from APIs.student_submissions import get_test_cases
-
+from guard.professorAccess.AccessChallengeView import accessChallengeViewProfessor
 @app.route('/submissions-manual-marking', methods=['GET'])
 def get_submissions_manual_marking():
     try:
         tokenData = getattr(request, 'tokenData', None)
         role = tokenData['role']
-        if role != 'professor':
-            return {'message': ""}, 401
+        if not (role == 'professor' or role == 'admin'):
+            return jsonify({"message": "Access Denied"}), 401
         student_university_number = request.args.get('studentUniversityNumber')
         course_id = request.args.get('courseId')
         contest_id = request.args.get('contestId')
         challenge_id = request.args.get('challengeId')
+        access = accessChallengeViewProfessor(course_id, contest_id, challenge_id, tokenData['universityNumber'])
+        if not access:
+            return jsonify({"message": "Access Denied"}), 401
         contest_challenge_details_query = f"SELECT max_score FROM contests_challenges WHERE challenge_id = %s AND contest_id = %s "
-
         cursor = connection.cursor()
         cursor.execute(contest_challenge_details_query,(challenge_id, contest_id))
         maxScore = cursor.fetchone()

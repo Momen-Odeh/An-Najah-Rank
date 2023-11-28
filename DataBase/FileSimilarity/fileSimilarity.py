@@ -8,7 +8,7 @@ from MySQL_SetUp import connection
 from fileManagment.deleteFileAWS import delete_file_from_AWS
 from fileManagment.getFileContent import get_file_content
 from FileSimilarity.calculateSimilariy import calculateSimilariy
-
+from guard.professorAccess.AccessChallengeView import accessChallengeViewProfessor
 
 
 @app.route('/file-Similarity', methods=['POST'])
@@ -97,10 +97,14 @@ def getUserSimilarity():
         contestId = params['contestId']
         challengeId = params['challengeId']
         userId = params['userId']
+        courseId = params['courseId']
         tokenData = getattr(request, 'tokenData', None)
         role = tokenData['role']
         if role != 'professor' and role != 'admin':
             return {'message': "unauthorized role"}, 401
+        access = accessChallengeViewProfessor(courseId, contestId, challengeId, tokenData['universityNumber'])
+        if not access:
+            return {'message': "unauthorized role professor"}, 401
         sql = f"""
         SELECT similarityFileKey FROM `an-najah rank`.contests_challenges
          where challenge_id= '{challengeId}' and contest_id = '{contestId}';

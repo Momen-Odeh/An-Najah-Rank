@@ -1,17 +1,31 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import useStyles from "./style";
 import LogInForm from "../../Components/LoginForm";
 import RegistrationShow from "../../Components/RegistrationShow";
-import { useOutletContext } from "react-router-dom";
+import { useNavigate, useOutletContext } from "react-router-dom";
 import code from "./images/code.png";
 import { routeNames } from "../../Utils/Utils";
+import Cookies from "js-cookie";
+import axios from "axios";
 const LogIn = () => {
   const classes = useStyles();
+  const navigate = useNavigate();
+  const token = Cookies.get("token");
   const setActiveTab = useOutletContext();
   useEffect(() => {
+    if (token) {
+      axios
+        .get("/checkToken")
+        .then((res) => {
+          navigate("/");
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
     setActiveTab(routeNames.LOG_IN);
   }, []);
   return (

@@ -3,6 +3,7 @@ from flask import request, jsonify
 from dataBaseConnection import execute_query, fetch_results
 from MySQL_SetUp import connection
 from guard.professorAccess.AccessContestProfessor import accessContestProfessor
+from guard.AccessContest import accessContest
 import datetime
 import json
 @app.route('/contest-info', methods=['GET'])
@@ -11,7 +12,10 @@ def get_contests_info():
         tokenData = getattr(request, 'tokenData', None)
         ownerUniversityNumber = tokenData['universityNumber']
         courseId = request.args.get('courseId')
-        access = accessContestProfessor(courseId, request.args.get('contest_id'), ownerUniversityNumber)
+        if request.args.get('contestView'):
+            access = accessContest(courseId, request.args.get('contest_id'), ownerUniversityNumber)
+        else:
+            access = accessContestProfessor(courseId, request.args.get('contest_id'), ownerUniversityNumber)
         if not access:
             return jsonify({"message": "Access Denied"}), 401
         query = f"""

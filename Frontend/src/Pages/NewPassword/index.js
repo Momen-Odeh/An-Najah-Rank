@@ -10,7 +10,7 @@ import { routeNames } from "../../Utils/Utils";
 import { useOutletContext } from "react-router-dom";
 import handelStateChanges from "../../Utils/handelStateChanges";
 import Loader from "react-spinners/ClipLoader";
-import { toast } from "react-toastify";
+import { toastError } from "../../Utils/toast";
 
 import axios from "axios";
 import { validatePassword } from "../../Utils/Validation";
@@ -71,16 +71,7 @@ const NewPassword = () => {
                   : null,
               });
             } else {
-              toast.error(err.response.data.error, {
-                position: "bottom-left",
-                autoClose: 10000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                theme: "light",
-              });
+              toastError(err.response.data.error);
             }
             setLoading(false);
           });

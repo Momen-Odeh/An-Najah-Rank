@@ -26,4 +26,5 @@ def generate_token(email, universityNumber, name, role):
 
 @app.route('/checkToken', methods=['GET'])
 def check_token():
-        return get_Data_from_token(request.args.get('token'))
+    return jsonify(getattr(request, 'tokenData', None)), 200
+

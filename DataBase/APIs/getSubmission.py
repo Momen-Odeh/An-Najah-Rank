@@ -7,17 +7,19 @@ from fileManagment.getFileContent import get_file_content
 def get_submission_info():
     try:
         tokenData = getattr(request, 'tokenData', None)
+        role = tokenData['role']
+        if role != 'student':
+            return jsonify({"message": "Access Denied"}), 401
         student_university_number = tokenData['universityNumber']
-        print(student_university_number)
         submission_id = request.args.get('SubmissionId')
         contest_id = request.args.get('contestId')
         challenge_id = request.args.get('challengeId')
-        contest_challenge_details_query = f"SELECT max_score FROM contests_challenges WHERE challenge_id = %s " \
-                                          f"AND contest_id = %s "
+        contest_challenge_details_query = f"""SELECT max_score FROM contests_challenges WHERE challenge_id = %s
+                                          AND contest_id = %s """
 
-        submission_query = f"SELECT * FROM student_submissions WHERE " \
-                           f"studentUniversityNumber = '{student_university_number}' " \
-                           f"AND id = '{submission_id}'"
+        submission_query = f"""SELECT * FROM student_submissions WHERE 
+                               studentUniversityNumber = '{student_university_number}'
+                               AND id = '{submission_id}';"""
 
         test_cases = f"SELECT status FROM submission_testCases WHERE submissionId = '{submission_id}'"
         cursor = connection.cursor()

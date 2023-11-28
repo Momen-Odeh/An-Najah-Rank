@@ -19,15 +19,10 @@ const ContestView = () => {
   const classes = useStyles();
   const navigate = useNavigate();
   useEffect(() => {
-    // axios
-    //   .get("/accessCourse", {
-    //     params: {
-    //       courseNumber: id,
-    //     },
-    //   })
-    //   .then((response1) => {
     axios
-      .get(`/contest-info`, { params: { contest_id: contestId } })
+      .get(`/contest-info`, {
+        params: { courseId: id, contest_id: contestId, contestView: true },
+      })
       .then((response) => {
         setChallengeContest(
           response.data.ContestChallenges.map((item, index) => {
@@ -46,23 +41,17 @@ const ContestView = () => {
         setContestInfo(response.data.contest);
       })
       .catch((error) => {
-        if (error.response.status === 401) {
-          navigate("/log-in");
-          toastError("Invalid Access");
+        if (error?.response?.status === 401) {
+          //************* guard done ************************ */
+          if (error?.response?.data?.message === "Access Denied") {
+            toastError("Invalid Access");
+            navigate("/");
+          } else {
+            toastError("Invalid Access");
+            navigate("/log-in");
+          }
         }
       });
-    // })
-    // .catch((error1) => {
-    //   console.log(error1);
-    //   if (error1.response.status === 401) {
-    //     toastError("Invalid Access");
-    //     if (error1.response.data.Valid === undefined) {
-    //       navigate("/log-in");
-    //     } else {
-    //       navigate("/");
-    //     }
-    //   }
-    // });
   }, []);
 
   return (

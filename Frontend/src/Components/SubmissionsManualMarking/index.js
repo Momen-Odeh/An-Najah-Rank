@@ -7,12 +7,13 @@ import { FaCheck } from "react-icons/fa";
 import TestCaseProblem from "../TestCaseProblem";
 import useStyle from "./style";
 import axios from "axios";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Breadcrumbs from "../Breadcrumbs";
 import { toastError } from "../../Utils/toast";
 const SubmissionsManualMarking = () => {
   const classes = useStyle();
   const { id, contestId, challengeId, studentId } = useParams();
+  const navigate = useNavigate();
   const [testCases, setTestCases] = useState([]);
   const sumStrength = testCases?.reduce(
     (sum, testCase) => sum + testCase.strength,
@@ -33,7 +34,16 @@ const SubmissionsManualMarking = () => {
         setTestCases(res.data.testCases);
       })
       .catch((error) => {
-        toastError(error);
+        if (error?.response?.status === 401) {
+          //************* guard done ************************ */
+          if (error?.response?.data?.message === "Access Denied") {
+            toastError("Invalid Access");
+            navigate("/");
+          } else {
+            toastError("Invalid Access");
+            navigate("/log-in");
+          }
+        }
       });
   }, []);
 

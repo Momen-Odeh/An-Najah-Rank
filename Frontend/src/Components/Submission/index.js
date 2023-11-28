@@ -34,13 +34,18 @@ const Submission = () => {
       .then((res) => {
         setSubmissionData(res.data.submission);
       })
-      .catch((e) => {
-        if (e?.response?.status === 401) {
+      .catch((error) => {
+        if (error?.response?.status === 401) {
           //************* guard done ************************ */
-          toastError("Invalid Access");
-          navigate("/");
+          if (error?.response?.data?.message === "Access Denied") {
+            toastError("Invalid Access");
+            navigate("/");
+          } else {
+            toastError("Invalid Access");
+            navigate("/log-in");
+          }
         }
-        console.log(e);
+        console.log(error);
       });
   }, []);
   return (

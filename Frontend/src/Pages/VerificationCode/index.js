@@ -170,7 +170,7 @@ const VarificationCode = () => {
       </Container>
     </div>
   ) : (
-    <Navigate to={"/log-in"} />
+    <Navigate to={"/"} />
   );
 };
 

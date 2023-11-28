@@ -15,12 +15,11 @@ def getChallenge(id):
         universityNumber = tokenData['universityNumber']
         if courseId:
             access = accessChallenge(courseId, contestId, id, universityNumber)
-            if not access:
-                return jsonify({"message": "Access Denied"}), 401
         else:
             access = accessChallengeProfessor(id, universityNumber)
-            if not access:
-                return jsonify({"message": "Access Denied"}), 401
+        if not access:
+            return jsonify({"message": "Access Denied"}), 401
+
         cursor = connection.cursor()
         cursor.execute(f"SELECT * FROM challenges where id = '{id}';")
         result = cursor.fetchone()

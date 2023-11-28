@@ -12,12 +12,10 @@ import { useEffect } from "react";
 import { AiFillFileText } from "react-icons/ai";
 import axios from "axios";
 import useStyles from "./style";
-import userContext from "../../Utils/userContext";
 import { useNavigate } from "react-router-dom";
 import { toastError } from "../../Utils/toast";
 const CourseView = () => {
-  const context = useContext(userContext);
-  const { activeUser } = context;
+  const [role, setRole] = useState();
   const navigate = useNavigate();
   const { id } = useParams();
   const [course, setCourse] = useState({
@@ -48,9 +46,7 @@ const CourseView = () => {
       TabComponent: (
         <ContestsInCourse
           contests={course.contests}
-          isAdmin={
-            activeUser.role === "professor" || activeUser.role === "admin"
-          }
+          isAdmin={role === "professor" || role === "admin"}
           handleAddContest={handleAddContest}
           courseId={id}
         />
@@ -66,24 +62,18 @@ const CourseView = () => {
   ];
 
   useEffect(() => {
-    // axios
-    //   .get("/accessCourse", {
-    //     params: {
-    //       courseNumber: id,
-    //     },
-    //   })
-    //   .then((response1) => {
     axios
       .get("/course-info", {
         params: {
           courseNumber: id,
+          courseView: true,
         },
       })
       .then((response) => {
         const { name, description, backgroundImage } = response.data.course;
-        const { students, moderators } = response.data;
+        const { students, userRole, moderators } = response.data;
         setStudents(students);
-
+        setRole(userRole);
         setCourse({
           ...course,
           name,
@@ -102,20 +92,18 @@ const CourseView = () => {
         });
       })
       .catch((error) => {
+        if (error?.response?.status === 401) {
+          //************* guard done ************************ */
+          if (error?.response?.data?.message === "Access Denied") {
+            toastError("Invalid Access");
+            navigate("/");
+          } else {
+            toastError("Invalid Access");
+            navigate("/log-in");
+          }
+        }
         console.log(error);
       });
-    // })
-    // .catch((error1) => {
-    //   console.log(error1);
-    //   if (error1.response.status === 401) {
-    //     toastError("Invalid Access");
-    //     if (error1.response.data.Valid === undefined) {
-    //       navigate("/log-in");
-    //     } else {
-    //       navigate("/");
-    //     }
-    //   }
-    // });
   }, []);
 
   const classes = useStyles();
@@ -172,7 +160,7 @@ const CourseView = () => {
         </Col>
       </Row>
 
-      {activeUser.role === "professor" || activeUser.role === "admin" ? (
+      {role === "professor" || role === "admin" ? (
         <Row className={`${classes.Row} mb-2`}>
           <Col className={`${classes.Col}`}>
             <ChallengeTabs ListTabs={tabs} />
@@ -183,9 +171,7 @@ const CourseView = () => {
           <Col className={`${classes.Col}`}>
             <ContestsInCourse
               contests={course.contests}
-              isAdmin={
-                activeUser.role === "professor" || activeUser.role === "admin"
-              }
+              isAdmin={role === "professor" || role === "admin"}
               handleAddContest={handleAddContest}
             />
           </Col>
