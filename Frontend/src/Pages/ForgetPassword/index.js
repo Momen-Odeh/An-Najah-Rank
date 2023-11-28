@@ -10,7 +10,6 @@ import { useOutletContext } from "react-router-dom";
 import { routeNames } from "../../Utils/Utils";
 import handelStateChanges from "../../Utils/handelStateChanges";
 import axios from "axios";
-import AlertComponent from "../../Components/Alert";
 import { useNavigate } from "react-router-dom";
 import { useCookies } from "react-cookie";
 import { Navigate } from "react-router-dom";
@@ -39,7 +38,7 @@ const ForgetPassword = () => {
     if (validateEmail(email.value)) {
       setLoading(true);
       axios
-        .post("http://127.0.0.1:5000/forgetPassword", {
+        .post("/forgetPassword", {
           email: email.value,
         })
         .then((respons) => {

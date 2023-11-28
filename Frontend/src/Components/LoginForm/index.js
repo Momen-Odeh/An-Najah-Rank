@@ -41,11 +41,9 @@ const LogInForm = () => {
       validateEmail(loginValue.email)
     ) {
       try {
-        const response = await axios.get("/login", {
-          params: {
-            email: loginValue.email,
-            password: loginValue.password,
-          },
+        const response = await axios.post("/login", {
+          email: loginValue.email,
+          password: loginValue.password,
         });
         console.log(response);
         Cookies.set("token", response.data.token, {

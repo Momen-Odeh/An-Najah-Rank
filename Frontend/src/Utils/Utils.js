@@ -23,9 +23,7 @@ import Settings from "../Pages/Settings";
 import Admin from "../Pages/Admin";
 import NotificationComponent from "../Components/Notification";
 import SubmissionsManualMarking from "../Components/SubmissionsManualMarking";
-import UploadFile from "../Components/UploadFile";
 import CodeSimilarity from "../Components/CodeSimilarity";
-import Submission from "../Components/Submission";
 // const AboutUs = lazy(() => import("../Pages/AboutUs/SubComponents/AboutUs"))
 
 export const routeNames = {
@@ -54,16 +52,7 @@ export const routes = [
   {
     path: "/",
     title: routeNames.HOME,
-    component: (
-      <IsLoggedIn moveTo={"log-in"}>
-        <Home />
-      </IsLoggedIn>
-    ),
-  },
-  {
-    path: "/code-similarity",
-    title: "code Similarity",
-    component: <CodeSimilarity />,
+    component: <Home />,
   },
   {
     path: "/profile",
@@ -100,20 +89,16 @@ export const routes = [
     title: routeNames.NEW_PASSWORD,
     component: <NewPassword />,
   },
-  {
-    path: "/enroll-student",
-    title: routeNames.ENROLL_STUDENT,
-    component: <EnrollStudent />,
-  },
+  // {
+  //   path: "/enroll-student",
+  //   title: routeNames.ENROLL_STUDENT,
+  //   component: <EnrollStudent />,
+  // },
   //**************************************************/courses**************************************************************/
   {
     path: "/courses",
     title: routeNames.COURSE_VIEW,
-    component: (
-      //<IsLoggedIn moveTo={"log-in"}>
-      <Outlet />
-      //</IsLoggedIn>
-    ),
+    component: <Outlet />,
     subRoutes: [
       {
         index: true,
@@ -169,7 +154,7 @@ export const routes = [
                             path: "problem",
                             component: <Challenge />,
                           },
-                          {/*--------------------------------------submission view for students and professors-----------------------*/
+                          {
                             title: "submissions",
                             path: "submissions",
                             component: <Outlet />,
@@ -178,10 +163,20 @@ export const routes = [
                                 index: true,
                                 component: <Challenge />,
                               },
-                              {//this is under submissions
-                                title: "specific submission",
+                              {
+                                title: "problem",
                                 path: ":submissionId",
                                 component: <Challenge />,
+                              },
+                              {
+                                title: "studentSubmissions",
+                                path: "manual-mark",
+                                component: <Navigate to={".."} />,
+                              },
+                              {
+                                title: "studentSubmissions",
+                                path: "manual-mark/:studentId",
+                                component: <SubmissionsManualMarking />,
                               },
                               {
                                 title: "code Similarity",
@@ -192,16 +187,6 @@ export const routes = [
                                 title: "code Similarity with user id",
                                 path: "code-similarity/:userId",
                                 component: <CodeSimilarity />,
-                              },
-                              {
-                                title: "manual mark",
-                                path: "manual-mark",
-                                component: <Navigate to={".."} />,
-                              },
-                              {
-                                title: "student Submissions and manual mark",
-                                path: "manual-mark/:studentId",
-                                component: <SubmissionsManualMarking />,
                               },
                             ],
                           },
@@ -238,34 +223,21 @@ export const routes = [
   //   title: "Notification",
   //   component: <NotificationComponent />,
   // },
-  {
-    path: "/SubmissionsManualMarking",
-    title: "SubmissionsManualMarking",
-    component: <SubmissionsManualMarking />,
-  },
   /******************************************* /admin ***********************************/
   {
     path: "/admin",
     title: routeNames.ADMIN,
-    component: (
-      <IsLoggedIn moveTo={"log-in"}>
-        <Admin />
-      </IsLoggedIn>
-    ),
+    component: <Admin />,
   },
   /******************************************* /administration ***********************************/
   {
     path: "/administration",
     title: routeNames.ADMINISTRATION,
-    component: (
-      <IsLoggedIn moveTo={"log-in"} isAdmin={true}>
-        <Outlet />
-      </IsLoggedIn>
-    ),
+    component: <Outlet />,
     subRoutes: [
       {
         index: true,
-        component: <Navigate to={"/administration/courses"} />,
+        component: <Administration />,
       },
       /******************************************* /administration/courses ***********************************/
       {
@@ -291,7 +263,7 @@ export const routes = [
             subRoutes: [
               {
                 index: true,
-                component: <Navigate to={"details"} />,
+                component: <Course />,
               },
               {
                 title: "details",
@@ -332,7 +304,7 @@ export const routes = [
                     subRoutes: [
                       {
                         index: true,
-                        component: <Navigate to={"details"} />,
+                        component: <Contests />,
                       },
                       {
                         title: "details",
@@ -382,7 +354,7 @@ export const routes = [
             subRoutes: [
               {
                 index: true,
-                component: <Navigate to={"details"} />,
+                component: <Challenges />,
               },
               {
                 title: "details",

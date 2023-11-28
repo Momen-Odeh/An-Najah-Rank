@@ -6,12 +6,26 @@ import useStyles from "./style";
 import RegistrationShow from "../../Components/RegistrationShow";
 import code from "./images/code.png";
 import SignUpForm from "../../Components/SignUpForm";
-import { useOutletContext } from "react-router-dom";
+import { useNavigate, useOutletContext } from "react-router-dom";
 import { routeNames } from "../../Utils/Utils";
+import Cookies from "js-cookie";
+import axios from "axios";
 const SignUp = () => {
   const classes = useStyles();
+  const navigate = useNavigate();
+  const token = Cookies.get("token");
   const setActiveTab = useOutletContext();
   useEffect(() => {
+    if (token) {
+      axios
+        .get("/checkToken")
+        .then((res) => {
+          navigate("/");
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
     setActiveTab(routeNames.LOG_IN);
   }, []);
   return (

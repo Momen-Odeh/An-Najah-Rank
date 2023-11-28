@@ -1,19 +1,20 @@
-import React, { useContext, useEffect } from "react";
-import userContext from "../../Utils/userContext";
+import React, { useEffect } from "react";
 import axios from "axios";
+import { useParams } from "react-router-dom";
 const CourseAccess = ({ children }) => {
+  const { id } = useParams();
   useEffect(() => {
     axios
       .get("/accessCourse", {
         params: {
-          courseNumber: "144",
+          courseNumber: id,
         },
       })
       .then((response) => {
-        console.log("EEEEEEEEEEEEe", response);
+        console.log(response);
       })
       .catch((error) => {
-        console.log("QQQQQQQQQQQQQQQ", error);
+        console.log(error);
       });
   }, []);
   return children;

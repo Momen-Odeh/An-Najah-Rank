@@ -32,31 +32,17 @@ const VarificationCode = () => {
     if (code.length === 6) {
       setLoading(true);
       axios
-        .post("http://127.0.0.1:5000/verfiyCode", {
+        .post("/verfiyCode", {
           email: sessionStorage.getItem("email"),
           code: code,
         })
         .then((resp) => {
           if (resp.status === 200) {
-            // axios
-            //   .post("http://127.0.0.1:5000/emailCodeVerification", {
-            //     email: sessionStorage.getItem("email"),
-            //   })
-            //   .then((resp) => {
-            //     console.log(resp);
-            //     navigate("/new-password");
-            //   })
-            //   .catch((err) => {
-            //     setAlert({
-            //       value: true,
-            //       msg: "there is error:" + err,
-            //     });
-            //   });
             if (sessionStorage.getItem("event") === "forget Password")
               navigate("/new-password");
             else if (sessionStorage.getItem("event") === "register") {
               axios
-                .put("http://127.0.0.1:5000/userStatusAuth", {
+                .put("/userStatusAuth", {
                   email: sessionStorage.getItem("email"),
                 })
                 .then((resp) => {
@@ -184,7 +170,7 @@ const VarificationCode = () => {
       </Container>
     </div>
   ) : (
-    <Navigate to={"/log-in"} />
+    <Navigate to={"/"} />
   );
 };
 

@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Editor } from "@monaco-editor/react";
 import useStyles from "./style";
-import { Col, Container, Form, Row } from "react-bootstrap";
+import { Col, Container, Row } from "react-bootstrap";
 import SelectionGroup from "../SelectionGroup";
 import Switch from "react-switch";
 import ButtonRank from "../ButtonRank";
@@ -79,7 +79,6 @@ const CodeEditor = () => {
   const navigate = useNavigate();
   const [dark, setDark] = useState(false);
   const [language, setLanguage] = useState("java");
-  const [textHeight, setTextHeight] = useState("400px");
   const [textCode, setTextCode] = useState("");
   const context = useContext(ChallengeContext);
   const genrateTab = (arr) => {
@@ -284,7 +283,7 @@ const CodeEditor = () => {
       <Row>
         <Col className={classes.Col}>
           <Editor
-            height={textHeight}
+            height={"400px"}
             className={classes.Editor}
             defaultLanguage="java"
             defaultValue={defaultLang[language]}

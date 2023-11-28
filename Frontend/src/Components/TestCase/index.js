@@ -1,12 +1,11 @@
 import React, { useState } from "react";
-import { Container, Row, Col, Form, Modal } from "react-bootstrap";
+import { Container, Row, Col, Modal } from "react-bootstrap";
 import Text from "../Text";
 import TextEditor from "../TextEditor";
 import useStyle from "./Style";
 import DataTypes from "../DataTypes";
 import ButtonRank from "../ButtonRank";
 import InputFiledRank from "../InputFiledRank";
-import AlertComponent from "../Alert";
 import CheckRank from "../CheckRank";
 const TestCase = ({
   showAddModal,
@@ -29,11 +28,6 @@ const TestCase = ({
 
   const [selectedOptionInput, setSelectedOptionInput] = useState(inputType);
   const [selectedOptionOutput, setSelectedOptionOutput] = useState(outputType);
-  const [showAlert, setShowAlert] = useState(false);
-  const [alertData, setAlertData] = useState({
-    message: "",
-    variant: "warning",
-  });
   const handleInputChange = (e, optionName, val) => {
     if (e) {
       const { name, value, type, checked, files } = e.target;
@@ -83,7 +77,6 @@ const TestCase = ({
       <Modal.Body>
         <Container fluid>
           <Row>
-            {/* className="align-items-center justify-content-center"> */}
             <Col xs="auto">
               <Text text={"Strength"} />
             </Col>

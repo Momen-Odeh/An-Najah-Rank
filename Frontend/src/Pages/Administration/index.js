@@ -1,21 +1,16 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Col, Container, Row } from "react-bootstrap";
-import { useCookies } from "react-cookie";
 import ChallengeTabs from "../../Components/ChallengTabs";
 import ManageChallenges from "../../Components/ManageChallenges";
-import ManageContests from "../../Components/ManageContests";
 import ManageCourses from "../../Components/ManageCourses";
 import Text from "../../Components/Text";
 import useStyles from "./style";
 import Breadcrumbs from "../../Components/Breadcrumbs";
-//
-import userContext from "../../Utils/userContext";
-import { useContext } from "react";
-//
+import { toastError } from "../../Utils/toast";
+import { useNavigate } from "react-router-dom";
 const Administration = () => {
-  const [cookies, setCookies] = useCookies();
-
+  const navigate = useNavigate();
   const [data, setData] = useState({
     courses: [],
     challenges: [],
@@ -27,6 +22,16 @@ const Administration = () => {
         setData(res.data);
       })
       .catch((error) => {
+        if (error?.response?.status === 401) {
+          //************* guard done ************************ */
+          if (error?.response?.data?.message === "Access Denied") {
+            toastError("Invalid Access");
+            navigate("/");
+          } else {
+            toastError("Invalid Access");
+            navigate("/log-in");
+          }
+        }
         console.log(error);
       });
   }, []);
@@ -44,12 +49,12 @@ const Administration = () => {
       urlPattern: "/administration/challenges",
     },
   ];
-  const clasess = useStyles();
+  const classes = useStyles();
 
   return (
-    <Container fluid className={clasess.Container}>
-      <Row className={`${clasess.Row} mb-2`}>
-        <Col className={`${clasess.Col}`}>
+    <Container fluid className={classes.Container}>
+      <Row className={`${classes.Row} mb-2`}>
+        <Col className={`${classes.Col}`}>
           <Breadcrumbs />
         </Col>
       </Row>

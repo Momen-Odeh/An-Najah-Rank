@@ -1,5 +1,5 @@
 import React from "react";
-import { Col, Container, Form, Row } from "react-bootstrap";
+import { Col, Container, Row } from "react-bootstrap";
 import ButtonRank from "../ButtonRank";
 import TabTable from "../TabTable";
 import { useNavigate } from "react-router-dom";
@@ -10,10 +10,10 @@ const ManageChallenges = ({ challenges }) => {
   const header = ["Challenge Name", "Challenge tags", "Challenge Owner"];
   const navigate = useNavigate();
   const [search, setSearch] = useState("");
-  const clasess = useStyles();
+  const classes = useStyles();
   return (
     <Container>
-      <Row className={clasess.RowChallenge}>
+      <Row className={classes.RowChallenge}>
         <Col>
           <InputFiledRank
             type="text"

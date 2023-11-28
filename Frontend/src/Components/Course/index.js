@@ -1,23 +1,26 @@
 import React from "react";
 import { Col, Container, Row } from "react-bootstrap";
 import useStyles from "./style";
-import Avatar from "react-avatar";
 import Text from "../Text";
-import ButtonRank from "../ButtonRank";
 import { Link } from "react-router-dom";
 
 const Course = ({ img, title, url, modirators }) => {
-  const clasess = useStyles();
+  const classes = useStyles();
   return (
-    <Container fluid className={clasess.Container}>
-      <Row className={clasess.RowCourse}>
-        <Col className={`${clasess.ColImg} `} xs={4}>
-          <img className={clasess.Img} draggable={"false"} src={img} />
+    <Container fluid className={classes.Container}>
+      <Row className={classes.RowCourse}>
+        <Col className={`${classes.ColImg} `} xs={4}>
+          <img
+            className={classes.Img}
+            draggable={"false"}
+            src={img}
+            alt="background"
+          />
         </Col>
-        <Col className={`${clasess.ColInfo} `}>
+        <Col className={`${classes.ColInfo} `}>
           <Row>
             <Col>
-              <Link to={url} className={clasess.Link}>
+              <Link to={url} className={classes.Link}>
                 <Text
                   text={title}
                   size="20px"

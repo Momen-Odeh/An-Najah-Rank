@@ -6,17 +6,16 @@ import useStyle from "./Style";
 import ButtonRank from "../ButtonRank";
 import { useEffect } from "react";
 import axios from "axios";
-import { useCookies } from "react-cookie";
 import { useNavigate, useParams } from "react-router-dom";
 import InputFiledRank from "../InputFiledRank";
 import { validateUniversityNumber } from "../../Utils/Validation";
 import { toast } from "react-toastify";
 import LoaderRank from "../LoaderRank";
+import { toastError } from "../../Utils/toast";
 const CourseDetails = ({ operation, data = null, setData }) => {
   const [loading, setLoading] = useState(false);
   const classes = useStyle();
   const navigate = useNavigate();
-  const [cookies, setCookies] = useCookies();
   const { id } = useParams();
   const [details, setDetails] = useState({
     number: null,
@@ -26,6 +25,7 @@ const CourseDetails = ({ operation, data = null, setData }) => {
     students: "",
     uploadImg: null,
   });
+
   const [errorMsg, setErrorMsg] = useState({
     number: null,
     name: null,
@@ -35,7 +35,25 @@ const CourseDetails = ({ operation, data = null, setData }) => {
   });
 
   useEffect(() => {
-    if (data) setDetails(data);
+    if (operation === "create") {
+      axios
+        .get("/is-admin-or-professor")
+        .then((res) => {
+          if (data) setDetails(data);
+        })
+        .catch((error) => {
+          if (error?.response?.status === 401) {
+            //************* guard done ************************ */
+            if (error?.response?.data?.message === "Access Denied") {
+              toastError("Invalid Access");
+              navigate("/");
+            } else {
+              toastError("Invalid Access");
+              navigate("/log-in");
+            }
+          }
+        });
+    } else if (data) setDetails(data);
   }, [data]);
   const handleChange = (e, nameVal = null, val = null) => {
     if (e) {
@@ -75,18 +93,34 @@ const CourseDetails = ({ operation, data = null, setData }) => {
       }
     }
   };
+  const handleGetStudentId = (data) => {
+    let index1 = 0;
+    let findIndex = -1;
+    for (index1; index1 < data?.length; index1++) {
+      let find = data[index1]?.indexOf("رقم الطالب");
+      if (find >= 0) {
+        findIndex = find;
+        break;
+      }
+    }
+    const studentsUniversityNumber = data
+      ?.filter((_, index) => index > index1)
+      .map((item) => item[findIndex]);
+    handleChange(null, "students", studentsUniversityNumber);
+  };
   const handleFileUpload = (file) => {
     if (file) {
       const reader = new FileReader();
-      reader.onload = (e) => {
-        const data = e.target.result;
-        const workbook = XLSX.read(data, { type: "binary" });
+      reader.onload = (event) => {
+        const data = new Uint8Array(event.target.result);
+        const workbook = XLSX.read(data, { type: "array" });
         const sheetName = workbook.SheetNames[0];
         const sheet = workbook.Sheets[sheetName];
         const jsonData = XLSX.utils.sheet_to_json(sheet, { header: 1 });
-        handleChange(null, "students", jsonData);
+        handleGetStudentId(jsonData);
       };
-      reader.readAsBinaryString(file);
+
+      reader.readAsArrayBuffer(file);
     }
   };
 
@@ -116,16 +150,12 @@ const CourseDetails = ({ operation, data = null, setData }) => {
         console.log(1);
         setLoading(true);
         if (operation === "create") {
-          const idIndex = details.students[0].indexOf("id");
-          const studentsUniversityNumber = details.students
-            .filter((_, index) => index !== 0)
-            .map((item) => item[idIndex]);
           await axios.post(`/courses`, {
             courseNumber: details.number,
             name: details.name,
             description: details.description,
             backgroundImage: details.image,
-            studentsUniversityNumber: studentsUniversityNumber,
+            studentsUniversityNumber: details.students,
           });
           const formData = new FormData();
           formData.append("image", details.uploadImg);

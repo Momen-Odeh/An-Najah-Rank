@@ -1,6 +1,6 @@
 import React from "react";
 import Button from "react-bootstrap/Button";
-import useStyles from "./stayle";
+import useStyles from "./style";
 import { Link } from "react-router-dom";
 
 const ButtonRegister = ({ text, to, onClick, disabled }) => {

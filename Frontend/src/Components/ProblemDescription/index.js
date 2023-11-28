@@ -1,13 +1,10 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext } from "react";
 import { Col, Container, Row } from "react-bootstrap";
 import useStyles from "./style";
 import ProblemStatement from "../ProblemStatement";
 import ProblemValue from "../ProblemValue";
 import CodeEditor from "../CodeEditor";
 import ChallengeTabs from "../ChallengTabs";
-import { FaCheck } from "react-icons/fa";
-import { ImCross } from "react-icons/im";
-import TestCaseProblem from "../TestCaseProblem";
 import ChallengeContext from "../../Utils/ChallengeContext";
 import LoaderRank from "../LoaderRank";
 
@@ -30,7 +27,7 @@ const ProblemDescription = () => {
           <CodeEditor />
         </Col>
       </Row>
-      {show && ( //******************************************************************************* */
+      {show && (
         <Row>
           <Col className={classes.Col}>
             <ChallengeTabs ListTabs={tabContent} PaddingTop="0" />

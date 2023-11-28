@@ -7,6 +7,7 @@ import useStyle from "./style";
 import ButtonRank from "../ButtonRank";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { toastError } from "../../Utils/toast";
 
 const Submission = () => {
   const classes = useStyle();
@@ -34,6 +35,16 @@ const Submission = () => {
         setSubmissionData(res.data.submission);
       })
       .catch((error) => {
+        if (error?.response?.status === 401) {
+          //************* guard done ************************ */
+          if (error?.response?.data?.message === "Access Denied") {
+            toastError("Invalid Access");
+            navigate("/");
+          } else {
+            toastError("Invalid Access");
+            navigate("/log-in");
+          }
+        }
         console.log(error);
       });
   }, []);

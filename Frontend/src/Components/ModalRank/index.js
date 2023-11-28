@@ -1,18 +1,9 @@
 import React from "react";
-import { Col, Container, Form, Modal, Row } from "react-bootstrap";
-import Text from "../Text";
-import ButtonRank from "../ButtonRank";
+import { Modal } from "react-bootstrap";
 
 const ModalRank = ({ show, onHide, title, children, footer }) => {
   return (
-    <Modal
-      show={show}
-      //   dialogClassName={classes.customModal}
-      onHide={onHide}
-      scrollable
-      centered
-      backdrop="static"
-    >
+    <Modal show={show} onHide={onHide} scrollable centered backdrop="static">
       <Modal.Header closeButton>
         <Modal.Title>{title}</Modal.Title>
       </Modal.Header>

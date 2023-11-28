@@ -1,5 +1,5 @@
-import React, { useState, useRef, useEffect } from "react";
-import { Form, ListGroup } from "react-bootstrap";
+import React, { useState, useRef } from "react";
+import { ListGroup } from "react-bootstrap";
 import useStyle from "./Style";
 import InputFiledRank from "../InputFiledRank";
 

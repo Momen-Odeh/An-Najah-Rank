@@ -1,8 +1,6 @@
-import axios from "axios";
 import React from "react";
-import { useEffect } from "react";
 import { useState } from "react";
-import { Col, Container, Form, Row } from "react-bootstrap";
+import { Col, Container, Row } from "react-bootstrap";
 import { useNavigate, useParams } from "react-router-dom";
 import ButtonRank from "../ButtonRank";
 import TabTable from "../TabTable";
@@ -13,10 +11,10 @@ const ManageContests = ({ contests }) => {
   const { id } = useParams();
   const [search, setSearch] = useState("");
   const header = ["Contest Name", "Contest Owner", "Start Date", "End Date"];
-  const clasess = useStyles();
+  const classes = useStyles();
   return (
     <Container>
-      <Row className={clasess.Row}>
+      <Row className={classes.Row}>
         <Col>
           <InputFiledRank
             type="text"
@@ -26,7 +24,7 @@ const ManageContests = ({ contests }) => {
             onChange={(e) => setSearch(e.target.value)}
           />
         </Col>
-        <Col xs={"auto"} className={clasess.AddCol}>
+        <Col xs={"auto"} className={classes.AddCol}>
           <ButtonRank
             text={"Create Contest"}
             hoverBackgroundColor="#0e141e"

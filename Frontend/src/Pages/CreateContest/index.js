@@ -3,16 +3,6 @@ import { Col, Container, Row } from "react-bootstrap";
 import Breadcrumbs from "../../Components/Breadcrumbs";
 import ContestsDetalis from "../../Components/ContestDetails";
 import useStyles from "./style";
-const path = [
-  {
-    title: "Manage Contests",
-    url: "/log-in",
-  },
-  {
-    title: "create contest",
-    url: "",
-  },
-];
 
 const CreateContest = () => {
   const classes = useStyles();
@@ -20,7 +10,7 @@ const CreateContest = () => {
     <Container fluid className={classes.Container}>
       <Row className={`mt-2 `}>
         <Col>
-          <Breadcrumbs path={path} />
+          <Breadcrumbs />
         </Col>
       </Row>
       <Row>

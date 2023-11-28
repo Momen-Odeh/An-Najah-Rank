@@ -4,10 +4,9 @@ import { Container, Row, Col } from "react-bootstrap";
 import ButtonRank from "../ButtonRank";
 import TabTable from "../TabTable";
 import { HiPencil } from "react-icons/hi";
-import { BiCheckbox, BiCheckCircle, BiTrash } from "react-icons/bi";
+import { BiCheckCircle, BiTrash } from "react-icons/bi";
 import useStyle from "./Style";
 import axios from "axios";
-import AlertComponent from "../Alert";
 import { useParams } from "react-router-dom";
 import { validateNumber } from "../../Utils/Validation";
 import { toastError } from "../../Utils/toast";
@@ -38,11 +37,7 @@ const TestCases = memo(({ operation, testCasesData }) => {
     explanation: null,
     isSelected: false,
   });
-  const [showAlert, setShowAlert] = useState(false);
-  const [alertData, setAlertData] = useState({
-    message: "",
-    variant: "warning",
-  });
+
   useEffect(() => {
     if (testCasesData) setTestCases(testCasesData);
   }, [testCasesData]);
@@ -190,17 +185,15 @@ const TestCases = memo(({ operation, testCasesData }) => {
       is_sample: testCase.sample,
       explanation: testCase.sample ? testCase.explanation : null,
     };
-    setShowAlert(false);
     try {
-      const response = await axios.post("/test_cases", dataToAdd);
+      await axios.post("/test_cases", dataToAdd);
       const params = new URLSearchParams(dataToAdd);
       console.log(dataToAdd);
       const res = await axios.get("/test_cases?" + params.toString());
       console.log(res.data.message);
       return res.data.message;
     } catch (error) {
-      setAlertData({ message: error.response.data.message, variant: "danger" });
-      setShowAlert(true);
+      console.log(error);
     }
   };
 
@@ -210,27 +203,9 @@ const TestCases = memo(({ operation, testCasesData }) => {
     Output:
       typeof item.output === "string" ? item.output : "output" + i + "file",
     Sample: (
-      <div>
-        {/* onClick={() => handleUpdateTestCase(i, "sample", !item.sample)}> */}
-        {item.sample ? (
-          <BiCheckCircle size={24} color="green" />
-        ) : (
-          "" // <BiCheckbox size={24} color="#949494" />
-        )}
-      </div>
+      <div>{item.sample && <BiCheckCircle size={24} color="green" />}</div>
     ),
     Strength: item.strength,
-    // Select: (
-    //   <div
-    //     onClick={() => handleUpdateTestCase(i, "isSelected", !item.isSelected)}
-    //   >
-    //     {item.isSelected ? (
-    //       <BiCheckCircle size={24} color="green" />
-    //     ) : (
-    //       <BiCheckbox size={24} color="#949494" />
-    //     )}
-    //   </div>
-    // ),
     update: (
       <>
         <HiPencil
@@ -309,17 +284,6 @@ const TestCases = memo(({ operation, testCasesData }) => {
       <Row>
         <TabTable TableHeader={header} TableData={data} />
       </Row>
-      {/* <Row>
-        <Col md={2}></Col>
-        <Col md={8}>
-          {showAlert && (
-            <AlertComponent
-              message={alertData.message}
-              variant={alertData.variant}
-            />
-          )}
-        </Col>
-      </Row> */}
       <Row>
         <p style={{ fontSize: "18px", marginTop: "24px" }}>
           You will get{" "}

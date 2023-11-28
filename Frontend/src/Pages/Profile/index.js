@@ -7,7 +7,7 @@ import axios from "axios";
 import { toastError } from "../../Utils/toast";
 import { useNavigate } from "react-router-dom";
 const Profile = () => {
-  const clasess = useStyles();
+  const classes = useStyles();
   const [accountInfo, setAccountInfo] = useState({});
   const [userCouses, setUserCouses] = useState([]);
   const navigate = useNavigate();
@@ -16,7 +16,8 @@ const Profile = () => {
       .get("/user")
       .then((response) => {
         setAccountInfo({ ...response.data });
-
+      })
+      .then(() => {
         axios
           .get("/userCourses")
           .then((response) => {
@@ -40,12 +41,12 @@ const Profile = () => {
       });
   }, []);
   return (
-    <Container fluid className={clasess.Container}>
-      <Row className={clasess.Row}>
-        <Col className={`${clasess.Col} ${clasess.Aside}`} md={3}>
+    <Container fluid className={classes.Container}>
+      <Row className={classes.Row}>
+        <Col className={`${classes.Col} ${classes.Aside}`} md={3}>
           <ProfileAside accountInfo={accountInfo} />
         </Col>
-        <Col className={`${clasess.Col} ${clasess.main}`}>
+        <Col className={`${classes.Col} ${classes.main}`}>
           <ProfileMain userCouses={userCouses} />
         </Col>
       </Row>

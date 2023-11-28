@@ -29,7 +29,7 @@ const InputFiledRank = ({
   style,
   textAlign = null,
 }) => {
-  const clasess = useStyles({
+  const classes = useStyles({
     msg,
     width,
     labelFontSize,
@@ -38,16 +38,16 @@ const InputFiledRank = ({
   });
   const [showPassword, SetShowPassword] = useState(false);
   return (
-    <div className={clasess.div}>
+    <div className={classes.div}>
       {label && (
-        <Form.Label className={clasess.Label} htmlFor={id}>
+        <Form.Label className={classes.Label} htmlFor={id}>
           {label}
         </Form.Label>
       )}
       <InputGroup>
         {options ? (
           <Form.Select
-            className={`${clasess.Control} ${clasess.Select} ${className}`}
+            className={`${classes.Control} ${classes.Select} ${className}`}
             style={style}
             type={type}
             id={id}
@@ -60,14 +60,14 @@ const InputFiledRank = ({
             onKeyDown={onKeyDown}
           >
             {options.map((item, index) => (
-              <option value={item.value} key={index} className={clasess.option}>
+              <option value={item.value} key={index} className={classes.option}>
                 {item.text}
               </option>
             ))}
           </Form.Select>
         ) : (
           <Form.Control
-            className={clasess.Control}
+            className={classes.Control}
             type={type === "password" && showPassword ? "text" : type}
             id={id}
             value={value}
@@ -88,7 +88,7 @@ const InputFiledRank = ({
 
         {type === "password" && (
           <InputGroup.Text
-            className={clasess.IconPassword}
+            className={classes.IconPassword}
             onClick={() => {
               SetShowPassword(!showPassword);
             }}
@@ -98,7 +98,7 @@ const InputFiledRank = ({
         )}
       </InputGroup>
       {msg && (
-        <Form.Text className={clasess.msg} muted>
+        <Form.Text className={classes.msg} muted>
           * {msg}
         </Form.Text>
       )}

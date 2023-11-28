@@ -11,15 +11,12 @@ import useStyles from "./style";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import ChallengeContext from "../../Utils/ChallengeContext";
-import { FaCheck } from "react-icons/fa";
-import { ImCross } from "react-icons/im";
-import TestCaseProblem from "../../Components/TestCaseProblem";
 import { toastError } from "../../Utils/toast";
 import Submission from "../../Components/Submission";
 import SubmissionProfessor from "../../Components/SubmissionProfessor";
 
-const Challenge = ({}) => {
-  const clasess = useStyles();
+const Challenge = () => {
+  const classes = useStyles();
   const { id, contestId, challengeId, submissionId } = useParams();
   const navigate = useNavigate();
   const [challengeData, setChallengeData] = useState({});
@@ -50,46 +47,38 @@ const Challenge = ({}) => {
       TabComponent: <LeadboardTab />,
       urlPattern: `/courses/${id}/contests/${contestId}/challenges/${challengeId}/leaderboard`,
     },
-    {
-      eventKey: "Discussions",
-      title: "Discussions",
-      TabComponent: <h1>Tab4</h1>,
-      urlPattern: `/courses/${id}/contests/${contestId}/challenges/${challengeId}/discussions`,
-    },
+    // {
+    //   eventKey: "Discussions",
+    //   title: "Discussions",
+    //   TabComponent: <h1>Tab4</h1>,
+    //   urlPattern: `/courses/${id}/contests/${contestId}/challenges/${challengeId}/discussions`,
+    // },
   ];
   useEffect(() => {
     axios
-      .get("/accessCourse", {
-        params: {
-          courseNumber: id,
-        },
+      .get("/challenge/" + challengeId, {
+        params: { courseId: id, contestId: contestId },
       })
-      .then((response1) => {
-        axios
-          .get("/challenge/" + challengeId, { timeout: 1000000 })
-          .then((res) => {
-            setChallengeData(res.data);
-            console.log(res);
-            setLoadingPage(true);
-          })
-          .catch((e) => {
-            console.log(e.response);
-            if (e.response.status === 401) {
-              navigate("/log-in");
-              toastError("Invalid Access");
-            }
-          });
+      .then((res) => {
+        setChallengeData(res?.data);
+        console.log(res);
+        setLoadingPage(true);
       })
-      .catch((error1) => {
-        console.log(error1);
-        if (error1.response.status === 401) {
-          toastError("Invalid Access");
-          if (error1.response.data.Valid === undefined) {
-            navigate("/log-in");
-          } else {
+      .catch((e) => {
+        console.log(e.response);
+        if (e?.response?.status === 401) {
+          //***********************guard done***************************
+          if (e?.response?.data?.message === "Access Denied") {
+            toastError("Invalid Access");
             navigate("/");
+          } else {
+            toastError("Invalid Access");
+            navigate("/log-in");
           }
         }
+      })
+      .catch((error) => {
+        console.log(error);
       });
   }, []);
   return (
@@ -101,13 +90,13 @@ const Challenge = ({}) => {
         setLoading: setLoading,
       }}
     >
-      <Container fluid className={clasess.Container}>
-        <Row className={`mt-2 ${clasess.maxWidth}`}>
+      <Container fluid className={classes.Container}>
+        <Row className={`mt-2 ${classes.maxWidth}`}>
           <Col>
             <Breadcrumbs />
           </Col>
         </Row>
-        <Row className={`mb-4 ${clasess.maxWidth}`}>
+        <Row className={`mb-4 ${classes.maxWidth}`}>
           <Col>
             <TextRegister
               text={challengeData.name}
@@ -117,7 +106,7 @@ const Challenge = ({}) => {
             />
           </Col>
         </Row>
-        <Row className={`mb-4 ${clasess.maxWidth}`}>
+        <Row className={`mb-4 ${classes.maxWidth}`}>
           <Col>{loadingPage && <ChallengeTabs ListTabs={tabContent} />}</Col>
         </Row>
       </Container>

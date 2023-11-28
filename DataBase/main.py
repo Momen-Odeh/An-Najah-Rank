@@ -27,7 +27,6 @@ from APIs.contestsForCourse import getContestForCourse
 from authentication import check_token
 from APIs.admin import get_professor_pending
 from APIs.UserCourses import getUserCourses
-from APIs.AccessCourse import accessCourse
 from authAPIs import validate_token
 from APIs.student_submissions import add_challenge_student
 from APIs.getSubmission import get_submission_info
@@ -37,6 +36,7 @@ from APIs.getStudentSubmissions import get_submissions_manual_marking
 from APIs.submissionsStudents import get_submissions_students
 from APIs.updateSubmissionScore import update_submission_score
 from APIs.studentsLeadboard import get_students_leadboard
+from guard.professorAccess import haveAccess
 import Notification.notification
 
 @app.route('/flask', methods=['GET'])

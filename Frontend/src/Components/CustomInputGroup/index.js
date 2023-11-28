@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { InputGroup, Form, Button } from "react-bootstrap";
+import { InputGroup } from "react-bootstrap";
 import useStyle from "./Style";
 import InputFiledRank from "../InputFiledRank";
 import ButtonRank from "../ButtonRank";

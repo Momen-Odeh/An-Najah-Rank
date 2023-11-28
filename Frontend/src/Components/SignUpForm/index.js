@@ -19,7 +19,7 @@ import {
   validateFullName,
 } from "../../Utils/Validation";
 import Loader from "react-spinners/ClipLoader";
-import { toast } from "react-toastify";
+import { toastError } from "../../Utils/toast";
 const SignUpForm = () => {
   const classes = useStyles();
   const navigate = useNavigate();
@@ -96,10 +96,7 @@ const SignUpForm = () => {
           role: signupValue.isProfessor ? "professor" : "student",
         };
         console.log(data);
-        const response = await Axios.post(
-          "http://localhost:5000/register",
-          data
-        );
+        await Axios.post("/register", data);
         sessionStorage.setItem("email", data.email);
         sessionStorage.setItem("event", "register");
         navigate("/verification-code");
@@ -125,26 +122,8 @@ const SignUpForm = () => {
           }
         } else {
           error.response?.data.message
-            ? toast.error(error.response.data.message, {
-                position: "bottom-left",
-                autoClose: 10000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                theme: "light",
-              })
-            : toast.error("No connection with backend", {
-                position: "bottom-left",
-                autoClose: 10000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                theme: "light",
-              });
+            ? toastError(error.response.data.message)
+            : toastError("No connection with backend");
         }
       }
     }

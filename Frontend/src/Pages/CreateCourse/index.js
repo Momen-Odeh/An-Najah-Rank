@@ -1,15 +1,13 @@
-import React, { useState } from "react";
-import Moderators from "../../Components/Moderators";
-import ChallengeTabs from "../../Components/ChallengTabs";
+import React from "react";
 import Breadcrumbs from "../../Components/Breadcrumbs";
 import Text from "../../Components/Text";
 import { Container, Row } from "react-bootstrap";
 import CourseDetails from "../../Components/CourseDetails";
 import useStyles from "./style";
 const CreateCourse = () => {
-  const clasess = useStyles();
+  const classes = useStyles();
   return (
-    <Container fluid className={clasess.Container}>
+    <Container fluid className={classes.Container}>
       <Row className="m-2">
         <Breadcrumbs />
       </Row>

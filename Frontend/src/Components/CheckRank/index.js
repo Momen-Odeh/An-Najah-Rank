@@ -11,13 +11,13 @@ const CheckRank = ({
   value,
   disabled,
 }) => {
-  const clasess = useStyle();
+  const classes = useStyle();
   return (
-    <label className={clasess.CheckLabel}>
+    <label className={classes.CheckLabel}>
       <Form.Check
         type={type}
         name={name}
-        className={clasess.Check}
+        className={classes.Check}
         checked={checked}
         onChange={onChange}
         value={value}

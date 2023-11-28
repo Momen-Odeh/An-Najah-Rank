@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Col, Container, Row } from "react-bootstrap";
 import useStyles from "./style";
 import Text from "../../Components/Text";
@@ -114,11 +114,6 @@ const Settings = () => {
                 />
               </div>
             ))}
-
-            {/* <div className={classes.IconContainer}>
-            <FiLock size={"25px"} color="#696c83" />{" "}
-            <Text text={"Password"} color="#696c83" />
-          </div> */}
           </Col>
           <Col className={classes.Col}>{settingsContent.component}</Col>
         </Row>

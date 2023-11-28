@@ -9,13 +9,12 @@ import useStyles from "./style";
 import { useNavigate, useParams } from "react-router-dom";
 import { useState } from "react";
 import { useEffect } from "react";
-import { useCookies } from "react-cookie";
 import axios from "axios";
+import { toastError } from "../../Utils/toast";
 const Contests = () => {
-  const navigate = useNavigate();
-  const clasess = useStyles();
+  const classes = useStyles();
   const { id, contestId } = useParams();
-  const [cookies, setCookies] = useCookies();
+  const navigate = useNavigate();
   const [details, setDetails] = useState({
     name: null,
     description: null,
@@ -28,7 +27,7 @@ const Contests = () => {
   useEffect(() => {
     axios
       .get(`/contest-info`, {
-        params: { contest_id: contestId },
+        params: { contest_id: contestId, courseId: id },
       })
       .then((res) => {
         setDetails({
@@ -52,7 +51,19 @@ const Contests = () => {
           }))
         );
       })
-      .catch((error) => {});
+      .catch((error) => {
+        if (error?.response?.status === 401) {
+          //************* guard done ************************ */
+          if (error?.response?.data?.message === "Access Denied") {
+            toastError("Invalid Access");
+            navigate("/");
+          } else {
+            toastError("Invalid Access");
+            navigate("/log-in");
+          }
+        }
+        console.log(error);
+      });
   }, []);
 
   const tabContent = [
@@ -75,18 +86,18 @@ const Contests = () => {
     },
   ];
   return (
-    <Container fluid className={clasess.Container}>
-      <Row className={`mt-2 ${clasess.maxWidth}`}>
+    <Container fluid className={classes.Container}>
+      <Row className={`mt-2 ${classes.maxWidth}`}>
         <Col>
           <Breadcrumbs />
         </Col>
       </Row>
-      <Row className={`mb-4 ${clasess.maxWidth}`}>
+      <Row className={`mb-4 ${classes.maxWidth}`}>
         <Col>
           <Text text={details.name} size="36px" wegiht="500" height="40px" />
         </Col>
       </Row>
-      <Row className={`mb-4 ${clasess.maxWidth}`}>
+      <Row className={`mb-4 ${classes.maxWidth}`}>
         <Col>
           <ChallengeTabs ListTabs={tabContent} />
         </Col>

@@ -1,32 +1,40 @@
 import axios from "axios";
 import React, { useEffect } from "react";
 import { useState } from "react";
-import { Col, Container, OverlayTrigger, Row, Tooltip } from "react-bootstrap";
-import { useCookies } from "react-cookie";
+import { Col, Container, Row } from "react-bootstrap";
 import { FaCheck, FaTimes } from "react-icons/fa";
 import TabTable from "../../Components/TabTable";
 import Text from "../../Components/Text";
 import useStyle from "./style";
+import { useNavigate } from "react-router-dom";
+import { toastError } from "../../Utils/toast";
 const Admin = () => {
   const classes = useStyle();
+  const navigate = useNavigate();
   const [professors, setProfessors] = useState([]);
-  const [cookies, setCookies] = useCookies();
   useEffect(() => {
     axios
-      .get(`http://localhost:5000/admin?token=${cookies.token}`)
+      .get(`/admin`)
       .then((res) => {
         setProfessors(res.data.professors);
       })
       .catch((error) => {
-        console.log(error.response.data.message);
+        if (error?.response?.status === 401) {
+          //************* guard done ************************ */
+          if (error?.response?.data?.message === "Access Denied") {
+            toastError("Invalid Access");
+            navigate("/");
+          } else {
+            toastError("Invalid Access");
+            navigate("/log-in");
+          }
+        } else console.log(error);
       });
   }, []);
 
   const handleAccept = (universityNumber) => {
     axios
-      .put(`http://localhost:5000/admin/${universityNumber}`, {
-        token: cookies.token,
-      })
+      .put(`/admin/${universityNumber}`)
       .then(() => {
         setProfessors(
           professors.filter(
@@ -40,9 +48,7 @@ const Admin = () => {
   };
   const handleReject = (universityNumber) => {
     axios
-      .delete(
-        `http://localhost:5000/admin/${universityNumber}?token=${cookies.token}`
-      )
+      .delete(`/admin/${universityNumber}`)
       .then(() => {
         setProfessors(
           professors.filter(

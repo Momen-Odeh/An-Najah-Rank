@@ -3,7 +3,7 @@ import CustomInputGroup from "../CustomInputGroup";
 import useStyle from "./Style";
 import CancelModeratorsBtn from "../CancelModeratorsBtn";
 
-const Tags = ({ tags, handleChange, name, disabled }) => {
+const Tags = ({ tags, handleChange, disabled }) => {
   const classes = useStyle();
   const handleAdd = (val) => {
     if (val.trim() !== "") {
