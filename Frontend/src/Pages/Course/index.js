@@ -11,6 +11,7 @@ import StudentsInCourse from "../../Components/StudentsInCourse";
 import ManageContests from "../../Components/ManageContests";
 import useStyle from "./style";
 import { toastError } from "../../Utils/toast";
+import Loader from "../../Components/Loader";
 const Course = () => {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -30,6 +31,7 @@ const Course = () => {
     email: "",
   });
   const [contests, setContests] = useState([]);
+  const [loadingPage, setLoadingPage] = useState(true);
   useEffect(() => {
     axios
       .get(`/course-info`, {
@@ -50,6 +52,7 @@ const Course = () => {
         setModerators(res.data.moderators);
         setSuggestionModerators(res.data.suggestionModerators);
         setContests(res.data.contests);
+        setLoadingPage(false);
       })
       .catch((error) => {
         if (error?.response?.status === 401) {
@@ -61,7 +64,7 @@ const Course = () => {
             toastError("Invalid Access");
             navigate("/log-in");
           }
-        }
+        } else setLoadingPage(false);
         console.log(error);
       });
   }, []);
@@ -112,7 +115,9 @@ const Course = () => {
     },
   ];
   const classes = useStyle();
-  return (
+  return loadingPage ? (
+    <Loader />
+  ) : (
     <Container fluid className={classes.Container}>
       <Row className="m-2">
         <Breadcrumbs />

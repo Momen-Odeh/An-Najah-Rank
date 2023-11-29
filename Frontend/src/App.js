@@ -16,6 +16,7 @@ import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
 import BaseURI from "./Utils/BaseURI";
 import Cookies from "js-cookie";
+import Loader from "./Components/Loader";
 function App() {
   axios.defaults.baseURL = BaseURI;
   // axios.defaults.params = {
@@ -25,14 +26,12 @@ function App() {
   axios.defaults.headers.post["Content-Type"] = "application/json";
   const router = createBrowserRouter(
     createRoutesFromElements(
-      <Route element={<PageLayout />} errorElement={<NotFound />}>
-        {generateRoutes(routes)}
-      </Route>
+      <Route element={<PageLayout />}>{generateRoutes(routes)}</Route>
     )
   );
 
   return (
-    <Suspense fallback={<>Loading</>}>
+    <Suspense fallback={<Loader />}>
       <RouterProvider router={router} />
       <ToastContainer />
     </Suspense>

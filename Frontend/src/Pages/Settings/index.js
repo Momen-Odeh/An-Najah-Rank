@@ -10,6 +10,7 @@ import axios from "axios";
 import SettingsContext from "../../Utils/SettingsContext";
 import { useNavigate } from "react-router-dom";
 import { toastError } from "../../Utils/toast";
+import Loader from "../../Components/Loader";
 const Settings = () => {
   const navigate = useNavigate();
   const [accountInfo, setAccountInfo] = useState({});
@@ -20,18 +21,20 @@ const Settings = () => {
     confirmPassword: "",
   });
   const classes = useStyles();
+  const [loadingPage, setLoadingPage] = useState(true);
   useEffect(() => {
     axios
       .get("/user")
       .then((response) => {
         setAccountInfo({ ...response.data });
+        setLoadingPage(false);
       })
       .catch((error) => {
         console.error("Error fetching image:", error);
         if (error.response.status === 401) {
           toastError("unauthorized access");
           navigate("/log-in");
-        }
+        } else setLoadingPage(false);
       });
   }, []);
   const [settingsContent, setSettingsContent] = useState({
@@ -44,7 +47,9 @@ const Settings = () => {
       component: Component,
     });
   };
-  return (
+  return loadingPage ? (
+    <Loader />
+  ) : (
     <SettingsContext.Provider
       value={{
         accountInfo: accountInfo,

@@ -12,12 +12,14 @@ import { PiCodeBold } from "react-icons/pi";
 import { RxLapTimer } from "react-icons/rx";
 import CountDown from "../../Components/CountDown";
 import { toastError } from "../../Utils/toast";
+import Loader from "../../Components/Loader";
 const ContestView = () => {
   const { id, contestId } = useParams();
   const [challengeContest, setChallengeContest] = useState([]);
   const [contestInfo, setContestInfo] = useState({});
   const classes = useStyles();
   const navigate = useNavigate();
+  const [loadingPage, setLoadingPage] = useState(true);
   useEffect(() => {
     axios
       .get(`/contest-info`, {
@@ -39,6 +41,7 @@ const ContestView = () => {
           })
         );
         setContestInfo(response.data.contest);
+        setLoadingPage(false);
       })
       .catch((error) => {
         if (error?.response?.status === 401) {
@@ -50,11 +53,13 @@ const ContestView = () => {
             toastError("Invalid Access");
             navigate("/log-in");
           }
-        }
+        } else setLoadingPage(false);
       });
   }, []);
 
-  return (
+  return loadingPage ? (
+    <Loader />
+  ) : (
     <Container fluid className={classes.Container}>
       <Row className={`${classes.Row} mb-5`}>
         <Col className={`${classes.Col}`}>

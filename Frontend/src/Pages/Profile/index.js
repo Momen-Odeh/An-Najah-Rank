@@ -6,10 +6,12 @@ import ProfileMain from "../../Components/ProfileMain";
 import axios from "axios";
 import { toastError } from "../../Utils/toast";
 import { useNavigate } from "react-router-dom";
+import Loader from "../../Components/Loader";
 const Profile = () => {
   const classes = useStyles();
   const [accountInfo, setAccountInfo] = useState({});
   const [userCouses, setUserCouses] = useState([]);
+  const [loadingPage, setLoadingPage] = useState(true);
   const navigate = useNavigate();
   useEffect(() => {
     axios
@@ -27,9 +29,11 @@ const Profile = () => {
                 return { ...item, url: "/courses/" + item.courseNumber };
               })
             );
+            setLoadingPage(false);
           })
           .catch((error) => {
             console.log(error);
+            setLoadingPage(false);
           });
       })
       .catch((error) => {
@@ -37,10 +41,12 @@ const Profile = () => {
         if (error.response.status === 401) {
           toastError("unauthorized access");
           navigate("/log-in");
-        }
+        } else setLoadingPage(false);
       });
   }, []);
-  return (
+  return loadingPage ? (
+    <Loader />
+  ) : (
     <Container fluid className={classes.Container}>
       <Row className={classes.Row}>
         <Col className={`${classes.Col} ${classes.Aside}`} md={3}>

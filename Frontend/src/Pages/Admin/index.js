@@ -8,15 +8,18 @@ import Text from "../../Components/Text";
 import useStyle from "./style";
 import { useNavigate } from "react-router-dom";
 import { toastError } from "../../Utils/toast";
+import Loader from "../../Components/Loader";
 const Admin = () => {
   const classes = useStyle();
   const navigate = useNavigate();
   const [professors, setProfessors] = useState([]);
+  const [loadingPage, setLoadingPage] = useState(true);
   useEffect(() => {
     axios
       .get(`/admin`)
       .then((res) => {
         setProfessors(res.data.professors);
+        setLoadingPage(false);
       })
       .catch((error) => {
         if (error?.response?.status === 401) {
@@ -28,7 +31,10 @@ const Admin = () => {
             toastError("Invalid Access");
             navigate("/log-in");
           }
-        } else console.log(error);
+        } else {
+          setLoadingPage(false);
+          console.log(error);
+        }
       });
   }, []);
 
@@ -83,7 +89,9 @@ const Admin = () => {
       </>
     ),
   }));
-  return (
+  return loadingPage ? (
+    <Loader />
+  ) : (
     <Container>
       <Row className="mt-4">
         <Col>

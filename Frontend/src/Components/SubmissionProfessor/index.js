@@ -9,6 +9,7 @@ import { toastError } from "../../Utils/toast";
 import InputFiledRank from "../InputFiledRank";
 import { Col, Container, Row } from "react-bootstrap";
 import useStyle from "./style";
+import Loader from "../Loader";
 const SubmissionProfessor = () => {
   const classes = useStyle();
   const navigate = useNavigate();
@@ -20,6 +21,7 @@ const SubmissionProfessor = () => {
   const [sort, setSort] = useState({ sortOn: null, type: null });
   const location = useLocation();
   const currentPath = location.pathname;
+  const [loadingPage, setLoadingPage] = useState(true);
   useEffect(() => {
     if (currentPath.includes("submissions"))
       axios
@@ -30,10 +32,12 @@ const SubmissionProfessor = () => {
           setStudentsSubmission(res.data.submissions);
           setMaxScore(res.data.maxScore);
           setShowItem(1);
+          setLoadingPage(false);
         })
         .catch((error) => {
           if (error?.response?.status == 401) setShowItem(0);
           else toastError(error);
+          setLoadingPage(false);
         });
   }, [location.pathname]);
 
@@ -136,16 +140,26 @@ const SubmissionProfessor = () => {
       ),
     }));
 
-  return showItem == null ? (
+  const handleCalculateSimilarity = async () => {
+    // await axios.post(``);
+  };
+
+  return loadingPage ? (
+    <Loader internal />
+  ) : showItem == null ? (
     <></>
   ) : showItem === 1 ? (
     <Container fluid className="p-0 m-0">
       <Row className="mb-3">
-        <Col className="d-flex justify-content-end">
+        <Col className="d-flex justify-content-between">
           <InputFiledRank
             type="text"
             placeholder="Type student name"
             onChange={(e) => setSearch(e.target.value)}
+          />
+          <ButtonRank
+            text={"Calculate Similarity"}
+            onClick={handleCalculateSimilarity}
           />
         </Col>
       </Row>
