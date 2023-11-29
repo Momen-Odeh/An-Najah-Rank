@@ -24,6 +24,7 @@ import Admin from "../Pages/Admin";
 import NotificationComponent from "../Components/Notification";
 import SubmissionsManualMarking from "../Components/SubmissionsManualMarking";
 import CodeSimilarity from "../Components/CodeSimilarity";
+import NotFound from "../Components/NotFound";
 // const AboutUs = lazy(() => import("../Pages/AboutUs/SubComponents/AboutUs"))
 
 export const routeNames = {
@@ -371,6 +372,11 @@ export const routes = [
         ],
       },
     ],
+  },
+  {
+    title: "Not Found",
+    path: "*",
+    component: <NotFound />,
   },
 ];
 

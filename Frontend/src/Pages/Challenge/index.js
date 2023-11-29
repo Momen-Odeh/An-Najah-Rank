@@ -14,7 +14,7 @@ import ChallengeContext from "../../Utils/ChallengeContext";
 import { toastError } from "../../Utils/toast";
 import Submission from "../../Components/Submission";
 import SubmissionProfessor from "../../Components/SubmissionProfessor";
-
+import Loader from "../../Components/Loader";
 const Challenge = () => {
   const classes = useStyles();
   const { id, contestId, challengeId, submissionId } = useParams();
@@ -25,7 +25,7 @@ const Challenge = () => {
     tabContent: [],
   });
   const [loading, setLoading] = useState(false);
-  const [loadingPage, setLoadingPage] = useState(false);
+  const [loadingPage, setLoadingPage] = useState(true);
   const tabContent = [
     {
       eventKey: "Problem",
@@ -62,7 +62,7 @@ const Challenge = () => {
       .then((res) => {
         setChallengeData(res?.data);
         console.log(res);
-        setLoadingPage(true);
+        setLoadingPage(false);
       })
       .catch((e) => {
         console.log(e.response);
@@ -75,13 +75,18 @@ const Challenge = () => {
             toastError("Invalid Access");
             navigate("/log-in");
           }
+        } else {
+          setLoadingPage(false);
         }
       })
       .catch((error) => {
         console.log(error);
+        setLoadingPage(false);
       });
   }, []);
-  return (
+  return loadingPage ? (
+    <Loader />
+  ) : (
     <ChallengeContext.Provider
       value={{
         challengeData: challengeData,
@@ -107,7 +112,9 @@ const Challenge = () => {
           </Col>
         </Row>
         <Row className={`mb-4 ${classes.maxWidth}`}>
-          <Col>{loadingPage && <ChallengeTabs ListTabs={tabContent} />}</Col>
+          <Col>
+            <ChallengeTabs ListTabs={tabContent} />
+          </Col>
         </Row>
       </Container>
     </ChallengeContext.Provider>

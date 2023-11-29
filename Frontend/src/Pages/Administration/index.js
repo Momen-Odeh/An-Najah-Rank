@@ -9,17 +9,20 @@ import useStyles from "./style";
 import Breadcrumbs from "../../Components/Breadcrumbs";
 import { toastError } from "../../Utils/toast";
 import { useNavigate } from "react-router-dom";
+import Loader from "../../Components/Loader";
 const Administration = () => {
   const navigate = useNavigate();
   const [data, setData] = useState({
     courses: [],
     challenges: [],
   });
+  const [loadingPage, setLoadingPage] = useState(true);
   useEffect(() => {
     axios
       .get(`/challenges-for-owner`)
       .then((res) => {
         setData(res.data);
+        setLoadingPage(false);
       })
       .catch((error) => {
         if (error?.response?.status === 401) {
@@ -31,7 +34,7 @@ const Administration = () => {
             toastError("Invalid Access");
             navigate("/log-in");
           }
-        }
+        } else setLoadingPage(false);
         console.log(error);
       });
   }, []);
@@ -51,7 +54,9 @@ const Administration = () => {
   ];
   const classes = useStyles();
 
-  return (
+  return loadingPage ? (
+    <Loader />
+  ) : (
     <Container fluid className={classes.Container}>
       <Row className={`${classes.Row} mb-2`}>
         <Col className={`${classes.Col}`}>

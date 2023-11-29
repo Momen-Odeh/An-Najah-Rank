@@ -7,6 +7,7 @@ import { useEffect } from "react";
 import axios from "axios";
 import { useLocation, useParams } from "react-router-dom";
 import InputFiledRank from "../InputFiledRank";
+import Loader from "../Loader";
 const LeadboardTab = () => {
   const classes = useStyles();
   const { id, contestId, challengeId } = useParams();
@@ -14,6 +15,7 @@ const LeadboardTab = () => {
   const [search, setSearch] = useState("");
   const location = useLocation();
   const currentPath = location.pathname;
+  const [loadingPage, setLoadingPage] = useState(true);
   useEffect(() => {
     if (currentPath.includes("leaderboard"))
       axios
@@ -22,9 +24,11 @@ const LeadboardTab = () => {
         )
         .then((res) => {
           setSubmissions(res.data.submissions);
+          setLoadingPage(false);
         })
         .catch((error) => {
           console.log(error);
+          setLoadingPage(false);
         });
   }, [location.pathname]);
 
@@ -48,7 +52,9 @@ const LeadboardTab = () => {
       submissionDate: item.submissionDate,
     }));
 
-  return (
+  return loadingPage ? (
+    <Loader internal />
+  ) : (
     <Container fluid className={classes.Container}>
       <Row className={`${classes.RowHead} mb-3`}>
         <Col className={classes.ColHead}>

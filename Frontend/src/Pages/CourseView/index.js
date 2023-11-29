@@ -14,6 +14,7 @@ import axios from "axios";
 import useStyles from "./style";
 import { useNavigate } from "react-router-dom";
 import { toastError } from "../../Utils/toast";
+import Loader from "../../Components/Loader";
 const CourseView = () => {
   const [role, setRole] = useState();
   const navigate = useNavigate();
@@ -22,7 +23,7 @@ const CourseView = () => {
     contests: [],
   });
   const [students, setStudents] = useState([]);
-
+  const [loadingPage, setLoadingPage] = useState(true);
   const handleAddContest = (name) => {
     const newContest = {
       ContestName: name,
@@ -90,6 +91,7 @@ const CourseView = () => {
             };
           }),
         });
+        setLoadingPage(false);
       })
       .catch((error) => {
         if (error?.response?.status === 401) {
@@ -101,13 +103,15 @@ const CourseView = () => {
             toastError("Invalid Access");
             navigate("/log-in");
           }
-        }
+        } else setLoadingPage(false);
         console.log(error);
       });
   }, []);
 
   const classes = useStyles();
-  return (
+  return loadingPage ? (
+    <Loader />
+  ) : (
     <Container fluid className={classes.Container}>
       {course.backgroundImage && (
         <Row className={`${classes.Row} mb-2 mt-3`}>

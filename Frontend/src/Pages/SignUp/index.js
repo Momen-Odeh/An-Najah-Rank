@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
@@ -10,11 +10,13 @@ import { useNavigate, useOutletContext } from "react-router-dom";
 import { routeNames } from "../../Utils/Utils";
 import Cookies from "js-cookie";
 import axios from "axios";
+import Loader from "../../Components/Loader";
 const SignUp = () => {
   const classes = useStyles();
   const navigate = useNavigate();
   const token = Cookies.get("token");
   const setActiveTab = useOutletContext();
+  const [loadingPage, setLoadingPage] = useState(true);
   useEffect(() => {
     if (token) {
       axios
@@ -24,11 +26,14 @@ const SignUp = () => {
         })
         .catch((error) => {
           console.log(error);
+          setLoadingPage(false);
         });
-    }
+    } else setLoadingPage(false);
     setActiveTab(routeNames.LOG_IN);
   }, []);
-  return (
+  return loadingPage ? (
+    <Loader />
+  ) : (
     <Container fluid className={classes.Container}>
       <Row
         className={`${classes.Row} align-items-center justify-content-center`}

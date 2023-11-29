@@ -11,6 +11,7 @@ import { useState } from "react";
 import { useEffect } from "react";
 import axios from "axios";
 import { toastError } from "../../Utils/toast";
+import Loader from "../../Components/Loader";
 const Contests = () => {
   const classes = useStyles();
   const { id, contestId } = useParams();
@@ -24,6 +25,7 @@ const Contests = () => {
   });
   const [challenges, setChallenges] = useState([]);
   const [challengesContest, setChallengesContest] = useState([]);
+  const [loadingPage, setLoadingPage] = useState(true);
   useEffect(() => {
     axios
       .get(`/contest-info`, {
@@ -50,6 +52,7 @@ const Contests = () => {
             maxScore: item.maxScore,
           }))
         );
+        setLoadingPage(false);
       })
       .catch((error) => {
         if (error?.response?.status === 401) {
@@ -61,7 +64,7 @@ const Contests = () => {
             toastError("Invalid Access");
             navigate("/log-in");
           }
-        }
+        } else setLoadingPage(false);
         console.log(error);
       });
   }, []);
@@ -85,7 +88,9 @@ const Contests = () => {
       urlPattern: `/administration/courses/${id}/contests/${contestId}/challenges`,
     },
   ];
-  return (
+  return loadingPage ? (
+    <Loader />
+  ) : (
     <Container fluid className={classes.Container}>
       <Row className={`mt-2 ${classes.maxWidth}`}>
         <Col>

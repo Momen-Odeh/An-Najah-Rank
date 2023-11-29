@@ -8,12 +8,14 @@ import ButtonRank from "../ButtonRank";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toastError } from "../../Utils/toast";
+import Loader from "../Loader";
 
 const Submission = () => {
   const classes = useStyle();
   const { id, contestId, challengeId, submissionId } = useParams();
   const navigate = useNavigate();
   const [submissionData, setSubmissionData] = useState(null);
+  const [loadingPage, setLoadingPage] = useState(true);
   const handleOpenInEditor = () => {
     localStorage.setItem(
       "challenge " + challengeId,
@@ -33,6 +35,7 @@ const Submission = () => {
       )
       .then((res) => {
         setSubmissionData(res.data.submission);
+        setLoadingPage(false);
       })
       .catch((error) => {
         if (error?.response?.status === 401) {
@@ -44,11 +47,15 @@ const Submission = () => {
             toastError("Invalid Access");
             navigate("/log-in");
           }
+        } else {
+          setLoadingPage(false);
         }
         console.log(error);
       });
   }, []);
-  return (
+  return loadingPage ? (
+    <Loader internal />
+  ) : (
     <Container>
       <Card>
         <Card.Header>

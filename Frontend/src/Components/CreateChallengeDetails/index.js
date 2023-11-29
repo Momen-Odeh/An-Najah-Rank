@@ -71,42 +71,42 @@ const CreateChallengeDetails = ({ operation, data }) => {
       input_format: details.inputFormat,
       constraints: details.constraints,
       output_format: details.outputFormat,
-      tags: details.tags.length === 0 ? null : details.tags,
+      tags: details?.tags?.length === 0 ? null : details.tags,
     };
     setErrorMsg({
       name:
-        challenge.name.length < 3
+        challenge?.name?.length < 3
           ? "challenge name must contain at least 3 characters"
           : null,
       description:
-        challenge.description.length === 0
+        challenge?.description?.length === 0
           ? "please enter the challenge description"
           : null,
       problemStatement:
-        challenge.problem_statement.length === 0
+        challenge?.problem_statement?.length === 0
           ? "please enter the challenge problem statement"
           : null,
       inputFormat:
-        challenge.input_format.length === 0
+        challenge?.input_format?.length === 0
           ? "please enter the challenge input format"
           : null,
       constraints:
-        challenge.constraints.length === 0
+        challenge?.constraints?.length === 0
           ? "please enter the challenge constraints"
           : null,
       outputFormat:
-        challenge.output_format.length === 0
+        challenge?.output_format?.length === 0
           ? "please enter the challenge output format"
           : null,
     });
 
     if (
-      challenge.name.length >= 3 &&
-      challenge.description.length !== 0 &&
-      challenge.problem_statement.length !== 0 &&
-      challenge.input_format.length !== 0 &&
-      challenge.constraints.length !== 0 &&
-      challenge.output_format.length !== 0
+      challenge.name?.length >= 3 &&
+      challenge.description?.length !== 0 &&
+      challenge.problem_statement?.length !== 0 &&
+      challenge.input_format?.length !== 0 &&
+      challenge.constraints?.length !== 0 &&
+      challenge.output_format?.length !== 0
     ) {
       setLoading(true);
       try {

@@ -9,6 +9,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import useStyles from "./style";
 import { toastError } from "../../Utils/toast";
+import Loader from "../../Components/Loader";
 const Challenges = () => {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -23,6 +24,7 @@ const Challenges = () => {
     tags: [],
   });
   const [testCasesData, setTestCasesData] = useState([]);
+  const [loadingPage, setLoadingPage] = useState(true);
   useEffect(() => {
     axios
       .get("/challenge/" + id)
@@ -50,13 +52,14 @@ const Challenges = () => {
             isSelected: false,
           }))
         );
+        setLoadingPage(false);
       })
       .catch((e) => {
         if (e?.response?.status === 401) {
           //************* guard done ************************ */
           toastError("Invalid Access");
           navigate("/");
-        }
+        } else setLoadingPage(false);
         console.log(e.response);
       });
   }, []);
@@ -81,7 +84,9 @@ const Challenges = () => {
   ];
 
   const classes = useStyles();
-  return (
+  return loadingPage ? (
+    <Loader />
+  ) : (
     <Container fluid className={`${classes.Container}`}>
       <Row className="mb-2">
         <Col>
