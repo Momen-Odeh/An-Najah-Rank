@@ -1,7 +1,7 @@
 from flask import request, jsonify
 from FlaskSetUp import app
 from flask import request, jsonify, render_template
-from FlaskSetUp import app
+from FlaskSetUp import app, socketio
 from flask_cors import CORS
 from EmailAuth.emailConnection import sendEmail
 from APIs.registration import register_user
@@ -45,5 +45,4 @@ def index():
     return jsonify({'message': getattr(request, 'tokenData', None)})
 
 if __name__ == '__main__':
-    # socketio.run(app, debug=True, allow_unsafe_werkzeug=True)
-    app.run(debug=True)
+    socketio.run(app, debug=True, allow_unsafe_werkzeug=True)

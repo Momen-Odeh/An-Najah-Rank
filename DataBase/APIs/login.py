@@ -20,7 +20,7 @@ def login_user():
                 if check_password_hash(stored_password_hash, password):
                     if user_data[0][4] == "approved":
                         token = generate_token(user_data[0][1], user_data[0][0], user_data[0][2], user_data[0][3])
-                        return jsonify({'message': "Login successful", "token": token}), 200
+                        return jsonify({'message': "Login successful", "user": {"universityNumber": user_data[0][0]}, "token": token}), 200
                     else:
                         if user_data[0][3] == "student":
                             return jsonify({'message': "your account not verified"}), 401
