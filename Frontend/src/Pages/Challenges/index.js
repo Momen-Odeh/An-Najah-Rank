@@ -21,6 +21,7 @@ const Challenges = () => {
     inputFormat: null,
     constraints: null,
     outputFormat: null,
+    challengePrivacy: false,
     tags: [],
   });
   const [testCasesData, setTestCasesData] = useState([]);
@@ -39,6 +40,7 @@ const Challenges = () => {
           constraints: res.data.constraints,
           outputFormat: res.data.outputFormat,
           tags: res.data.tags,
+          challengePrivacy: res.data.challengePrivacy,
         });
         setTestCasesData(
           res.data.testCases.map((item, index) => ({

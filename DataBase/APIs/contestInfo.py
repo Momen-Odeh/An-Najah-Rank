@@ -38,10 +38,12 @@ def get_contests_info():
         }
         query = f"""
                     SELECT *
-                    FROM challenges ;
-                """
-        # WHERE
-        # ownerUniversityNumber = '{ownerUniversityNumber}'
+                    FROM challenges
+                    WHERE
+                    ownerUniversityNumber = '{ownerUniversityNumber}'
+                    or
+                    challengePrivacy= 'public'
+        """
         cursor = execute_query(connection, query)
         myChallenges = fetch_results(cursor)
 
@@ -55,7 +57,7 @@ def get_contests_info():
         ContestChallenges = fetch_results(cursor)
         fields = [
             "id", "name", "description", "difficulty", "problem_statement", "input_format", "constraints",
-            "output_format", "tags", "created_at", "updated_at", "ownerUniversityNumber",
+            "output_format", "tags", "created_at", "updated_at", "ownerUniversityNumber","challengePrivacy",
             "maxScore", "challenge_id", "contest_id"
         ]
         ContestChallengesData = []
