@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { TfiEmail } from "react-icons/tfi";
 import { TfiLock } from "react-icons/tfi";
 import InputFiledRegister from "../InputFiledRegister";
@@ -13,9 +13,11 @@ import Cookies from "js-cookie";
 import { validateEmail, validatePassword } from "../../Utils/Validation";
 import { toast } from "react-toastify";
 import Loader from "react-spinners/ClipLoader";
+import userContext from "../../Utils/userContext";
 const LogInForm = () => {
   const navigate = useNavigate();
   const [loginValue, setLoginValue] = useState({ email: "", password: "" });
+  const { activeUser, setActiveUser } = useContext(userContext);
   const [errorMsg, setErrorMsg] = useState({
     email: null,
     password: null,
@@ -45,7 +47,8 @@ const LogInForm = () => {
           email: loginValue.email,
           password: loginValue.password,
         });
-        console.log(response);
+        console.log(response.data.user);
+        setActiveUser(response.data.user);
         Cookies.set("token", response.data.token, {
           expires: 30,
           path: "/",

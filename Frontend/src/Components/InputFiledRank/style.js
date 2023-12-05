@@ -15,7 +15,8 @@ const useStyles = createUseStyles({
     transition: "0.5s",
     borderTopRightRadius: "0.375rem !important",
     borderBottomRightRadius: "0.375rem !important",
-    border: ({ msg }) => (msg ? "1px solid #e40506" : ""),
+    border: ({ msg, BorderColor }) =>
+      msg && !BorderColor ? "1px solid #e40506" : "",
     "&:focus": {
       boxShadow: "none",
       borderColor: "#39424e",

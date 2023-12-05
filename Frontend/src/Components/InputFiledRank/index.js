@@ -12,6 +12,7 @@ const InputFiledRank = ({
   onChange,
   disabled,
   msg,
+  BorderColor,
   placeholder,
   width,
   size,
@@ -31,6 +32,7 @@ const InputFiledRank = ({
 }) => {
   const classes = useStyles({
     msg,
+    BorderColor,
     width,
     labelFontSize,
     labelFontColor,
