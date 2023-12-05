@@ -9,10 +9,12 @@ import { useParams } from "react-router-dom";
 import Breadcrumbs from "../Breadcrumbs";
 import { useNavigate } from "react-router-dom";
 import { toastError } from "../../Utils/toast";
+import Loader from "../Loader";
 const CodeSimilarity = () => {
   const classes = useStyles();
   const { userId, id, contestId, challengeId } = useParams();
   const navigate = useNavigate();
+  const [loadingPage, setLoadingPage] = useState(true);
   const [leftUser, setLeftUser] = useState([
     {
       eventKey: "tab-0",
@@ -85,6 +87,7 @@ const CodeSimilarity = () => {
             };
           })
         );
+        setLoadingPage(false);
       })
       .catch((error) => {
         console.log(error);
@@ -114,11 +117,15 @@ const CodeSimilarity = () => {
             toastError("Not found");
             navigate("..");
           }
+        } else {
+          setLoadingPage(false);
         }
       });
   }, []);
 
-  return (
+  return loadingPage ? (
+    <Loader />
+  ) : (
     <Container fluid className={classes.Container}>
       <Row className={`${classes.RowCont}`}>
         <Col>

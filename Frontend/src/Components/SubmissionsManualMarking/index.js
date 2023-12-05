@@ -10,6 +10,7 @@ import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 import Breadcrumbs from "../Breadcrumbs";
 import { toastError } from "../../Utils/toast";
+import Loader from "../Loader";
 const SubmissionsManualMarking = () => {
   const classes = useStyle();
   const { id, contestId, challengeId, studentId } = useParams();
@@ -23,7 +24,7 @@ const SubmissionsManualMarking = () => {
   const [submissionId, setSubmissionId] = useState(
     studentSubmissions[0]?.submissionId
   );
-
+  const [loadingPage, setLoadingPage] = useState(true);
   useEffect(() => {
     axios
       .get(
@@ -32,6 +33,7 @@ const SubmissionsManualMarking = () => {
       .then((res) => {
         setStudentSubmissions(res.data.submissions);
         setTestCases(res.data.testCases);
+        setLoadingPage(false);
       })
       .catch((error) => {
         if (error?.response?.status === 401) {
@@ -43,7 +45,7 @@ const SubmissionsManualMarking = () => {
             toastError("Invalid Access");
             navigate("/log-in");
           }
-        }
+        } else setLoadingPage(false);
       });
   }, []);
 
@@ -120,7 +122,9 @@ const SubmissionsManualMarking = () => {
     }
   });
 
-  return (
+  return loadingPage ? (
+    <Loader />
+  ) : (
     <Container>
       <Row className={`mt-2 mb-2`}>
         <Col>
