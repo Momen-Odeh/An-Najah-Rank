@@ -11,6 +11,7 @@ import InputFiledRank from "../InputFiledRank";
 import useStyle from "./style";
 import LoaderRank from "../LoaderRank";
 import { toastError } from "../../Utils/toast";
+import CheckRank from "../CheckRank";
 const CreateChallengeDetails = ({ operation, data }) => {
   const [loading, setLoading] = useState(false);
   const { id } = useParams();
@@ -22,6 +23,7 @@ const CreateChallengeDetails = ({ operation, data }) => {
     inputFormat: "",
     constraints: "",
     outputFormat: "",
+    challengePrivacy: false,
     tags: [],
   });
   const [errorMsg, setErrorMsg] = useState({
@@ -71,6 +73,7 @@ const CreateChallengeDetails = ({ operation, data }) => {
       input_format: details.inputFormat,
       constraints: details.constraints,
       output_format: details.outputFormat,
+      challengePrivacy: details.challengePrivacy,
       tags: details?.tags?.length === 0 ? null : details.tags,
     };
     setErrorMsg({
@@ -291,6 +294,32 @@ const CreateChallengeDetails = ({ operation, data }) => {
             handleChange={handleChange}
             disabled={loading}
             msg={errorMsg.outputFormat}
+          />
+        </Col>
+      </Row>
+
+      <Row className="mb-3">
+        <Col xs={"auto"} className={classes.TitleFiled}>
+          <Text
+            fontFamily="Open Sans"
+            text={"Challenge Privacy"}
+            height={"40px"}
+            wegiht={"600"}
+          />
+        </Col>
+        <Col className={`${classes.ColInputFiled} ${classes.CheckRank}`}>
+          <CheckRank
+            type={"checkbox"}
+            label={`make the challenge public.`}
+            name="hasEndTime"
+            checked={details.challengePrivacy}
+            onChange={() =>
+              setDetails({
+                ...details,
+                challengePrivacy: !details.challengePrivacy,
+              })
+            }
+            disabled={loading}
           />
         </Col>
       </Row>
