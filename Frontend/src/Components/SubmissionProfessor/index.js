@@ -7,14 +7,14 @@ import { useEffect } from "react";
 import axios from "axios";
 import { toastError } from "../../Utils/toast";
 import InputFiledRank from "../InputFiledRank";
-import { Col, Container, Row } from "react-bootstrap";
+import { Col, Container, Row, Spinner } from "react-bootstrap";
 import useStyle from "./style";
 import Loader from "../Loader";
 const SubmissionProfessor = () => {
   const classes = useStyle();
   const navigate = useNavigate();
   const { id, contestId, challengeId } = useParams();
-  const [maxScore, setMaxScore] = useState(50);
+  const [maxScore, setMaxScore] = useState();
   const [studentsSubmission, setStudentsSubmission] = useState([]);
   const [showItem, setShowItem] = useState(null);
   const [search, setSearch] = useState("");
@@ -22,6 +22,7 @@ const SubmissionProfessor = () => {
   const location = useLocation();
   const currentPath = location.pathname;
   const [loadingPage, setLoadingPage] = useState(true);
+  const [similarityState, setSimilarityState] = useState();
   useEffect(() => {
     if (currentPath.includes("submissions"))
       axios
@@ -29,7 +30,9 @@ const SubmissionProfessor = () => {
           `/submissions-students?courseId=${id}&contestId=${contestId}&challengeId=${challengeId}`
         )
         .then((res) => {
+          console.log(res.data);
           setStudentsSubmission(res.data.submissions);
+          setSimilarityState(res.data.similarityState);
           setMaxScore(res.data.maxScore);
           setShowItem(1);
           setLoadingPage(false);
@@ -111,7 +114,13 @@ const SubmissionProfessor = () => {
           className="d-flex justify-content-center align-items-center me-4"
           key={index}
         >
-          {item.similarity + "%"}
+          {similarityState === null
+            ? "---"
+            : similarityState === "in progress"
+            ? "..."
+            : item.similarity + "%"}
+
+          {/* //******************************************************************************************************  */}
         </span>
       ),
       studentSubmissions: (
@@ -126,22 +135,28 @@ const SubmissionProfessor = () => {
           }
         />
       ),
-      studentSimilarity: (
-        <ButtonRank
-          key={index}
-          text={"View Similarity"}
-          size="small"
-          onClick={() =>
-            navigate(
-              `/courses/${id}/contests/${contestId}/challenges/${challengeId}/submissions/code-similarity/${item.studentUniversityNumber}`
-            )
-          }
-        />
-      ),
+      studentSimilarity: similarityState !== null &&
+        similarityState !== "in progress" && (
+          <ButtonRank
+            key={index}
+            text={"View Similarity"}
+            size="small"
+            // disabled={similarityState === null}
+            onClick={() =>
+              navigate(
+                `/courses/${id}/contests/${contestId}/challenges/${challengeId}/submissions/code-similarity/${item.studentUniversityNumber}`
+              )
+            }
+          />
+        ),
     }));
 
-  const handleCalculateSimilarity = async () => {
-    // await axios.post(``);
+  const handleCalculateSimilarity = () => {
+    setSimilarityState("in progress");
+    axios.post(`/file-Similarity`, {
+      contestId: contestId,
+      challengeId: challengeId,
+    });
   };
 
   return loadingPage ? (
@@ -157,8 +172,19 @@ const SubmissionProfessor = () => {
             placeholder="Type student name"
             onChange={(e) => setSearch(e.target.value)}
           />
+
           <ButtonRank
-            text={"Calculate Similarity"}
+            text={
+              similarityState === "in progress" ? (
+                <span>
+                  Calculate Similarity
+                  <Spinner animation="border" size="sm" className="ms-2" />
+                </span>
+              ) : (
+                "Calculate Similarity"
+              )
+            }
+            disabled={similarityState === "in progress"}
             onClick={handleCalculateSimilarity}
           />
         </Col>

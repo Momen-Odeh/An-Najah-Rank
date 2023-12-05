@@ -16,11 +16,11 @@ def get_submissions_students():
         access = accessChallengeViewProfessor(course_id, contest_id, challenge_id, tokenData['universityNumber'])
         if not access:
             return jsonify({"message": "Access Denied"}), 401
-        contest_challenge_details_query = f"SELECT max_score FROM contests_challenges WHERE challenge_id = %s AND contest_id = %s "
+        contest_challenge_details_query = f"SELECT max_score,similarityFileKey FROM contests_challenges WHERE challenge_id = %s AND contest_id = %s "
 
         cursor = connection.cursor()
         cursor.execute(contest_challenge_details_query,(challenge_id, contest_id))
-        maxScore = cursor.fetchone()
+        contest_challenge = cursor.fetchone()
         last_submissions_query = f"""
             SELECT ss.*, u.fullName
             FROM student_submissions ss
@@ -43,13 +43,17 @@ def get_submissions_students():
         submissions=[]
         for item in result:
             submissions.append({
-                "score": (maxScore[0] * item[6]) / 100,
+                "score": (contest_challenge[0] * item[6]) / 100,
                 "submissionDate": item[5],
                 "similarity": item[10],
                 "studentUniversityNumber": item[1],
                 "studentName": item[11]
             })
-        return jsonify({"submissions": submissions, "maxScore": maxScore[0]}), 200
+        if contest_challenge[1] != None and contest_challenge[1] != "in progress":
+            simState = "similarity file exist"
+        else:
+            simState = contest_challenge[1]
+        return jsonify({"submissions": submissions, "maxScore": contest_challenge[0], "similarityState":simState }), 200
     except Exception as e:
         print(e)
         return {'message': str(e)}, 500
