@@ -3,37 +3,43 @@ import { Nav, Badge, Overlay } from "react-bootstrap";
 import { FaBell } from "react-icons/fa";
 import useStyle from "./Style";
 import { useEffect } from "react";
-import io from "socket.io-client";
 import userContext from "../../Utils/userContext";
-import axios from "axios";
 
 const Notification = () => {
   const classes = useStyle();
   const [showNotification, setShowNotification] = useState(false);
-  const { activeUser, setActiveUser } = useContext(userContext);
-  const [notifications, setNotifications] = useState([]);
+  const { notifications, setNotifications, socket } = useContext(userContext);
   const ref = useRef(null);
-  const [socket, setSocket] = useState(null);
-  useEffect(() => {
-    if (activeUser.universityNumber) {
-      axios.get("/get-notifications").then((res) => {
-        setNotifications(res.data.notifications);
-      });
-      const socket = io("http://127.0.0.1:5000", {
-        query: {
-          user_university_number: activeUser.universityNumber,
-        },
-      });
-      setSocket(socket);
-      return () => {
-        socket.disconnect();
-      };
+  const formatTimeAgo = (timestamp) => {
+    const now = new Date();
+    const timeAgo = new Date(timestamp);
+    const timeDifference = now - timeAgo; // time in ms
+
+    const second = 1000;
+    const minute = 60 * second;
+    const hour = 60 * minute;
+    const day = 24 * hour;
+    const month = 30 * day;
+    const year = 12 * month;
+
+    if (timeDifference < minute) {
+      return Math.floor(timeDifference / second) + " seconds ago";
+    } else if (timeDifference < hour) {
+      return Math.floor(timeDifference / minute) + " minutes ago";
+    } else if (timeDifference < day) {
+      return Math.floor(timeDifference / hour) + " hours ago";
+    } else if (timeDifference < month) {
+      return Math.floor(timeDifference / day) + " days ago";
+    } else if (timeDifference < year) {
+      return Math.floor(timeDifference / month) + " months ago";
+    } else {
+      return Math.floor(timeDifference / year) + " years ago";
     }
-  }, [activeUser]);
+  };
 
   useEffect(() => {
     if (socket) {
-      socket.on("notification", (data) => {
+      socket?.on("notification", (data) => {
         setNotifications((prev) => [data, ...prev]);
       });
     }
@@ -46,10 +52,6 @@ const Notification = () => {
 
   const closeNotificationPanel = () => {
     setShowNotification(false);
-  };
-
-  const handleShowAll = () => {
-    socket?.emit("add_user", { user: activeUser.universityNumber });
   };
 
   return (
@@ -86,23 +88,22 @@ const Notification = () => {
           </div>
           <div className={classes.OverlayContent}>
             {notifications?.map((notification, index) => (
-              <div key={index} className={classes.notificationItem}>
-                <span className={classes.notificationText}>
+              <div key={index} className={`${classes.notificationItem}`}>
+                <div className={classes.notificationText}>
                   {notification.title}
-                </span>
-                <span className={classes.notificationTime}>
-                  {notification.time}
-                </span>
+                </div>
+                <div className={classes.notificationTime}>
+                  {formatTimeAgo(notification.time)}
+                </div>
               </div>
             ))}
-            <hr className={classes.line}></hr>
+            {/* <hr className={classes.line}></hr>
             <a
               className={classes.notificationLink}
               href="#Notification"
-              onClick={handleShowAll}
             >
               Show all
-            </a>
+            </a> */}
           </div>
         </div>
       </Overlay>

@@ -17,7 +17,7 @@ import userContext from "../../Utils/userContext";
 const LogInForm = () => {
   const navigate = useNavigate();
   const [loginValue, setLoginValue] = useState({ email: "", password: "" });
-  const { activeUser, setActiveUser } = useContext(userContext);
+  const { setActiveUser, setNotifications } = useContext(userContext);
   const [errorMsg, setErrorMsg] = useState({
     email: null,
     password: null,
@@ -52,6 +52,10 @@ const LogInForm = () => {
         Cookies.set("token", response.data.token, {
           expires: 30,
           path: "/",
+        });
+        axios.defaults.headers.common["Authorization"] = Cookies.get("token");
+        const data = await axios.get("/get-notifications").then((res) => {
+          setNotifications(res.data.notifications);
         });
         navigate("/");
       } catch (error) {

@@ -13,8 +13,23 @@ const useStyle = createUseStyles({
     fontSize: "18px",
   },
   Overlay: {
-    paddingTop: "10px",
+    marginTop: "13px",
+    borderRadius: "5px",
     boxShadow: "2px 2px 4px 2px rgba(0, 0, 0, 0.2)",
+    overflow: "auto",
+    maxHeight: "480px",
+    "&::-webkit-scrollbar": {
+      width: "6px",
+      borderRadius: "10px",
+    },
+    "&::-webkit-scrollbar-thumb": {
+      backgroundColor: "#888",
+      borderRadius: "10px",
+    },
+    "&::-webkit-scrollbar-track": {
+      backgroundColor: "#eee",
+      borderRadius: "10px",
+    },
   },
   OverlayTitle: {
     backgroundColor: "#0e141e",
@@ -33,24 +48,28 @@ const useStyle = createUseStyles({
     flexDirection: "column",
     alignContent: "center",
   },
+
   notificationItem: {
     border: "1px solid #ccc",
     borderRadius: "4px",
-    padding: "12px",
+    padding: "10px",
     marginBottom: "10px",
     backgroundColor: "#f5f5f5",
     boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
-    display: "flex",
     justifyContent: "space-between",
     alignItems: "center",
   },
   notificationText: {
     fontSize: "14px",
     color: "#333",
+    userSelect: "none",
   },
   notificationTime: {
     fontSize: "12px",
     color: "#999",
+    display: "flex",
+    justifyContent: "end",
+    userSelect: "none",
   },
   line: {
     marginLeft: "-10px",
@@ -159,6 +178,7 @@ const useStyle = createUseStyles({
       height: "100%",
       maxWidth: "100%",
       minWidth: "100%",
+      maxHeight: "100%",
       zIndex: 1000,
       display: "flex",
       justifyContent: "center",
