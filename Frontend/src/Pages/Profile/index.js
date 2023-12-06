@@ -21,7 +21,7 @@ const Profile = () => {
       })
       .then(() => {
         axios
-          .get("/userCourses")
+          .get("/userCourses", { params: { limit: 3 } })
           .then((response) => {
             console.log(response.data.courses);
             setUserCouses(

@@ -17,6 +17,21 @@ const useStyles = createUseStyles({
     display: "flex",
     alignItems: "center",
   },
+  showAll: {
+    textAlign: "center",
+  },
+  linkShow: {
+    textDecoration: "none",
+    fontSize: "20px",
+    fontFamily: "'Open Sans', sans-serif ",
+    fontWeight: "600",
+    color: "#0e141e",
+    transition: "0.3s",
+    "&:hover": {
+      textDecoration: "none",
+      color: "#008fcc",
+    },
+  },
 });
 
 export default useStyles;

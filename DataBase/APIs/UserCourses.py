@@ -9,6 +9,11 @@ import base64
 
 @app.route('/userCourses', methods=['GET'])
 def getUserCourses():
+
+    if request.args.get('limit') is not None:
+        limitVal ="limit "+ request.args.get('limit')
+    else:
+        limitVal ="limit 1000"
     try:
         tokenData = getattr(request, 'tokenData', None)
         sql = f"""
@@ -24,7 +29,8 @@ def getUserCourses():
         INNER JOIN course_moderators ON student_enrollments.courseNumber = course_moderators.courseNumber
         INNER JOIN user ON course_moderators.stuffNumber = user.universityNumber
         WHERE student_enrollments.studentNumber = '{tokenData['universityNumber']}'
-        GROUP BY courses.courseNumber, courses.name, courses.description, courses.ownerUniversityNumber, courses.backgroundImage;
+        GROUP BY courses.courseNumber, courses.name, courses.description, courses.ownerUniversityNumber, courses.backgroundImage
+        {limitVal};
         """
         result = fetch_results(execute_query(connection, sql))
         coursesData =[]
