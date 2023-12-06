@@ -18,12 +18,12 @@ def get_notifications():
                             FROM notifications
                             WHERE userId = '{user_id}'
                         ) AS combined_notifications
-                        ORDER BY sendTime ASC
+                        ORDER BY sendTime DESC
                         """
         cursor = connection.cursor()
         cursor.execute(query)
         data = cursor.fetchall()
-        notifications = [{"title": notification[0], "time": notification[1], "courseNumber": notification[2]} for notification in data]
+        notifications = [{"title": notification[0], "time": notification[1].strftime('%Y-%m-%d %H:%M:%S'), "courseNumber": notification[2]} for notification in data]
         return jsonify({"notifications": notifications}), 200
     except Exception as e:
         print(e)
