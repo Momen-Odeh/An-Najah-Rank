@@ -65,18 +65,20 @@ const ProfileMain = ({ userCouses }) => {
           </Link>
         </Col>
       </Row>
-      <Row className={`${classes.Row} mt-5 mb-3`}>
-        <Col className={`${classes.Col} ${classes.IconContainer}`}>
-          <PiCodeBold className={classes.Icon} />
-          <Text
-            text={"Latest Challenges"}
-            size="20px"
-            fontFamily="Open Sans"
-            wegiht="600"
-            color="#0e141e"
-          />
-        </Col>
-      </Row>
+      {latestChallenge.length !== 0 && (
+        <Row className={`${classes.Row} mt-5 mb-3`}>
+          <Col className={`${classes.Col} ${classes.IconContainer}`}>
+            <PiCodeBold className={classes.Icon} />
+            <Text
+              text={"Latest Challenges"}
+              size="20px"
+              fontFamily="Open Sans"
+              wegiht="600"
+              color="#0e141e"
+            />
+          </Col>
+        </Row>
+      )}
       {latestChallenge.map((item, index) => (
         <Row className={`${classes.Row} mb-4`} key={index}>
           <Col className={`${classes.Col}`}>

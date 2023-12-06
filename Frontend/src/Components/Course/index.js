@@ -31,7 +31,7 @@ const Course = ({ img, title, url, modirators }) => {
             </Col>
           </Row>
           <Row>
-            {modirators.map((item, index) => (
+            {modirators?.map((item, index) => (
               <Col xs={"auto"} key={index}>
                 <Text
                   text={item}
