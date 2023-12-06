@@ -118,7 +118,9 @@ const SubmissionProfessor = () => {
             ? "---"
             : similarityState === "in progress"
             ? "..."
-            : item.similarity + "%"}
+            : item.similarity !== null
+            ? item.similarity + "%"
+            : "No calculated"}
 
           {/* //******************************************************************************************************  */}
         </span>

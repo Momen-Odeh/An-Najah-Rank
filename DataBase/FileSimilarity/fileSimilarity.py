@@ -59,7 +59,8 @@ def FileSimilarity():
             update_data(connection, 'student_submissions', ["similarity"], (sim),
                         f"studentUniversityNumber = '{idUNV}';")
         # **************************************************************************************************************
-
+        update_data(connection, 'student_submissions', ["similarity"], (0),
+                    f"`similarity` IS NULL and `id` >= 0;")
         if len(oldKey) == 0:
             return {"message": "not found contest or challenge"}, 404
         oldKey = oldKey[0][0]
