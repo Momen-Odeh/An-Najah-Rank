@@ -17,6 +17,19 @@ def FileSimilarity():
         body = request.get_json()
         challengeId = body["challengeId"]
         contestId = body["contestId"]
+        sql = f"""
+                        SELECT similarityFileKey FROM `an-najah rank`.contests_challenges
+                         where challenge_id= '{challengeId}' and contest_id = '{contestId}';
+                        """
+        cursor = execute_query(connection, sql)
+        oldKey = fetch_results(cursor)
+        update_data(
+            connection,
+            'contests_challenges',
+            ['similarityFileKey'],
+            ('in progress'),
+            f"(contest_id = '{contestId}' and challenge_id = '{challengeId}')"
+        )
         result = calculateSimilariy(contestId, challengeId)
         result = {
             "challengeId":challengeId,
@@ -46,12 +59,8 @@ def FileSimilarity():
             update_data(connection, 'student_submissions', ["similarity"], (sim),
                         f"studentUniversityNumber = '{idUNV}';")
         # **************************************************************************************************************
-        sql = f"""
-                SELECT similarityFileKey FROM `an-najah rank`.contests_challenges
-                 where challenge_id= '{challengeId}' and contest_id = '{contestId}';
-                """
-        cursor = execute_query(connection, sql)
-        oldKey = fetch_results(cursor)
+        update_data(connection, 'student_submissions', ["similarity"], (0),
+                    f"`similarity` IS NULL and `id` >= 0;")
         if len(oldKey) == 0:
             return {"message": "not found contest or challenge"}, 404
         oldKey = oldKey[0][0]
@@ -62,9 +71,15 @@ def FileSimilarity():
                     f"(contest_id = '{contestId}' and challenge_id = '{challengeId}')")
         print(key)
 
-
         return result, 200
     except Exception as e:
+        update_data(
+            connection,
+            'contests_challenges',
+            ['similarityFileKey'],
+            (None),
+            f"(contest_id = '{contestId}' and challenge_id = '{challengeId}')"
+        )
         return {"error": e}, 409
 
 @app.route('/file-Similarity', methods=['GET'])
