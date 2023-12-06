@@ -37,7 +37,7 @@ from APIs.submissionsStudents import get_submissions_students
 from APIs.updateSubmissionScore import update_submission_score
 from APIs.studentsLeadboard import get_students_leadboard
 from guard.professorAccess import haveAccess
-import Notification.notification
+from Notification.getNotifications import get_notifications
 
 @app.route('/flask', methods=['GET'])
 def index():

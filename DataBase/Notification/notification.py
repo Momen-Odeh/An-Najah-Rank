@@ -1,7 +1,8 @@
 from FlaskSetUp import socketio
 from flask import request
 from datetime import datetime
-
+from dataBaseConnection import insert_data
+from MySQL_SetUp import connection
 online_users = []
 
 
@@ -32,19 +33,39 @@ def handle_disconnect():
     print("disconnected  ****  " + request.sid)
 
 
-@socketio.on('add_user')
-def add_user_notification(data):
-    user_university_number = data.get('user')
-    notification = {
-        'title': f'New item added from {user_university_number}',
-        'time': datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-    }
-    print("user_university_number", user_university_number)
-    if(user_university_number==1478):
-        user_university_number = 11923929
-    else:
-        user_university_number = 1478
-    user = get_user(user_university_number)
+def handle_notification(text, user_ids, course_number=None):
+    try:
+        send_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        notification = {
+            'title': text,
+            'time': send_time
+        }
+        for user_id in user_ids:
+            u = get_user(user_id)
+            if u:
+                socketio.emit('notification', notification, room=u['socket_id'])
+        if course_number:
+            values = (text, send_time, course_number)
+            insert_data(connection, "notifications", ("text", "sendTime", "courseNumber"), values)
+        else:
+            for user_id in user_ids:
+                insert_data(connection, "notifications", ("text", "sendTime", "userId"), (text, send_time, user_id))
+    except Exception as e:
+        print(e)
 
-    if user:
-        socketio.emit('notification', notification, room=user['socket_id'])
+# @socketio.on('add_user')
+# def add_user_notification(data):
+#     user_university_number = data.get('user')
+#     notification = {
+#         'title': f'New item added from {user_university_number}',
+#         'time': datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+#     }
+#     print("user_university_number", user_university_number)
+#     if(user_university_number==1478):
+#         user_university_number = 11923929
+#     else:
+#         user_university_number = 1478
+#     user = get_user(user_university_number)
+#
+#     if user:
+#         socketio.emit('notification', notification, room=user['socket_id'])

@@ -2,7 +2,7 @@ from FlaskSetUp import app
 from flask import request, jsonify
 from dataBaseConnection import insert_data, update_data, delete_data
 from MySQL_SetUp import connection
-from authentication import get_Data_from_token
+from Notification.notification import handle_notification
 @app.route('/contests', methods=['POST'])
 def add_contest():
     try:
@@ -17,6 +17,14 @@ def add_contest():
             (data['name'], data['description'], data['startTime'], data['hasEndTime'], data['endTime'],
              ownerUniversityNumber, data['courseNumber'])
         )
+        cursor = connection.cursor()
+        cursor.execute(f"SELECT name from courses WHERE courseNumber = '{data['courseNumber']}';")
+        course_name = cursor.fetchone()[0]
+        cursor.execute(f"SELECT studentNumber from student_enrollments WHERE courseNumber = '{data['courseNumber']}';")
+        students = cursor.fetchall()
+        students = [student[0] for student in students]
+        handle_notification(f"new Assignment added to {course_name} course", students,
+                            data['courseNumber'])
         return result
     except Exception as e:
         print("ddddddddd",e)

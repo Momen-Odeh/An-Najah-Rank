@@ -4,6 +4,7 @@ from dataBaseConnection import insert_data, update_data, delete_data, execute_qu
 from MySQL_SetUp import connection
 from fileManagment.uploadFile import upload_file
 from fileManagment.deleteFileAWS import delete_file_from_AWS
+from Notification.notification import handle_notification
 @app.route('/courses', methods=['POST'])
 def add_course():
     try:
@@ -24,6 +25,7 @@ def add_course():
                     ['courseNumber', 'studentNumber'],
                     (data['courseNumber'], university_number)
                 )
+            handle_notification("You have been added to the new course", data['studentsUniversityNumber'], data['courseNumber'])
         return result
     except Exception as e:
         return {'message': str(e)}, 409
