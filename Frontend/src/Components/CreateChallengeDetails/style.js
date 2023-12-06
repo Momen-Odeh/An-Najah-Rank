@@ -30,6 +30,9 @@ const useStyle = createUseStyles({
     borderRadius: "5px",
     // objectFit: "contain",
   },
+  CheckRank: {
+    marginLeft: "20px",
+  },
 });
 
 export default useStyle;

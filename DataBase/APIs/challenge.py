@@ -15,9 +15,10 @@ def add_challenge():
             connection,
             'challenges',
             ['name', 'description', 'difficulty', 'problem_statement', 'input_format', 'constraints', 'output_format',
-             'tags','ownerUniversityNumber'],
+             'tags','ownerUniversityNumber','challengePrivacy'],
             (data['name'], data['description'], data['difficulty'], data['problem_statement'], data['input_format'],
-             data['constraints'], data['output_format'], converted_tags,ownerUniversityNumber)
+             data['constraints'], data['output_format'], converted_tags,ownerUniversityNumber,
+             "public" if data['challengePrivacy'] is True else "private")
         )
         return result
     except Exception as e:
@@ -40,7 +41,7 @@ def get_challenge_id():
                 AND JSON_CONTAINS(tags, %s)
                 AND ownerUniversityNumber = %s
         """
-        tokenData = get_Data_from_token(request.args.get('token'))
+        tokenData = getattr(request, 'tokenData', None)
         ownerUniversityNumber = tokenData['universityNumber']
         params = (
             request.args.get('name'),
@@ -99,13 +100,14 @@ def update_challenge(id):
             data['constraints'],
             data['output_format'],
             converted_tags,
+            "public" if data['challengePrivacy'] is True else "private",
             id
         )
         result = update_data(
             connection,
             'challenges',
             ['name', 'description', 'difficulty', 'problem_statement', 'input_format', 'constraints', 'output_format',
-             'tags'],
+             'tags', 'challengePrivacy'],
             new_values,
             condition
         )

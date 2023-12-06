@@ -40,6 +40,7 @@ def getChallenge(id):
         print(resultTestCases)
         if len(result) != 0:
             # id, name, description, difficulty, problem_statement, input_format, constraints, output_format, tags, created_at, updated_at
+
             return jsonify({
                     "status": f"ok",
                     "id": result[0],
@@ -50,6 +51,7 @@ def getChallenge(id):
                     "inputFormat": result[5],
                     "constraints": result[6],
                     "outputFormat": result[7],
+                    "challengePrivacy": True if result[12] == "public" else False,
                     "tags": json.loads(result[8]),
                     "created_at": result[9],
                     "updated_at": result[10],
