@@ -5,6 +5,7 @@ import useStyle from "./Style";
 import { useEffect } from "react";
 import io from "socket.io-client";
 import userContext from "../../Utils/userContext";
+import axios from "axios";
 
 const Notification = () => {
   const classes = useStyle();
@@ -15,6 +16,9 @@ const Notification = () => {
   const [socket, setSocket] = useState(null);
   useEffect(() => {
     if (activeUser.universityNumber) {
+      axios.get("/get-notifications").then((res) => {
+        setNotifications(res.data.notifications);
+      });
       const socket = io("http://127.0.0.1:5000", {
         query: {
           user_university_number: activeUser.universityNumber,
@@ -30,7 +34,7 @@ const Notification = () => {
   useEffect(() => {
     if (socket) {
       socket.on("notification", (data) => {
-        setNotifications((prev) => [...prev, data]);
+        setNotifications((prev) => [data, ...prev]);
       });
     }
   }, [socket]);
