@@ -23,6 +23,7 @@ import SubmissionsManualMarking from "../Components/SubmissionsManualMarking";
 import CodeSimilarity from "../Components/CodeSimilarity";
 import NotFound from "../Components/NotFound";
 import AllNotification from "../Pages/AllNotification";
+import AllCourse from "../Pages/AllCourses";
 // const AboutUs = lazy(() => import("../Pages/AboutUs/SubComponents/AboutUs"))
 
 export const routeNames = {
@@ -106,7 +107,7 @@ export const routes = [
     subRoutes: [
       {
         index: true,
-        component: <h1>courses Here</h1>,
+        component: <AllCourse />,
       },
       {
         path: ":id",
