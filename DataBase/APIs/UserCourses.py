@@ -17,8 +17,12 @@ def getUserCourses():
         else:
             limitVal = "limit 1000"
 
+        if request.args.get('id') is not None:
+            userid = request.args.get('id')
+        else:
+            userid = tokenData['universityNumber']
 
-        if tokenData['role'] == 'admin':
+        if tokenData['role'] == 'admin' and request.args.get('id') is None:
             sql = f"""
                     SELECT 
                     c.courseNumber,
@@ -46,12 +50,11 @@ def getUserCourses():
                     INNER JOIN courses ON student_enrollments.courseNumber = courses.courseNumber
                     INNER JOIN course_moderators ON student_enrollments.courseNumber = course_moderators.courseNumber
                     INNER JOIN user ON course_moderators.stuffNumber = user.universityNumber
-                    WHERE student_enrollments.studentNumber = '{tokenData['universityNumber']}'
+                    WHERE student_enrollments.studentNumber = '{userid}'
                     GROUP BY courses.courseNumber, courses.name, courses.description, courses.ownerUniversityNumber, courses.backgroundImage
                     {limitVal};
                     """
         result = fetch_results(execute_query(connection, sql))
-        print(result)
         coursesData =[]
         if len(result) != 0:
             for item in result:

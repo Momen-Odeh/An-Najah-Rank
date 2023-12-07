@@ -59,7 +59,18 @@ export const routes = [
   {
     path: "/profile",
     title: routeNames.PROFILE,
-    component: <Profile />,
+    component: <Outlet />,
+    subRoutes: [
+      {
+        index: true,
+        component: <Profile />,
+      },
+      {
+        title: "user profiles",
+        path: ":id",
+        component: <Profile />,
+      },
+    ],
   },
   {
     path: "/settings",
@@ -108,7 +119,7 @@ export const routes = [
       },
       {
         path: ":id",
-        title: "courseWitId",
+        title: "courseWithId",
         component: <Outlet />,
         subRoutes: [
           {

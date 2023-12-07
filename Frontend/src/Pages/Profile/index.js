@@ -7,21 +7,25 @@ import axios from "axios";
 import { toastError } from "../../Utils/toast";
 import { useNavigate } from "react-router-dom";
 import Loader from "../../Components/Loader";
+import { useParams } from "react-router-dom";
 const Profile = () => {
   const classes = useStyles();
   const [accountInfo, setAccountInfo] = useState({});
   const [userCouses, setUserCouses] = useState([]);
   const [loadingPage, setLoadingPage] = useState(true);
   const navigate = useNavigate();
+  const { id } = useParams();
   useEffect(() => {
     axios
-      .get("/user")
+      .get("/user", { params: { id: id } })
       .then((response) => {
         setAccountInfo({ ...response.data });
       })
       .then(() => {
         axios
-          .get("/userCourses", { params: { limit: 3 } })
+          .get("/userCourses", {
+            params: { limit: id === undefined ? 3 : 1000, id: id },
+          })
           .then((response) => {
             console.log(response.data.courses);
             setUserCouses(
@@ -37,13 +41,19 @@ const Profile = () => {
           });
       })
       .catch((error) => {
-        console.log("Error fetching image:", error);
+        console.log("Error :", error);
         if (error.response.status === 401) {
-          toastError("unauthorized access");
-          navigate("/log-in");
+          // console.log(error.response);
+          if (error.response.data.message === "invalid access") {
+            toastError("unauthorized access");
+            navigate("/");
+          } else {
+            toastError("unauthorized access");
+            navigate("/log-in");
+          }
         } else setLoadingPage(false);
       });
-  }, []);
+  }, [id]);
   return loadingPage ? (
     <Loader />
   ) : (

@@ -13,10 +13,21 @@ import base64
 @app.route('/user', methods=['GET'])
 def getUserInfo():
     try:
+        # print("---------->",request.args.get('id')) # form /profile None and from /profile/:id id
         tokenData = getattr(request, 'tokenData', None)
-        result = fetch_results(
-            execute_query(connection, f"SELECT * FROM `an-najah rank`.user where email = '{tokenData['email']}';")
-        )
+
+        if request.args.get('id') is not None:
+            sql = f"SELECT * FROM `an-najah rank`.user where universityNumber = '{request.args.get('id')}';"
+            access = int(request.args.get('id')) == int(tokenData['universityNumber']) or \
+                     tokenData['role'] == "admin" or tokenData['role'] == "professor"
+        else:
+            sql = f"SELECT * FROM `an-najah rank`.user where email = '{tokenData['email']}';"
+            access=True
+        if not access:
+            return jsonify({
+                "message": "invalid access",
+            }), 401
+        result = fetch_results(execute_query(connection, sql))
 
         if len(result) != 0:
             response = {
