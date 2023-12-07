@@ -25,7 +25,7 @@ def add_course():
                     ['courseNumber', 'studentNumber'],
                     (data['courseNumber'], university_number)
                 )
-            handle_notification("You have been added to the new course", data['studentsUniversityNumber'], data['courseNumber'])
+            handle_notification(True, "You have been added to the new course", data['studentsUniversityNumber'], data['courseNumber'])
         return result
     except Exception as e:
         return {'message': str(e)}, 409

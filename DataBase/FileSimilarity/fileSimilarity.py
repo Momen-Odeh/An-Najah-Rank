@@ -9,7 +9,7 @@ from fileManagment.deleteFileAWS import delete_file_from_AWS
 from fileManagment.getFileContent import get_file_content
 from FileSimilarity.calculateSimilariy import calculateSimilariy
 from guard.professorAccess.AccessChallengeView import accessChallengeViewProfessor
-
+from Notification.notification import handle_notification
 
 @app.route('/file-Similarity', methods=['POST'])
 def FileSimilarity():
@@ -17,6 +17,9 @@ def FileSimilarity():
         body = request.get_json()
         challengeId = body["challengeId"]
         contestId = body["contestId"]
+        courseId = body["courseId"]
+        tokenData = getattr(request, 'tokenData', None)
+        universityNumber = tokenData['universityNumber']
         sql = f"""
                         SELECT similarityFileKey FROM `an-najah rank`.contests_challenges
                          where challenge_id= '{challengeId}' and contest_id = '{contestId}';
@@ -70,7 +73,13 @@ def FileSimilarity():
         update_data(connection, 'contests_challenges', ["similarityFileKey"], (key),
                     f"(contest_id = '{contestId}' and challenge_id = '{challengeId}')")
         print(key)
-
+        cursor = connection.cursor()
+        cursor.execute(f"""
+                            SELECT name from courses
+                            WHERE  courseNumber = '{courseId}'
+                        """)
+        course_name = cursor.fetchone()[0]
+        handle_notification(False, f"Similarity data ready for submissions in {course_name} course", [universityNumber])
         return result, 200
     except Exception as e:
         update_data(

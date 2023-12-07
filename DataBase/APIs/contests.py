@@ -9,7 +9,6 @@ def add_contest():
         data = request.get_json()
         tokenData = getattr(request, 'tokenData', None)
         ownerUniversityNumber = tokenData['universityNumber']
-        print(data['hasEndTime'])
         result = insert_data(
             connection,
             'contests',
@@ -21,20 +20,24 @@ def add_contest():
         cursor.execute(f"SELECT name from courses WHERE courseNumber = '{data['courseNumber']}';")
         course_name = cursor.fetchone()[0]
         cursor.execute(f"SELECT studentNumber from student_enrollments WHERE courseNumber = '{data['courseNumber']}';")
-        students = cursor.fetchall()
-        students = [student[0] for student in students]
-        handle_notification(f"new Assignment added to {course_name} course", students,
-                            data['courseNumber'])
-        return result
+        students = [student[0] for student in cursor.fetchall()]
+
+        contest_id, status = get_contests_id(data['name'], data['description'], data['startTime'],
+                                             ownerUniversityNumber, data['courseNumber'], data['hasEndTime'])
+
+        if status == 200:
+            handle_notification(True, f"New contest added to {course_name} course", students,
+                                data['courseNumber'], contest_id)
+
+            return jsonify({'message': contest_id}), 200
+        else:
+            return jsonify({'message': contest_id}), 409
     except Exception as e:
-        print("ddddddddd",e)
+        print("Error:", e)
         return {'message': str(e)}, 409
 
-@app.route('/contest_id', methods=['GET'])
-def get_contests_id():
+def get_contests_id(name, description, startTime, ownerUniversityNumber, courseNumber, hasEndTime):
     try:
-        tokenData = getattr(request, 'tokenData', None)
-        ownerUniversityNumber = tokenData['universityNumber']
         sql_query = """
             SELECT id 
             FROM contests 
@@ -46,22 +49,26 @@ def get_contests_id():
                 AND OwnerUniversityNumber = %s 
                 AND courseNumber = %s
         """
-        hasEndTime = 1 if request.args.get('hasEndTime') and request.args.get('hasEndTime').lower() == 'true' else 0
-        # endTime = None if request.args.get('endTime')== 'null' else request.args.get('endTime')
         params = (
-            request.args.get('name'),
-            request.args.get('description'),
-            request.args.get('startTime'),
+            name,
+            description,
+            startTime,
             hasEndTime,
             ownerUniversityNumber,
-            request.args.get('courseNumber')
+            courseNumber
         )
         cursor = connection.cursor()
         cursor.execute(sql_query, params)
         result = cursor.fetchall()
-        return jsonify({'message': result[len(result)-1][0]}), 200
+        if result:
+            return result[-1][0], 200  # Return the last contest ID and status
+        else:
+            return None, 404  # Return None if contest ID is not found
+
     except Exception as e:
-        return {'message': str(e)}, 409
+        return {'message': str(e)}, 500
+
+
 
 @app.route('/contests/<int:id>', methods=['PUT'])
 def update_contest(id):
