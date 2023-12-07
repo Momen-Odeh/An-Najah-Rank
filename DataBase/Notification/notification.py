@@ -17,7 +17,7 @@ def remove_user(socket_id):
 
 
 def get_user(user_university_number):
-    return next((user for user in online_users if user['user_university_number'] == user_university_number), None)
+    return next((user for user in online_users if int(user['user_university_number']) == int(user_university_number)), None)
 
 
 @socketio.on('connect')
@@ -33,23 +33,31 @@ def handle_disconnect():
     print("disconnected  ****  " + request.sid)
 
 
-def handle_notification(text, user_ids, course_number=None):
+def handle_notification(grouped, text, user_ids, course_number=None, contest_id=None, challenge_id=None):
     try:
         send_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         notification = {
             'title': text,
-            'time': send_time
+            'time': send_time,
+            'courseNumber': course_number,
+            'contestId': contest_id,
+            'challengeId': challenge_id
         }
         for user_id in user_ids:
             u = get_user(user_id)
             if u:
+                print("send notification to ", user_id)
                 socketio.emit('notification', notification, room=u['socket_id'])
-        if course_number:
-            values = (text, send_time, course_number)
-            insert_data(connection, "notifications", ("text", "sendTime", "courseNumber"), values)
+        if grouped:
+            values = (text, send_time, course_number, contest_id, challenge_id)
+            insert_data(connection, "notifications", ("text", "sendTime", "courseNumber", "contestId", "challengeId"),
+                        values)
+
         else:
             for user_id in user_ids:
-                insert_data(connection, "notifications", ("text", "sendTime", "userId"), (text, send_time, user_id))
+                insert_data(connection, "notifications",
+                            ("text", "sendTime", "userId", "courseNumber", "contestId", "challengeId"),
+                            (text, send_time, user_id, course_number, contest_id, challenge_id))
     except Exception as e:
         print(e)
 
