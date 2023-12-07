@@ -58,6 +58,7 @@ const useStyle = createUseStyles({
     boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
     justifyContent: "space-between",
     alignItems: "center",
+    cursor: "pointer",
   },
   notificationText: {
     fontSize: "14px",

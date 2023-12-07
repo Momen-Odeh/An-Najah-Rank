@@ -4,43 +4,30 @@ import { FaBell } from "react-icons/fa";
 import useStyle from "./Style";
 import { useEffect } from "react";
 import userContext from "../../Utils/userContext";
+import { useNavigate } from "react-router-dom";
+import { toastInfo } from "../../Utils/toast";
+import axios from "axios";
+import formatTimeAgo from "../../Utils/formateTimeAgo";
 
 const Notification = () => {
   const classes = useStyle();
+  const navigate = useNavigate();
   const [showNotification, setShowNotification] = useState(false);
-  const { notifications, setNotifications, socket } = useContext(userContext);
+  const {
+    notifications,
+    setNotifications,
+    socket,
+    newNotifications,
+    setNewNotifications,
+  } = useContext(userContext);
   const ref = useRef(null);
-  const formatTimeAgo = (timestamp) => {
-    const now = new Date();
-    const timeAgo = new Date(timestamp);
-    const timeDifference = now - timeAgo; // time in ms
-
-    const second = 1000;
-    const minute = 60 * second;
-    const hour = 60 * minute;
-    const day = 24 * hour;
-    const month = 30 * day;
-    const year = 12 * month;
-
-    if (timeDifference < minute) {
-      return Math.floor(timeDifference / second) + " seconds ago";
-    } else if (timeDifference < hour) {
-      return Math.floor(timeDifference / minute) + " minutes ago";
-    } else if (timeDifference < day) {
-      return Math.floor(timeDifference / hour) + " hours ago";
-    } else if (timeDifference < month) {
-      return Math.floor(timeDifference / day) + " days ago";
-    } else if (timeDifference < year) {
-      return Math.floor(timeDifference / month) + " months ago";
-    } else {
-      return Math.floor(timeDifference / year) + " years ago";
-    }
-  };
 
   useEffect(() => {
     if (socket) {
       socket?.on("notification", (data) => {
         setNotifications((prev) => [data, ...prev]);
+        setNewNotifications((prev) => prev + 1);
+        toastInfo(data.title);
       });
     }
   }, [socket]);
@@ -53,7 +40,13 @@ const Notification = () => {
   const closeNotificationPanel = () => {
     setShowNotification(false);
   };
-
+  if (showNotification && newNotifications > 0) {
+    axios.post("/update-last-notification", {
+      title: notifications[0].title,
+      time: notifications[0].time,
+    });
+    setNewNotifications(0);
+  }
   return (
     <Nav.Item>
       <Nav.Link ref={ref} onClick={handleNotificationPanel}>
@@ -63,13 +56,13 @@ const Notification = () => {
             showNotification ? classes.clickedBtn : ""
           }`}
         />
-        {notifications?.length > 0 && (
+        {newNotifications > 0 && (
           <Badge
             pill
             variant=""
             style={{ fontSize: "10px", padding: "3px 5px" }}
           >
-            {notifications?.length}
+            {newNotifications}
           </Badge>
         )}
       </Nav.Link>
@@ -88,7 +81,21 @@ const Notification = () => {
           </div>
           <div className={classes.OverlayContent}>
             {notifications?.map((notification, index) => (
-              <div key={index} className={`${classes.notificationItem}`}>
+              <div
+                key={index}
+                className={`${classes.notificationItem}`}
+                onClick={() => {
+                  console.log(notification);
+                  let url = "";
+                  if (notification?.courseNumber)
+                    url += `/courses/${notification.courseNumber}`;
+                  if (notification?.contestId)
+                    url += `/contests/${notification.contestId}`;
+                  if (notification?.challengeId)
+                    url += `/challenges/${notification.challengeId}`;
+                  if (notification?.courseNumber) navigate(url);
+                }}
+              >
                 <div className={classes.notificationText}>
                   {notification.title}
                 </div>
@@ -97,13 +104,16 @@ const Notification = () => {
                 </div>
               </div>
             ))}
-            {/* <hr className={classes.line}></hr>
+            <hr className={classes.line}></hr>
             <a
               className={classes.notificationLink}
-              href="#Notification"
+              href="#14"
+              onClick={() => {
+                navigate("/notifications");
+              }}
             >
               Show all
-            </a> */}
+            </a>
           </div>
         </div>
       </Overlay>
