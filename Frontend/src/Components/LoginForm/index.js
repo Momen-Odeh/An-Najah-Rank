@@ -11,13 +11,14 @@ import handelStateChanges from "../../Utils/handelStateChanges";
 import axios from "axios";
 import Cookies from "js-cookie";
 import { validateEmail, validatePassword } from "../../Utils/Validation";
-import { toast } from "react-toastify";
 import Loader from "react-spinners/ClipLoader";
 import userContext from "../../Utils/userContext";
+import { toastError } from "../../Utils/toast";
 const LogInForm = () => {
   const navigate = useNavigate();
   const [loginValue, setLoginValue] = useState({ email: "", password: "" });
-  const { setActiveUser, setNotifications } = useContext(userContext);
+  const { setActiveUser, setNotifications, setNewNotifications } =
+    useContext(userContext);
   const [errorMsg, setErrorMsg] = useState({
     email: null,
     password: null,
@@ -54,9 +55,16 @@ const LogInForm = () => {
           path: "/",
         });
         axios.defaults.headers.common["Authorization"] = Cookies.get("token");
-        const data = await axios.get("/get-notifications").then((res) => {
-          setNotifications(res.data.notifications);
-        });
+        const data = await axios
+          .get("/get-notifications", { params: { all: 0 } })
+          .then((res) => {
+            setNotifications(res.data.notifications);
+            setNewNotifications(
+              res.data.notifications?.filter(
+                (n) => n.id > res.data.lastReadNotification
+              )?.length
+            );
+          });
         navigate("/");
       } catch (error) {
         if (error.response?.status === 404) {
@@ -71,26 +79,8 @@ const LogInForm = () => {
           });
         } else
           error.response?.data.message
-            ? toast.error(error.response.data.message, {
-                position: "bottom-left",
-                autoClose: 10000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                theme: "light",
-              })
-            : toast.error("No connection with backend", {
-                position: "bottom-left",
-                autoClose: 10000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                theme: "light",
-              });
+            ? toastError(error.response.data.message)
+            : toastError("No connection with backend");
       }
     }
     setLoading(false);

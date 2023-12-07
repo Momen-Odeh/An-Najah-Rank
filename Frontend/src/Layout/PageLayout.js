@@ -8,15 +8,17 @@ import useStyles from "./style";
 import Cookies from "js-cookie";
 import axios from "axios";
 import { io } from "socket.io-client";
+import Loader from "../Components/Loader";
 
 function PageLayout() {
   const [activeTab, setActiveTab] = useState(routeNames.HOME);
   const [activeUser, setActiveUser] = useState({});
   const [notifications, setNotifications] = useState([]);
   const [socket, setSocket] = useState(null);
+  const [newNotifications, setNewNotifications] = useState(0);
   const classes = useStyles();
   const token = Cookies.get("token");
-
+  const [loadingPage, setLoadingPage] = useState(true);
   useEffect(() => {
     if (token) {
       axios
@@ -25,21 +27,30 @@ function PageLayout() {
           setActiveUser(res.data);
         })
         .then(
-          axios.get("/get-notifications").then((res) => {
-            setNotifications(res.data.notifications);
-          })
+          axios
+            .get("/get-notifications", { params: { all: 0 } })
+            .then((res) => {
+              setNotifications(res.data.notifications);
+              setNewNotifications(
+                res.data.notifications?.filter(
+                  (n) => n.id > res.data.lastReadNotification
+                )?.length
+              );
+              setLoadingPage(false);
+            })
         )
         .catch((error) => {
           console.log(error);
+          setLoadingPage(false);
         });
     }
   }, []);
 
   useEffect(() => {
-    if (activeUser.universityNumber) {
+    if (activeUser?.universityNumber) {
       const socket = io("http://127.0.0.1:5000", {
         query: {
-          user_university_number: activeUser.universityNumber,
+          user_university_number: activeUser?.universityNumber,
         },
       });
       setSocket(socket);
@@ -58,11 +69,13 @@ function PageLayout() {
           setNotifications,
           socket,
           setSocket,
+          newNotifications,
+          setNewNotifications,
         }}
       >
         <div>
           <MainNavbar activeTab={activeTab} />
-          <Outlet context={setActiveTab} />
+          {loadingPage ? <Loader /> : <Outlet context={setActiveTab} />}
         </div>
         <Footer className={classes.Footer} />
       </userContext.Provider>

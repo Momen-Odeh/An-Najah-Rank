@@ -23,3 +23,15 @@ export const toastSuccess = (msg) =>
     progress: undefined,
     theme: "light",
   });
+
+export const toastInfo = (msg) =>
+  toast.info(msg, {
+    position: "bottom-left",
+    hideProgressBar: false,
+    autoClose: false,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+    progress: undefined,
+    theme: "light",
+  });
