@@ -79,8 +79,9 @@ const useStyle = createUseStyles({
   },
   notificationLink: {
     textAlign: "center",
-    textDecoration: "none",
+    fontSize: "18px",
     color: "#576871",
+    cursor: "pointer",
     "&:hover": {
       fontWeight: "bold",
       textDecoration: "underline",

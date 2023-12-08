@@ -105,15 +105,14 @@ const Notification = () => {
               </div>
             ))}
             <hr className={classes.line}></hr>
-            <a
+            <div
               className={classes.notificationLink}
-              href="#14"
               onClick={() => {
                 navigate("/notifications");
               }}
             >
               Show all
-            </a>
+            </div>
           </div>
         </div>
       </Overlay>
