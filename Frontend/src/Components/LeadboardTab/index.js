@@ -23,6 +23,7 @@ const LeadboardTab = () => {
           `/students-leadboard?courseId=${id}&contestId=${contestId}&challengeId=${challengeId}`
         )
         .then((res) => {
+          console.log(res);
           setSubmissions(res.data.submissions);
           setLoadingPage(false);
         })
@@ -41,17 +42,20 @@ const LeadboardTab = () => {
   });
 
   const TableHeader = ["Rank", "Student Name", "Score", "Time"];
+  let dataURI = [];
   const result = sortedSubmissions
     ?.filter((item) =>
       item.studentName?.toLowerCase().includes(search.toLowerCase())
     )
-    ?.map((item, index) => ({
-      rank: index + 1,
-      studentName: item.studentName,
-      score: item.score,
-      submissionDate: item.submissionDate,
-    }));
-
+    ?.map((item, index) => {
+      dataURI.push("/profile/" + item.studentUniversityNumber);
+      return {
+        rank: index + 1,
+        studentName: item.studentName,
+        score: item.score,
+        submissionDate: item.submissionDate,
+      };
+    });
   return loadingPage ? (
     <Loader internal />
   ) : (
@@ -68,7 +72,11 @@ const LeadboardTab = () => {
       </Row>
       <Row>
         <Col>
-          <TabTable TableData={result} TableHeader={TableHeader} />
+          <TabTable
+            TableData={result}
+            TableHeader={TableHeader}
+            url={dataURI}
+          />
         </Col>
       </Row>
     </Container>

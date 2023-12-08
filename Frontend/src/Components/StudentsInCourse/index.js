@@ -74,30 +74,35 @@ const StudentsInCourse = ({ students, setStudents }) => {
     setDeleteModal({ show: false });
     setLoading(false);
   };
+  let dataURI = [];
   const data = students
     .filter((word) =>
       word.studentName?.toLowerCase().includes(search.toLowerCase())
     )
-    .map((item, index) => ({
-      registrationNumber: item.registrationNumber,
-      studentName: item.studentName,
-      email: item.email,
-      delete: (
-        <BiTrash
-          size={30}
-          color="#949494"
-          className={classes.iconColor}
-          onClick={() =>
-            setDeleteModal({
-              show: true,
-              index: index,
-              registrationNumber: item.registrationNumber,
-            })
-          }
-        />
-      ),
-    }));
+    .map((item, index) => {
+      dataURI.push(`/profile/${item.registrationNumber}`);
+      return {
+        registrationNumber: item.registrationNumber,
+        studentName: item.studentName,
+        email: item.email,
 
+        delete: (
+          <BiTrash
+            size={30}
+            color="#949494"
+            className={classes.iconColor}
+            onClick={() =>
+              setDeleteModal({
+                show: true,
+                index: index,
+                registrationNumber: item.registrationNumber,
+              })
+            }
+          />
+        ),
+      };
+    });
+  console.log(dataURI);
   const { registrationNumber, studentName, email } = student;
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -131,7 +136,7 @@ const StudentsInCourse = ({ students, setStudents }) => {
       </Row>
       <Row className="mt-3 mb-3">
         <Col>
-          <TabTable TableHeader={tableHeader} TableData={data} />
+          <TabTable TableHeader={tableHeader} TableData={data} url={dataURI} />
         </Col>
       </Row>
       <ModalRank
