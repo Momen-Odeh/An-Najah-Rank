@@ -3,6 +3,7 @@ import { useOutletContext } from "react-router-dom";
 import { routeNames } from "../../Utils/Utils";
 import Loader from "../../Components/Loader";
 import axios from "axios";
+import UserStatistics from "../../Components/UserStatistics";
 const Home = () => {
   const setActiveTab = useOutletContext();
   const [loadingPage, setLoadingPage] = useState(true);
@@ -27,6 +28,8 @@ const Home = () => {
     <div>
       <h1>Home Page</h1>
       <button onClick={clickBtn}>Click me</button>
+      <hr />
+      <UserStatistics />
     </div>
   );
 };

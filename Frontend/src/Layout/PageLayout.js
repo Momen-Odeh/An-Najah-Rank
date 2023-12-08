@@ -75,6 +75,7 @@ function PageLayout() {
       >
         <div>
           <MainNavbar activeTab={activeTab} />
+          {/* <Outlet context={setActiveTab} /> */}
           {loadingPage ? <Loader /> : <Outlet context={setActiveTab} />}
         </div>
         <Footer className={classes.Footer} />
