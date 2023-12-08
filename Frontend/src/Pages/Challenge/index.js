@@ -47,12 +47,6 @@ const Challenge = () => {
       TabComponent: <LeadboardTab />,
       urlPattern: `/courses/${id}/contests/${contestId}/challenges/${challengeId}/leaderboard`,
     },
-    // {
-    //   eventKey: "Discussions",
-    //   title: "Discussions",
-    //   TabComponent: <h1>Tab4</h1>,
-    //   urlPattern: `/courses/${id}/contests/${contestId}/challenges/${challengeId}/discussions`,
-    // },
   ];
   useEffect(() => {
     axios

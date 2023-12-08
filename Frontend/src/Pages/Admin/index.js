@@ -9,11 +9,16 @@ import useStyle from "./style";
 import { useNavigate } from "react-router-dom";
 import { toastError } from "../../Utils/toast";
 import Loader from "../../Components/Loader";
+import ModalRank from "../../Components/ModalRank";
+import ButtonRank from "../../Components/ButtonRank";
 const Admin = () => {
   const classes = useStyle();
   const navigate = useNavigate();
   const [professors, setProfessors] = useState([]);
   const [loadingPage, setLoadingPage] = useState(true);
+  const [deleteModal, setDeleteModal] = useState({ show: false, index: -1 });
+  const [loading, setLoading] = useState(false);
+  const handleDelete = () => {};
   useEffect(() => {
     axios
       .get(`/admin`)
@@ -39,6 +44,7 @@ const Admin = () => {
   }, []);
 
   const handleAccept = (universityNumber) => {
+    setLoading(true);
     axios
       .put(`/admin/${universityNumber}`)
       .then(() => {
@@ -47,12 +53,16 @@ const Admin = () => {
             (item) => item.universityNumber !== universityNumber
           )
         );
+        setDeleteModal({ show: false });
+        setLoading(false);
       })
       .catch((error) => {
         console.log(error.response.data.message);
       });
   };
   const handleReject = (universityNumber) => {
+    setLoading(true);
+
     axios
       .delete(`/admin/${universityNumber}`)
       .then(() => {
@@ -61,6 +71,8 @@ const Admin = () => {
             (item) => item.universityNumber !== universityNumber
           )
         );
+        setDeleteModal({ show: false });
+        setLoading(false);
       })
       .catch((error) => {
         console.log(error.response.data.message);
@@ -76,14 +88,36 @@ const Admin = () => {
         <FaCheck
           size={24}
           className={classes.add}
-          onClick={() => handleAccept(item.universityNumber)}
+          onClick={() =>
+            setDeleteModal({
+              show: true,
+              title: "Add professor",
+              body:
+                "are you sure that want to accept the professor with id " +
+                item.universityNumber +
+                "?",
+              id: item.universityNumber,
+              handelFunc: handleAccept,
+            })
+          } //handleAccept(item.universityNumber)
           title="click to accept professor"
         />
         <span className="ms-5"></span>
         <FaTimes
           size={24}
           className={classes.remove}
-          onClick={() => handleReject(item.universityNumber)}
+          onClick={() =>
+            setDeleteModal({
+              show: true,
+              title: "Reject professor",
+              body:
+                "are you sure that want to Reject the professor with id " +
+                item.universityNumber +
+                "?",
+              id: item.universityNumber,
+              handelFunc: handleReject,
+            })
+          } //handleReject(item.universityNumber)
           title="click to reject professor"
         />
       </>
@@ -103,6 +137,29 @@ const Admin = () => {
           <TabTable TableHeader={header} TableData={data} />
         </Col>
       </Row>
+      <ModalRank
+        show={deleteModal.show}
+        onHide={() => {
+          setDeleteModal({ ...deleteModal, show: false });
+        }}
+        title={deleteModal.title}
+        footer={
+          <ButtonRank
+            text={"Yes"}
+            hoverBackgroundColor="#0e141e"
+            onClick={() => deleteModal.handelFunc(deleteModal.id)}
+            disabled={loading}
+          />
+        }
+      >
+        <Text
+          text={deleteModal.body}
+          size="0.9em"
+          fontFamily="Open Sans"
+          wegiht="600"
+          color="#0e141e"
+        />
+      </ModalRank>
     </Container>
   );
 };

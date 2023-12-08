@@ -13,27 +13,46 @@ def getChallengesForOwner():
         name = tokenData['name']
         if not (tokenData['role'] == 'professor' or tokenData['role'] == 'admin'):
             return jsonify({"message": "Access Denied"}), 401
-        challenge_query = f"SELECT * FROM challenges WHERE ownerUniversityNumber = {ownerUniversityNumber};"
+        if tokenData['role'] =="admin":
+            challenge_query = f"""
+            SELECT c.*,u.fullName FROM challenges c
+            inner join user u on u.universityNumber = c.ownerUniversityNumber
+            """
+        else:
+            challenge_query = f"""
+            SELECT c.*,u.fullName FROM challenges c
+            inner join user u on u.universityNumber = c.ownerUniversityNumber
+            WHERE ownerUniversityNumber = {ownerUniversityNumber}
+            """
         challenges = fetch_results(execute_query(connection, challenge_query))
         challenge_objects = []
         for row in challenges:
             challenge = {
                 "id": row[0],
                 "name": row[1],
-                "ownerName": name,
+                "ownerName": row[-1],
                 "tags": json.loads(row[8])
             }
             challenge_objects.append(challenge)
 
-
-        course_query = f"SELECT * FROM courses WHERE ownerUniversityNumber = {ownerUniversityNumber};"
+        if tokenData['role'] =="admin":
+            course_query = f"""
+                SELECT c.*,u.fullName FROM  courses c
+                inner join user u on c.ownerUniversityNumber = u.universityNumber
+            """
+        else:
+            course_query = f"""
+             SELECT c.*,u.fullName FROM  courses c
+             inner join user u on c.ownerUniversityNumber = u.universityNumber
+             WHERE ownerUniversityNumber = {ownerUniversityNumber};
+            """
         courses = fetch_results(execute_query(connection, course_query))
         course_objects = []
         for row in courses:
             course = {
                 "id": row[0],
                 "name": row[1],
-                "ownerName": name,
+                "ownerName": row[-1],
                 "moderators": fetch_results(execute_query(connection, f"""
                     SELECT u.fullName
                     FROM user AS u

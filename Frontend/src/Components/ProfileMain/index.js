@@ -8,34 +8,36 @@ import { PiCodeBold } from "react-icons/pi";
 import ChallengeShow from "../ChallengeShow";
 import axios from "axios";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 const ProfileMain = ({ userCouses }) => {
   const classes = useStyles();
   const [latestChallenge, setLatestChallenge] = useState([]);
-
+  const { id } = useParams();
   useEffect(() => {
-    axios
-      .get("/latestChallengesProfile")
-      .then((response) => {
-        console.log(response.data);
-        setLatestChallenge(
-          response.data.challenges.map((item, index) => {
-            return {
-              Name: item.name,
-              solved: item.submissionResult === 100,
-              statistics: [
-                { key: "Difficulty: ", val: item.difficulty },
-                { key: "Success Rate: ", val: item.submissionResult + "%" },
-                { key: "Max Score: ", val: item.max_score },
-              ],
-              url: `/courses/${item.courseNumber}/contests/${item.contestId}/challenges/${item.challengeId}/problem`,
-            };
-          })
-        );
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    if (id === undefined) {
+      axios
+        .get("/latestChallengesProfile")
+        .then((response) => {
+          console.log(response.data);
+          setLatestChallenge(
+            response.data.challenges.map((item, index) => {
+              return {
+                Name: item.name,
+                solved: item.submissionResult === 100,
+                statistics: [
+                  { key: "Difficulty: ", val: item.difficulty },
+                  { key: "Success Rate: ", val: item.submissionResult + "%" },
+                  { key: "Max Score: ", val: item.max_score },
+                ],
+                url: `/courses/${item.courseNumber}/contests/${item.contestId}/challenges/${item.challengeId}/problem`,
+              };
+            })
+          );
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
   }, []);
   return (
     <Container fluid className={classes.Container}>
@@ -43,7 +45,7 @@ const ProfileMain = ({ userCouses }) => {
         <Col className={`${classes.Col} ${classes.IconContainer}`}>
           <ImBooks className={classes.Icon} />
           <Text
-            text={"My Courses"}
+            text={"Courses"}
             size="20px"
             fontFamily="Open Sans"
             wegiht="600"
@@ -58,32 +60,37 @@ const ProfileMain = ({ userCouses }) => {
           </Col>
         </Row>
       ))}
-      <Row className={`${classes.Row} mb-3 `}>
-        <Col className={`${classes.Col} ${classes.showAll}`}>
-          <Link to={"/courses"} className={classes.linkShow}>
-            Show all Courses
-          </Link>
-        </Col>
-      </Row>
-      <Row className={`${classes.Row} mt-5 mb-3`}>
-        <Col className={`${classes.Col} ${classes.IconContainer}`}>
-          <PiCodeBold className={classes.Icon} />
-          <Text
-            text={"Latest Challenges"}
-            size="20px"
-            fontFamily="Open Sans"
-            wegiht="600"
-            color="#0e141e"
-          />
-        </Col>
-      </Row>
-      {latestChallenge.map((item, index) => (
-        <Row className={`${classes.Row} mb-4`} key={index}>
-          <Col className={`${classes.Col}`}>
-            <ChallengeShow {...item} />
+      {id === undefined && (
+        <Row className={`${classes.Row} mb-3 `}>
+          <Col className={`${classes.Col} ${classes.showAll}`}>
+            <Link to={"/courses"} className={classes.linkShow}>
+              Show all Courses
+            </Link>
           </Col>
         </Row>
-      ))}
+      )}
+      {id === undefined && latestChallenge.length !== 0 && (
+        <Row className={`${classes.Row} mt-5 mb-3`}>
+          <Col className={`${classes.Col} ${classes.IconContainer}`}>
+            <PiCodeBold className={classes.Icon} />
+            <Text
+              text={"Latest Challenges"}
+              size="20px"
+              fontFamily="Open Sans"
+              wegiht="600"
+              color="#0e141e"
+            />
+          </Col>
+        </Row>
+      )}
+      {id === undefined &&
+        latestChallenge.map((item, index) => (
+          <Row className={`${classes.Row} mb-4`} key={index}>
+            <Col className={`${classes.Col}`}>
+              <ChallengeShow {...item} />
+            </Col>
+          </Row>
+        ))}
     </Container>
   );
 };

@@ -6,11 +6,13 @@ import Text from "../Text";
 import { TfiEmail } from "react-icons/tfi";
 import { AiOutlineNumber } from "react-icons/ai";
 import { FiUser } from "react-icons/fi";
+import { MdOutlineWorkOutline } from "react-icons/md";
 import ButtonRank from "../ButtonRank";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 const ProfileAside = ({ accountInfo }) => {
   const classes = useStyles();
   const navigate = useNavigate();
+  const { id } = useParams();
   return (
     <Container fluid className={classes.Container}>
       <Row>
@@ -47,6 +49,17 @@ const ProfileAside = ({ accountInfo }) => {
               />
             </Col>
           </Row>
+          <Row>
+            <Col className={`${classes.Col} ${classes.IconContainer}`}>
+              <MdOutlineWorkOutline className={classes.Icon} />
+              <Text
+                text={accountInfo.role}
+                fontFamily="Open Sans"
+                size="14px"
+                wegiht="600"
+              />
+            </Col>
+          </Row>
           <Row className="mb-4">
             <Col className={`${classes.Col} ${classes.IconContainer}`}>
               <TfiEmail className={classes.Icon} />
@@ -58,15 +71,18 @@ const ProfileAside = ({ accountInfo }) => {
               />
             </Col>
           </Row>
-          <Row>
-            <Col className={`${classes.Col} ${classes.IconContainer}`}>
-              <ButtonRank
-                text={"Edit Profile"}
-                width={"100%"}
-                onClick={() => navigate("/settings")}
-              />
-            </Col>
-          </Row>
+
+          {id === undefined && (
+            <Row>
+              <Col className={`${classes.Col} ${classes.IconContainer}`}>
+                <ButtonRank
+                  text={"Edit Profile"}
+                  width={"100%"}
+                  onClick={() => navigate("/settings")}
+                />
+              </Col>
+            </Row>
+          )}
         </Col>
       </Row>
     </Container>

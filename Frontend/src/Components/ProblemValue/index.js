@@ -13,28 +13,6 @@ const ProblemValue = () => {
       <Row>
         <Col className={classes.Col}>
           <TextRegister
-            text={"Submition: "}
-            size="16px"
-            wegiht="400"
-            color="#979FAF"
-          />
-          <Link>30</Link>
-        </Col>
-      </Row>
-      <Row>
-        <Col className={classes.Col}>
-          <TextRegister
-            text={"Max Score: "}
-            size="16px"
-            wegiht="400"
-            color="#979FAF"
-          />
-          <TextRegister text={"35"} size="16px" wegiht="100" color="#39424E" />
-        </Col>
-      </Row>
-      <Row>
-        <Col className={classes.Col}>
-          <TextRegister
             text={"Difficulty: "}
             size="16px"
             wegiht="400"
@@ -48,6 +26,39 @@ const ProblemValue = () => {
           />
         </Col>
       </Row>
+      <Row>
+        <Col className={classes.Col}>
+          <TextRegister
+            text={"Max Score: "}
+            size="16px"
+            wegiht="400"
+            color="#979FAF"
+          />
+          <TextRegister
+            text={context.challengeData.max_score}
+            size="16px"
+            wegiht="100"
+            color="#39424E"
+          />
+        </Col>
+      </Row>
+      <Row>
+        <Col className={classes.Col}>
+          <TextRegister
+            text={"Total Submition: "}
+            size="16px"
+            wegiht="400"
+            color="#979FAF"
+          />
+          <TextRegister
+            text={context.challengeData.total_submission}
+            size="16px"
+            wegiht="100"
+            color="#39424E"
+          />
+        </Col>
+      </Row>
+
       <Row>
         <Col className={classes.Col}>
           <hr />
