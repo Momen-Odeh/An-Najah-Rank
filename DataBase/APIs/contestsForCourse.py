@@ -74,10 +74,10 @@ def getContestForCourse(id):
                 "endDate": row[5],
                 "ownerName": cursor.fetchone(),
                 'solved': True,
-                "statistics": [
-                    {'key': 'Solved Rate: ', "val": f"{rate}%"},#******************************************************
-                    {'key': 'max Score: ', "val": maxVal}
-                ]
+                # "statistics": [
+                #     {'key': 'Solved Rate: ', "val": f"{rate}%"},#******************************************************
+                #     {'key': 'max Score: ', "val": maxVal}
+                # ]
             }
             contest_objects.append(contest)
 

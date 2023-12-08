@@ -18,6 +18,7 @@ const TestCase = ({
   errorMsg,
   loading,
   setErrorMsg,
+  relatedContests,
 }) => {
   const classes = useStyle();
 
@@ -101,7 +102,41 @@ const TestCase = ({
               />
             </Col>
           </Row>
-
+          <Row className="mt-2">
+            <Col xs="auto">
+              {relatedContests.length > 0 && (
+                <Text
+                  text={
+                    "* This challenge is used in courses and there is student submit code please choose the contest in course who want to run this test case on it."
+                  }
+                  color="red"
+                />
+              )}
+            </Col>
+          </Row>
+          <Row className="m-1">
+            <Col className="ms-2">
+              {relatedContests.map((context, index) => (
+                <CheckRank
+                  key={index}
+                  type="checkbox"
+                  name="sample"
+                  label={
+                    "contest " +
+                    context.contestId +
+                    ": " +
+                    context.contestName +
+                    " " +
+                    "course " +
+                    context.courseNumber +
+                    ": " +
+                    context.courseName +
+                    "."
+                  }
+                />
+              ))}
+            </Col>
+          </Row>
           <DataTypes
             name={"input"}
             data={currentTestCase.input}

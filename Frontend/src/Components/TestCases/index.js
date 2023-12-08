@@ -13,7 +13,7 @@ import { toastError } from "../../Utils/toast";
 import ModalRank from "../ModalRank";
 import Text from "../Text";
 
-const TestCases = memo(({ operation, testCasesData }) => {
+const TestCases = memo(({ operation, testCasesData, relatedContests }) => {
   const [deleteModal, setDeleteModal] = useState({ show: false });
   const { id } = useParams();
   const classes = useStyle();
@@ -224,29 +224,6 @@ const TestCases = memo(({ operation, testCasesData }) => {
     ),
   }));
 
-  /**********************************************************calculate percent ************************************/
-  const [percentage, setPercentage] = useState(0);
-  useEffect(() => {
-    const selectedTestCases = testCases.filter(
-      (testCase) => testCase.isSelected
-    );
-    const sumSelectedStrength = selectedTestCases.reduce(
-      (sum, testCase) => sum + parseInt(testCase.strength, 10),
-      0
-    );
-    const sumTotalStrength = testCases.reduce(
-      (sum, testCase) => sum + parseInt(testCase.strength, 10),
-      0
-    );
-    const calculatedPercentage =
-      sumTotalStrength === 0
-        ? 0
-        : (sumSelectedStrength / sumTotalStrength) * 100;
-    setPercentage(calculatedPercentage);
-  }, [testCases, testCase.isSelected]);
-
-  /**********************************************************************************************************/
-
   return (
     <Container fluid>
       <TestCase
@@ -260,6 +237,7 @@ const TestCases = memo(({ operation, testCasesData }) => {
         errorMsg={errorMsg}
         setErrorMsg={setErrorMsg}
         loading={loading}
+        relatedContests={relatedContests}
       />
       <Row className="mb-3">
         <Col className="d-flex justify-content-end">
@@ -282,16 +260,11 @@ const TestCases = memo(({ operation, testCasesData }) => {
         </Col>
       </Row>
       <Row>
+        <span className="mb-1" style={{ color: "red", fontWeight: "bold" }}>
+          * Should add at least one sample test case to enable use this
+          challenge.
+        </span>
         <TabTable TableHeader={header} TableData={data} />
-      </Row>
-      <Row>
-        <p style={{ fontSize: "18px", marginTop: "24px" }}>
-          You will get{" "}
-          <span style={{ backgroundColor: "yellow" }}>
-            {percentage.toFixed(2)}%
-          </span>{" "}
-          of the maximum score if you pass the selected test cases.
-        </p>
       </Row>
       <ModalRank
         show={deleteModal.show}
