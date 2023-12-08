@@ -1,16 +1,36 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useContext } from "react";
 import { Nav, Badge, Overlay } from "react-bootstrap";
 import { FaBell } from "react-icons/fa";
 import useStyle from "./Style";
+import { useEffect } from "react";
+import userContext from "../../Utils/userContext";
+import { useNavigate } from "react-router-dom";
+import { toastInfo } from "../../Utils/toast";
+import axios from "axios";
+import formatTimeAgo from "../../Utils/formateTimeAgo";
+
 const Notification = () => {
   const classes = useStyle();
+  const navigate = useNavigate();
   const [showNotification, setShowNotification] = useState(false);
-  const [notifications, setNotifications] = useState([
-    { id: 1, text: "Notification 1", time: "2 min ago" },
-    { id: 2, text: "Notification 2", time: "2 hours ago" },
-    { id: 3, text: "Notification 3", time: "3 hours ago" },
-  ]);
+  const {
+    notifications,
+    setNotifications,
+    socket,
+    newNotifications,
+    setNewNotifications,
+  } = useContext(userContext);
   const ref = useRef(null);
+
+  useEffect(() => {
+    if (socket) {
+      socket?.on("notification", (data) => {
+        setNotifications((prev) => [data, ...prev]);
+        setNewNotifications((prev) => prev + 1);
+        toastInfo(data.title);
+      });
+    }
+  }, [socket]);
 
   const handleNotificationPanel = (event) => {
     event.preventDefault();
@@ -20,7 +40,13 @@ const Notification = () => {
   const closeNotificationPanel = () => {
     setShowNotification(false);
   };
-
+  if (showNotification && newNotifications > 0) {
+    axios.post("/update-last-notification", {
+      title: notifications[0].title,
+      time: notifications[0].time,
+    });
+    setNewNotifications(0);
+  }
   return (
     <Nav.Item>
       <Nav.Link ref={ref} onClick={handleNotificationPanel}>
@@ -30,13 +56,13 @@ const Notification = () => {
             showNotification ? classes.clickedBtn : ""
           }`}
         />
-        {notifications.length > 0 && (
+        {newNotifications > 0 && (
           <Badge
             pill
             variant=""
             style={{ fontSize: "10px", padding: "3px 5px" }}
           >
-            {notifications.length}
+            {newNotifications}
           </Badge>
         )}
       </Nav.Link>
@@ -54,18 +80,38 @@ const Notification = () => {
             <h5>Notifications</h5>
           </div>
           <div className={classes.OverlayContent}>
-            {notifications.map((notification, index) => (
-              <div key={index} className={classes.notificationItem}>
-                <span className={classes.notificationText}>
-                  {notification.text}
-                </span>
-                <span className={classes.notificationTime}>
-                  {notification.time}
-                </span>
+            {notifications?.map((notification, index) => (
+              <div
+                key={index}
+                className={`${classes.notificationItem}`}
+                onClick={() => {
+                  console.log(notification);
+                  let url = "";
+                  if (notification?.courseNumber)
+                    url += `/courses/${notification.courseNumber}`;
+                  if (notification?.contestId)
+                    url += `/contests/${notification.contestId}`;
+                  if (notification?.challengeId)
+                    url += `/challenges/${notification.challengeId}`;
+                  if (notification?.courseNumber) navigate(url);
+                }}
+              >
+                <div className={classes.notificationText}>
+                  {notification.title}
+                </div>
+                <div className={classes.notificationTime}>
+                  {formatTimeAgo(notification.time)}
+                </div>
               </div>
             ))}
             <hr className={classes.line}></hr>
-            <a className={classes.notificationLink} href="#Notification">
+            <a
+              className={classes.notificationLink}
+              href="#14"
+              onClick={() => {
+                navigate("/notifications");
+              }}
+            >
               Show all
             </a>
           </div>

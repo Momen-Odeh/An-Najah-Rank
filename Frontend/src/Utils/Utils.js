@@ -11,20 +11,18 @@ import CreateChallenge from "../Pages/CreateChallenge";
 import CreateContest from "../Pages/CreateContest";
 import CreateCourse from "../Pages/CreateCourse";
 import ContestView from "../Pages/ContestView";
-import EnrollStudent from "../Pages/EnrollStudent";
 import CourseView from "../Pages/CourseView";
 import Administration from "../Pages/Administration";
-import IsLoggedIn from "../Components/Authorization/IsLoggedIn";
 import Challenges from "../Pages/Challenges";
 import Profile from "../Pages/Profile";
 import Contests from "../Pages/Contests";
 import Course from "../Pages/Course";
 import Settings from "../Pages/Settings";
 import Admin from "../Pages/Admin";
-import NotificationComponent from "../Components/Notification";
 import SubmissionsManualMarking from "../Components/SubmissionsManualMarking";
 import CodeSimilarity from "../Components/CodeSimilarity";
 import NotFound from "../Components/NotFound";
+import AllNotification from "../Pages/AllNotification";
 import AllCourse from "../Pages/AllCourses";
 // const AboutUs = lazy(() => import("../Pages/AboutUs/SubComponents/AboutUs"))
 
@@ -55,6 +53,11 @@ export const routes = [
     path: "/",
     title: routeNames.HOME,
     component: <Home />,
+  },
+  {
+    path: "/notifications",
+    title: "Notification",
+    component: <AllNotification />,
   },
   {
     path: "/profile",

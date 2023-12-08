@@ -9,7 +9,6 @@ import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 import InputFiledRank from "../InputFiledRank";
 import { validateUniversityNumber } from "../../Utils/Validation";
-import { toast } from "react-toastify";
 import LoaderRank from "../LoaderRank";
 import { toastError } from "../../Utils/toast";
 const CourseDetails = ({ operation, data = null, setData }) => {
@@ -25,7 +24,7 @@ const CourseDetails = ({ operation, data = null, setData }) => {
     students: "",
     uploadImg: null,
   });
-
+  console.log(details.students);
   const [errorMsg, setErrorMsg] = useState({
     number: null,
     name: null,
@@ -75,7 +74,7 @@ const CourseDetails = ({ operation, data = null, setData }) => {
           uploadImg: e.target.files[0],
         });
       } else {
-        alert("Please select a valid image file.");
+        toastError("Please select a valid image file.");
         e.target.value = null;
         handleChange(null, "image", null);
       }
@@ -85,10 +84,10 @@ const CourseDetails = ({ operation, data = null, setData }) => {
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      if (file.name.endsWith(".xls") || file.name.endsWith(".xlsx")) {
+      if (file.name.endsWith(".xlsx")) {
         handleFileUpload(file);
       } else {
-        alert("Please select a valid Excel file (.xls or .xlsx).");
+        toastError("Please select a valid Excel file with .xlsx extension");
         e.target.value = null;
       }
     }
@@ -136,7 +135,9 @@ const CourseDetails = ({ operation, data = null, setData }) => {
         ? "must enter course description."
         : null,
       image: !details.image ? "should enter course background image" : null,
-      students: !details.students ? "should enter Students Excel File" : null,
+      students: !details.students
+        ? "should enter Students Excel File with .xlsx extension"
+        : null,
     });
     console.log(details.image && details.students && operation === "create");
     if (
@@ -175,16 +176,7 @@ const CourseDetails = ({ operation, data = null, setData }) => {
         setLoading(false);
         navigate(`/administration/courses/${details.number}/moderators`);
       } catch (error) {
-        toast.error(error?.response?.data?.message, {
-          position: "bottom-left",
-          autoClose: 10000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "light",
-        });
+        toastError(error?.response?.data?.message);
         setLoading(false);
       }
     }
@@ -304,10 +296,11 @@ const CourseDetails = ({ operation, data = null, setData }) => {
             <InputFiledRank
               type="file"
               name="students"
-              accept=".xls, .xlsx"
+              accept=".xlsx"
               onChange={handleFileChange}
               size={"sm"}
-              msg={errorMsg.students}
+              msg={"should enter Students Excel File with .xlsx extension"}
+              BorderColor={!errorMsg.students}
               disabled={loading}
             />
           </Col>

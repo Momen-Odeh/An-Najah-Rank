@@ -158,6 +158,7 @@ const SubmissionProfessor = () => {
     axios.post(`/file-Similarity`, {
       contestId: contestId,
       challengeId: challengeId,
+      courseId: id,
     });
   };
 

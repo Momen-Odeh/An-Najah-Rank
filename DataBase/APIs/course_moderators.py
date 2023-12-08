@@ -2,6 +2,8 @@ from FlaskSetUp import app
 from flask import request
 from dataBaseConnection import insert_data, delete_data
 from MySQL_SetUp import connection
+from Notification.notification import handle_notification
+
 @app.route('/course_moderators', methods=['POST'])
 def add_course_moderators():
     try:
@@ -12,6 +14,14 @@ def add_course_moderators():
             ['courseNumber', 'stuffNumber'],
             (data['courseNumber'], data['stuffNumber'])
         )
+        cursor = connection.cursor()
+        cursor.execute(f"""
+                                    SELECT name from courses
+                                    WHERE  courseNumber = '{data['courseNumber']}'
+                                """)
+        course_name = cursor.fetchone()[0]
+        handle_notification(False, f"Your added as moderator in {course_name} course", [data['stuffNumber']],
+                            data['courseNumber'])
         return result
     except Exception as e:
         return {'message': str(e)}, 409
@@ -27,6 +37,13 @@ def delete_course_moderators():
             'course_moderators',
             condition,
         )
+        cursor = connection.cursor()
+        cursor.execute(f"""
+                           SELECT name from courses
+                           WHERE  courseNumber = '{course_number}'
+                       """)
+        course_name = cursor.fetchone()[0]
+        handle_notification(False, f"Your moderator access in {course_name} course removed", [stuff_number])
         return result
     except Exception as e:
         return {'message': str(e)}, 500

@@ -105,13 +105,10 @@ const ContestsDetalis = ({ operation, data = null }) => {
         setLoading(true);
         if (operation === "create") {
           setErrorMsg({ ...errorMsg, endTime: null });
-          await axios.post("/contests", {
+          const res = await axios.post("/contests", {
             ...contest,
             courseNumber: id,
           });
-          const params = new URLSearchParams({ ...contest, courseNumber: id });
-          console.log({ ...contest, courseNumber: id });
-          const res = await axios.get("/contest_id?" + params.toString());
           navigate(
             `/administration/courses/${id}/contests/${res?.data?.message}/challenges`
           );
