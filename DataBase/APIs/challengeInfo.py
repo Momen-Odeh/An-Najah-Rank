@@ -24,6 +24,7 @@ def getChallenge(id):
         cursor.execute(f"SELECT * FROM challenges where id = '{id}';")
         result = cursor.fetchone()
         resultTestCases = fetch_results(execute_query(connection, f"SELECT * FROM test_cases where challenge_id = '{id}' AND is_sample = '1';"), )
+
         test_case_objects = []
         for row in resultTestCases:
             test_case = {
@@ -40,7 +41,13 @@ def getChallenge(id):
         print(resultTestCases)
         if len(result) != 0:
             # id, name, description, difficulty, problem_statement, input_format, constraints, output_format, tags, created_at, updated_at
-
+            sql = f"""
+                            SELECT cc.max_score,count(ss.id) as total_submission FROM contests_challenges cc
+                            left join student_submissions ss on cc.challenge_id = ss.challengeId and cc.contest_id = ss.contestId
+                            where challenge_id='{id}' and contest_id='{contestId}'
+                            """
+            stat = fetch_results(execute_query(connection, sql), )
+            print(stat)
             return jsonify({
                     "status": f"ok",
                     "id": result[0],
@@ -55,7 +62,9 @@ def getChallenge(id):
                     "tags": json.loads(result[8]),
                     "created_at": result[9],
                     "updated_at": result[10],
-                    "testCases": test_case_objects
+                    "testCases": test_case_objects,
+                    "max_score":stat[0][0],
+                    "total_submission": stat[0][1],
                             }), 200
         else:
             return jsonify({

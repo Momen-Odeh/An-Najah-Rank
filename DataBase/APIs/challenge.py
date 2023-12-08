@@ -1,9 +1,8 @@
 from FlaskSetUp import app
 from flask import request, jsonify
 import json
-from dataBaseConnection import insert_data, update_data, delete_data, execute_query, fetch_results
+from dataBaseConnection import insert_data, update_data, delete_data
 from MySQL_SetUp import connection
-from authentication import get_Data_from_token
 @app.route('/challenges', methods=['POST'])
 def add_challenge():
     try:

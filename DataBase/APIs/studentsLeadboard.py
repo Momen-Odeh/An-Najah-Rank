@@ -14,7 +14,7 @@ def get_students_leadboard():
         cursor.execute(contest_challenge_details_query, (challenge_id, contest_id))
         maxScore = cursor.fetchone()
         last_submissions_query = f"""
-            SELECT ss.submissionTime, ss.submissionResult, u.fullName
+            SELECT ss.submissionTime, ss.submissionResult, u.fullName,u.universityNumber
             FROM student_submissions ss
             JOIN (
                 SELECT studentUniversityNumber, MAX(submissionTime) AS maxSubmissionTime
@@ -37,7 +37,8 @@ def get_students_leadboard():
             submissions.append({
                 "score": (maxScore[0] * item[1]) / 100,
                 "submissionDate": item[0],
-                "studentName": item[2]
+                "studentName": item[2],
+                "studentUniversityNumber": item[3]
             })
         return jsonify({"submissions": submissions, "maxScore": maxScore[0]}), 200
     except Exception as e:
