@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Col, Container, Row } from "react-bootstrap";
 import useStyles from "./style";
 import Course from "../Course";
@@ -6,40 +6,37 @@ import Text from "../Text";
 import { ImBooks } from "react-icons/im";
 import { PiCodeBold } from "react-icons/pi";
 import ChallengeShow from "../ChallengeShow";
+import axios from "axios";
+import { useState } from "react";
+import { Link } from "react-router-dom";
 const ProfileMain = ({ userCouses }) => {
   const classes = useStyles();
-  const LatestChallenge = [
-    {
-      Name: "An-Najah Rank test2",
-      solved: true,
-      statistics: [
-        { key: "Difficulty: ", val: "Medium" },
-        { key: "Success Rate: ", val: "100%" },
-        { key: "Max Score: ", val: 100 },
-      ],
-      url: "#test2",
-    },
-    {
-      Name: "An-Najah Rank test2",
-      solved: false,
-      statistics: [
-        { key: "Difficulty: ", val: "Medium" },
-        { key: "Success Rate: ", val: "100%" },
-        { key: "Max Score: ", val: 100 },
-      ],
-      url: "#test2",
-    },
-    {
-      Name: "An-Najah Rank test2",
-      solved: false,
-      statistics: [
-        { key: "Difficulty: ", val: "Medium" },
-        { key: "Success Rate: ", val: "100%" },
-        { key: "Max Score: ", val: 100 },
-      ],
-      url: "#test2",
-    },
-  ];
+  const [latestChallenge, setLatestChallenge] = useState([]);
+
+  useEffect(() => {
+    axios
+      .get("/latestChallengesProfile")
+      .then((response) => {
+        console.log(response.data);
+        setLatestChallenge(
+          response.data.challenges.map((item, index) => {
+            return {
+              Name: item.name,
+              solved: item.submissionResult === 100,
+              statistics: [
+                { key: "Difficulty: ", val: item.difficulty },
+                { key: "Success Rate: ", val: item.submissionResult + "%" },
+                { key: "Max Score: ", val: item.max_score },
+              ],
+              url: `/courses/${item.courseNumber}/contests/${item.contestId}/challenges/${item.challengeId}/problem`,
+            };
+          })
+        );
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
   return (
     <Container fluid className={classes.Container}>
       <Row className={`${classes.Row} mb-3`}>
@@ -61,6 +58,13 @@ const ProfileMain = ({ userCouses }) => {
           </Col>
         </Row>
       ))}
+      <Row className={`${classes.Row} mb-3 `}>
+        <Col className={`${classes.Col} ${classes.showAll}`}>
+          <Link to={"/courses"} className={classes.linkShow}>
+            Show all Courses
+          </Link>
+        </Col>
+      </Row>
       <Row className={`${classes.Row} mt-5 mb-3`}>
         <Col className={`${classes.Col} ${classes.IconContainer}`}>
           <PiCodeBold className={classes.Icon} />
@@ -73,7 +77,7 @@ const ProfileMain = ({ userCouses }) => {
           />
         </Col>
       </Row>
-      {LatestChallenge.map((item, index) => (
+      {latestChallenge.map((item, index) => (
         <Row className={`${classes.Row} mb-4`} key={index}>
           <Col className={`${classes.Col}`}>
             <ChallengeShow {...item} />
