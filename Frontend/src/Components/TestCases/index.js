@@ -12,7 +12,7 @@ import { validateNumber } from "../../Utils/Validation";
 import { toastError } from "../../Utils/toast";
 import ModalRank from "../ModalRank";
 import Text from "../Text";
-
+import { IoIosCloseCircleOutline } from "react-icons/io";
 const TestCases = memo(({ operation, testCasesData, relatedContests }) => {
   const [deleteModal, setDeleteModal] = useState({ show: false });
   const { id } = useParams();
@@ -51,7 +51,7 @@ const TestCases = memo(({ operation, testCasesData, relatedContests }) => {
     "",
   ];
 
-  const handleAddTestCase = async () => {
+  const handleAddTestCase = async (selectedContests) => {
     setErrorMsg({
       input:
         testCase.input.length !== 0
@@ -74,7 +74,7 @@ const TestCases = memo(({ operation, testCasesData, relatedContests }) => {
       validateNumber(testCase.strength)
     ) {
       setLoading(true);
-      const id = await handleAdd(testCases.length);
+      const id = await handleAdd(selectedContests);
       if (id) {
         setTestCases([
           ...testCases,
@@ -88,7 +88,16 @@ const TestCases = memo(({ operation, testCasesData, relatedContests }) => {
     }
   };
 
-  const handleUpdateTestCase = async (index, name, newData) => {
+  const handleUpdateTestCase = async (selectedContests) => {
+    const contestIds = relatedContests
+      .map((item, index) => {
+        if (selectedContests[index] === true) {
+          return item.contestId;
+        }
+        return null;
+      })
+      .filter((id) => id !== null);
+    console.log("contestIds", contestIds);
     setErrorMsg({
       input:
         testCase.input.length !== 0
@@ -112,41 +121,36 @@ const TestCases = memo(({ operation, testCasesData, relatedContests }) => {
     ) {
       setLoading(true);
       const updatedTestCases = [...testCases];
-      if (name === "all") {
-        updatedTestCases[testCase.order] = testCase;
-        index = testCase.order;
-      } else
-        updatedTestCases[index] = {
-          ...updatedTestCases[index],
-          [name]: newData,
-        };
-      if (name === "sample")
-        updatedTestCases[index] = {
-          ...updatedTestCases[index],
-          strength: updatedTestCases[index].sample ? 0 : 10,
-        };
-      if (name !== "isSelected") {
-        const data = {
-          challenge_id: id,
-          input_data: updatedTestCases[index].input,
-          output_data: updatedTestCases[index].output,
-          strength: updatedTestCases[index].strength,
-          is_sample: updatedTestCases[index].sample,
-          explanation: updatedTestCases[index].sample
-            ? updatedTestCases[index].explanation
-            : null,
-        };
-        try {
-          await axios.put(`/test_cases/${updatedTestCases[index].id}`, data);
-          setLoading(false);
-        } catch (error) {
-          console.log(error);
-          toastError("not updated ");
+      updatedTestCases[testCase.order] = testCase;
+      const index = testCase.order;
+      const data = {
+        challenge_id: id,
+        input_data: updatedTestCases[index].input,
+        output_data: updatedTestCases[index].output,
+        strength: updatedTestCases[index].strength,
+        is_sample: updatedTestCases[index].sample,
+        explanation: updatedTestCases[index].sample
+          ? updatedTestCases[index].explanation
+          : null,
+      };
+      try {
+        await axios.put(`/test_cases/${updatedTestCases[index].id}`, data);
+        if (contestIds.length > 0) {
+          axios.post("/run-new-test-case", {
+            contestIds: contestIds,
+            testCaseId: updatedTestCases[index].id,
+            challengeId: id,
+            operation: "update",
+          });
         }
+        setTestCases(updatedTestCases);
+      } catch (error) {
+        console.log(error);
+        toastError("not updated ");
       }
-      setTestCases(updatedTestCases);
       setTestCase("");
       setShowAddModal(false);
+      setLoading(false);
     }
   };
 
@@ -176,7 +180,15 @@ const TestCases = memo(({ operation, testCasesData, relatedContests }) => {
     setShowAddModal(true);
   };
 
-  const handleAdd = async () => {
+  const handleAdd = async (selectedContests) => {
+    const contestIds = relatedContests
+      .map((item, index) => {
+        if (selectedContests[index] === true) {
+          return item.contestId;
+        }
+        return null;
+      })
+      .filter((id) => id !== null);
     const dataToAdd = {
       challenge_id: id,
       input_data: testCase.input,
@@ -186,11 +198,15 @@ const TestCases = memo(({ operation, testCasesData, relatedContests }) => {
       explanation: testCase.sample ? testCase.explanation : null,
     };
     try {
-      await axios.post("/test_cases", dataToAdd);
-      const params = new URLSearchParams(dataToAdd);
-      console.log(dataToAdd);
-      const res = await axios.get("/test_cases?" + params.toString());
-      console.log(res.data.message);
+      const res = await axios.post("/test_cases", dataToAdd);
+      if (contestIds.length > 0) {
+        axios.post("/run-new-test-case", {
+          contestIds: contestIds,
+          testCaseId: res,
+          challengeId: id,
+          operation: "create",
+        });
+      }
       return res.data.message;
     } catch (error) {
       console.log(error);
@@ -203,7 +219,13 @@ const TestCases = memo(({ operation, testCasesData, relatedContests }) => {
     Output:
       typeof item.output === "string" ? item.output : "output" + i + "file",
     Sample: (
-      <div>{item.sample && <BiCheckCircle size={24} color="green" />}</div>
+      <div>
+        {item.sample ? (
+          <BiCheckCircle size={24} color="green" />
+        ) : (
+          <IoIosCloseCircleOutline size={24} color="red" />
+        )}
+      </div>
     ),
     Strength: item.strength,
     update: (
