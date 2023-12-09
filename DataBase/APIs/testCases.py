@@ -2,6 +2,8 @@ from FlaskSetUp import app
 from flask import request, jsonify
 from dataBaseConnection import insert_data, update_data, delete_data, execute_query, fetch_results
 from MySQL_SetUp import connection
+from APIs.runNewTestCase import run_new_test_case
+
 @app.route('/test_cases', methods=['POST'])
 def add_test_case():
     try:
@@ -12,39 +14,32 @@ def add_test_case():
             ['challenge_id', 'input_data', 'output_data', 'strength', 'is_sample', 'explanation'],
             (data['challenge_id'], data['input_data'], data['output_data'], data['strength'], data['is_sample'], data['explanation'])
         )
-        return result
-    except Exception as e:
-        return {'message': str(e)}, 409
 
-@app.route('/test_cases', methods=['GET'])
-def get_testCase_id():
-    try:
         sql_query = """ 
-            SELECT id
-            FROM test_cases 
-            WHERE 
-                challenge_id = %s 
-                AND input_data = %s 
-                AND output_data = %s 
-                AND strength = %s 
-                AND is_sample = %s
-        """
-        is_sample = 1 if request.args.get('is_sample', '').lower() == 'true' else 0
-
+                    SELECT id
+                    FROM test_cases 
+                    WHERE 
+                        challenge_id = %s 
+                        AND input_data = %s 
+                        AND output_data = %s 
+                        AND strength = %s 
+                        AND is_sample = %s
+                """
+        is_sample = 1 if data['is_sample'] == True else 0
         params = (
-            request.args.get('challenge_id'),
-            request.args.get('input_data'),
-            request.args.get('output_data'),
-            request.args.get('strength'),
+            data['challenge_id'],
+            data['input_data'],
+            data['output_data'],
+            data['strength'],
             is_sample,
         )
         cursor = connection.cursor()
         cursor.execute(sql_query, params)
         result = cursor.fetchall()
-        print('result',result)
-        return jsonify({'message': result[len(result)-1][0]}), 200
+        return jsonify({'message': result[len(result) - 1][0]}), 200
     except Exception as e:
         return {'message': str(e)}, 409
+
 
 @app.route('/test_cases/get', methods=['GET'])
 def get_testCases():
@@ -83,7 +78,7 @@ def update_test_case(id):
             new_values,
             condition
         )
-        return result
+        return jsonify({'message': "ok"}), 200
     except Exception as e:
         return {'message': str(e)}, 500
 
