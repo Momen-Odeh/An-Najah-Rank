@@ -7,6 +7,7 @@ def get_professor_pending():
     try:
         tokenData = getattr(request, 'tokenData', None)
         role = tokenData['role']
+        finalResult ={}
         if role =='admin':
             role = 'professor'
             status = 'pending for admin'
@@ -22,7 +23,71 @@ def get_professor_pending():
                     'name': professor[2],
                 }
                 professors.append(response)
-            return jsonify({'professors': professors}), 200
+            finalResult["pendingProfessors"] = professors
+            # *********************************************************************************************************
+            role = 'professor'
+            status = 'approved'
+            query = "SELECT * FROM user WHERE role = %s AND status = %s;"
+            cursor = connection.cursor()
+            cursor.execute(query, (role, status))
+            results = cursor.fetchall()
+            professors = []
+            for professor in results:
+                response = {
+                    'universityNumber': professor[0],
+                    'email': professor[1],
+                    'name': professor[2],
+                }
+                professors.append(response)
+            finalResult["activeProfessors"] = professors
+            # *********************************************************************************************************
+            role = 'student'
+            status = 'approved'
+            query = "SELECT * FROM user WHERE role = %s;"
+            cursor = connection.cursor()
+            cursor.execute(query, (role))
+            results = cursor.fetchall()
+            students = []
+            for student in results:
+                response = {
+                    'universityNumber': student[0],
+                    'email': student[1],
+                    'name': student[2],
+                }
+                students.append(response)
+            finalResult["activeStudents"] = students
+            # *********************************************************************************************************
+            query = """
+                select u.universityNumber,u.fullName,u.role,
+                count(cc.challenge_id) as totalSubmission,
+                (select count(ss.id)
+                from student_submissions ss
+                inner join challenges ccc on  ccc.id = ss.challengeId
+                where ss.studentUniversityNumber = se.studentNumber and ss.submissionResult = '100')as successSubmission
+                from student_enrollments se
+                inner join contests c on se.courseNumber = c.courseNumber
+                inner join contests_challenges cc on c.id = cc.contest_id
+                inner join user u on u.universityNumber = se.studentNumber
+                where u.role = 'student'
+                group by se.studentNumber
+                order by totalSubmission,successSubmission DESC
+                limit 100
+                """
+            cursor = connection.cursor()
+            cursor.execute(query)
+            results = cursor.fetchall()
+            submissions = []
+            for submission in results:
+                response = {
+                    'universityNumber': submission[0],
+                    'name': submission[1],
+                    'totalSubmission': submission[3],
+                    'successSubmission': submission[4],
+                }
+                submissions.append(response)
+            finalResult["topStudents"] = submissions
+            # *********************************************************************************************************
+            return jsonify(finalResult), 200
         return jsonify({'professors': [], 'message': 'you are not admin'}), 401
     except Exception as e:
         return jsonify({'message': e}), 409
