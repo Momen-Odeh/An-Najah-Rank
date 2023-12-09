@@ -23,8 +23,12 @@ def getChallenge(id):
         cursor = connection.cursor()
         cursor.execute(f"SELECT * FROM challenges where id = '{id}';")
         result = cursor.fetchone()
-        resultTestCases = fetch_results(execute_query(connection, f"""SELECT * FROM test_cases where
+        if courseId:
+            resultTestCases = fetch_results(execute_query(connection, f"""SELECT * FROM test_cases where
                                                                   challenge_id = '{id}' AND is_sample = '1';"""), )
+        else:
+            resultTestCases = fetch_results(execute_query(connection, f"""SELECT * FROM test_cases where
+                                                                              challenge_id = '{id}' """), )
         related_contests = fetch_results(execute_query
                                          (connection,
                                           f"""select c.id, c.name, c.courseNumber, co.name from contests_challenges cc 
