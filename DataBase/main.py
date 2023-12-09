@@ -13,7 +13,7 @@ from EmailAuth.updatePassword import updatePassword
 from EmailAuth.forgetPassword import forgetPassword
 from APIs.challengeInfo import getChallenge
 from APIs.challenge import add_challenge, update_challenge, delete_challenge, get_challenge_details
-from APIs.testCases import add_test_case, get_testCase_id, get_testCases, delete_test_case, update_test_case
+from APIs.testCases import add_test_case, get_testCases, delete_test_case, update_test_case
 from APIs.contests import add_contest
 from APIs.contestInfo import get_contests_info
 from APIs.contestChallenges import add_challenge_in_contest
@@ -39,6 +39,8 @@ from APIs.studentsLeadboard import get_students_leadboard
 from guard.professorAccess import haveAccess
 from Notification.getNotifications import get_notifications
 from APIs.latestChallenge import getLastChallenges
+from APIs.runNewTestCase import run_new_test_case
+
 
 @app.route('/flask', methods=['GET'])
 def index():

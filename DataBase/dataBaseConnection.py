@@ -43,6 +43,7 @@ def update_data(connection, table_name, column_names, new_values, condition):
     try:
         cursor = connection.cursor()
         query = f"UPDATE {table_name} SET {', '.join([f'{col} = %s' for col in column_names])} WHERE {condition}"
+        print(query)
         cursor.execute(query, new_values)
         connection.commit()
         return jsonify({'message':"Data updated successfully."}),200
