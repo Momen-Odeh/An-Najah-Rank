@@ -89,7 +89,8 @@ def run_new_test_case():
                         (total_score),
                         f"id = '{submission[0]}'"
                         )
-        handle_notification(False, "The test case submission done on selected contests", [tokenData['universityNumber']], )
+        handle_notification(False, f"""Running test case on contests selected with challenge id 
+                                   {challenge_id} finish successfully """, [tokenData['universityNumber']], )
         return jsonify({'message': "ok"}), 200
     except Exception as e:
         return {'message': str(e)}, 409

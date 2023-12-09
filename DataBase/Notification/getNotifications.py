@@ -1,6 +1,5 @@
 from FlaskSetUp import app
 from MySQL_SetUp import connection
-from dataBaseConnection import update_data
 from flask import request, jsonify
 @app.route('/get-notifications', methods=['GET'])
 def get_notifications():
