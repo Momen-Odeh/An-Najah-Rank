@@ -62,14 +62,35 @@ def get_contests_info():
         ]
         ContestChallengesData = []
         for record in ContestChallenges:
+
             data_object = {}
             for i in range(len(fields)):
                 if isinstance(record[i], datetime.datetime):
                     data_object[fields[i]] = record[i].isoformat()
                 elif fields[i] == "tags":
                     data_object[fields[i]]=json.loads(record[i])
+                elif fields[i] == "id":
+                    data_object[fields[i]] = record[i]
+                    sqlRate = f"""
+                                SELECT
+                                (SELECT COUNT(DISTINCT studentUniversityNumber) FROM student_submissions
+                                 WHERE 
+                                 contestId = '{request.args.get('contest_id')}' AND
+                                  courseNumber = '{request.args.get('courseId')}' 
+                                 and challengeId ='{record[i]}' AND submissionResult = '100') AS submissionCount,
+                                (SELECT COUNT(DISTINCT studentNumber) FROM student_enrollments
+                                 WHERE courseNumber = '{request.args.get('courseId')}') AS enrollmentCount;
+                                """
+                    cursor = execute_query(connection, sqlRate)
+                    challengeRate = fetch_results(cursor)[0]
+                    if challengeRate[0] == 0 or challengeRate[1] == 0:
+                        data_object['challengeRate'] = 0
+                    else:
+                        data_object['challengeRate'] = round((challengeRate[0]/challengeRate[1])*100,2)
                 else:
                     data_object[fields[i]] = record[i]
+            # print()
+            # print(data_object)
             ContestChallengesData.append(data_object)
         response_data = {
             'contest': contestData,
@@ -78,4 +99,5 @@ def get_contests_info():
         }
         return jsonify(response_data), 200
     except Exception as e:
+        print(e)
         return {'message': str(e)}, 409

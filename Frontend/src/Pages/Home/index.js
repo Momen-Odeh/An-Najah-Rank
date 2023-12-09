@@ -28,8 +28,6 @@ const Home = () => {
     <div>
       <h1>Home Page</h1>
       <button onClick={clickBtn}>Click me</button>
-      <hr />
-      <UserStatistics />
     </div>
   );
 };

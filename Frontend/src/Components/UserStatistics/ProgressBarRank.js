@@ -1,6 +1,6 @@
 import React from "react";
 import { ProgressBar } from "react-bootstrap";
-import useStyle from "./style";
+import useStyle from "./ProgressBarStyle";
 import Text from "../Text";
 const ProgressBarRank = ({
   difficulty,
@@ -10,23 +10,34 @@ const ProgressBarRank = ({
   backgroundColor,
 }) => {
   const classes = useStyle({ color, backgroundColor });
-  console.log(color, backgroundColor);
+  const percentage =
+    currentVal == 0 || maxVal == 0
+      ? 0
+      : ((currentVal / maxVal) * 100).toFixed(2);
+
   return (
-    <>
-      <br />
-      <div>
-        <div className={classes.progressBarHead}>
-          <Text text={difficulty} />
-          <Text text={`${currentVal}/${maxVal}`} />
-          <Text text={`${(currentVal / maxVal).toFixed(3) * 100}%`} />
-        </div>
-        <ProgressBar
-          now={currentVal}
-          max={maxVal}
-          className={classes.progressBar}
+    <div>
+      <div className={classes.progressBarHead}>
+        <Text text={difficulty} color="#98a1a4" />
+        <Text
+          text={`${currentVal}/${maxVal}`}
+          color="#635f56"
+          size="14px"
+          wegiht="600"
+        />
+        <Text
+          text={`${percentage}%`}
+          size="14px"
+          wegiht="600"
+          color="#635f56"
         />
       </div>
-    </>
+      <ProgressBar
+        now={currentVal}
+        max={maxVal}
+        className={classes.progressBar}
+      />
+    </div>
   );
 };
 

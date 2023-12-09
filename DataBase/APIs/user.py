@@ -7,12 +7,13 @@ from fileManagment.getFileAWS import get_file_from_AWS
 from fileManagment.deleteFileAWS import delete_file_from_AWS
 from werkzeug.security import generate_password_hash, check_password_hash
 import io
-import base64
+from UserStatistics.statistics_for_user import statistics_for_user
 
 
 @app.route('/user', methods=['GET'])
 def getUserInfo():
     try:
+
         # print("---------->",request.args.get('id')) # form /profile None and from /profile/:id id
         tokenData = getattr(request, 'tokenData', None)
 
@@ -29,14 +30,21 @@ def getUserInfo():
             }), 401
         result = fetch_results(execute_query(connection, sql))
 
+
         if len(result) != 0:
+            if (result[0][3] == "student"):
+                userStatistics = statistics_for_user(result[0][0])
+            else:
+                userStatistics =None
             response = {
                 "status": "ok",
                 "universityNumber": result[0][0],
                 "email": result[0][1],
                 "fullName": result[0][2],
                 "role": result[0][3],
+                "userStatistics":userStatistics
             }
+
 
             if result[0][6] is not None:
                 response["img"] = get_file_from_AWS(result[0][6])  # base64.b64encode(result[0][6]).decode('utf-8')
