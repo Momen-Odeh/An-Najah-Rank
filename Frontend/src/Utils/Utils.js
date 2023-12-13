@@ -24,6 +24,7 @@ import CodeSimilarity from "../Components/CodeSimilarity";
 import NotFound from "../Components/NotFound";
 import AllNotification from "../Pages/AllNotification";
 import AllCourse from "../Pages/AllCourses";
+import ProfessorsRequests from "../Pages/Admin/ProfessorsRequests";
 // const AboutUs = lazy(() => import("../Pages/AboutUs/SubComponents/AboutUs"))
 
 export const routeNames = {
@@ -243,7 +244,34 @@ export const routes = [
   {
     path: "/admin",
     title: routeNames.ADMIN,
-    component: <Admin />,
+    component: <Outlet />,
+    subRoutes: [
+      {
+        index: true,
+        component: <Admin />,
+      },
+      /******************************************* /administration/courses/create-course ***********************************/
+      {
+        path: "professors-requests",
+        title: "professors-requests",
+        component: <Admin />,
+      },
+      {
+        path: "professors",
+        title: "professors",
+        component: <Admin />,
+      },
+      {
+        path: "students",
+        title: "students",
+        component: <Admin />,
+      },
+      {
+        path: "submissions",
+        title: "submissions",
+        component: <Admin />,
+      },
+    ],
   },
   /******************************************* /administration ***********************************/
   {

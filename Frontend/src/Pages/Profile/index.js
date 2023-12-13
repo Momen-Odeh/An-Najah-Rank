@@ -63,7 +63,10 @@ const Profile = () => {
           <ProfileAside accountInfo={accountInfo} />
         </Col>
         <Col className={`${classes.Col} ${classes.main}`}>
-          <ProfileMain userCouses={userCouses} />
+          <ProfileMain
+            userCouses={userCouses}
+            userStatistics={accountInfo.userStatistics}
+          />
         </Col>
       </Row>
     </Container>

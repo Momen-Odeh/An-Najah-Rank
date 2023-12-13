@@ -5,11 +5,13 @@ import Course from "../Course";
 import Text from "../Text";
 import { ImBooks } from "react-icons/im";
 import { PiCodeBold } from "react-icons/pi";
+import { IoStatsChart } from "react-icons/io5";
 import ChallengeShow from "../ChallengeShow";
 import axios from "axios";
 import { useState } from "react";
 import { Link, useParams } from "react-router-dom";
-const ProfileMain = ({ userCouses }) => {
+import UserStatistics from "../UserStatistics";
+const ProfileMain = ({ userCouses, userStatistics }) => {
   const classes = useStyles();
   const [latestChallenge, setLatestChallenge] = useState([]);
   const { id } = useParams();
@@ -41,6 +43,27 @@ const ProfileMain = ({ userCouses }) => {
   }, []);
   return (
     <Container fluid className={classes.Container}>
+      {userStatistics !== null && (
+        <Row className={`${classes.Row} mb-3`}>
+          <Col className={`${classes.Col} ${classes.IconContainer}`}>
+            <IoStatsChart className={classes.Icon} />
+            <Text
+              text={"Student Statistics"}
+              size="20px"
+              fontFamily="Open Sans"
+              wegiht="600"
+              color="#0e141e"
+            />
+          </Col>
+        </Row>
+      )}
+      {userStatistics !== null && (
+        <Row className={`${classes.Row} mb-4`}>
+          <Col className={`${classes.Col}`}>
+            <UserStatistics userStatistics={userStatistics} />
+          </Col>
+        </Row>
+      )}
       <Row className={`${classes.Row} mb-3`}>
         <Col className={`${classes.Col} ${classes.IconContainer}`}>
           <ImBooks className={classes.Icon} />
