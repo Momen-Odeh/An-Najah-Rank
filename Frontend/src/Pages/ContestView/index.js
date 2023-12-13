@@ -30,10 +30,10 @@ const ContestView = () => {
           response.data.ContestChallenges.map((item, index) => {
             return {
               Name: item.name,
-              // solved: index % 2 === 0 ? true : false,
+              solved: item.challengeRate == 100,
               statistics: [
                 { key: "Difficulty: ", val: item.difficulty },
-                // { key: "Success Rate: ", val: "100%" },
+                { key: "Success Rate: ", val: item.challengeRate + " %" },
                 { key: "Max Score: ", val: item.maxScore },
               ],
               url: `/courses/${id}/contests/${contestId}/challenges/${item.challenge_id}/problem`,

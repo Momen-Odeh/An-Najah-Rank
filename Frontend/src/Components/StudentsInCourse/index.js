@@ -102,7 +102,6 @@ const StudentsInCourse = ({ students, setStudents }) => {
         ),
       };
     });
-  console.log(dataURI);
   const { registrationNumber, studentName, email } = student;
   const handleChange = (e) => {
     const { name, value } = e.target;

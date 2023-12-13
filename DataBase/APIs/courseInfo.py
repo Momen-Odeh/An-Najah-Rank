@@ -100,6 +100,11 @@ def get_course_info():
                 """
         cursor = execute_query(connection, query)
         data = fetch_results(cursor)
+        sqlStudendCount = f"""
+                            SELECT COUNT(DISTINCT studentNumber) as NumStudent FROM student_enrollments
+                            WHERE courseNumber = '{request.args.get('courseNumber')}'
+                            """
+        studendCount = fetch_results(execute_query(connection,sqlStudendCount))[0][0]
         moderators = []
         for professor in data:
             moderators.append({
@@ -107,7 +112,7 @@ def get_course_info():
                 "email": professor[1],
                 "universityNumber": professor[0]
             })
-        contests = getContestForCourse(request.args.get('courseNumber'))
+        contests = getContestForCourse(request.args.get('courseNumber'),studendCount)
         response_data = {
             'course': courseData,
             'suggestionModerators': suggestionModerators,
