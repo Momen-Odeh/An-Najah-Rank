@@ -15,6 +15,20 @@ def add_challenge_student():
         tokenData = getattr(request, 'tokenData', None)
         code = data['code']
         language = data['language']
+        # ****************************************
+        query = f"""
+                                    SELECT *
+                                    FROM contests 
+                                    WHERE 
+                                    id ='{data['contestId']}';
+                                """
+        cursor = connection.cursor()
+        cursor.execute(query)
+        contest = cursor.fetchone()
+        if (tokenData['role'] == "student" and
+                datetime.datetime.now() < contest[4] == 1 and datetime.datetime.now() > contest[5]):
+            return jsonify({"message": "Access Denied"}), 401
+        # ****************************************
         testCases = get_test_cases(data['challengeId'])
         input = [test_case["input_data"] for test_case in testCases]
         output = [test_case["output_data"] for test_case in testCases]

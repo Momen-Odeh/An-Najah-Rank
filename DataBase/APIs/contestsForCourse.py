@@ -35,8 +35,8 @@ def getContestForCourse(id,studendCount):
             contest = {
                 "id": row[0],
                 "name": row[1],
-                "startDate": row[3],
-                "endDate": row[5],
+                "startDate": row[3].strftime('%Y-%m-%d %H:%M:%S'),
+                "endDate": row[5].strftime('%Y-%m-%d %H:%M:%S')if row[4] == 1 else row[5],
                 "ownerName": cursor.fetchone(),
                 'solved': False,
                 "statistics": [

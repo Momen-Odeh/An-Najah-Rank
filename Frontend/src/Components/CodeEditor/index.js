@@ -228,7 +228,14 @@ const CodeEditor = () => {
         );
       })
       .catch((error) => {
-        toastError("there is an error resubmit your code");
+        console.log(error);
+        if (
+          error?.response?.data?.message === "No more submissions, time ended"
+        ) {
+          toastError("No more submissions, time ended");
+        } else {
+          toastError("there is an error resubmit your code");
+        }
       });
   };
   const [loading, setLoading] = useState(true);

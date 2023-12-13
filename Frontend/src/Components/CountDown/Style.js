@@ -18,6 +18,17 @@ const useStyle = createUseStyles({
     width: "70px",
     fontWeight: "600",
   },
+  countdownTitle: {
+    fontSize: "16px",
+    margin: "5px",
+    padding: "5px",
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "center",
+    color: "#62656a",
+    fontWeight: "600",
+  },
   "@media (max-width: 510px)": {
     countdownContainer: {
       width: "100%",
@@ -29,6 +40,12 @@ const useStyle = createUseStyles({
       // width: "100%",
       justifyContent: "center",
       flexWrap: "wrap",
+    },
+  },
+  "@media (max-width: 370px)": {
+    countdownTitle: {
+      marginRight: "40px",
+      marginLeft: "40px",
     },
   },
   messageContainer: {

@@ -27,6 +27,8 @@ def get_contests_info():
         cursor = connection.cursor()
         cursor.execute(query)
         contest = cursor.fetchone()
+        if(tokenData['role'] == "student" and datetime.datetime.now() < contest[3]):
+            return jsonify({"message": "Access Denied"}), 401
         contestData = {
             "id":contest[0],
             "name":contest[1],
