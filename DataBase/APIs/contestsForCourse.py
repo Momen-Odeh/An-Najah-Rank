@@ -41,7 +41,7 @@ def getContestForCourse(id,studendCount):
                 'solved': False,
                 "statistics": [
                     {'key': 'Solved Rate: ', "val": f"{rate}%"},
-                    {'key': 'max Score: ', "val": maxVal}
+                    {'key': 'max Score: ', "val": float(maxVal)}
                 ]
             }
             contest_objects.append(contest)
