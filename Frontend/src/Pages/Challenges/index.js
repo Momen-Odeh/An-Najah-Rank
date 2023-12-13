@@ -13,6 +13,7 @@ import Loader from "../../Components/Loader";
 const Challenges = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const [relatedContests, setRelatedContests] = useState([]);
   const [details, setDetails] = useState({
     difficulty: "Easy",
     name: null,
@@ -54,6 +55,7 @@ const Challenges = () => {
             isSelected: false,
           }))
         );
+        setRelatedContests(res.data.relatedContests);
         setLoadingPage(false);
       })
       .catch((e) => {
@@ -79,7 +81,11 @@ const Challenges = () => {
       title: "TestCases",
       eventKey: "TestCases",
       TabComponent: (
-        <TestCases operation={"update"} testCasesData={testCasesData} />
+        <TestCases
+          operation={"update"}
+          testCasesData={testCasesData}
+          relatedContests={relatedContests}
+        />
       ),
       urlPattern: `/administration/challenges/${id}/test-cases`,
     },

@@ -7,6 +7,7 @@ import DataTypes from "../DataTypes";
 import ButtonRank from "../ButtonRank";
 import InputFiledRank from "../InputFiledRank";
 import CheckRank from "../CheckRank";
+import { useEffect } from "react";
 const TestCase = ({
   showAddModal,
   setShowAddModal,
@@ -18,6 +19,7 @@ const TestCase = ({
   errorMsg,
   loading,
   setErrorMsg,
+  relatedContests,
 }) => {
   const classes = useStyle();
 
@@ -25,9 +27,22 @@ const TestCase = ({
     typeof currentTestCase.input == "string" ? "editor" : "upload";
   const outputType =
     typeof currentTestCase.input == "string" ? "editor" : "upload";
-
+  const [selectedContests, setSelectedContests] = useState(
+    new Array(relatedContests.length).fill(false)
+  );
   const [selectedOptionInput, setSelectedOptionInput] = useState(inputType);
   const [selectedOptionOutput, setSelectedOptionOutput] = useState(outputType);
+  useEffect(() => {
+    if (showAddModal) {
+      setSelectedContests(new Array(relatedContests.length).fill(false));
+    }
+  }, [showAddModal]);
+
+  const handleSelectedContests = (index, val) => {
+    const newSelectedContests = [...selectedContests];
+    newSelectedContests[index] = val;
+    setSelectedContests(newSelectedContests);
+  };
   const handleInputChange = (e, optionName, val) => {
     if (e) {
       const { name, value, type, checked, files } = e.target;
@@ -76,6 +91,48 @@ const TestCase = ({
       </Modal.Header>
       <Modal.Body>
         <Container fluid>
+          {relatedContests.length > 0 && (
+            <>
+              <Row>
+                <Col xs="auto">
+                  <Text
+                    text={
+                      "* This challenge is used in courses and there is student submit code please choose the contest in course who want to run this test case on it."
+                    }
+                    color="red"
+                  />
+                </Col>
+              </Row>
+              <Row className="m-1">
+                <Col className="ms-2">
+                  {relatedContests.map((context, index) => (
+                    <CheckRank
+                      key={index}
+                      type="checkbox"
+                      name="sample"
+                      checked={selectedContests[index]}
+                      onChange={(e) => {
+                        handleSelectedContests(index, e.target.checked);
+                      }}
+                      disabled={loading}
+                      label={
+                        "contest " +
+                        context.contestId +
+                        " - " +
+                        context.contestName +
+                        " in course " +
+                        context.courseNumber +
+                        " - " +
+                        context.courseName +
+                        "."
+                      }
+                    />
+                  ))}
+                </Col>
+              </Row>
+              <hr></hr>
+            </>
+          )}
           <Row>
             <Col xs="auto">
               <Text text={"Strength"} />
@@ -145,14 +202,14 @@ const TestCase = ({
               {action === "add" && (
                 <ButtonRank
                   text={"Save"}
-                  onClick={handleAdd}
+                  onClick={() => handleAdd(selectedContests)}
                   disabled={loading}
                 />
               )}
               {action !== "add" && (
                 <ButtonRank
                   text={"Update"}
-                  onClick={() => handleUpdate(null, "all", null)}
+                  onClick={() => handleUpdate(selectedContests)}
                   disabled={loading}
                 />
               )}

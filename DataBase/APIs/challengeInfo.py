@@ -23,8 +23,23 @@ def getChallenge(id):
         cursor = connection.cursor()
         cursor.execute(f"SELECT * FROM challenges where id = '{id}';")
         result = cursor.fetchone()
-        resultTestCases = fetch_results(execute_query(connection, f"SELECT * FROM test_cases where challenge_id = '{id}' AND is_sample = '1';"), )
-
+        if courseId:
+            resultTestCases = fetch_results(execute_query(connection, f"""SELECT * FROM test_cases where
+                                                                  challenge_id = '{id}' AND is_sample = '1';"""), )
+        else:
+            resultTestCases = fetch_results(execute_query(connection, f"""SELECT * FROM test_cases where
+                                                                              challenge_id = '{id}' """), )
+        related_contests = fetch_results(execute_query
+                                         (connection,
+                                          f"""select c.id, c.name, c.courseNumber, co.name from contests_challenges cc 
+                                              join contests c on cc.contest_id=c.id
+                                              join courses co on co.courseNumber = c.courseNumber
+                                              join student_submissions ss on ss.contestId = c.id
+                                              where cc.challenge_id = '{id}' group by ss.contestId;
+                                          ;"""), )
+        related_contests = [{"contestId": related_contest[0], "contestName": related_contest[1],
+                            "courseNumber": related_contest[2], "courseName": related_contest[3]}
+                           for related_contest in related_contests]
         test_case_objects = []
         for row in resultTestCases:
             test_case = {
@@ -65,6 +80,7 @@ def getChallenge(id):
                     "testCases": test_case_objects,
                     "max_score":stat[0][0],
                     "total_submission": stat[0][1],
+                    "relatedContests": related_contests,
                             }), 200
         else:
             return jsonify({

@@ -19,44 +19,29 @@ def add_challenge():
              data['constraints'], data['output_format'], converted_tags,ownerUniversityNumber,
              "public" if data['challengePrivacy'] is True else "private")
         )
-        return result
-    except Exception as e:
-        return {'message': str(e)}, 409
-
-@app.route('/challenge_id', methods=['GET'])
-def get_challenge_id():
-    try:
+        # get_challenge_id
         sql_query = """
-            SELECT id 
-            FROM challenges 
-            WHERE 
-                name = %s 
-                AND description = %s 
-                AND difficulty = %s 
-                AND problem_statement = %s 
-                AND input_format = %s 
-                AND constraints = %s 
-                AND output_format = %s 
-                AND JSON_CONTAINS(tags, %s)
-                AND ownerUniversityNumber = %s
-        """
-        tokenData = getattr(request, 'tokenData', None)
-        ownerUniversityNumber = tokenData['universityNumber']
+                    SELECT id 
+                    FROM challenges 
+                    WHERE 
+                        name = %s 
+                        AND description = %s 
+                        AND difficulty = %s 
+                        AND problem_statement = %s 
+                        AND input_format = %s 
+                        AND constraints = %s 
+                        AND output_format = %s
+                        AND ownerUniversityNumber = %s
+                """
+
         params = (
-            request.args.get('name'),
-            request.args.get('description'),
-            request.args.get('difficulty'),
-            request.args.get('problem_statement'),
-            request.args.get('input_format'),
-            request.args.get('constraints'),
-            request.args.get('output_format'),
-            request.args.get('tags'),
-            ownerUniversityNumber
+            data['name'], data['description'], data['difficulty'], data['problem_statement'], data['input_format'],
+            data['constraints'], data['output_format'], ownerUniversityNumber
         )
         cursor = connection.cursor()
         cursor.execute(sql_query, params)
         result = cursor.fetchall()
-        return jsonify({'message': result[len(result)-1][0]}), 200
+        return jsonify({'message': result[len(result) - 1][0]}), 200
     except Exception as e:
         return {'message': str(e)}, 409
 

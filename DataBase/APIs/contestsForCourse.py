@@ -40,7 +40,7 @@ def getContestForCourse(id,studendCount):
                 "ownerName": cursor.fetchone(),
                 'solved': False,
                 "statistics": [
-                    {'key': 'Solved Rate: ', "val": f"{rate}%"},#******************************************************
+                    {'key': 'Solved Rate: ', "val": f"{rate}%"},
                     {'key': 'max Score: ', "val": maxVal}
                 ]
             }

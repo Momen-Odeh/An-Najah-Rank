@@ -40,10 +40,10 @@ def get_contests_info():
                     SELECT *
                     FROM challenges
                     WHERE
-                    ownerUniversityNumber = '{ownerUniversityNumber}'
-                    or
-                    challengePrivacy= 'public'
-        """
+                        (ownerUniversityNumber = '{ownerUniversityNumber}'
+                        OR challengePrivacy = 'public')
+                        AND id IN (SELECT challenge_id FROM test_cases WHERE is_sample = '1');
+                """
         cursor = execute_query(connection, query)
         myChallenges = fetch_results(cursor)
 
