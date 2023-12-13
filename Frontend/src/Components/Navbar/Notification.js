@@ -93,6 +93,7 @@ const Notification = () => {
                     url += `/contests/${notification.contestId}`;
                   if (notification?.challengeId)
                     url += `/challenges/${notification.challengeId}`;
+                  closeNotificationPanel();
                   if (notification?.courseNumber) navigate(url);
                 }}
               >

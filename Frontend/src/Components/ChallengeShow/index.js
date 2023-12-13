@@ -26,7 +26,7 @@ const ChallengeShow = ({ Name, solved, statistics, url, endDate }) => {
           )}
         </Row>
         <Row className={classes.statisticsRow}>
-          {statistics.map((item, index) => (
+          {statistics?.map((item, index) => (
             <Col xs={"auto"} key={index} className="mb-1">
               <Text
                 text={item.key}

@@ -82,7 +82,7 @@ const CourseView = () => {
           backgroundImage: backgroundImage
             ? backgroundImage
             : "https://wallpapercrafter.com/desktop/161398-low-poly-digital-art-network-dots-abstract-lines-red-cyan.png",
-          contests: response.data.contests.map((item) => {
+          contests: response.data.contests?.map((item) => {
             return {
               ...item,
               Name: item.name,

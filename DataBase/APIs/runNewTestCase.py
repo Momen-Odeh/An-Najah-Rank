@@ -68,20 +68,19 @@ def run_new_test_case():
             else:
                 total_score = round(((old_strength / total_strength) * submission[3]) +
                                 ((test_case[4] / total_strength) * test_case_score))
-            print("total_score", total_score)
-            if not dataResponse:
-                dataResponse = [False, None, None]
+            if (not dataResponse or len(dataResponse)==0):
+                dataResponse.append([False, None, None])
             if operation == "create":
                 insert_data(connection, 'submission_testCases',
                             ['submissionId', 'testCaseId', 'status', 'stdout', 'stderr'],
                             (submission[0], test_case_id, test_case_result,
-                             dataResponse[1] if dataResponse[0] == True else None,
-                             dataResponse[2] if dataResponse[0] == False else None))
+                             dataResponse[0][1] if dataResponse[0][0] == True else None,
+                             dataResponse[0][2] if dataResponse[0][0] == False else None))
             else:
                 update_data(connection, 'submission_testCases', ['status', 'stdout', 'stderr'],
                             (test_case_result,
-                             dataResponse[1] if dataResponse[0] == True else None,
-                             dataResponse[2] if dataResponse[0] == False else None),
+                             dataResponse[0][1] if dataResponse[0][0] == True else None,
+                             dataResponse[0][2] if dataResponse[0][0] == False else None),
                             f"submissionId = '{submission[0]}' AND testCaseId = '{test_case_id}'"
                             )
 

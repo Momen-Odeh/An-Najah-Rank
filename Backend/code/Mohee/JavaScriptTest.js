@@ -1,6 +1,6 @@
 function processData(input) { 
   const [num1, num2] = input.split(' ').map(Number); 
-  const sum = num1 + num2+1; 
+  const sum = num1 + num2; 
   console.log(sum); 
 } 
  process.stdin.resume(); 
