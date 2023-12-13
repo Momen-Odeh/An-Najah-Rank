@@ -34,7 +34,7 @@ def add_challenge_student():
                 if output[i].strip() == dataResponse[i][1].strip():
                     submissionResult += testCases[i]['strength']
                 totalStrength += testCases[i]['strength']
-            submissionResult = int((submissionResult / totalStrength) * 100)
+            submissionResult = round((submissionResult / totalStrength) * 100)
             print(dataResponse)
         else: # if compilation error occur
             testCasesResult = [0 for x in output]

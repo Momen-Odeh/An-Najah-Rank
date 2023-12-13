@@ -114,14 +114,7 @@ const CreateChallengeDetails = ({ operation, data }) => {
       setLoading(true);
       try {
         if (operation === "create") {
-          await axios.post("/challenges", challenge);
-          challenge = {
-            ...challenge,
-            tags:
-              details.tags.length === 0 ? null : JSON.stringify(details.tags),
-          };
-          const params = new URLSearchParams(challenge);
-          const res = await axios.get("/challenge_id?" + params.toString());
+          const res = await axios.post("/challenges", challenge);
           navigate(`/administration/challenges/${res.data.message}/test-cases`);
         } else {
           await axios.put(`/challenges/${id}`, challenge);
@@ -341,7 +334,6 @@ const CreateChallengeDetails = ({ operation, data }) => {
           />
         </Col>
       </Row>
-
       {loading && (
         <Row>
           <Col xs={"auto"} className={classes.Loaderspace}></Col>

@@ -265,7 +265,7 @@ const ContestChallenges = ({ challengesData, challengesContest }) => {
         <Col>
           <InputFiledRank
             type="text"
-            placeholder="Type username to search"
+            placeholder="Type challenge name"
             width={"250px"}
             value={search}
             onChange={(e) => {
