@@ -49,7 +49,7 @@ const Header = ({ activeTab }) => {
               className={`${classes.hoveringColor} ${
                 activeTab === routeNames.HOME ? classes.activeTab : ""
               }`}
-              onClick={() => navigate(homePath)}
+              onClick={() => navigate("/courses")}
             >
               Courses
             </Nav.Link>
@@ -76,15 +76,15 @@ const Header = ({ activeTab }) => {
               ))}
             </div>
           </Nav>
-          <Nav className={classes.customInputGroup}>
+          {/* <Nav className={classes.customInputGroup}>
             <SearchBox />
-          </Nav>
+          </Nav> */}
         </Navbar.Collapse>
         <Nav style={{ order: "1" }} className={classes.userChoiceLarge}>
           <UserChoices userChoices={userChoicesData} />
         </Nav>
         <Nav className="ml-auto d-flex flex-row">
-          <Messages />
+          {/* <Messages /> */}
           <Notification />
         </Nav>
       </Container>

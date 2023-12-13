@@ -58,8 +58,10 @@ const UserChoices = ({ userChoices }) => {
               <duv
                 onClick={() => {
                   if (userChoice.title === "Logout") {
+                    closeUserChoices();
                     logOutSystem();
                   } else {
+                    closeUserChoices();
                     navigate(userChoice.link);
                   }
                 }}
