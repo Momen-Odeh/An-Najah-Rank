@@ -37,6 +37,21 @@ def getUserCourses():
                     GROUP BY c.courseNumber, c.name, c.description, c.ownerUniversityNumber, c.backgroundImage
                     {limitVal};
                     """
+        elif tokenData['role'] == 'professor' and request.args.get('id') is None:
+            sql = f"""
+                    SELECT  c.courseNumber,
+                    c.name,
+                    c.description,
+                    c.ownerUniversityNumber,
+                    c.backgroundImage,
+                    GROUP_CONCAT(DISTINCT u.fullName) AS moderatorFullNames
+                    FROM courses c
+                    LEFT join course_moderators  cm ON c.courseNumber = cm.courseNumber
+                    LEFT join user u on u.universityNumber = cm.stuffNumber
+                    WHERE cm.stuffNumber = '{userid}' or c.ownerUniversityNumber='{userid}'
+                    GROUP BY c.courseNumber, c.name, c.description, c.ownerUniversityNumber, c.backgroundImage
+                    {limitVal};
+                    """
         else:
             sql = f"""
                     SELECT

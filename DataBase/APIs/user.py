@@ -67,7 +67,7 @@ def UpdateUserImg():
     try:
         image = request.files['image']
         result = fetch_results(
-            execute_query(connection, f"SELECT * FROM `an-najah rank`.user where universityNumber = '{tokenData['universityNumber']}';")
+            execute_query(connection, f"SELECT * FROM user where universityNumber = '{tokenData['universityNumber']}';")
         )
         if result[0][6] is not None or result[0][6] != "":
             delete_file_from_AWS(result[0][6])
@@ -76,14 +76,14 @@ def UpdateUserImg():
         # print("imageData")
         key = upload_file(image, f"images/userImages/{tokenData['email']}")
         update_data(connection, 'user', ["img"], (key), f"(email = '{tokenData['email']}')")
-        return jsonify({
+        return {
             "status": "Update image successfully",
-        }), 200
+        }, 200
     except Exception as e:
-        return jsonify({
+        return {
             "status": "error",
             "error": e,
-        }), 400
+        }, 400
 
 
 @app.route('/user', methods=['PUT'])  # must add token to the API
