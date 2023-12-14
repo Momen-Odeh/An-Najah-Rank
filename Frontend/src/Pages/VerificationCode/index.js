@@ -38,18 +38,21 @@ const VarificationCode = () => {
         })
         .then((resp) => {
           if (resp.status === 200) {
-            if (sessionStorage.getItem("event") === "forget Password")
+            if (sessionStorage.getItem("event") === "forget Password") {
+              setLoading(false);
               navigate("/new-password");
-            else if (sessionStorage.getItem("event") === "register") {
+            } else if (sessionStorage.getItem("event") === "register") {
               axios
                 .put("/userStatusAuth", {
                   email: sessionStorage.getItem("email"),
                 })
                 .then((resp) => {
                   sessionStorage.clear();
+                  setLoading(false);
                   navigate("/log-in");
                 })
                 .catch((err) => {
+                  setLoading(false);
                   setAlert({
                     value: true,
                     msg: "" + err,
@@ -57,7 +60,6 @@ const VarificationCode = () => {
                 });
             }
           }
-          setLoading(false);
         })
         .catch((err) => {
           if (err.response.data.msg === "invalid access") {
