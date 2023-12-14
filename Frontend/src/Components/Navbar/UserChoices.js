@@ -1,13 +1,16 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useContext } from "react";
 import { Nav, Overlay } from "react-bootstrap";
 import { AiOutlineUser } from "react-icons/ai";
 import { SlArrowDown } from "react-icons/sl";
 import { useNavigate } from "react-router-dom";
 import useStyle from "./Style";
 import Cookies from "js-cookie";
+import userContext from "../../Utils/userContext";
+import Avatar from "react-avatar";
 const UserChoices = ({ userChoices }) => {
   const classes = useStyle();
   const [showChoices, setShowChoices] = useState(false);
+  const { activeUser } = useContext(userContext);
   const ref = useRef(null);
   const handleUserChoices = (event) => {
     event.preventDefault();
@@ -33,12 +36,16 @@ const UserChoices = ({ userChoices }) => {
         ref={ref}
         onClick={handleUserChoices}
       >
-        <div className={classes.iconContainer}>
-          <AiOutlineUser size={24} color="#576871" />
-        </div>
+        {activeUser?.image ? (
+          <Avatar round src={activeUser.image} size="40px" />
+        ) : (
+          <div className={classes.iconContainer}>
+            <AiOutlineUser size={"30px"} color="#576871" />
+          </div>
+        )}
         <SlArrowDown
           size={20}
-          className={`${classes.hoveringColor} ${
+          className={`ml-2 ${classes.hoveringColor} ${
             showChoices ? classes.clickedBtn : ""
           }`}
         />

@@ -7,7 +7,7 @@ from fileManagment.getLanguageType import get_language_type
 import requests
 import os
 from datetime import datetime
-
+from FlaskSetUp import backend_base_url
 @app.route('/student-challenge-submissions', methods=['POST'])
 def add_challenge_student():
     try:
@@ -35,7 +35,7 @@ def add_challenge_student():
         languageAPI=language
         if(languageAPI=="cpp"):
             languageAPI="c"
-        dataResponse = requests.post(f'http://127.0.0.1:5001/{languageAPI}', json={"code": code, "input": input})
+        dataResponse = requests.post(f'{backend_base_url}/{languageAPI}', json={"code": code, "input": input})
         response_json = dataResponse.json()
         dataResponse = response_json.get("output", [])
         testCasesResult = []

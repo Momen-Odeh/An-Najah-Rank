@@ -8,9 +8,18 @@ const useStyle = createUseStyles({
     color: "white !important",
   },
   burgerBtn: {
-    backgroundColor: "white",
-    order: "-2",
+    backgroundColor: "#979faf",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    order: "5",
+    marginLeft: "8px",
     fontSize: "18px",
+    padding: "4px 2px",
+    width: "45px",
+    "&:hover": {
+      // backgroundColor: "white",
+    },
   },
   Overlay: {
     marginTop: "13px",
@@ -59,6 +68,7 @@ const useStyle = createUseStyles({
     justifyContent: "space-between",
     alignItems: "center",
     cursor: "pointer",
+    order: 4,
   },
   notificationText: {
     fontSize: "14px",
@@ -76,12 +86,15 @@ const useStyle = createUseStyles({
     marginLeft: "-10px",
     marginRight: "-10px",
     margin: "2px 2px",
+    order: 29,
   },
   notificationLink: {
     textAlign: "center",
     fontSize: "18px",
     color: "#576871",
     cursor: "pointer",
+    zIndex: 2000,
+    order: 30,
     "&:hover": {
       fontWeight: "bold",
       textDecoration: "underline",
@@ -126,14 +139,13 @@ const useStyle = createUseStyles({
     width: "100%",
   },
   iconContainer: {
-    width: "36px",
-    height: "36px",
+    width: "40px",
+    height: "40px",
     backgroundColor: "#e7eeef",
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
     borderRadius: "50%",
-    marginRight: "8px",
   },
   userChoicesContainer: {
     minWidth: "200px",
@@ -177,36 +189,38 @@ const useStyle = createUseStyles({
       boxShadow: "none",
       position: "fixed",
       width: "100%",
-      height: "100%",
       maxWidth: "100%",
       minWidth: "100%",
-      maxHeight: "100%",
       zIndex: 1000,
       display: "flex",
       justifyContent: "center",
       alignItems: "center",
+      overflow: "visible",
     },
     OverlayContent: {
       position: "fixed",
       top: 50,
+      left: 0,
       maxWidth: "100%",
       minWidth: "100%",
       width: "100%",
-      height: "100%",
+      backgroundColor: "white",
     },
     OverlayTitle: {
       position: "fixed",
+      top: 1,
       maxWidth: "100%",
       minWidth: "100%",
       width: "100%",
-      height: "100%",
     },
   },
 
   userChoiceLarge: {
     display: "block",
   },
-
+  navCollapse: {
+    order: 0,
+  },
   userChoicesSmall: {
     display: "none",
   },
@@ -216,6 +230,9 @@ const useStyle = createUseStyles({
   "@media (max-width: 991px)": {
     userChoicesSmall: {
       display: "block",
+    },
+    navCollapse: {
+      order: 8,
     },
     userChoiceLarge: {
       display: "none",
@@ -231,6 +248,7 @@ const useStyle = createUseStyles({
       display: "block",
       height: "3px",
       backgroundColor: "green",
+      width: "60px",
       marginTop: "6px",
       marginBottom: "0",
       paddingBottom: "0",

@@ -6,7 +6,7 @@ import requests
 from FlaskSetUp import app
 from flask import request, jsonify
 from Notification.notification import handle_notification
-
+from FlaskSetUp import backend_base_url
 
 @app.route('/run-new-test-case', methods=['POST'])
 def run_new_test_case():
@@ -36,8 +36,7 @@ def run_new_test_case():
             lang = get_language_type(submission[1])
             if (lang == "c++"):
                 lang = "c"
-            dataResponse = requests.post(f'http://127.0.0.1:5001/{lang}', json={"code": code,
-                                                                                       "input": [test_case[2]]})
+            dataResponse = requests.post(f'{backend_base_url}/{lang}', json={"code": code, "input": [test_case[2]]})
             response_json = dataResponse.json()
             dataResponse = response_json.get("output", [])
             print("dataResponse", dataResponse)
