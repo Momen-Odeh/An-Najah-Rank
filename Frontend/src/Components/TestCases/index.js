@@ -45,7 +45,7 @@ const TestCases = memo(({ operation, testCasesData, relatedContests }) => {
     "Order",
     "Input",
     "Output",
-    "Sample",
+    "Is Sample",
     "Strength",
     // "Select",
     "",
