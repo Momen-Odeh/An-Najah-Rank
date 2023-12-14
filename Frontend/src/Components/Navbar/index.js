@@ -7,13 +7,15 @@ import Messages from "./Messages";
 import UserChoices from "./UserChoices";
 import { routeNames, routes } from "../../Utils/Utils";
 import Logo from "./images/logo.jpg";
+import { useContext } from "react";
+import userContext from "../../Utils/userContext";
 const Header = ({ activeTab }) => {
   const classes = useStyle();
   const navigate = useNavigate();
+  const { activeUser } = useContext(userContext);
   const userChoicesData = [
     { id: 1, title: "Profile", link: "/profile" },
     { id: 2, title: "Settings", link: "/settings" },
-    { id: 3, title: "Submissions", link: "#Submissions" },
     { id: 4, title: "Administration", link: "/administration/courses" },
     { id: 5, title: "Logout", link: "log-in" },
   ];
@@ -30,7 +32,7 @@ const Header = ({ activeTab }) => {
       className={`${classes.navContainer} p-2`}
     >
       <Container fluid>
-        <Navbar.Brand onClick={() => navigate("/")}>
+        <Navbar.Brand onClick={() => navigate("/profile")}>
           <img src={Logo} alt="Logo" width="60" height="40" />
           <span
             className={`m-1 ${classes.textColor}`}
@@ -43,50 +45,63 @@ const Header = ({ activeTab }) => {
           aria-controls="responsive-navbar-nav"
           className={classes.burgerBtn}
         />
-        <Navbar.Collapse id="responsive-navbar-nav">
+        <Navbar.Collapse
+          id="responsive-navbar-nav"
+          className={classes.navCollapse}
+        >
           <Nav className="me-auto">
-            <Nav.Link
-              className={`${classes.hoveringColor} ${
-                activeTab === routeNames.HOME ? classes.activeTab : ""
-              }`}
-              onClick={() => navigate("/courses")}
-            >
-              Courses
-            </Nav.Link>
-            <Nav.Link
-              className={`${classes.hoveringColor} ${
-                activeTab === routeNames.LOG_IN ? classes.activeTab : ""
-              }`}
-              onClick={() => navigate(signInPath)}
-            >
-              Sign in
-            </Nav.Link>
-            <div className={classes.userChoicesSmall}>
-              {userChoicesData.map((choice, index) => (
-                <Nav.Link
-                  key={index}
-                  className={`${classes.hoveringColor}`}
-                  onClick={() => {
-                    console.log("choice.id == 5");
-                    navigate(choice.link);
-                  }}
-                >
-                  {choice.title}
-                </Nav.Link>
-              ))}
-            </div>
+            {activeUser?.email && (
+              <Nav.Link
+                className={`${classes.hoveringColor} ${
+                  activeTab === routeNames.HOME ? classes.activeTab : ""
+                }`}
+                onClick={() => navigate("/courses")}
+              >
+                Courses
+              </Nav.Link>
+            )}
+            {!activeUser?.email && (
+              <Nav.Link
+                className={`${classes.hoveringColor} ${
+                  activeTab === routeNames.LOG_IN ? classes.activeTab : ""
+                }`}
+                onClick={() => navigate(signInPath)}
+              >
+                Sign in
+              </Nav.Link>
+            )}
+            {activeUser?.email && (
+              <div className={classes.userChoicesSmall}>
+                {userChoicesData.map((choice, index) => (
+                  <Nav.Link
+                    key={index}
+                    className={`${classes.hoveringColor}`}
+                    onClick={() => {
+                      console.log("choice.id == 5");
+                      navigate(choice.link);
+                    }}
+                  >
+                    {choice.title}
+                  </Nav.Link>
+                ))}
+              </div>
+            )}
           </Nav>
           {/* <Nav className={classes.customInputGroup}>
             <SearchBox />
           </Nav> */}
         </Navbar.Collapse>
-        <Nav style={{ order: "1" }} className={classes.userChoiceLarge}>
-          <UserChoices userChoices={userChoicesData} />
-        </Nav>
-        <Nav className="ml-auto d-flex flex-row">
-          {/* <Messages /> */}
-          <Notification />
-        </Nav>
+        {activeUser?.email && (
+          <Nav style={{ order: "1" }} className={classes.userChoiceLarge}>
+            <UserChoices userChoices={userChoicesData} />
+          </Nav>
+        )}
+        {activeUser?.email && (
+          <Nav className="ml-auto d-flex flex-row">
+            {/* <Messages /> */}
+            <Notification />
+          </Nav>
+        )}
       </Container>
     </Navbar>
   );
