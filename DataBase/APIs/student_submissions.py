@@ -25,9 +25,9 @@ def add_challenge_student():
         cursor = connection.cursor()
         cursor.execute(query)
         contest = cursor.fetchone()
-        if (tokenData['role'] == "student" and
-                datetime.datetime.now() < contest[4] == 1 and datetime.datetime.now() > contest[5]):
-            return jsonify({"message": "Access Denied"}), 401
+
+        if (contest[4] == 1 and datetime.now() > contest[5]):
+            return jsonify({"message": "No more submissions, time ended"}), 401
         # ****************************************
         testCases = get_test_cases(data['challengeId'])
         input = [test_case["input_data"] for test_case in testCases]
@@ -112,7 +112,7 @@ def add_challenge_student():
         add_submission_testCases(submissionId, [test_case['id'] for test_case in testCases], testCasesResult, dataResponse)
         return jsonify({"submissionId": submissionId}), 201
     except Exception as e:
-        return {'message': str(e)}, 409
+        return {'message': str(e)}, 400
 
 
 def get_test_cases(challengeId):

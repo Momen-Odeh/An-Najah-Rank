@@ -214,7 +214,7 @@ const CodeEditor = () => {
   };
   const handleSubmitCode = async () => {
     axios
-      .post(BackEndURI + "/student-challenge-submissions", {
+      .post("/student-challenge-submissions", {
         code: textCode,
         language: language,
         challengeId: challengeId,
@@ -229,6 +229,7 @@ const CodeEditor = () => {
       })
       .catch((error) => {
         console.log(error);
+        //********************************** */
         if (
           error?.response?.data?.message === "No more submissions, time ended"
         ) {
