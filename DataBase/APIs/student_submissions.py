@@ -15,6 +15,20 @@ def add_challenge_student():
         tokenData = getattr(request, 'tokenData', None)
         code = data['code']
         language = data['language']
+        # ****************************************
+        query = f"""
+                                    SELECT *
+                                    FROM contests 
+                                    WHERE 
+                                    id ='{data['contestId']}';
+                                """
+        cursor = connection.cursor()
+        cursor.execute(query)
+        contest = cursor.fetchone()
+
+        if (contest[4] == 1 and datetime.now() > contest[5]):
+            return jsonify({"message": "No more submissions, time ended"}), 401
+        # ****************************************
         testCases = get_test_cases(data['challengeId'])
         input = [test_case["input_data"] for test_case in testCases]
         output = [test_case["output_data"] for test_case in testCases]
@@ -98,7 +112,7 @@ def add_challenge_student():
         add_submission_testCases(submissionId, [test_case['id'] for test_case in testCases], testCasesResult, dataResponse)
         return jsonify({"submissionId": submissionId}), 201
     except Exception as e:
-        return {'message': str(e)}, 409
+        return {'message': str(e)}, 400
 
 
 def get_test_cases(challengeId):

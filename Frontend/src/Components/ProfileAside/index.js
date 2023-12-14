@@ -22,6 +22,7 @@ const ProfileAside = ({ accountInfo }) => {
               <Avatar
                 round
                 src={accountInfo.img}
+                color="black"
                 size="150px"
                 name={accountInfo.fullName}
               />

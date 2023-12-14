@@ -22,4 +22,4 @@ def run_challenge_code():
         elif response_json['stderr']:  # if compilation error occur
             return jsonify({"stderr": response_json['stderr']}), 400
     except Exception as e:
-        return {"error": e}, 400
+        return {'message': str(e)}, 400

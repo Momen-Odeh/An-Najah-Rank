@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext, useState } from "react";
 import { Col, Container, Row } from "react-bootstrap";
 import useStyles from "./style";
 import Text from "../Text";
@@ -6,9 +6,34 @@ import ButtonRank from "../ButtonRank";
 import { BiCheckCircle } from "react-icons/bi";
 import { useNavigate } from "react-router-dom";
 import CountDown from "../CountDown";
-const ChallengeShow = ({ Name, solved, statistics, url, endDate }) => {
+import userContext from "../../Utils/userContext";
+const ChallengeShow = ({
+  Name,
+  solved,
+  statistics,
+  url,
+  endDate,
+  startDate,
+}) => {
   const classes = useStyles();
   const navigate = useNavigate();
+  const { activeUser } = useContext(userContext);
+  const currentTime = new Date();
+  const startTime = new Date(startDate);
+  const [completCount, setCompletCount] = useState(
+    activeUser.role === "professor" || activeUser.role === "admin"
+      ? false
+      : startTime > currentTime
+  );
+
+  // console.log(startTime, "---------------", currentTime);
+  // console.log(
+  //   "comparison start > currentTime ",
+  //   Name,
+  //   "******",
+  //   startTime > currentTime
+  // );
+
   return (
     <Container fluid className={classes.Container}>
       <Row className={classes.RowChallengeShow}>
@@ -19,9 +44,14 @@ const ChallengeShow = ({ Name, solved, statistics, url, endDate }) => {
               <BiCheckCircle size={26} color="green" className="ml-4" />
             )}
           </Col>
+          {}
           {endDate && (
             <Col className={`${classes.CountDownCol} `}>
-              <CountDown endDate={endDate} />
+              <CountDown
+                endDate={endDate}
+                startDate={startTime}
+                setCompletCount={setCompletCount}
+              />
             </Col>
           )}
         </Row>
@@ -45,6 +75,7 @@ const ChallengeShow = ({ Name, solved, statistics, url, endDate }) => {
           ))}
           <Col className={classes.ButtonTry}>
             <ButtonRank
+              disabled={completCount}
               text={solved ? "Try Again" : "Solve Challenge"}
               hoverBackgroundColor="#0e141e"
               onClick={() => navigate(url)}

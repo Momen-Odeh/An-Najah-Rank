@@ -214,7 +214,7 @@ const CodeEditor = () => {
   };
   const handleSubmitCode = async () => {
     axios
-      .post(BackEndURI + "/student-challenge-submissions", {
+      .post("/student-challenge-submissions", {
         code: textCode,
         language: language,
         challengeId: challengeId,
@@ -228,7 +228,15 @@ const CodeEditor = () => {
         );
       })
       .catch((error) => {
-        toastError("there is an error resubmit your code");
+        console.log(error);
+        //********************************** */
+        if (
+          error?.response?.data?.message === "No more submissions, time ended"
+        ) {
+          toastError("No more submissions, time ended");
+        } else {
+          toastError("there is an error resubmit your code");
+        }
       });
   };
   const [loading, setLoading] = useState(true);

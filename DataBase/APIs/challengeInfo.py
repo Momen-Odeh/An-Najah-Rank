@@ -5,7 +5,7 @@ from dataBaseConnection import execute_query, fetch_results
 from guard.AccessChallenge import accessChallenge
 from guard.professorAccess.AccessChallengeProfessor import accessChallengeProfessor
 import json
-
+import datetime
 @app.route('/challenge/<int:id>', methods=['GET'])
 def getChallenge(id):
     try:
@@ -19,7 +19,19 @@ def getChallenge(id):
             access = accessChallengeProfessor(id, universityNumber)
         if not access:
             return jsonify({"message": "Access Denied"}), 401
-
+        #
+        query = f"""
+                            SELECT *
+                            FROM contests 
+                            WHERE 
+                            id ='{contestId}';
+                        """
+        cursor = connection.cursor()
+        cursor.execute(query)
+        contest = cursor.fetchone()
+        if (tokenData['role'] == "student" and datetime.datetime.now() < contest[3]):
+            return jsonify({"message": "Access Denied"}), 401
+        #
         cursor = connection.cursor()
         cursor.execute(f"SELECT * FROM challenges where id = '{id}';")
         result = cursor.fetchone()

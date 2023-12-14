@@ -1,14 +1,16 @@
-#include <stdio.h>
-
-int main() {
-    int num1, num2;
-    scanf("%d", &num1);
-
-   scanf("%d", &num2);
-
-    int sum = num1 + num2;
-
-    printf("%d\n", sum);
-
-    return 0;
-}
+  #include <cmath>
+  #include <cstdio>
+  #include <vector>
+  #include <iostream>
+  #include <algorithm>
+  using namespace std;
+  
+  
+  int main() {
+    int x,y;
+    cin >>x;
+    cin >>y;
+    cout << x+y;
+      return 0;
+  }
+  
