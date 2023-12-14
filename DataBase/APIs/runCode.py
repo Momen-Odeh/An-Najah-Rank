@@ -19,7 +19,7 @@ def run_challenge_code():
         if dataResponse:
             print(dataResponse)
             return jsonify({"dataResponse": dataResponse})
-        else:  # if compilation error occur
+        elif response_json['stderr']:  # if compilation error occur
             return jsonify({"stderr": response_json['stderr']}), 400
     except Exception as e:
-        print(e)
+        return {"error": e}, 400

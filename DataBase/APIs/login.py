@@ -4,8 +4,9 @@ from MySQL_SetUp import connection
 from flask import request, jsonify
 from authentication import generate_token
 from FlaskSetUp import app
+from fileManagment.getFileAWS import get_file_from_AWS
 
-@app.route('/login',methods=['POST'])
+@app.route('/login', methods=['POST'])
 def login_user():
     try:
         request_data = request.json
@@ -19,8 +20,14 @@ def login_user():
                 stored_password_hash = user_data[0][5]
                 if check_password_hash(stored_password_hash, password):
                     if user_data[0][4] == "approved":
+                        image = get_file_from_AWS(user_data[0][6]) if user_data[0][6] else None
                         token = generate_token(user_data[0][1], user_data[0][0], user_data[0][2], user_data[0][3])
-                        return jsonify({'message': "Login successful", "user": {"universityNumber": user_data[0][0]}, "token": token}), 200
+                        return jsonify({'message': "Login successful", "user": {"universityNumber": user_data[0][0],
+                                                                                "email": user_data[0][1],
+                                                                                "name": user_data[0][2],
+                                                                                "role": user_data[0][3],
+                                                                                "image": image},
+                                        "token": token}), 200
                     else:
                         if user_data[0][3] == "student":
                             return jsonify({'message': "your account not verified"}), 401

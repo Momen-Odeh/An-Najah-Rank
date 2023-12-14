@@ -40,7 +40,7 @@ from guard.professorAccess import haveAccess
 from Notification.getNotifications import get_notifications
 from APIs.latestChallenge import getLastChallenges
 from APIs.runNewTestCase import run_new_test_case
-
+from APIs.get_user_info import get_user_info
 
 @app.route('/flask', methods=['GET'])
 def index():
