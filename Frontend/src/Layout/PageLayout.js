@@ -22,27 +22,26 @@ function PageLayout() {
   useEffect(() => {
     if (token) {
       axios
-        .get("/checkToken")
+        .get("/get-user-info")
         .then((res) => {
-          setActiveUser(res.data);
+          setActiveUser(res?.data?.user);
+          return axios.get("/get-notifications", { params: { all: 0 } });
         })
-        .then(
-          axios
-            .get("/get-notifications", { params: { all: 0 } })
-            .then((res) => {
-              setNotifications(res.data.notifications);
-              setNewNotifications(
-                res.data.notifications?.filter(
-                  (n) => n.id > res.data.lastReadNotification
-                )?.length
-              );
-              setLoadingPage(false);
-            })
-        )
+        .then((res) => {
+          setNotifications(res?.data?.notifications);
+          setNewNotifications(
+            res.data.notifications?.filter(
+              (n) => n.id > res?.data?.lastReadNotification
+            )?.length
+          );
+          setLoadingPage(false);
+        })
         .catch((error) => {
-          console.log(error);
+          console.error(error);
           setLoadingPage(false);
         });
+    } else {
+      setLoadingPage(false);
     }
   }, []);
 
