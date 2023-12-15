@@ -10,7 +10,6 @@ import axios from "axios";
 import TestCaseProblem from "../TestCaseProblem";
 import { FaCheck } from "react-icons/fa";
 import { ImCross } from "react-icons/im";
-import BackEndURI from "../../Utils/BackEndURI";
 import { useNavigate, useParams } from "react-router-dom";
 import { toastError } from "../../Utils/toast";
 
@@ -170,7 +169,6 @@ const CodeEditor = () => {
         const stderr = err.response?.data.stderr;
         console.log("stderr: " + stderr);
         console.log("Error Type:", "Run Time Error", "&&", "stderr:", stderr);
-        context.setLoading(false);
         context.testCases.setVal({ ...context.testCases.val, show: true });
         return [
           {
@@ -199,8 +197,10 @@ const CodeEditor = () => {
         buildTableUI("java");
         break;
       case "c":
-      case "cpp":
         buildTableUI("c");
+        break;
+      case "cpp":
+        buildTableUI("cpp");
         break;
       case "python":
         buildTableUI("python");
@@ -208,11 +208,15 @@ const CodeEditor = () => {
       case "javascript":
         buildTableUI("javascript");
         break;
+      case "regularexpression":
+        buildTableUI("regularexpression");
+        break;
       default:
         break;
     }
   };
   const handleSubmitCode = async () => {
+    context.setLoading(true);
     axios
       .post("/student-challenge-submissions", {
         code: textCode,
@@ -223,12 +227,14 @@ const CodeEditor = () => {
       })
       .then((res) => {
         const submissionId = res.data.submissionId;
+        context.setLoading(false);
         navigate(
           `/courses/${id}/contests/${contestId}/challenges/${challengeId}/submissions/${submissionId}`
         );
       })
       .catch((error) => {
         console.log(error);
+        context.setLoading(false);
         //********************************** */
         if (
           error?.response?.data?.message === "No more submissions, time ended"
