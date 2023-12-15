@@ -4,7 +4,7 @@ def statistics_for_user (userId):
     sql = f"""
             select se.*,c.id as contest_id , cc.challenge_id,ch.difficulty,
             count(cc.challenge_id) as totalSubmition,
-            (select count(ss.id)
+            (select count(DISTINCT ss.courseNumber, ss.contestId, ss.challengeId)
             from student_submissions ss
             inner join challenges ccc on  ccc.id = ss.challengeId
             where ss.studentUniversityNumber = '{userId}' and ss.submissionResult = '100' 
