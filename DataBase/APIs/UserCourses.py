@@ -63,8 +63,8 @@ def getUserCourses():
                     GROUP_CONCAT(DISTINCT user.fullName) AS moderatorFullNames
                     FROM student_enrollments
                     INNER JOIN courses ON student_enrollments.courseNumber = courses.courseNumber
-                    INNER JOIN course_moderators ON student_enrollments.courseNumber = course_moderators.courseNumber
-                    INNER JOIN user ON course_moderators.stuffNumber = user.universityNumber
+                    LEFT JOIN course_moderators ON student_enrollments.courseNumber = course_moderators.courseNumber
+                    LEFT JOIN user ON course_moderators.stuffNumber = user.universityNumber
                     WHERE student_enrollments.studentNumber = '{userid}'
                     GROUP BY courses.courseNumber, courses.name, courses.description, courses.ownerUniversityNumber, courses.backgroundImage
                     {limitVal};
