@@ -4,10 +4,10 @@
   class Main {
   
       public static void main(String[] args) {
-        Scanner in = new Scanner(System.in);
-        int a = in.nextInt();
-        int b = in.nextInt();
-        ///////////////////////////// print result
-        System.out.print(a+b);
+          /* Enter your code here. Read input from STDIN. Print output to STDOUT. Your class should be named Solution. */
+          Scanner scanner = new Scanner(System.in);
+          int x = scanner.nextInt();
+          int result = (int)Math.sqrt(x);
+          System.out.print(result);
       }
   }
