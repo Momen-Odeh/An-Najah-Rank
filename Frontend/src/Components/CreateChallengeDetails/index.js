@@ -15,8 +15,10 @@ import CheckRank from "../CheckRank";
 const CreateChallengeDetails = ({ operation, data }) => {
   const [loading, setLoading] = useState(false);
   const { id } = useParams();
+  const languages = ["Java", "C", "C++", "Python", "JavaScript", "Regex"];
   const [details, setDetails] = useState({
     difficulty: "Easy",
+    challengeLanguage: ["Java", "C", "Python", "JavaScript", "C++"],
     name: "",
     description: "",
     problemStatement: "",
@@ -33,6 +35,7 @@ const CreateChallengeDetails = ({ operation, data }) => {
     inputFormat: null,
     constraints: null,
     outputFormat: null,
+    language: null,
   });
   useEffect(() => {
     if (operation === "create") {
@@ -55,6 +58,7 @@ const CreateChallengeDetails = ({ operation, data }) => {
         });
     } else if (data) setDetails(data);
   }, [data]);
+  console.log(details);
   const navigate = useNavigate();
   const handleChange = (e, nameVal = null, val = null) => {
     if (e) {
@@ -74,6 +78,7 @@ const CreateChallengeDetails = ({ operation, data }) => {
       constraints: details.constraints,
       output_format: details.outputFormat,
       challengePrivacy: details.challengePrivacy,
+      challengeLanguage: details.challengeLanguage,
       tags: details?.tags?.length === 0 ? null : details.tags,
     };
     setErrorMsg({
@@ -101,6 +106,13 @@ const CreateChallengeDetails = ({ operation, data }) => {
         challenge?.output_format?.length === 0
           ? "please enter the challenge output format"
           : null,
+      language:
+        details.challengeLanguage?.length === 0
+          ? "please choose challenge languages"
+          : details.challengeLanguage?.includes("Regex") &&
+            details.challengeLanguage?.length > 1
+          ? "Regex must be alone"
+          : null,
     });
 
     if (
@@ -109,7 +121,11 @@ const CreateChallengeDetails = ({ operation, data }) => {
       challenge.problem_statement?.length !== 0 &&
       challenge.input_format?.length !== 0 &&
       challenge.constraints?.length !== 0 &&
-      challenge.output_format?.length !== 0
+      challenge.output_format?.length !== 0 &&
+      ((details.challengeLanguage?.length > 0 &&
+        !details.challengeLanguage?.includes("Regex")) ||
+        (details.challengeLanguage?.includes("Regex") &&
+          details.challengeLanguage?.length === 1))
     ) {
       setLoading(true);
       try {
@@ -159,16 +175,52 @@ const CreateChallengeDetails = ({ operation, data }) => {
                 value: "Hard",
                 text: "Hard",
               },
-              {
-                value: "Advanced",
-                text: "Advanced",
-              },
-              {
-                value: "Expert",
-                text: "Expert",
-              },
             ]}
           />
+        </Col>
+      </Row>
+      <Row className="mb-3">
+        <Col xs={"auto"} className={classes.TitleFiled}>
+          <Text
+            fontFamily="Open Sans"
+            text={"Specify Language"}
+            height={"40px"}
+            wegiht={"600"}
+          />
+        </Col>
+        <Col className={`${classes.ColInputFiled} ${classes.CheckRank}`}>
+          <Row className="gap-4">
+            {languages.map((item) => (
+              <Col xs="auto">
+                <CheckRank
+                  type={"checkbox"}
+                  label={item}
+                  checked={details.challengeLanguage?.includes(item)}
+                  name={item}
+                  onChange={(e) => {
+                    e.target.checked
+                      ? setDetails({
+                          ...details,
+                          challengeLanguage: [
+                            ...details.challengeLanguage,
+                            item,
+                          ],
+                        })
+                      : setDetails({
+                          ...details,
+                          challengeLanguage: details.challengeLanguage.filter(
+                            (i) => i !== item
+                          ),
+                        });
+                  }}
+                  disabled={loading}
+                />
+              </Col>
+            ))}
+          </Row>
+          {errorMsg.language && (
+            <span className={classes.msg}>* {errorMsg.language}</span>
+          )}
         </Col>
       </Row>
       <Row className="mb-3">
@@ -304,7 +356,7 @@ const CreateChallengeDetails = ({ operation, data }) => {
           <CheckRank
             type={"checkbox"}
             label={`make the challenge public.`}
-            name="hasEndTime"
+            name="challengePrivacy"
             checked={details.challengePrivacy}
             onChange={() =>
               setDetails({

@@ -60,7 +60,7 @@ def get_contests_info():
         fields = [
             "id", "name", "description", "difficulty", "problem_statement", "input_format", "constraints",
             "output_format", "tags", "created_at", "updated_at", "ownerUniversityNumber","challengePrivacy",
-            "maxScore", "challenge_id", "contest_id"
+            "challengeLanguage", "maxScore", "challenge_id", "contest_id"
         ]
         ContestChallengesData = []
         for record in ContestChallenges:

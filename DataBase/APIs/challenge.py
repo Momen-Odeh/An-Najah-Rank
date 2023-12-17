@@ -10,14 +10,15 @@ def add_challenge():
         tokenData = getattr(request, 'tokenData', None)
         ownerUniversityNumber = tokenData['universityNumber']
         converted_tags = json.dumps(data['tags'])
+        converted_languages = json.dumps(data['challengeLanguage'])
         result = insert_data(
             connection,
             'challenges',
             ['name', 'description', 'difficulty', 'problem_statement', 'input_format', 'constraints', 'output_format',
-             'tags','ownerUniversityNumber','challengePrivacy'],
+             'tags', 'ownerUniversityNumber', 'challengePrivacy', 'challengeLanguage'],
             (data['name'], data['description'], data['difficulty'], data['problem_statement'], data['input_format'],
-             data['constraints'], data['output_format'], converted_tags,ownerUniversityNumber,
-             "public" if data['challengePrivacy'] is True else "private")
+             data['constraints'], data['output_format'], converted_tags, ownerUniversityNumber,
+             "public" if data['challengePrivacy'] is True else "private", converted_languages)
         )
         # get_challenge_id
         sql_query = """
@@ -61,7 +62,8 @@ def get_challenge_details():
                 'inputFormat': result[5],
                 'constraints': result[6],
                 'outputFormat': result[7],
-                'tags': json.loads(result[8])
+                'tags': json.loads(result[8]),
+                'challengeLanguage': json.loads(result[13])
             }
             return jsonify({'message': response}), 200
         else:
@@ -74,6 +76,7 @@ def update_challenge(id):
     try:
         data = request.get_json()
         converted_tags = json.dumps(data['tags'])
+        converted_languages = json.dumps(data['challengeLanguage'])
         condition = 'id = %s'
         new_values = (
             data['name'],
@@ -85,13 +88,14 @@ def update_challenge(id):
             data['output_format'],
             converted_tags,
             "public" if data['challengePrivacy'] is True else "private",
+            converted_languages,
             id
         )
         result = update_data(
             connection,
             'challenges',
             ['name', 'description', 'difficulty', 'problem_statement', 'input_format', 'constraints', 'output_format',
-             'tags', 'challengePrivacy'],
+             'tags', 'challengePrivacy', 'challengeLanguage'],
             new_values,
             condition
         )

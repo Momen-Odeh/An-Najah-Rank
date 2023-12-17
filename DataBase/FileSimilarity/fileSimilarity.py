@@ -30,10 +30,23 @@ def FileSimilarity():
             connection,
             'contests_challenges',
             ['similarityFileKey'],
-            ('in progress'),
+            ['in progress'],
             f"(contest_id = '{contestId}' and challenge_id = '{challengeId}')"
         )
+        print("******************* start calculate *************")
+        cursor = connection.cursor()
+        cursor.execute(f"""
+                                    SELECT name from courses
+                                    WHERE  courseNumber = '{courseId}'
+                                """)
+        course_name = cursor.fetchone()[0]
+
         result = calculateSimilariy(contestId, challengeId)
+        if result is None:
+            handle_notification(False, f"""Failed in calculate similarity for submissions in {course_name}
+                                       course, please try again later""",
+                                [universityNumber])
+            raise Exception("Similarity server fails")
         result = {
             "challengeId":challengeId,
             "contestId":contestId,
@@ -73,20 +86,15 @@ def FileSimilarity():
         update_data(connection, 'contests_challenges', ["similarityFileKey"], (key),
                     f"(contest_id = '{contestId}' and challenge_id = '{challengeId}')")
         print(key)
-        cursor = connection.cursor()
-        cursor.execute(f"""
-                            SELECT name from courses
-                            WHERE  courseNumber = '{courseId}'
-                        """)
-        course_name = cursor.fetchone()[0]
         handle_notification(False, f"Similarity data ready for submissions in {course_name} course", [universityNumber])
         return result, 200
     except Exception as e:
+        print("error ******************", e)
         update_data(
             connection,
             'contests_challenges',
             ['similarityFileKey'],
-            (None),
+            [None],
             f"(contest_id = '{contestId}' and challenge_id = '{challengeId}')"
         )
         return {"error": e}, 409

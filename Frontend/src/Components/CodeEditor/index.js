@@ -10,6 +10,7 @@ import axios from "axios";
 import TestCaseProblem from "../TestCaseProblem";
 import { FaCheck } from "react-icons/fa";
 import { ImCross } from "react-icons/im";
+import BackEndURI from "../../Utils/BackEndURI";
 import { useNavigate, useParams } from "react-router-dom";
 import { toastError } from "../../Utils/toast";
 
@@ -62,6 +63,7 @@ process.stdin.on("end", function () {
    processData(_input);
 });
 `,
+  regularexpression: ``,
 };
 const choices = [
   { title: "Java", value: "java" },
@@ -69,7 +71,7 @@ const choices = [
   { title: "C++", value: "cpp" },
   { title: "Python", value: "python" },
   { title: "JavaScript", value: "javascript" },
-  { title: "Regular Expression", value: "regularexpression" },
+  { title: "Regex", value: "regularexpression" },
 ];
 
 const CodeEditor = () => {
@@ -80,6 +82,7 @@ const CodeEditor = () => {
   const [language, setLanguage] = useState("java");
   const [textCode, setTextCode] = useState("");
   const context = useContext(ChallengeContext);
+  console.log("language", language);
   const genrateTab = (arr) => {
     return arr.map((item, index) => {
       if (item.output_real !== undefined) {
@@ -169,6 +172,7 @@ const CodeEditor = () => {
         const stderr = err.response?.data.stderr;
         console.log("stderr: " + stderr);
         console.log("Error Type:", "Run Time Error", "&&", "stderr:", stderr);
+        context.setLoading(false);
         context.testCases.setVal({ ...context.testCases.val, show: true });
         return [
           {
@@ -216,7 +220,6 @@ const CodeEditor = () => {
     }
   };
   const handleSubmitCode = async () => {
-    context.setLoading(true);
     axios
       .post("/student-challenge-submissions", {
         code: textCode,
@@ -227,14 +230,12 @@ const CodeEditor = () => {
       })
       .then((res) => {
         const submissionId = res.data.submissionId;
-        context.setLoading(false);
         navigate(
           `/courses/${id}/contests/${contestId}/challenges/${challengeId}/submissions/${submissionId}`
         );
       })
       .catch((error) => {
         console.log(error);
-        context.setLoading(false);
         //********************************** */
         if (
           error?.response?.data?.message === "No more submissions, time ended"
@@ -255,7 +256,11 @@ const CodeEditor = () => {
       setLanguage(storedData.language);
       setTextCode(storedData.code);
     } else {
-      setTextCode(defaultLang[language]);
+      const lang = choices?.filter(
+        (item) => context.challengeData.challengeLanguage[0] === item.title
+      )[0]?.value;
+      setTextCode(defaultLang[lang]);
+      setLanguage(lang);
     }
     setLoading(false);
   }, []);
@@ -283,7 +288,9 @@ const CodeEditor = () => {
             }}
           />
           <SelectionGroup
-            choices={choices}
+            choices={choices.filter((item) =>
+              context.challengeData.challengeLanguage.includes(item.title)
+            )}
             language={{
               value: language,
               setValue: (val) => {
