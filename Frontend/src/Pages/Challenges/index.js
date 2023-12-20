@@ -42,6 +42,7 @@ const Challenges = () => {
           outputFormat: res.data.outputFormat,
           tags: res.data.tags,
           challengePrivacy: res.data.challengePrivacy,
+          challengeLanguage: res.data.challengeLanguage,
         });
         setTestCasesData(
           res.data.testCases.map((item, index) => ({

@@ -1,4 +1,2 @@
-input_str = input()
-num1, num2 = map(int, input_str.split())
-sum = num1 + num2
-print(sum)
+# Enter your code here. Read input from STDIN. Print output to STDOUT
+print(True)

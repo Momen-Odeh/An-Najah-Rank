@@ -145,7 +145,7 @@ const NewPassword = () => {
         <Row className={`${classes.Row} mb-3 `}>
           <Col className={classes.Col}>
             <ButtonRegister
-              text="PASSWORD UPDATE"
+              text="UPDATE PASSWORD"
               disabled={loading}
               onClick={handelPasswordUpdateButton}
             />

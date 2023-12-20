@@ -43,11 +43,12 @@ def update_data(connection, table_name, column_names, new_values, condition):
     try:
         cursor = connection.cursor()
         query = f"UPDATE {table_name} SET {', '.join([f'{col} = %s' for col in column_names])} WHERE {condition}"
-        print(query)
+        print(query, new_values)
         cursor.execute(query, new_values)
         connection.commit()
         return jsonify({'message':"Data updated successfully."}),200
-    except pymysql.Error as e:
+    except Exception as e:
+        print("exception", e)
         return jsonify({'message': f"Error: {e}" }), 409
 
 

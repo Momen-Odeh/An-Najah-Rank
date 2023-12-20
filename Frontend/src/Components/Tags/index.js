@@ -7,7 +7,8 @@ const Tags = ({ tags, handleChange, disabled }) => {
   const classes = useStyle();
   const handleAdd = (val) => {
     if (val.trim() !== "") {
-      handleChange(null, "tags", [...tags, val.trim()]);
+      if (tags) handleChange(null, "tags", [...tags, val.trim()]);
+      else handleChange(null, "tags", [val.trim()]);
     }
   };
 

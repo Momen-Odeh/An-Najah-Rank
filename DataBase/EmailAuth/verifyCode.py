@@ -42,9 +42,10 @@ def updateUserStatusAuth ():
         val = request.get_json()
         email = val.get('email')
         res = execute_query(connection, f"select role from user where email = '{email}'")
-        if(fetch_results(res)[0][0] == "student"):
+        result = fetch_results(res)[0][0]
+        if(result == "student"):
             return update_data(connection,'user',['status'],("approved"),f"email = '{email}'")
-        elif (fetch_results(res)[0][0] == "professor") :
+        elif (result == "professor") :
             return update_data(connection, 'user', ['status'], ("pending for admin"), f"email = '{email}'")
 
     except Exception as e:

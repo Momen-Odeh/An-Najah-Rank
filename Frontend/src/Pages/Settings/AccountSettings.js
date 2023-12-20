@@ -13,13 +13,15 @@ import handelStateChanges from "../../Utils/handelStateChanges";
 import SettingsContext from "../../Utils/SettingsContext";
 import axios from "axios";
 import Loader from "react-spinners/ClipLoader";
-import { toast } from "react-toastify";
 import { validatePassword } from "../../Utils/Validation";
 import { useNavigate } from "react-router-dom";
+import { toastError, toastSuccess } from "../../Utils/toast";
+import userContext from "../../Utils/userContext";
 import Cookies from "js-cookie";
 const AccountSettings = ({}) => {
   const clasess = useStyles();
   const navigate = useNavigate();
+  const { setActiveUser } = useContext(userContext);
   const context = useContext(SettingsContext);
   const { accountInfo, setAccountInfo, loading, setLoading } = context;
   const [deleteModal, setDeleteModal] = useState(false);
@@ -44,23 +46,30 @@ const AccountSettings = ({}) => {
         axios
           .put("/userImg", formData)
           .then((res) => {
+            setActiveUser((prev) => {
+              return {
+                ...prev,
+                image: accountInfo.img,
+              };
+            });
             console.log(res);
+          })
+          .then(() => {
+            axios
+              .put("/user", {
+                keys: ["fullName"],
+                values: [accountInfo.fullName],
+              })
+              .then((res) => {
+                console.log(res);
+                toastSuccess("updated successfully");
+              });
           })
           .catch((error) => {
             console.log(error);
-            toast.error(error.response.data.error, {
-              position: "bottom-left",
-              autoClose: 10000,
-              hideProgressBar: false,
-              closeOnClick: true,
-              pauseOnHover: true,
-              draggable: true,
-              progress: undefined,
-              theme: "light",
-            });
+            toastError(error.response.data.error);
           });
-      }
-      if (accountInfo.UploadeImg === null) {
+      } else if (accountInfo.UploadeImg === null) {
         axios
           .put("/user", {
             keys: ["fullName", "img"],
@@ -68,29 +77,11 @@ const AccountSettings = ({}) => {
           })
           .then((res) => {
             console.log(res);
-            toast.success("updated successfully", {
-              position: "bottom-left",
-              autoClose: 10000,
-              hideProgressBar: false,
-              closeOnClick: true,
-              pauseOnHover: true,
-              draggable: true,
-              progress: undefined,
-              theme: "light",
-            });
+            toastSuccess("updated successfully");
           })
           .catch((error) => {
             console.log(error);
-            toast.error(error.response.data.error, {
-              position: "bottom-left",
-              autoClose: 10000,
-              hideProgressBar: false,
-              closeOnClick: true,
-              pauseOnHover: true,
-              draggable: true,
-              progress: undefined,
-              theme: "light",
-            });
+            toastError(error.response?.data?.error);
           });
       } else {
         axios
@@ -100,29 +91,11 @@ const AccountSettings = ({}) => {
           })
           .then((res) => {
             console.log(res);
-            toast.success("updated successfully", {
-              position: "bottom-left",
-              autoClose: 10000,
-              hideProgressBar: false,
-              closeOnClick: true,
-              pauseOnHover: true,
-              draggable: true,
-              progress: undefined,
-              theme: "light",
-            });
+            toastSuccess("updated successfully");
           })
           .catch((error) => {
             console.log(error);
-            toast.error(error.response.data.error, {
-              position: "bottom-left",
-              autoClose: 10000,
-              hideProgressBar: false,
-              closeOnClick: true,
-              pauseOnHover: true,
-              draggable: true,
-              progress: undefined,
-              theme: "light",
-            });
+            toastError(error.response.data.error);
           });
       }
     }

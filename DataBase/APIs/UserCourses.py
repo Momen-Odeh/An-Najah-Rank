@@ -34,6 +34,23 @@ def getUserCourses():
                     FROM courses c
                     LEFT join course_moderators  cm ON c.courseNumber = cm.courseNumber
                     LEFT join user u on u.universityNumber = cm.stuffNumber
+                                     or c.ownerUniversityNumber= u.universityNumber
+                    GROUP BY c.courseNumber, c.name, c.description, c.ownerUniversityNumber, c.backgroundImage
+                    {limitVal};
+                    """
+        elif tokenData['role'] == 'professor' and request.args.get('id') is None:
+            sql = f"""
+                    SELECT  c.courseNumber,
+                    c.name,
+                    c.description,
+                    c.ownerUniversityNumber,
+                    c.backgroundImage,
+                    GROUP_CONCAT(DISTINCT u.fullName) AS moderatorFullNames
+                    FROM courses c
+                    LEFT join course_moderators  cm ON c.courseNumber = cm.courseNumber
+                    LEFT join user u on u.universityNumber = cm.stuffNumber
+                                     or c.ownerUniversityNumber= u.universityNumber
+                    WHERE cm.stuffNumber = '{userid}' or c.ownerUniversityNumber='{userid}'
                     GROUP BY c.courseNumber, c.name, c.description, c.ownerUniversityNumber, c.backgroundImage
                     {limitVal};
                     """
@@ -48,8 +65,9 @@ def getUserCourses():
                     GROUP_CONCAT(DISTINCT user.fullName) AS moderatorFullNames
                     FROM student_enrollments
                     INNER JOIN courses ON student_enrollments.courseNumber = courses.courseNumber
-                    INNER JOIN course_moderators ON student_enrollments.courseNumber = course_moderators.courseNumber
-                    INNER JOIN user ON course_moderators.stuffNumber = user.universityNumber
+                    LEFT JOIN course_moderators ON student_enrollments.courseNumber = course_moderators.courseNumber
+                    LEFT JOIN user ON course_moderators.stuffNumber = user.universityNumber 
+                                   or courses.ownerUniversityNumber= user.universityNumber
                     WHERE student_enrollments.studentNumber = '{userid}'
                     GROUP BY courses.courseNumber, courses.name, courses.description, courses.ownerUniversityNumber, courses.backgroundImage
                     {limitVal};

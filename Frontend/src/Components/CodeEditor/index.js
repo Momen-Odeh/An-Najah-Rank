@@ -63,6 +63,7 @@ process.stdin.on("end", function () {
    processData(_input);
 });
 `,
+  regularexpression: ``,
 };
 const choices = [
   { title: "Java", value: "java" },
@@ -70,7 +71,7 @@ const choices = [
   { title: "C++", value: "cpp" },
   { title: "Python", value: "python" },
   { title: "JavaScript", value: "javascript" },
-  { title: "Regular Expression", value: "regularexpression" },
+  { title: "Regex", value: "regularexpression" },
 ];
 
 const CodeEditor = () => {
@@ -81,6 +82,7 @@ const CodeEditor = () => {
   const [language, setLanguage] = useState("java");
   const [textCode, setTextCode] = useState("");
   const context = useContext(ChallengeContext);
+  console.log("language", language);
   const genrateTab = (arr) => {
     return arr.map((item, index) => {
       if (item.output_real !== undefined) {
@@ -199,14 +201,19 @@ const CodeEditor = () => {
         buildTableUI("java");
         break;
       case "c":
-      case "cpp":
         buildTableUI("c");
+        break;
+      case "cpp":
+        buildTableUI("cpp");
         break;
       case "python":
         buildTableUI("python");
         break;
       case "javascript":
         buildTableUI("javascript");
+        break;
+      case "regularexpression":
+        buildTableUI("regularexpression");
         break;
       default:
         break;
@@ -249,7 +256,11 @@ const CodeEditor = () => {
       setLanguage(storedData.language);
       setTextCode(storedData.code);
     } else {
-      setTextCode(defaultLang[language]);
+      const lang = choices?.filter(
+        (item) => context.challengeData.challengeLanguage[0] === item.title
+      )[0]?.value;
+      setTextCode(defaultLang[lang]);
+      setLanguage(lang);
     }
     setLoading(false);
   }, []);
@@ -277,7 +288,9 @@ const CodeEditor = () => {
             }}
           />
           <SelectionGroup
-            choices={choices}
+            choices={choices.filter((item) =>
+              context.challengeData.challengeLanguage.includes(item.title)
+            )}
             language={{
               value: language,
               setValue: (val) => {

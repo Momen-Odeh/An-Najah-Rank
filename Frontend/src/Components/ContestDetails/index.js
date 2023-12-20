@@ -78,7 +78,7 @@ const ContestsDetalis = ({ operation, data = null }) => {
       startTime:
         details.startTime == null
           ? "please enter the start time of contest"
-          : new Date(details.startTime) < new Date()
+          : new Date(details.startTime) < new Date() && operation !== "update"
           ? "start time should be in future"
           : null,
       hasEndTime: true,
@@ -94,7 +94,7 @@ const ContestsDetalis = ({ operation, data = null }) => {
       details.description.length !== 0 &&
       details.name.length >= 3 &&
       details.startTime != null &&
-      new Date(details.startTime) >= new Date() &&
+      (new Date(details.startTime) >= new Date() || operation === "update") &&
       endTimeCondition
     ) {
       const contest = {

@@ -86,11 +86,12 @@ def getChallenge(id):
                     "constraints": result[6],
                     "outputFormat": result[7],
                     "challengePrivacy": True if result[12] == "public" else False,
+                    "challengeLanguage": json.loads(result[13]),
                     "tags": json.loads(result[8]),
                     "created_at": result[9],
                     "updated_at": result[10],
                     "testCases": test_case_objects,
-                    "max_score":stat[0][0],
+                    "max_score": stat[0][0],
                     "total_submission": stat[0][1],
                     "relatedContests": related_contests,
                             }), 200

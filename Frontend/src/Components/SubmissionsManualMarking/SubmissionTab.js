@@ -8,11 +8,14 @@ import ButtonRank from "../ButtonRank";
 import { useState } from "react";
 import axios from "axios";
 import { toastError, toastSuccess } from "../../Utils/toast";
+import LoaderRank from "../LoaderRank";
 
 const SubmissionTab = ({ submissionData }) => {
   const classes = useStyle();
   const [score, setScore] = useState(submissionData.score);
+  const [loading, setLoading] = useState(false);
   const handleUpdateScore = () => {
+    setLoading(true);
     axios
       .put(`/update-submission-score/${submissionData.submissionId}`, {
         submissionResult: score,
@@ -22,6 +25,9 @@ const SubmissionTab = ({ submissionData }) => {
       })
       .catch((error) => {
         toastError(error);
+      })
+      .finally(() => {
+        setLoading(false);
       });
   };
   return (
@@ -74,11 +80,22 @@ const SubmissionTab = ({ submissionData }) => {
             </Col>
             {submissionData.manualMark && (
               <Col className="d-flex justify-content-end">
-                <ButtonRank text={"Save Changes"} onClick={handleUpdateScore} />
+                <ButtonRank
+                  text={"Save Changes"}
+                  onClick={handleUpdateScore}
+                  disabled={loading}
+                />
               </Col>
             )}
           </Row>
         </Card.Body>
+        <Card.Footer>
+          {submissionData.manualMark && (
+            <Col className="d-flex justify-content-center">
+              <LoaderRank loading={loading} />
+            </Col>
+          )}
+        </Card.Footer>
       </Card>
       <Row className={`${classes.date} mt-4`}>
         <Text

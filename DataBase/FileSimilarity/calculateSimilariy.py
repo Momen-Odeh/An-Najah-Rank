@@ -54,80 +54,84 @@ def getSimilarityURL(contestId, challengeId):
     # ******************************************************************************************************************
     return dataURL
 def calculateSimilariy(contestId, challengeId):
-    url = getSimilarityURL(contestId, challengeId)#"http://moss.stanford.edu/results/3/4528236255023"#
-    similarityFiles = pd.read_html(url)
-    response = similarityFiles[0].values
-    filesNames = set()  # [uniqeFileNames,]
-    similarityFilesData = []  # [[index,file1Name,similarity1,file2Name,similarity2,numLinesMatch,linesSimilar]
-    for index, rowFile in enumerate(response):
-        seprate1 = separatePersante(rowFile[0])
-        seprate2 = separatePersante(rowFile[1])
-        matchLines = pd.read_html(url + f"/match{index}-top.html")
-        lines = []
-        for line in matchLines[0].values:
-            lines.append([line[0], line[2]])
+    try:
+        url = getSimilarityURL(contestId, challengeId)#"http://moss.stanford.edu/results/3/4528236255023"#
+        similarityFiles = pd.read_html(url)
+        response = similarityFiles[0].values
+        filesNames = set()  # [uniqeFileNames,]
+        similarityFilesData = []  # [[index,file1Name,similarity1,file2Name,similarity2,numLinesMatch,linesSimilar]
+        for index, rowFile in enumerate(response):
+            seprate1 = separatePersante(rowFile[0])
+            seprate2 = separatePersante(rowFile[1])
+            matchLines = pd.read_html(url + f"/match{index}-top.html")
+            lines = []
+            for line in matchLines[0].values:
+                lines.append([line[0], line[2]])
 
-        splitStr = seprate1[0].split("/")
-        seprate1[0] = splitStr[len(splitStr) - 1].split(".")[0]
-        splitStr = seprate2[0].split("/")
-        seprate2[0] = splitStr[len(splitStr) - 1].split(".")[0]
+            splitStr = seprate1[0].split("/")
+            seprate1[0] = splitStr[len(splitStr) - 1].split(".")[0]
+            splitStr = seprate2[0].split("/")
+            seprate2[0] = splitStr[len(splitStr) - 1].split(".")[0]
 
-        similarityFilesData.append([index, seprate1[0], seprate1[1], seprate2[0], seprate2[1], rowFile[2], lines])
-        filesNames.add(seprate1[0])
-        filesNames.add(seprate2[0])
-    filesNames = list(filesNames)
-    # *************************************************************
-    resultFileSimilarity = []
-    for name in filesNames:
-        # print(name)
-        SimilarFiles = []
-        fileRange = []
-        for row in similarityFilesData:
-            if name in row:
-                # print("row", row)
-                dataObj = {}
-                if name == row[1]:  # as i need Left
-                    # print("left")
-                    dataObj["similarFileName"] = row[3]
-                    dataObj["similarPercentage"] = row[2]
-                    dataObj["numLinesSimilar"] = row[5]
-                    dataObj["linesMatch"] = []
-                    for simline in row[6]:
-                        fileRange.append(simline[0])
-                        dataObj["linesMatch"].append(
-                            {
-                                "f1Lines": simline[0],
-                                "f2Lines": simline[1]
-                            }
-                        )
-                else:
-                    # print("right")
-                    dataObj["similarFileName"] = row[1]
-                    dataObj["similarPercentage"] = row[4]
-                    dataObj["numLinesSimilar"] = row[5]
-                    dataObj["linesMatch"] = []
-                    for simline in row[6]:
-                        fileRange.append(simline[1])
-                        dataObj["linesMatch"].append(
-                            {
-                                "f1Lines": simline[1],
-                                "f2Lines": simline[0]
-                            }
-                        )
+            similarityFilesData.append([index, seprate1[0], seprate1[1], seprate2[0], seprate2[1], rowFile[2], lines])
+            filesNames.add(seprate1[0])
+            filesNames.add(seprate2[0])
+        filesNames = list(filesNames)
+        # *************************************************************
+        resultFileSimilarity = []
+        for name in filesNames:
+            # print(name)
+            SimilarFiles = []
+            fileRange = []
+            for row in similarityFilesData:
+                if name in row:
+                    # print("row", row)
+                    dataObj = {}
+                    if name == row[1]:  # as i need Left
+                        # print("left")
+                        dataObj["similarFileName"] = row[3]
+                        dataObj["similarPercentage"] = row[2]
+                        dataObj["numLinesSimilar"] = row[5]
+                        dataObj["linesMatch"] = []
+                        for simline in row[6]:
+                            fileRange.append(simline[0])
+                            dataObj["linesMatch"].append(
+                                {
+                                    "f1Lines": simline[0],
+                                    "f2Lines": simline[1]
+                                }
+                            )
+                    else:
+                        # print("right")
+                        dataObj["similarFileName"] = row[1]
+                        dataObj["similarPercentage"] = row[4]
+                        dataObj["numLinesSimilar"] = row[5]
+                        dataObj["linesMatch"] = []
+                        for simline in row[6]:
+                            fileRange.append(simline[1])
+                            dataObj["linesMatch"].append(
+                                {
+                                    "f1Lines": simline[1],
+                                    "f2Lines": simline[0]
+                                }
+                            )
 
-                SimilarFiles.append(dataObj)
-        resMerge = merge_ranges(fileRange)
-        totalNumSimilarityLine = 0
-        for rangeSimLine in resMerge:
-            outSplit = rangeSimLine.split("-")
-            totalNumSimilarityLine += (int(outSplit[1]) - int(outSplit[0])) + 1
-        resultFileSimilarity.append(
-            {
-                "fileName": name,
-                "totalSimilarRange": resMerge,
-                "totalNumSimilarityLine": totalNumSimilarityLine,
-                "SimilarFiles": SimilarFiles,
-            }
-        )
+                    SimilarFiles.append(dataObj)
+            resMerge = merge_ranges(fileRange)
+            totalNumSimilarityLine = 0
+            for rangeSimLine in resMerge:
+                outSplit = rangeSimLine.split("-")
+                totalNumSimilarityLine += (int(outSplit[1]) - int(outSplit[0])) + 1
+            resultFileSimilarity.append(
+                {
+                    "fileName": name,
+                    "totalSimilarRange": resMerge,
+                    "totalNumSimilarityLine": totalNumSimilarityLine,
+                    "SimilarFiles": SimilarFiles,
+                }
+            )
 
-    return resultFileSimilarity
+        return resultFileSimilarity
+    except Exception as e:
+        return None
+
