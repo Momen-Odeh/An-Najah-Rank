@@ -2,8 +2,7 @@ FROM python:3.9-alpine
 
 RUN apk update && \
     apk add --no-cache \
-    nginx \
-    supervisor
+    nginx
 
 WORKDIR /app
 COPY . /app
@@ -12,13 +11,12 @@ RUN python -m venv /venv
 ENV PATH="/venv/bin:$PATH"
 
 RUN pip install --upgrade pip && \
-    pip install -r requirements.txt && \
-    pip install gunicorn
+    pip install -r requirements.txt
 
-# Create Supervisor configuration
-RUN echo -e "[supervisord]\nnodaemon=true\n\n[program:gunicorn]\ncommand=gunicorn main:app --bind 0.0.0.0:5000 --workers 4\n\n[program:nginx]\ncommand=nginx -g 'daemon off;'" > /etc/supervisord.conf
+RUN pip install gunicorn
 
 EXPOSE 80
 
-# Run Supervisor to manage the processes
-CMD ["supervisord", "-c", "/etc/supervisord.conf"]
+COPY nginx.conf /etc/nginx/nginx.conf
+
+CMD ["sh", "-c", "gunicorn main:app --bind 127.0.0.1:5001 --workers 10 & nginx -g 'daemon off;'"]

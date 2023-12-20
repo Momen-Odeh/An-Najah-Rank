@@ -42,10 +42,15 @@ from APIs.latestChallenge import getLastChallenges
 from APIs.runNewTestCase import run_new_test_case
 from APIs.get_user_info import get_user_info
 
+@app.route('/')
+def hello_world():
+    return 'Hello World'
+
+
 @app.route('/flask', methods=['GET'])
 def index():
     # Access the token data from the request object
     return jsonify({'message': getattr(request, 'tokenData', None)})
 
 if __name__ == '__main__':
-    socketio.run(app, debug=True, allow_unsafe_werkzeug=True)
+    socketio.run(app, debug=True, allow_unsafe_werkzeug=True, port=5001, host='0.0.0.0')

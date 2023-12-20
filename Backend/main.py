@@ -7,6 +7,13 @@ from codeCompilationAndRun.regex import test_regex
 from flask_cors import CORS
 app = Flask(__name__)
 CORS(app)
+
+
+@app.route('/')
+def hello_world():
+    return 'Hello World'
+
+
 @app.route('/java', methods=['POST'])
 def applayJava():
     if request.is_json:
@@ -68,4 +75,4 @@ def applayRE():
         return jsonify({"error": "Request body must contain JSON data"}), 400
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=True, host='0.0.0.0', port=5000)
