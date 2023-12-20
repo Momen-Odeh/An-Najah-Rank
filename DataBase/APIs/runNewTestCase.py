@@ -91,4 +91,5 @@ def run_new_test_case():
                                    {challenge_id} finish successfully """, [tokenData['universityNumber']], )
         return jsonify({'message': "ok"}), 200
     except Exception as e:
+        print(e)
         return {'message': str(e)}, 409

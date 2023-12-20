@@ -4,9 +4,9 @@
   class Main {
   
       public static void main(String[] args) {
-          Scanner in = new Scanner(System.in);
-          int x = in.nextInt();
-          int y = in.nextInt();
-          System.out.print(x+y);
+          /* Enter your code here. Read input from STDIN. Print output to STDOUT. Your class should be named Solution. */
+          Scanner s = new Scanner(System.in);
+          boolean x = s.nextBoolean();
+          System.out.print(!x);
       }
   }

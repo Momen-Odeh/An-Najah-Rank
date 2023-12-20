@@ -66,7 +66,7 @@ def add_challenge_student():
             extention = 'js'
         elif (language == "regularexpression"):
             extention = 'txt'
-        elif (language == "c++"):
+        elif (language == "cpp"):
             extention = 'cpp'
         fullPath = os.path.abspath(os.path.join("code", f"file.{extention}"))
         print(f"Full path: {fullPath}")
@@ -83,7 +83,7 @@ def add_challenge_student():
             'student_submissions',
             ['studentUniversityNumber', 'courseNumber', 'challengeId', 'submissionFileKey',
              'submissionTime', 'submissionResult', 'compilationError', 'numberOfLines', 'contestId'],
-            (data['studentUniversityNumber'], data['courseNumber'], data['challengeId'], fileKey,
+            (tokenData['universityNumber'], data['courseNumber'], data['challengeId'], fileKey,
              submissionTime, submissionResult, CompilationError, numberOfLines, data['contestId'])
         )
         query = """
@@ -97,7 +97,7 @@ def add_challenge_student():
             ORDER BY id
         """
         values = (
-            data['studentUniversityNumber'],
+            tokenData['universityNumber'],
             data['courseNumber'],
             data['challengeId'],
             fileKey,

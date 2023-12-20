@@ -11,6 +11,6 @@ def get_language_type(key):
     elif (extention == "txt"):
         language = 'regularexpression'
     elif (extention == "cpp"):
-        language = 'c++'
+        language = 'cpp'
 
     return language

@@ -21,9 +21,9 @@ def getContestForCourse(id,studendCount):
                 SELECT cc.contest_id, cc.challenge_id,ss.studentUniversityNumber,ss.submissionResult
                 FROM contests_challenges cc
                 inner join student_submissions ss on cc.challenge_id=ss.challengeId
-                where contest_id = '{row[0]}' and ss.submissionResult =100 
+                where contest_id = '{row[0]}' and ss.submissionResult = '100' 
                 group by ss.studentUniversityNumber
-                having count(ss.studentUniversityNumber) = (select count(challenge_id) FROM contests_challenges 
+                having count(DISTINCT ss.courseNumber, ss.contestId, ss.challengeId) = (select count(challenge_id) FROM contests_challenges 
                 where contest_id = '{row[0]}')
                 order by ss.studentUniversityNumber;
                             """

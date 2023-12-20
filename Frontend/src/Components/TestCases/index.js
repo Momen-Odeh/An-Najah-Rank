@@ -45,7 +45,7 @@ const TestCases = memo(({ operation, testCasesData, relatedContests }) => {
     "Order",
     "Input",
     "Output",
-    "Sample",
+    "Is Sample",
     "Strength",
     // "Select",
     "",
@@ -202,7 +202,7 @@ const TestCases = memo(({ operation, testCasesData, relatedContests }) => {
       if (contestIds.length > 0) {
         axios.post("/run-new-test-case", {
           contestIds: contestIds,
-          testCaseId: res,
+          testCaseId: res.data.message,
           challengeId: id,
           operation: "create",
         });

@@ -5,6 +5,13 @@ const useStyle = createUseStyles({
     maxWidth: "700px",
     minWidth: "300px",
   },
+  msg: {
+    color: "#e40506 !important",
+    fontWeight: "500",
+    fontSize: "13px",
+    padding: "0px",
+    marginLeft: "-18px",
+  },
   TitleFiled: {
     width: "200px",
   },
