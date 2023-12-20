@@ -1,0 +1,25 @@
+services:
+  backend:
+    build: ./Backend
+    ports:
+      - "5000:80"
+    volumes:
+      - ./Backend:/app
+      
+  database:
+    build: ./DataBase
+    ports:
+      - "5001:80"
+    depends_on:
+      - backend
+    volumes:
+      - ./DataBase:/app
+      
+  frontend:
+    build: ./Frontend
+    ports:
+      - "80:80"
+    depends_on:
+      - database
+    volumes:
+      - ./Frontend:/app
