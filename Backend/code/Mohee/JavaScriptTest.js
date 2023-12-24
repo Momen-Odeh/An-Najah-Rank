@@ -1,14 +1,15 @@
-function processData(input) { 
-  const [num1, num2] = input.split(' ').map(Number); 
-  const sum = num1 + num2; 
-  console.log(sum); 
+function processData(input) {
+    //Enter your code here
+    console.log("ddd")
 } 
- process.stdin.resume(); 
-process.stdin.setEncoding('ascii'); 
- _input = '';
- process.stdin.on('data', function (input) {
- _input += input;
- });
- process.stdin.on('end', function () {
- processData(_input.trim());
+
+process.stdin.resume();
+process.stdin.setEncoding("ascii");
+_input = "";
+process.stdin.on("data", function (input) {
+    _input += input;
+});
+
+process.stdin.on("end", function () {
+   processData(_input);
 });

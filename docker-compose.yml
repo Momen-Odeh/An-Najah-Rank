@@ -1,3 +1,5 @@
+version: '3.1'
+
 services:
   backend:
     build: ./Backend
@@ -5,21 +7,50 @@ services:
       - "5000:80"
     volumes:
       - ./Backend:/app
-      
+    networks:
+      my-network:
+        ipv4_address: 192.168.48.2
+
   database:
     build: ./DataBase
     ports:
       - "5001:80"
     depends_on:
       - backend
+      - socketio
     volumes:
       - ./DataBase:/app
-      
+    networks:
+      my-network:
+        ipv4_address: 192.168.48.3
+
   frontend:
     build: ./Frontend
     ports:
       - "80:80"
     depends_on:
       - database
+      - socketio
     volumes:
       - ./Frontend:/app
+    networks:
+      my-network:
+        ipv4_address: 192.168.48.4
+
+  socketio:
+    build: ./socketio
+    ports:
+      - "5004:80"
+    volumes:
+      - ./socketio:/app
+    networks:
+      my-network:
+        ipv4_address: 192.168.48.5
+        
+networks:
+  my-network:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 192.168.48.0/24

@@ -47,7 +47,7 @@ function PageLayout() {
 
   useEffect(() => {
     if (activeUser?.universityNumber) {
-      const socket = io(BaseURI, {
+      const socket = io("http://localhost:5004", {
         query: {
           user_university_number: activeUser?.universityNumber,
         },
@@ -74,8 +74,8 @@ function PageLayout() {
       >
         <div>
           <MainNavbar activeTab={activeTab} />
-          {/* <Outlet context={setActiveTab} /> */}
-          {loadingPage ? <Loader /> : <Outlet context={setActiveTab} />}
+          <Outlet context={setActiveTab} />
+          {/*loadingPage ? <Loader /> : <Outlet context={setActiveTab} />*/}
         </div>
         <Footer className={classes.Footer} />
       </userContext.Provider>

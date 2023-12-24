@@ -53,4 +53,4 @@ def index():
     return jsonify({'message': getattr(request, 'tokenData', None)})
 
 if __name__ == '__main__':
-    socketio.run(app, debug=True, allow_unsafe_werkzeug=True, port=5001, host='0.0.0.0')
+    app.run(debug=True, host='0.0.0.0', port=5001)
