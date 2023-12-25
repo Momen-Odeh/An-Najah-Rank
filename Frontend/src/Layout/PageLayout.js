@@ -9,7 +9,7 @@ import Cookies from "js-cookie";
 import axios from "axios";
 import { io } from "socket.io-client";
 import Loader from "../Components/Loader";
-import BaseURI from "../Utils/BaseURI";
+import BaseURI, { SocketURI } from "../Utils/BaseURI";
 function PageLayout() {
   const [activeTab, setActiveTab] = useState(routeNames.HOME);
   const [activeUser, setActiveUser] = useState({});
@@ -47,7 +47,7 @@ function PageLayout() {
 
   useEffect(() => {
     if (activeUser?.universityNumber) {
-      const socket = io("http://localhost:5004", {
+      const socket = io(SocketURI, {
         query: {
           user_university_number: activeUser?.universityNumber,
         },

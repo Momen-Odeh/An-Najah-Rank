@@ -9,7 +9,7 @@ services:
       - ./Backend:/app
     networks:
       my-network:
-        ipv4_address: 192.168.48.2
+        ipv4_address: 172.31.42.13
 
   database:
     build: ./DataBase
@@ -22,7 +22,7 @@ services:
       - ./DataBase:/app
     networks:
       my-network:
-        ipv4_address: 192.168.48.3
+        ipv4_address: 172.31.42.13
 
   frontend:
     build: ./Frontend
@@ -35,7 +35,7 @@ services:
       - ./Frontend:/app
     networks:
       my-network:
-        ipv4_address: 192.168.48.4
+        ipv4_address: 172.31.42.13
 
   socketio:
     build: ./socketio
@@ -45,7 +45,7 @@ services:
       - ./socketio:/app
     networks:
       my-network:
-        ipv4_address: 192.168.48.5
+        ipv4_address: 172.31.42.13
         
 networks:
   my-network:
@@ -53,4 +53,4 @@ networks:
     ipam:
       driver: default
       config:
-        - subnet: 192.168.48.0/24
+        - subnet: 172.31.42.13/32
