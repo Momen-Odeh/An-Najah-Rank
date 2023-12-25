@@ -8,7 +8,7 @@ services:
     volumes:
       - ./Backend:/app
     networks:
-      my-network
+      - my-network
 
   database:
     build: ./DataBase
@@ -20,7 +20,7 @@ services:
     volumes:
       - ./DataBase:/app
     networks:
-      my-network
+      - my-network
 
   frontend:
     build: ./Frontend
@@ -32,7 +32,7 @@ services:
     volumes:
       - ./Frontend:/app
     networks:
-      my-network
+      - my-network
 
   socketio:
     build: ./socketio
@@ -41,7 +41,7 @@ services:
     volumes:
       - ./socketio:/app
     networks:
-      my-network
+      - my-network
         
 networks:
   my-network:
