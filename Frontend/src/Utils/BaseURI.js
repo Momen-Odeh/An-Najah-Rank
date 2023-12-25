@@ -1,3 +1,3 @@
-export const BaseURI = "http://172.31.42.13:5001";
-export const SocketURI = "http://172.31.42.13:5004";
+export const BaseURI = "http://172.18.0.4:5001";
+export const SocketURI = "http://172.18.0.2:5004";
 export default BaseURI;
