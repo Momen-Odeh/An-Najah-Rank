@@ -1,2 +1,2 @@
-export const BackEndURI = "http://localhost:5001";
+export const BackEndURI = "http://backend:5001";
 export default BackEndURI;
