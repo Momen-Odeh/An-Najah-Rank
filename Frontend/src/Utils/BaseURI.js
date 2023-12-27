@@ -1,3 +1,3 @@
-export const BaseURI = "http://database/:5001";
-export const SocketURI = "http://socketio/:5004";
+export const BaseURI = "http://database-app";
+export const SocketURI = "http://socketio-app";
 export default BaseURI;
