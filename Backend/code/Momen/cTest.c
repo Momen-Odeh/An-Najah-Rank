@@ -7,10 +7,8 @@
   
   
   int main() {
-    int x,y;
-    cin >>x;
-    cin >>y;
-    cout << x+y;
+      /* Enter your code here. Read input from STDIN. Print output to STDOUT */   
+      cout << "hi"<<endl;
       return 0;
   }
   
