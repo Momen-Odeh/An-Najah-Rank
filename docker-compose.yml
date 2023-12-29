@@ -1,25 +1,54 @@
+version: '3.1'
 services:
-  backend:
-    build: ./Backend
-    ports:
-      - "5000:5000"
+
+  db-nginx:
+    image: nginx:1.15
+    container_name: db-nginx
     volumes:
-      - ./Backend:/app
-      
-  database:
-    build: ./DataBase
+      - ./DataBase/nginx.conf:/etc/nginx/conf.d/default.conf
     ports:
-      - "5001:5001"
+      - 5001:80
+    networks:
+      - my-network
     depends_on:
-      - backend
+      - database
+  database:
+    build:
+      context: ./DataBase
+      dockerfile: Dockerfile
+    container_name: database
     volumes:
       - ./DataBase:/app
+    networks:
+      my-network:
+        aliases:
+          - database-app
+    depends_on:
+      - be-nginx
       
-#  frontend:
-#    build: ./Frontend
-#    ports:
-#      - "80:80"
-#    depends_on:
-#      - database
-#    volumes:
-#      - ./Frontend:/app
+      
+  be-nginx:
+    image: nginx:1.15
+    container_name: be-nginx
+    volumes:
+      - ./Backend/nginx.conf:/etc/nginx/conf.d/default.conf
+    ports:
+      - 5000:80
+    networks:
+      - my-network
+    depends_on:
+      - backend
+  backend:
+    build:
+      context: ./Backend
+      dockerfile: Dockerfile
+    container_name: backend
+    volumes:
+      - ./Backend:/app
+    networks:
+      my-network:
+        aliases:
+          - backend-app
+
+networks:
+  my-network:
