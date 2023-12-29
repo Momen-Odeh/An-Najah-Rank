@@ -24,12 +24,12 @@ services:
         aliases:
           - database-app
     depends_on:
-      - be-nginx
+      - benginx
       
       
-  be-nginx:
+  benginx:
     image: nginx:1.15
-    container_name: be-nginx
+    container_name: benginx
     volumes:
       - ./Backend/nginx.conf:/etc/nginx/conf.d/default.conf
     ports:
