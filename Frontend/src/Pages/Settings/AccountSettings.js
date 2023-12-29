@@ -38,11 +38,12 @@ const AccountSettings = ({}) => {
           ? "Full Name must contain at least 3 characters"
           : null,
     });
-    setLoading(true);
+
     if (accountInfo.fullName.length >= 3) {
       if (accountInfo.UploadeImg) {
         const formData = new FormData();
         formData.append("image", accountInfo.UploadeImg);
+        setLoading(true);
         axios
           .put("/userImg", formData)
           .then((res) => {
@@ -63,13 +64,16 @@ const AccountSettings = ({}) => {
               .then((res) => {
                 console.log(res);
                 toastSuccess("updated successfully");
+                setLoading(false);
               });
           })
           .catch((error) => {
             console.log(error);
             toastError(error.response.data.error);
+            setLoading(false);
           });
       } else if (accountInfo.UploadeImg === null) {
+        setLoading(true);
         axios
           .put("/user", {
             keys: ["fullName", "img"],
@@ -78,12 +82,15 @@ const AccountSettings = ({}) => {
           .then((res) => {
             console.log(res);
             toastSuccess("updated successfully");
+            setLoading(false);
           })
           .catch((error) => {
             console.log(error);
             toastError(error.response?.data?.error);
+            setLoading(false);
           });
       } else {
+        setLoading(true);
         axios
           .put("/user", {
             keys: ["fullName"],
@@ -92,15 +99,15 @@ const AccountSettings = ({}) => {
           .then((res) => {
             console.log(res);
             toastSuccess("updated successfully");
+            setLoading(false);
           })
           .catch((error) => {
             console.log(error);
             toastError(error.response.data.error);
+            setLoading(false);
           });
       }
     }
-
-    setLoading(false);
   };
   const handelDeleteImg = () => {
     setAccountInfo({ ...accountInfo, img: null, UploadeImg: null });

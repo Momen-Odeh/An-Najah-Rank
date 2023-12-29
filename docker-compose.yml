@@ -49,6 +49,21 @@ services:
       my-network:
         aliases:
           - backend-app
+  frontend:
+    build:
+      context: ./Frontend
+      dockerfile: Dockerfile
+    container_name: frontend
+    volumes:
+      - ./Frontend:/app
+    ports:
+      - "80:80"
+    networks:
+      my-network:
+        aliases:
+          - frontend-app
+    depends_on:
+      - db-nginx
 
 networks:
   my-network:

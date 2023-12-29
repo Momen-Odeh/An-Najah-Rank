@@ -328,6 +328,7 @@ const ContestChallenges = ({ challengesData, challengesContest }) => {
                 ? handleAplayEditTableData
                 : handelAddNewChallenge
             }
+            disabled={loading}
           />
         }
       >
