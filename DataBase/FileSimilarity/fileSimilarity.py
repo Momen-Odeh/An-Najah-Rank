@@ -33,7 +33,7 @@ def FileSimilarity():
             ['in progress'],
             f"(contest_id = '{contestId}' and challenge_id = '{challengeId}')"
         )
-        print("******************* start calculate *************")
+        app.logger.info("******************* start calculate *************")
         cursor = connection.cursor()
         cursor.execute(f"""
                                     SELECT name from courses
@@ -85,11 +85,11 @@ def FileSimilarity():
         key = storeSimilarityAWS(result,contestId,challengeId)
         update_data(connection, 'contests_challenges', ["similarityFileKey"], (key),
                     f"(contest_id = '{contestId}' and challenge_id = '{challengeId}')")
-        print(key)
+        app.logger.info(f"file key: {key}")
         handle_notification(False, f"Similarity data ready for submissions in {course_name} course", [universityNumber])
         return result, 200
     except Exception as e:
-        print("error ******************", e)
+        app.logger.error("error ******************", e)
         update_data(
             connection,
             'contests_challenges',
@@ -146,18 +146,20 @@ def getUserSimilarity():
         if len(key) == 0:
             return {"message": "not found contest or challenge"}, 404
         key = key[0][0]
+        app.logger.info("key file similarity", key[0][0])
         if key is None:
             return {"message": "not found similarity file"}, 404
         fileContent = getFileSimilarityAWS(key)
+        app.logger.info("fileContent", fileContent)
         arr = fileContent["filesSimilarity"]
 
         # Iterate through the array and find the object with the specified file number
         desired_object = next((item for item in arr if userId in item["fileName"]), None)
         if desired_object:
-            print("Found the desired object:")
+            app.logger.info("Found the desired object:")
             # return desired_object, 200
         else:
-            print("Object not found with fileName containing", userId)
+            app.logger.info("Object not found with fileName containing", userId)
             return {"message": "Not found user"}, 404
 
         uId = desired_object["fileName"].split("-")[-1]
@@ -183,8 +185,9 @@ def getUserSimilarity():
             keyUid = sqlRes[0][0]
             contentUid = get_file_content(keyUid)
             desired_object["SimilarFiles"][index]["code"] = contentUid
-        return desired_object,200
+        return desired_object, 200
 
     except Exception as e:
-        return {"error": e}, 409
+        app.logger.error(f"error in get file similarity: {e}")
+        return {"error": str(e)}, 409
 
