@@ -2,10 +2,11 @@ import React from "react";
 import { Col, Container, Row } from "react-bootstrap";
 import useStyles from "./style";
 import Text from "../Text";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Course = ({ img, title, url, modirators }) => {
   const classes = useStyles();
+  const navigate = useNavigate();
   return (
     <Container fluid className={classes.Container}>
       <Row className={classes.RowCourse}>
@@ -14,6 +15,7 @@ const Course = ({ img, title, url, modirators }) => {
             className={classes.Img}
             draggable={"false"}
             src={img}
+            onClick={() => navigate(url)}
             alt="background"
           />
         </Col>

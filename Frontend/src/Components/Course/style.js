@@ -14,6 +14,7 @@ const useStyles = createUseStyles({
     // height: "150px",
     objectFit: "contain",
     borderRadius: "15px",
+    cursor: "pointer",
   },
   ColInfo: {
     display: "flex",

@@ -165,13 +165,14 @@ const useStyle = createUseStyles({
     cursor: "pointer",
   },
   choiceLink: {
-    margin: "10px 20px !important",
+    margin: "5px 10px !important",
     textDecoration: "none",
+    display: "flex",
     fontSize: "1.1rem",
-    color: "#576871",
     transition: "0.1s",
     "&:hover": {
       fontWeight: "bold",
+      // backgroundColor: "#F5F5F5",
     },
   },
   hoveringColor: {
