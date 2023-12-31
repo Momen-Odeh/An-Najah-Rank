@@ -43,7 +43,6 @@ from APIs.runNewTestCase import run_new_test_case
 from APIs.get_user_info import get_user_info
 import logging
 
-app = Flask(__name__)
 log_file = 'app.log'
 logging.basicConfig(filename=log_file, level=logging.DEBUG)
 
