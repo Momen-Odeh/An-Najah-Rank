@@ -3,34 +3,54 @@ from flask import request
 from datetime import datetime
 from dataBaseConnection import insert_data
 from MySQL_SetUp import connection
-online_users = []
+from FlaskSetUp import socketio
+from flask import request
+from datetime import datetime
+from dataBaseConnection import insert_data
+from MySQL_SetUp import connection
+from collections import defaultdict
+
+online_users = defaultdict(list)
 
 
 def add_new_user(user_university_number, socket_id):
-    if not any(user['user_university_number'] == user_university_number for user in online_users):
-        online_users.append({'user_university_number': int(user_university_number), 'socket_id': socket_id})
+    online_users[user_university_number].append(socket_id)
+    print("online_users ", online_users)
 
 
 def remove_user(socket_id):
     global online_users
-    online_users = [user for user in online_users if user['socket_id'] != socket_id]
+    for user, sockets in online_users.items():
+        if socket_id in sockets:
+            sockets.remove(socket_id)
+            if not sockets:
+                del online_users[user]
+            break
+    print("online_users ", online_users)
 
 
 def get_user(user_university_number):
-    return next((user for user in online_users if int(user['user_university_number']) == int(user_university_number)), None)
+    return online_users.get(user_university_number)
 
 
 @socketio.on('connect')
 def handle_connect():
     user_university_number = request.args.get('user_university_number')
     add_new_user(user_university_number, request.sid)
-    print(user_university_number + "  ****  " + request.sid)
+    print("connected ***  "+user_university_number + "  ****  " + request.sid)
 
 
 @socketio.on('disconnect')
 def handle_disconnect():
     remove_user(request.sid)
     print("disconnected  ****  " + request.sid)
+
+
+def send_notification_to_user(user_university_number, notification):
+    sockets = get_user(user_university_number)
+    if sockets:
+        for socket_id in sockets:
+            socketio.emit('notification', notification, room=socket_id)
 
 
 def handle_notification(grouped, text, user_ids, course_number=None, contest_id=None, challenge_id=None):
@@ -44,10 +64,7 @@ def handle_notification(grouped, text, user_ids, course_number=None, contest_id=
             'challengeId': challenge_id
         }
         for user_id in user_ids:
-            u = get_user(user_id)
-            if u:
-                print("send notification to ", user_id)
-                socketio.emit('notification', notification, room=u['socket_id'])
+            send_notification_to_user(str(user_id), notification)
         if grouped:
             values = (text, send_time, course_number, contest_id, challenge_id)
             insert_data(connection, "notifications", ("text", "sendTime", "courseNumber", "contestId", "challengeId"),
