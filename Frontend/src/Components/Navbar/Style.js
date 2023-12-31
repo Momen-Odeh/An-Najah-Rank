@@ -214,7 +214,9 @@ const useStyle = createUseStyles({
       width: "100%",
     },
   },
-
+  logo: {
+    cursor: "pointer",
+  },
   userChoiceLarge: {
     display: "block",
   },

@@ -30,7 +30,8 @@ const ContestView = () => {
           response.data.ContestChallenges.map((item, index) => {
             return {
               Name: item.name,
-              solved: item.challengeRate == 100,
+              solved: item.solved,
+              tried: item.tried,
               statistics: [
                 { key: "Difficulty: ", val: item.difficulty },
                 { key: "Success Rate: ", val: item.challengeRate + " %" },

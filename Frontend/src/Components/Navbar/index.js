@@ -16,9 +16,15 @@ const Header = ({ activeTab }) => {
   const userChoicesData = [
     { id: 1, title: "Profile", link: "/profile" },
     { id: 2, title: "Settings", link: "/settings" },
-    { id: 4, title: "Administration", link: "/administration/courses" },
-    { id: 5, title: "Logout", link: "log-in" },
-  ];
+    { id: 3, title: "Administration", link: "/administration/courses" },
+    { id: 4, title: "Logout", link: "log-in" },
+  ].filter((item) => {
+    if (activeUser.role !== "student" && item.id === 3) {
+      return item;
+    } else if (item.id !== 3) {
+      return item;
+    }
+  });
   const signInPath = routes.filter(
     (item) => item.title === routeNames.LOG_IN
   )[0].path;
@@ -32,7 +38,10 @@ const Header = ({ activeTab }) => {
       className={`${classes.navContainer} p-2`}
     >
       <Container fluid>
-        <Navbar.Brand onClick={() => navigate("/profile")}>
+        <Navbar.Brand
+          className={classes.logo}
+          onClick={() => navigate("/profile")}
+        >
           <img src={Logo} alt="Logo" width="60" height="40" />
           <span
             className={`m-1 ${classes.textColor}`}

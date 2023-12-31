@@ -10,10 +10,12 @@ import userContext from "../../Utils/userContext";
 const ChallengeShow = ({
   Name,
   solved,
+  tried,
   statistics,
   url,
   endDate,
   startDate,
+  isContest = false,
 }) => {
   const classes = useStyles();
   const navigate = useNavigate();
@@ -76,7 +78,15 @@ const ChallengeShow = ({
           <Col className={classes.ButtonTry}>
             <ButtonRank
               disabled={completCount}
-              text={solved ? "Try Again" : "Solve Challenge"}
+              text={
+                isContest
+                  ? "View Contest"
+                  : activeUser.role !== "student"
+                  ? "View Challenge"
+                  : tried
+                  ? "Try Again"
+                  : "Solve Challenge"
+              }
               hoverBackgroundColor="#0e141e"
               onClick={() => navigate(url)}
             />

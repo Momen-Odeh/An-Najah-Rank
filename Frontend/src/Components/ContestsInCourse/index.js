@@ -34,7 +34,7 @@ const ContestsInCourse = ({ contests, isAdmin, courseId }) => {
       {contests?.map((item, index) => (
         <Row className=" mt-3" key={index}>
           <Col>
-            <ChallengeShow {...item} />
+            <ChallengeShow {...item} isContest />
           </Col>
         </Row>
       ))}
