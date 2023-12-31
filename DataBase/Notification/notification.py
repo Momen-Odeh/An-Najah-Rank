@@ -1,11 +1,6 @@
 from FlaskSetUp import socketio
 from flask import request
-from datetime import datetime
-from dataBaseConnection import insert_data
-from MySQL_SetUp import connection
-from FlaskSetUp import socketio
-from flask import request
-from datetime import datetime
+from FlaskSetUp import get_palestine_date_time
 from dataBaseConnection import insert_data
 from MySQL_SetUp import connection
 from collections import defaultdict
@@ -55,7 +50,7 @@ def send_notification_to_user(user_university_number, notification):
 
 def handle_notification(grouped, text, user_ids, course_number=None, contest_id=None, challenge_id=None):
     try:
-        send_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        send_time = get_palestine_date_time()
         notification = {
             'title': text,
             'time': send_time,

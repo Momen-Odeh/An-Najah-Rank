@@ -1,6 +1,10 @@
+import palestineDateTime from "./palestineDateTime";
+console.log("palestineDateTime:", palestineDateTime);
 const formatTimeAgo = (timestamp) => {
-  const now = new Date();
-  const timeAgo = new Date(timestamp);
+  const now = new Date(palestineDateTime).getTime();
+  console.log("now:", now);
+  const timeAgo = new Date(timestamp).getTime();
+  console.log("timeAgo: ", timeAgo);
   const timeDifference = now - timeAgo; // time in ms
   const second = 1000;
   const minute = 60 * second;
