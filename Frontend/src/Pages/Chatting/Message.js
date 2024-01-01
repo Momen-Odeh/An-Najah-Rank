@@ -4,19 +4,19 @@ import useStyle from "./style";
 import Avatar from "react-avatar";
 import Text from "../../Components/Text";
 
-const Message = ({ rtl }) => {
+const Message = ({ name, imgURL, message, time, myMessage }) => {
   const classes = useStyle();
   return (
     <Row className={classes.Message}>
-      {rtl && <Col></Col>}
+      {myMessage && <Col></Col>}
       <Col
         className={classes.MessageAvatar}
-        xs={{ span: "auto", order: rtl ? "1" : "0" }}
+        xs={{ span: "auto", order: myMessage ? "1" : "0" }}
       >
-        <Avatar name="Momen Odeh" color="#39424e" size="60" round />
+        <Avatar name={name} src={imgURL} color="#39424e" size="60" round />
       </Col>
       <Col className={classes.MessageBody} xs={"auto"}>
-        <Text text={"Hi, How are you i am good what about you?"} />
+        <Text text={message} />
       </Col>
     </Row>
   );

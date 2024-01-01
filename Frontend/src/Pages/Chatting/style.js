@@ -5,7 +5,6 @@ const useStyle = createUseStyles({
     maxWidth: "1200px",
     marginTop: "10px",
     marginBottom: "10px",
-    paddingTop: "10px",
     boxShadow: "2px 2px 4px 2px rgba(0, 0, 0, 0.2)",
     // backgroundColor: "red",
   },
@@ -26,6 +25,8 @@ const useStyle = createUseStyles({
     justifyContent: "space-between",
     padding: "15px 10px",
     borderBottom: "1px #c2c7d0 solid",
+    borderRight: "1px solid #c2c7d0",
+    paddingTop: "10px",
   },
   PersonInfo: {
     display: "flex",
@@ -41,15 +42,23 @@ const useStyle = createUseStyles({
     justifyContent: "center",
   },
   Conversations: {
-    maxHeight: "75vh",
-    overflow: "scroll",
+    height: "75vh",
+    display: "flex",
+    flexDirection: "column",
+    flexWrap: "nowrap",
+    // height: "75vh",
+    overflow: "auto",
+    borderRight: "1px solid #c2c7d0",
+
+    // width: "100%",
   },
+  RowConv: {},
   Message: {
     // backgroundColor: "red",
     // border: "1px solid red ",
     alignItems: "center",
     gap: "10px",
-    padding: "0",
+    padding: "0 10px",
     margin: "0",
   },
   MessageAvatar: {
@@ -67,8 +76,10 @@ const useStyle = createUseStyles({
     flexDirection: "column",
     gap: "15px",
     width: "100%",
-    maxHeight: "75vh",
-    overflow: "scroll",
+    height: "75vh",
+    // height: "75vh",
+    overflow: "auto",
+    paddingTop: "10px",
   },
   InputMessageContainer: {
     backgroundColor: "#f8f9fa",
@@ -80,6 +91,12 @@ const useStyle = createUseStyles({
   },
   InputFiledRank: {
     width: "90%",
+  },
+  openNewModal: {
+    cursor: "pointer",
+    "&:hover": {
+      //   backgroundColor: "red",
+    },
   },
 });
 

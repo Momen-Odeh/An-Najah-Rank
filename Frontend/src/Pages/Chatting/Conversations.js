@@ -3,13 +3,18 @@ import { Col, Container, Row } from "react-bootstrap";
 import useStyle from "./style";
 import Text from "../../Components/Text";
 import PersonInfo from "./PersonInfo";
+import ModalRank from "../../Components/ModalRank";
+import { useState } from "react";
+import InputFiledRank from "../../Components/InputFiledRank";
+import ButtonRank from "../../Components/ButtonRank";
 
-const Conversations = () => {
+const Conversations = ({ ConversationsData }) => {
   const classes = useStyle();
-  let data = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15];
+  const [newModal, setNewModal] = useState({ show: false });
+
   return (
     <Container fluid>
-      <Row className={classes.newChat}>
+      <Row className={`${classes.newChat}`}>
         <Col className={`${classes.Col} `} xs="auto">
           <Text
             text={"Conversations"}
@@ -19,19 +24,45 @@ const Conversations = () => {
           />
         </Col>
         <Col className={`${classes.Col} `} xs="auto">
-          <Text text={"new"} />
+          <div
+            onClick={() => setNewModal({ ...newModal, show: true })}
+            className={classes.openNewModal}
+          >
+            <Text text={"new"} />
+          </div>
           {/* Here will be enter the new box */}
         </Col>
       </Row>
-      <Row className={classes.Conversations}>
-        {data.map((item, index) => (
+      <Row className={`${classes.Conversations}`}>
+        {ConversationsData?.map((item, index) => (
           <Row key={index}>
             <Col key={index} className={`${classes.Col} `}>
-              <PersonInfo key={index} />
+              <PersonInfo key={index} {...item} />
             </Col>
           </Row>
         ))}
       </Row>
+      <ModalRank
+        title={"New Message"}
+        show={newModal.show}
+        onHide={() => setNewModal({ ...newModal, show: false })}
+        footer={
+          <>
+            <ButtonRank
+              text={"cancel"}
+              onClick={() => setNewModal({ ...newModal, show: false })}
+            />
+            <ButtonRank text={"send"} />
+          </>
+        }
+      >
+        {/* <div> */}
+        <Text text={"Send a message to:"} wegiht="100" />
+        <InputFiledRank placeholder={"Enter email address"} />
+        <br />
+        <InputFiledRank as={"textarea"} rows={"5"} />
+        {/* </div> */}
+      </ModalRank>
     </Container>
   );
 };
