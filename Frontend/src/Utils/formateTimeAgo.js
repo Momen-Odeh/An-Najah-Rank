@@ -1,7 +1,6 @@
-import palestineDateTime from "./palestineDateTime";
-console.log("palestineDateTime:", palestineDateTime);
+import { getPalestineDateTime } from "./palestineDateTime";
 const formatTimeAgo = (timestamp) => {
-  const now = new Date(palestineDateTime).getTime();
+  const now = new Date(getPalestineDateTime()).getTime();
   console.log("now:", now);
   const timeAgo = new Date(timestamp).getTime();
   console.log("timeAgo: ", timeAgo);

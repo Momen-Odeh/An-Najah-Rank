@@ -1,14 +1,15 @@
-const options = {
-  timeZone: "Asia/Gaza",
-  year: "numeric",
-  month: "numeric",
-  day: "numeric",
-  hour12: false,
-  hour: "numeric",
-  minute: "numeric",
-  second: "numeric",
+export const getPalestineDateTime = () => {
+  const options = {
+    timeZone: "Asia/Gaza",
+    year: "numeric",
+    month: "numeric",
+    day: "numeric",
+    hour12: false,
+    hour: "numeric",
+    minute: "numeric",
+    second: "numeric",
+  };
+  const currentDateTime = new Date();
+  currentDateTime.setMinutes(currentDateTime.getMinutes() + 1);
+  return new Intl.DateTimeFormat("en-US", options).format(currentDateTime);
 };
-const palestineDateTime = new Intl.DateTimeFormat("en-US", options).format(
-  new Date()
-);
-export default palestineDateTime;
