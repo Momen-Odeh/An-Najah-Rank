@@ -3,8 +3,8 @@ from MySQL_SetUp import connection
 from flask import request, jsonify
 
 
-@app.route('/get-messages', methods=['GET'])
-def get_notifications():
+@app.route('/get-conversations', methods=['GET'])
+def get_conversations():
     try:
         tokenData = getattr(request, 'tokenData', None)
         user_id = tokenData['universityNumber']
@@ -43,8 +43,70 @@ def get_notifications():
         data = cursor.fetchall()
         conversations = [{'conversationID': conversation[0], 'name': conversation[1], 'imgURL': conversation[2],
                           'lastMessageTime': conversation[3]} for conversation in data]
-        return jsonify({"messages": conversations}), 200
+        cursor = connection.cursor()
+        cursor.execute(f"""SELECT lastReadMessage from user WHERE universityNumber = '{user_id}' """)
+        lastReadMessage = cursor.fetchone()[0]
+        return jsonify({"conversations": conversations, "lastReadMessage": lastReadMessage}), 200
 
+    except Exception as e:
+        print(e)
+        return {'message': str(e)}, 409
+
+
+@app.route('/get-messages', methods=['GET'])
+def get_messages():
+    try:
+        tokenData = getattr(request, 'tokenData', None)
+        user_id = tokenData['universityNumber']
+        params = request.args
+        conversationID = int(params['conversationID'])
+        query = f"""
+            SELECT COUNT(*) AS permission_count
+            FROM conversations c
+            WHERE 
+                c.conversationID = '{conversationID}'
+                AND '{user_id}' IN (c.user1ID, c.user2ID);
+        """
+        cursor = connection.cursor()
+        cursor.execute(query)
+        permission_count = cursor.fetchone()[0]
+        if not (permission_count > 0):
+            return {'message': 'UnAuthorized'}, 401
+        query = f"""
+                    SELECT * FROM messages WHERE conversationID = '{conversationID}';
+                 """
+        cursor = connection.cursor()
+        cursor.execute(query)
+        data = cursor.fetchall()
+        messages = [{'messageID': message[0], 'message': message[3],
+                     'time': message[4].strftime('%Y-%m-%d %H:%M:%S'), 'myMessage': int(message[2]) == int(user_id)} for message in data]
+
+        return jsonify({"messages": messages}), 200
+
+    except Exception as e:
+        print(e)
+        return {'message': str(e)}, 409
+
+
+@app.route('/update-last-message', methods=['POST'])
+def update_last_message():
+    try:
+        tokenData = getattr(request, 'tokenData', None)
+        user_id = tokenData['universityNumber']
+        body = request.get_json()
+        cursor = connection.cursor()
+        cursor.execute(f"""
+                            SELECT messageID from messages WHERE content = '{body['content']}' 
+                            AND sendingTime = '{body['time']}' AND conversationID = '{body['conversationID']}'; """)
+        message_id = cursor.fetchone()[0]
+
+        cursor.execute("""
+            UPDATE user
+            SET lastReadMessage = %s
+            WHERE universityNumber = %s;
+        """, (message_id, user_id))
+        connection.commit()
+        return {'message': "done"}, 200
     except Exception as e:
         print(e)
         return {'message': str(e)}, 409
