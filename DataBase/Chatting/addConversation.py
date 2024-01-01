@@ -31,8 +31,8 @@ def add_conversation():
         return {'message': str(e)}, 409
 
 
-@app.route('/add-conversation', methods=['POST'])
-def add_conversation():
+@app.route('/add-message', methods=['POST'])
+def add_message():
     try:
         tokenData = getattr(request, 'tokenData', None)
         user_id = tokenData['universityNumber']
