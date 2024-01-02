@@ -2,6 +2,7 @@ from FlaskSetUp import app, get_palestine_date_time
 from MySQL_SetUp import connection
 from flask import request
 from dataBaseConnection import insert_data
+from Chatting.handleMessages import handle_messages
 
 
 @app.route('/add-conversation', methods=['POST'])
@@ -19,11 +20,13 @@ def add_conversation():
         insert_data(connection, "conversations", ('user1ID', 'user2ID'), [user_id, receiver_id])
         cursor.execute(f"""SELECT conversationID from conversations WHERE user1ID = '{user_id}' 
                            AND user2ID = '{receiver_id}'; """)
+        time = get_palestine_date_time()
         conversation_id = cursor.fetchone()[0]
         insert_data(connection, "messages", ('conversationID', 'senderID', 'content', 'sendingTime'),
-                    [conversation_id, user_id, body['messageContent'], get_palestine_date_time()])
+                    [conversation_id, user_id, body['messageContent'], time])
 
         # *************************** send message via socket io
+        handle_messages(conversation_id, time, body['messageContent'], user_id)
 
         return {'message': "done"}, 200
     except Exception as e:
@@ -49,11 +52,12 @@ def add_message():
         permission_count = cursor.fetchone()[0]
         if not (permission_count > 0):
             return {'message': 'UnAuthorized'}, 401
-
+        time = get_palestine_date_time()
         insert_data(connection, "messages", ('conversationID', 'senderID', 'content', 'sendingTime'),
-                    [body['conversationId'], user_id, body['messageContent'], get_palestine_date_time()])
+                    [body['conversationId'], user_id, body['messageContent'], time])
 
         # *************************** send message via socket io
+        handle_messages(body['conversationId'], time, body['messageContent'], user_id)
 
         return {'message': "done"}, 200
     except Exception as e:
