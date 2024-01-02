@@ -37,7 +37,7 @@ def add_conversation():
                     [conversation_id, user_id, body['messageContent'], time])
 
         cursor = connection.cursor()
-        cursor.execute(f"""SELECT fullName, img from user WHERE universityNumber = '{user_id}';""")
+        cursor.execute(f"""SELECT fullName, img from user WHERE universityNumber = '{receiver_id}';""")
         data = cursor.fetchone()
         response = {
             "name": data[0],
@@ -46,7 +46,7 @@ def add_conversation():
         }
         # *************************** send message via socket io
         handle_messages(conversation_id, time, body['messageContent'], user_id)
-        return {"response": response}, 200
+        return response, 200
     except Exception as e:
         print(e)
         return {'message': str(e)}, 409

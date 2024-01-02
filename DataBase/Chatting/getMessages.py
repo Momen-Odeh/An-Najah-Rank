@@ -35,7 +35,9 @@ def get_conversations():
                         '{user_id}' IN (c.user1ID, c.user2ID)
                         AND (c.user1ID != '{user_id}' OR c.user2ID != '{user_id}')
                     GROUP BY
-                        c.conversationID, name, imgURL;
+                        c.conversationID, name, imgURL
+                    ORDER BY
+                        lastMessageTime DESC;
                  """
         if get_all == 0:
             query += " limit 10"
