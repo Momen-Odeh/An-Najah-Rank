@@ -18,16 +18,21 @@ def add_conversation():
         receiver_id = cursor.fetchone()[0]
         if not receiver_id:
             return {"message": "receiver not found"}, 404
+
         cursor.execute(f"""
             SELECT conversationID
             FROM conversations
             WHERE (user1ID = '{user_id}' AND user2ID = '{receiver_id}')
                OR (user1ID = '{receiver_id}' AND user2ID = '{user_id}');
         """)
-
         existing_conversation = cursor.fetchone()
+
         if existing_conversation:
-            return {"message": "Conversation already exists", "conversationID": existing_conversation[0]}, 409
+            time = get_palestine_date_time()
+            insert_data(connection, "messages", ('conversationID', 'senderID', 'content', 'sendingTime'),
+                        [existing_conversation[0], user_id, body['messageContent'], time])
+            handle_messages(existing_conversation[0], time, body['messageContent'], receiver_id)
+            return {"message": "Conversation already exists", "conversationID": existing_conversation[0]}, 200
 
         insert_data(connection, "conversations", ('user1ID', 'user2ID'), [user_id, receiver_id])
         cursor.execute(f"""SELECT conversationID from conversations WHERE user1ID = '{user_id}' 
@@ -47,7 +52,7 @@ def add_conversation():
             "conversationID": conversation_id
         }
         # *************************** send message via socket io
-        handle_messages(conversation_id, time, body['messageContent'], user_id)
+        handle_messages(conversation_id, time, body['messageContent'], receiver_id)
         return response, 200
     except Exception as e:
         print(e)
