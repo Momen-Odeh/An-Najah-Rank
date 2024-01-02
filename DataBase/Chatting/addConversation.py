@@ -41,7 +41,7 @@ def add_conversation():
         data = cursor.fetchone()
         response = {
             "name": data[0],
-            "imgURL": data[1],
+            "imgURL": get_file_from_AWS(data[1]) if data[1] else None,
             "time": time,
             "conversationID": conversation_id
         }
