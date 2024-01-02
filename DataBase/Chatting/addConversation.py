@@ -42,7 +42,8 @@ def add_conversation():
         response = {
             "name": data[0],
             "imgURL": data[1],
-            "time": time
+            "time": time,
+            "conversationID": conversation_id
         }
         # *************************** send message via socket io
         handle_messages(conversation_id, time, body['messageContent'], user_id)
