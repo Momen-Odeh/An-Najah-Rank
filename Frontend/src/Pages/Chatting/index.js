@@ -8,14 +8,18 @@ import ButtonRank from "../../Components/ButtonRank";
 import { useState } from "react";
 import axios from "axios";
 import userContext from "../../Utils/userContext";
+import Text from "../../Components/Text";
+// import activeUseStyle from "./activeStyle";
 
 const Chatting = () => {
   const classes = UseStyle();
+  // const activeClasses = activeUseStyle();
   const { activeUser } = useContext(userContext);
+  const { socket } = useContext(userContext);
   const [ConversationsData, setConversationsData] = useState([
-    { name: "Momen H. Odeh", imgURL: "", lastMessageTime: "2023/12/25 10:12" },
-    { name: "Noor Aldeen", imgURL: "", lastMessageTime: "2023/5/25 10:12" },
-    { name: "Mohee", imgURL: "", lastMessageTime: "2023/5/25 10:12" },
+    // { name: "Momen H. Odeh", imgURL: "", lastMessageTime: "2023/12/25 10:12" },
+    // { name: "Noor Aldeen", imgURL: "", lastMessageTime: "2023/5/25 10:12" },
+    // { name: "Mohee", imgURL: "", lastMessageTime: "2023/5/25 10:12" },
   ]);
   const [exchangeMessagesData, setExchangeMessagesData] = useState([]);
   const [message, setMessage] = useState("");
@@ -24,9 +28,9 @@ const Chatting = () => {
     myImg: "",
     otherName: "",
     otherImg: "",
+    conversationID: null,
   });
   const sendMessage = () => {
-    console.log(44444444);
     setExchangeMessagesData([
       ...exchangeMessagesData,
       {
@@ -99,6 +103,19 @@ const Chatting = () => {
       });
   }, []);
 
+  useEffect(() => {
+    if (socket) {
+      socket?.on("message", (data) => {
+        setExchangeMessagesData((prev) => [
+          ...prev,
+          {
+            message: data.message,
+            myMessage: false,
+          },
+        ]);
+      });
+    }
+  }, [socket]);
   return (
     <Container fluid className={classes.Container}>
       <Row className={`${classes.RowContainer}`}>
@@ -107,33 +124,44 @@ const Chatting = () => {
             ConversationsData={ConversationsData}
             handelSendNewMessage={sendNewMessage}
             handelChooseConversation={chooseConversation}
+            activeConversationUsers={activeConversationUsers}
           />
         </Col>
         <Col className={`${classes.ChatCol} `}>
-          <div>
-            <ExchangeMessages
-              exchangeMessagesData={exchangeMessagesData}
-              setExchangeMessagesData={setExchangeMessagesData}
-              activeConversationUsers={activeConversationUsers}
-            />
-          </div>
-          <div className={classes.InputMessageContainer}>
-            <div className={classes.InputFiledRank}>
-              <InputFiledRank
-                placeholder={"Enter Message"}
-                onChange={(e) => setMessage(e.target.value)}
-                value={message}
-                onKeyDown={handleKeyPress}
-              />
-            </div>
+          {activeConversationUsers.conversationID !== null ? (
             <div>
-              <ButtonRank
-                text={"Send"}
-                onClick={sendMessage}
-                disabled={message.length === 0}
+              <ExchangeMessages
+                exchangeMessagesData={exchangeMessagesData}
+                setExchangeMessagesData={setExchangeMessagesData}
+                activeConversationUsers={activeConversationUsers}
               />
             </div>
-          </div>
+          ) : (
+            <div className={classes.EmptyConversation}>
+              <div className={classes.EmptyConversationInner}>
+                <Text text={"Select a chat to start messaging"} />
+              </div>
+            </div>
+          )}
+          {activeConversationUsers.conversationID !== null && (
+            <div className={classes.InputMessageContainer}>
+              <div className={classes.InputFiledRank}>
+                <InputFiledRank
+                  placeholder={"Enter Message"}
+                  onChange={(e) => setMessage(e.target.value)}
+                  value={message}
+                  onKeyDown={handleKeyPress}
+                />
+              </div>
+              <div>
+                <ButtonRank
+                  text={"Send"}
+                  onClick={sendMessage}
+                  disabled={message.length === 0}
+                />
+              </div>
+            </div>
+          )}
         </Col>
       </Row>
     </Container>

@@ -25,14 +25,14 @@ const Messages = () => {
     },
   ]);
   const ref = useRef(null);
-  useEffect(() => {
-    if (socket) {
-      socket?.on("message", (data) => {
-        setMessages();
-        toastInfo("New Message: " + data.message);
-      });
-    }
-  }, [socket]);
+  // useEffect(() => {
+  //   if (socket) {
+  //     socket?.on("message", (data) => {
+  //       // setMessages("");
+  //       toastInfo("New Message: " + data.message);
+  //     });
+  //   }
+  // }, [socket]);
   const handleMessagesPanel = (event) => {
     event.preventDefault();
     setShowMessages(!showMessages);
