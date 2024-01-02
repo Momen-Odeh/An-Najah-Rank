@@ -107,6 +107,19 @@ const useStyle = createUseStyles({
       //   backgroundColor: "red",
     },
   },
+  EmptyConversation: {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    height: "100%",
+    // backgroundColor: "#dee2e6",
+  },
+  EmptyConversationInner: {
+    backgroundColor: "#dee2e6",
+    padding: "7px 10px",
+    borderRadius: "15px",
+    cursor: "pointer",
+  },
 });
 
 export default useStyle;

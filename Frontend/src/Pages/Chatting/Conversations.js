@@ -12,6 +12,7 @@ const Conversations = ({
   ConversationsData,
   handelSendNewMessage,
   handelChooseConversation,
+  activeConversationUsers,
 }) => {
   const classes = useStyle();
   const [newModal, setNewModal] = useState({
@@ -49,7 +50,13 @@ const Conversations = ({
             onClick={() => handelChooseConversation(item)}
           >
             <Col key={index} className={`${classes.Col} `}>
-              <PersonInfo key={index} {...item} />
+              <PersonInfo
+                key={index}
+                {...item}
+                active={
+                  item.conversationID === activeConversationUsers.conversationID
+                }
+              />
             </Col>
           </Row>
         ))}
