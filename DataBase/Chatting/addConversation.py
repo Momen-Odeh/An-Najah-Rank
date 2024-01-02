@@ -17,6 +17,17 @@ def add_conversation():
         receiver_id = cursor.fetchone()[0]
         if not receiver_id:
             return {"message": "receiver not found"}, 404
+        cursor.execute(f"""
+            SELECT conversationID
+            FROM conversations
+            WHERE (user1ID = '{user_id}' AND user2ID = '{receiver_id}')
+               OR (user1ID = '{receiver_id}' AND user2ID = '{user_id}');
+        """)
+
+        existing_conversation = cursor.fetchone()
+        if existing_conversation:
+            return {"message": "Conversation already exists", "conversationID": existing_conversation[0]}, 409
+
         insert_data(connection, "conversations", ('user1ID', 'user2ID'), [user_id, receiver_id])
         cursor.execute(f"""SELECT conversationID from conversations WHERE user1ID = '{user_id}' 
                            AND user2ID = '{receiver_id}'; """)
@@ -25,10 +36,17 @@ def add_conversation():
         insert_data(connection, "messages", ('conversationID', 'senderID', 'content', 'sendingTime'),
                     [conversation_id, user_id, body['messageContent'], time])
 
+        cursor = connection.cursor()
+        cursor.execute(f"""SELECT fullName, img from user WHERE universityNumber = '{user_id}';""")
+        data = cursor.fetchone()[0]
+        response = {
+            "name": data[0],
+            "imgURL": data[1],
+            "time": time
+        }
         # *************************** send message via socket io
         handle_messages(conversation_id, time, body['messageContent'], user_id)
-
-        return {'message': "done"}, 200
+        return {"response": response}, 200
     except Exception as e:
         print(e)
         return {'message': str(e)}, 409
