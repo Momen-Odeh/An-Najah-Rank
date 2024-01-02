@@ -1,11 +1,14 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect, useContext } from "react";
 import { Nav, Badge, Overlay } from "react-bootstrap";
 import { FaComment } from "react-icons/fa";
 import useStyle from "./Style";
 import MessagesLogo from "./images/N-messages.png";
+import userContext from "../../Utils/userContext";
+import { toastInfo } from "../../Utils/toast";
 const Messages = () => {
   const classes = useStyle();
   const [showMessages, setShowMessages] = useState(false);
+  const { socket } = useContext(userContext);
   const [messages, setMessages] = useState([
     { id: 1, sender: "John france", time: "2 min ago", content: "Hello!" },
     {
@@ -22,7 +25,14 @@ const Messages = () => {
     },
   ]);
   const ref = useRef(null);
-
+  useEffect(() => {
+    if (socket) {
+      socket?.on("message", (data) => {
+        setMessages();
+        toastInfo("New Message: " + data.message);
+      });
+    }
+  }, [socket]);
   const handleMessagesPanel = (event) => {
     event.preventDefault();
     setShowMessages(!showMessages);
