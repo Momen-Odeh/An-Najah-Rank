@@ -120,6 +120,11 @@ const useStyle = createUseStyles({
     borderRadius: "15px",
     cursor: "pointer",
   },
+  ModalFooter: {
+    display: "flex",
+    width: "100%",
+    justifyContent: "space-between",
+  },
 });
 
 export default useStyle;

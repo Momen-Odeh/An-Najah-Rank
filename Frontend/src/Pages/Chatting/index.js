@@ -9,6 +9,7 @@ import { useState } from "react";
 import axios from "axios";
 import userContext from "../../Utils/userContext";
 import Text from "../../Components/Text";
+import { getPalestineDateTime } from "../../Utils/palestineDateTime";
 // import activeUseStyle from "./activeStyle";
 
 const Chatting = () => {
@@ -39,8 +40,16 @@ const Chatting = () => {
       },
     ]);
     setMessage("");
-    // activeConversationUsers.conversationID
-    //send api to store in DB
+    let old;
+    const newConv = ConversationsData.filter((x) => {
+      if (x.conversationID === activeConversationUsers.conversationID) {
+        old = x;
+      } else return x;
+    });
+    setConversationsData([
+      { ...old, lastMessageTime: getPalestineDateTime() },
+      ...newConv,
+    ]);
     axios
       .post("/add-message", {
         conversationId: activeConversationUsers.conversationID,
@@ -54,21 +63,74 @@ const Chatting = () => {
     }
   };
 
-  const sendNewMessage = (email, message) => {
+  const [loading, setLoading] = useState(false);
+  const sendNewMessage = (email, message, setNewModal, setErrorMsg) => {
     console.log("New message: ", email, "   ", message);
-    setConversationsData([
-      { name: email, imgURL: "", lastMessageTime: "2023/5/25 10:12" },
-      ...ConversationsData,
-    ]);
-    setExchangeMessagesData([
-      {
-        name: "email",
-        imgURL: "",
-        message: message,
-        time: "",
-        myMessage: true,
-      },
-    ]);
+    setLoading(true);
+    axios
+      .post("/add-conversation", {
+        receiverEmail: email,
+        messageContent: message,
+      })
+      .then(async (response) => {
+        console.log(response);
+        if (message !== undefined) {
+          await chooseConversation(
+            ConversationsData.filter(
+              (x) => x.conversationID === response.data.conversationID
+            )[0]
+          );
+          let old;
+          const newConv = ConversationsData.filter((x) => {
+            if (x.conversationID === response.data.conversationID) {
+              old = x;
+            } else return x;
+          });
+          setConversationsData([
+            { ...old, lastMessageTime: getPalestineDateTime() },
+            ...newConv,
+          ]);
+          setNewModal({ show: false, email: "", message: "" });
+        } else {
+          setConversationsData([
+            {
+              name: response.data.name,
+              imgURL: response.data.imgURL,
+              lastMessageTime: response.data.time,
+              conversationID: response.data.conversationID,
+            },
+            ...ConversationsData,
+          ]);
+          setExchangeMessagesData([
+            {
+              name: response.data.name,
+              imgURL: response.data.imgURL,
+              message: message,
+              time: response.data.time,
+              myMessage: true,
+            },
+          ]);
+          setActiveConversationUsers({
+            myName: activeUser.name,
+            myImg: activeUser.image,
+            otherName: response.data.name,
+            otherImg: response.data.imgURL,
+            conversationID: response.data.conversationID,
+          });
+          setNewModal({ show: false, email: "", message: "" });
+        }
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.log(error);
+        if (error.response.status === 404) {
+          setErrorMsg({
+            email: "Not found email, please try again",
+            message: null,
+          });
+        }
+        setLoading(false);
+      });
   };
 
   const chooseConversation = (item) => {
@@ -125,6 +187,7 @@ const Chatting = () => {
             handelSendNewMessage={sendNewMessage}
             handelChooseConversation={chooseConversation}
             activeConversationUsers={activeConversationUsers}
+            loading={loading}
           />
         </Col>
         <Col className={`${classes.ChatCol} `}>

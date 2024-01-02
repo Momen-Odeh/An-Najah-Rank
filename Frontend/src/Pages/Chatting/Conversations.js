@@ -7,12 +7,13 @@ import ModalRank from "../../Components/ModalRank";
 import { useState } from "react";
 import InputFiledRank from "../../Components/InputFiledRank";
 import ButtonRank from "../../Components/ButtonRank";
-
+import { validateEmail } from "../../Utils/Validation";
 const Conversations = ({
   ConversationsData,
   handelSendNewMessage,
   handelChooseConversation,
   activeConversationUsers,
+  loading,
 }) => {
   const classes = useStyle();
   const [newModal, setNewModal] = useState({
@@ -20,7 +21,21 @@ const Conversations = ({
     email: "",
     message: "",
   });
-
+  const [errorMsg, setErrorMsg] = useState({ email: null, message: null });
+  const handelValidationSendNewMsg = () => {
+    setErrorMsg({
+      email: !validateEmail(newModal.email) ? "please enter valid email" : null,
+      message: newModal.message.length === 0 ? "please enter message" : null,
+    });
+    if (validateEmail(newModal.email) && newModal.message.length !== 0) {
+      handelSendNewMessage(
+        newModal.email,
+        newModal.message,
+        setNewModal,
+        setErrorMsg
+      );
+    }
+  };
   return (
     <Container fluid className="p-0 m-0">
       <Row className={`${classes.newChat}  `}>
@@ -64,29 +79,45 @@ const Conversations = ({
       <ModalRank
         title={"New Message"}
         show={newModal.show}
-        onHide={() => setNewModal({ ...newModal, show: false })}
+        onHide={() => {
+          setNewModal({
+            show: false,
+            email: "",
+            message: "",
+          });
+          setErrorMsg({ email: null, message: null });
+        }}
         footer={
-          <>
+          <div className={classes.ModalFooter}>
             <ButtonRank
+              disabled={loading}
               text={"cancel"}
-              onClick={() => setNewModal({ ...newModal, show: false })}
+              onClick={() => {
+                setNewModal({
+                  show: false,
+                  email: "",
+                  message: "",
+                });
+                setErrorMsg({ email: null, message: null });
+              }}
             />
             <ButtonRank
               text={"send"}
-              onClick={() => {
-                handelSendNewMessage(newModal.email, newModal.message);
-                setNewModal({ show: false });
-              }}
+              onClick={handelValidationSendNewMsg}
+              disabled={loading}
             />
-          </>
+          </div>
         }
       >
         {/* <div> */}
         <Text text={"Send a message to:"} wegiht="100" />
         <InputFiledRank
           placeholder={"Enter email address"}
+          type={"email"}
           value={newModal.email}
           onChange={(e) => setNewModal({ ...newModal, email: e.target.value })}
+          msg={errorMsg.email}
+          disabled={loading}
         />
         <br />
         <InputFiledRank
@@ -96,6 +127,8 @@ const Conversations = ({
           onChange={(e) =>
             setNewModal({ ...newModal, message: e.target.value })
           }
+          msg={errorMsg.message}
+          disabled={loading}
         />
         {/* </div> */}
       </ModalRank>
