@@ -17,7 +17,7 @@ def add_conversation():
         receiver_id = cursor.fetchone()
         if not receiver_id:
             return {"message": "receiver not found"}, 404
-
+        receiver_id = receiver_id[0]
         cursor.execute(f"""
             SELECT conversationID
             FROM conversations
