@@ -6,7 +6,12 @@ const useStyle = createUseStyles({
     marginTop: "10px",
     marginBottom: "10px",
     boxShadow: "2px 2px 4px 2px rgba(0, 0, 0, 0.2)",
+    padding: "0",
     // backgroundColor: "red",
+  },
+  RowContainer: {
+    margin: "0",
+    padding: "0",
   },
   Col: {
     padding: "0",
@@ -33,7 +38,11 @@ const useStyle = createUseStyles({
     padding: "10px",
     gap: "25px",
     borderBottom: "1px #c2c7d0 solid",
-    // backgroundColor: "red",
+    cursor: "pointer",
+    transition: "0.2s",
+    "&:hover": {
+      backgroundColor: "#dddddd",
+    },
   },
   PersonInfoDetails: {
     display: "flex",

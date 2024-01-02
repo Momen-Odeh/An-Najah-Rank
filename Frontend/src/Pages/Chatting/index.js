@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext, useEffect } from "react";
 import UseStyle from "./style";
 import { Col, Container, Row } from "react-bootstrap";
 import Conversations from "./Conversations";
@@ -6,10 +6,12 @@ import ExchangeMessages from "./ExchangeMessages";
 import InputFiledRank from "../../Components/InputFiledRank";
 import ButtonRank from "../../Components/ButtonRank";
 import { useState } from "react";
-import handelStateChanges from "../../Utils/handelStateChanges";
+import axios from "axios";
+import userContext from "../../Utils/userContext";
 
 const Chatting = () => {
   const classes = UseStyle();
+  const { activeUser } = useContext(userContext);
   const [ConversationsData, setConversationsData] = useState([
     { name: "Momen H. Odeh", imgURL: "", lastMessageTime: "2023/12/25 10:12" },
     { name: "Noor Aldeen", imgURL: "", lastMessageTime: "2023/5/25 10:12" },
@@ -17,36 +19,102 @@ const Chatting = () => {
   ]);
   const [exchangeMessagesData, setExchangeMessagesData] = useState([]);
   const [message, setMessage] = useState("");
+  const [activeConversationUsers, setActiveConversationUsers] = useState({
+    myName: "",
+    myImg: "",
+    otherName: "",
+    otherImg: "",
+  });
   const sendMessage = () => {
+    console.log(44444444);
     setExchangeMessagesData([
       ...exchangeMessagesData,
       {
-        name: "Momen H. Odeh",
-        imgURL: "",
         message: message,
-        time: new Date(),
         myMessage: true,
       },
     ]);
     setMessage("");
+    // activeConversationUsers.conversationID
     //send api to store in DB
+    axios
+      .post("/add-message", {
+        conversationId: activeConversationUsers.conversationID,
+        messageContent: message,
+      })
+      .then((response) => console.log(response));
   };
   const handleKeyPress = (event) => {
     if (event.key === "Enter") {
       if (message.length !== 0) sendMessage();
     }
   };
+
+  const sendNewMessage = (email, message) => {
+    console.log("New message: ", email, "   ", message);
+    setConversationsData([
+      { name: email, imgURL: "", lastMessageTime: "2023/5/25 10:12" },
+      ...ConversationsData,
+    ]);
+    setExchangeMessagesData([
+      {
+        name: "email",
+        imgURL: "",
+        message: message,
+        time: "",
+        myMessage: true,
+      },
+    ]);
+  };
+
+  const chooseConversation = (item) => {
+    // console.log(item);
+    axios
+      .get("/get-messages", { params: { conversationID: item.conversationID } })
+      .then((response) => {
+        setExchangeMessagesData(response.data.messages);
+        console.log(response);
+        setActiveConversationUsers({
+          myName: activeUser.name,
+          myImg: activeUser.image,
+          otherName: item.name,
+          otherImg: item.imgURL,
+          conversationID: item.conversationID,
+        });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  useEffect(() => {
+    axios
+      .get("/get-conversations", { params: { all: 1 } })
+      .then((response) => {
+        setConversationsData(response.data.conversations);
+        console.log(response);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
+
   return (
     <Container fluid className={classes.Container}>
       <Row className={`${classes.RowContainer}`}>
-        <Col className={`${classes.ConversationsCol} ${classes.Col}`}>
-          <Conversations ConversationsData={ConversationsData} />
+        <Col className={`${classes.ConversationsCol}`}>
+          <Conversations
+            ConversationsData={ConversationsData}
+            handelSendNewMessage={sendNewMessage}
+            handelChooseConversation={chooseConversation}
+          />
         </Col>
-        <Col className={classes.ChatCol}>
+        <Col className={`${classes.ChatCol} `}>
           <div>
             <ExchangeMessages
               exchangeMessagesData={exchangeMessagesData}
               setExchangeMessagesData={setExchangeMessagesData}
+              activeConversationUsers={activeConversationUsers}
             />
           </div>
           <div className={classes.InputMessageContainer}>
