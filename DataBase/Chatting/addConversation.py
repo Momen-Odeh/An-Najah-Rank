@@ -38,7 +38,7 @@ def add_conversation():
 
         cursor = connection.cursor()
         cursor.execute(f"""SELECT fullName, img from user WHERE universityNumber = '{user_id}';""")
-        data = cursor.fetchone()[0]
+        data = cursor.fetchone()
         response = {
             "name": data[0],
             "imgURL": data[1],

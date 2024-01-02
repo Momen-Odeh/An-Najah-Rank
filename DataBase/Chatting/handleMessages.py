@@ -18,7 +18,7 @@ def handle_messages(conversation_id, send_time, message, user_id):
         cursor.execute(query)
         receiver_id = cursor.fetchone()[0]
         cursor.execute(f"""SELECT fullName, img from user WHERE universityNumber = '{user_id}';""")
-        data = cursor.fetchone()[0]
+        data = cursor.fetchone()
         notification = {
             'conversationId': conversation_id,
             'time': send_time,
