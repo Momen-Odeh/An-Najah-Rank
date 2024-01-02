@@ -1,6 +1,7 @@
 from FlaskSetUp import app
 from MySQL_SetUp import connection
 from flask import request, jsonify
+from fileManagment.getFileAWS import get_file_from_AWS
 
 
 @app.route('/get-conversations', methods=['GET'])
@@ -41,7 +42,8 @@ def get_conversations():
         cursor = connection.cursor()
         cursor.execute(query)
         data = cursor.fetchall()
-        conversations = [{'conversationID': conversation[0], 'name': conversation[1], 'imgURL': conversation[2],
+        conversations = [{'conversationID': conversation[0], 'name': conversation[1],
+                          'imgURL': get_file_from_AWS(conversation[2]) if conversation[2] else None,
                           'lastMessageTime': conversation[3]} for conversation in data]
         cursor = connection.cursor()
         cursor.execute(f"""SELECT lastReadMessage from user WHERE universityNumber = '{user_id}' """)
