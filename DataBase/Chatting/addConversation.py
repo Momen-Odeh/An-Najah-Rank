@@ -12,10 +12,9 @@ def add_conversation():
         tokenData = getattr(request, 'tokenData', None)
         user_id = tokenData['universityNumber']
         body = request.get_json()
-
         cursor = connection.cursor()
         cursor.execute(f"""SELECT universityNumber from user WHERE email = '{body['receiverEmail']}'; """)
-        receiver_id = cursor.fetchone()[0]
+        receiver_id = cursor.fetchone()
         if not receiver_id:
             return {"message": "receiver not found"}, 404
 
