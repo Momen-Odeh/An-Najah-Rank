@@ -3,6 +3,7 @@ import Avatar from "react-avatar";
 import useStyle from "./style";
 import Text from "../../Components/Text";
 import activeUseStyle from "./activeStyle";
+import formatTimeAgo from "../../Utils/formateTimeAgo";
 const PersonInfo = ({ name, imgURL, lastMessageTime, active }) => {
   const classes = useStyle();
   const activeClasses = activeUseStyle({ active });
@@ -16,7 +17,11 @@ const PersonInfo = ({ name, imgURL, lastMessageTime, active }) => {
           <Text text={name} />
         </div>
         <div>
-          <Text text={lastMessageTime} />
+          <Text
+            text={formatTimeAgo(lastMessageTime)}
+            wegiht="200"
+            size="14px"
+          />
         </div>
       </div>
     </div>

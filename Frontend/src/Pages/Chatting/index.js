@@ -14,14 +14,9 @@ import { getPalestineDateTime } from "../../Utils/palestineDateTime";
 
 const Chatting = () => {
   const classes = UseStyle();
-  // const activeClasses = activeUseStyle();
   const { activeUser } = useContext(userContext);
   const { socket } = useContext(userContext);
-  const [ConversationsData, setConversationsData] = useState([
-    // { name: "Momen H. Odeh", imgURL: "", lastMessageTime: "2023/12/25 10:12" },
-    // { name: "Noor Aldeen", imgURL: "", lastMessageTime: "2023/5/25 10:12" },
-    // { name: "Mohee", imgURL: "", lastMessageTime: "2023/5/25 10:12" },
-  ]);
+  const [ConversationsData, setConversationsData] = useState([]);
   const [exchangeMessagesData, setExchangeMessagesData] = useState([]);
   const [message, setMessage] = useState("");
   const [activeConversationUsers, setActiveConversationUsers] = useState({
@@ -31,6 +26,7 @@ const Chatting = () => {
     otherImg: "",
     conversationID: null,
   });
+
   const sendMessage = () => {
     setExchangeMessagesData([
       ...exchangeMessagesData,
@@ -57,6 +53,7 @@ const Chatting = () => {
       })
       .then((response) => console.log(response));
   };
+
   const handleKeyPress = (event) => {
     if (event.key === "Enter") {
       if (message.length !== 0) sendMessage();
@@ -159,6 +156,16 @@ const Chatting = () => {
       .then((response) => {
         setConversationsData(response.data.conversations);
         console.log(response);
+        const conversationId = sessionStorage.getItem("conversationId");
+        sessionStorage.removeItem("conversationId");
+        if (conversationId) {
+          const activeConversation = response.data.conversations?.filter(
+            (item) => item.conversationID == conversationId
+          )[0];
+          if (activeConversation) {
+            chooseConversation(activeConversation);
+          }
+        }
       })
       .catch((error) => {
         console.log(error);

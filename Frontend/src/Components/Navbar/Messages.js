@@ -2,39 +2,17 @@ import React, { useState, useRef, useEffect, useContext } from "react";
 import { Nav, Badge, Overlay } from "react-bootstrap";
 import { FaComment } from "react-icons/fa";
 import useStyle from "./Style";
-import MessagesLogo from "./images/N-messages.png";
 import userContext from "../../Utils/userContext";
-import { toastInfo } from "../../Utils/toast";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Avatar from "react-avatar";
+import Text from "../Text";
+import formatTimeAgo from "../../Utils/formateTimeAgo";
 const Messages = () => {
   const classes = useStyle();
   const [showMessages, setShowMessages] = useState(false);
-  const { socket, messageNotification } = useContext(userContext);
-  const [messages, setMessages] = useState([
-    { id: 1, sender: "John france", time: "2 min ago", content: "Hello!" },
-    {
-      id: 2,
-      sender: "Alice don",
-      time: "2 hours ago",
-      content: "How are you?",
-    },
-    {
-      id: 3,
-      sender: "Bob dapo",
-      time: "3 hours ago",
-      content: "Meeting at 3 PM.",
-    },
-  ]);
+  const { messageNotification } = useContext(userContext);
+  const navigate = useNavigate();
   const ref = useRef(null);
-  // useEffect(() => {
-  //   if (socket) {
-  //     socket?.on("message", (data) => {
-  //       // setMessages("");
-  //       toastInfo("New Message: " + data.message);
-  //     });
-  //   }
-  // }, [socket]);
   useEffect(() => {}, []);
   const handleMessagesPanel = (event) => {
     event.preventDefault();
@@ -43,6 +21,12 @@ const Messages = () => {
 
   const closeMessagesPanel = () => {
     setShowMessages(false);
+  };
+
+  const handleChooseMsg = (conversationId) => {
+    sessionStorage.setItem("conversationId", conversationId);
+    closeMessagesPanel();
+    navigate("/chatting");
   };
 
   return (
@@ -59,7 +43,7 @@ const Messages = () => {
           variant=""
           style={{ fontSize: "10px", padding: "3px 5px", margin: "0px 2px" }}
         >
-          {messages.length}
+          {5}
         </Badge>
       </Nav.Link>
 
@@ -77,28 +61,38 @@ const Messages = () => {
           </div>
           <div className={classes.OverlayContent}>
             {messageNotification.map((message, index) => (
-              <div key={index} className={classes.messageItem}>
-                <div className="d-flex align-items-center">
-                  <Avatar
-                    src={message.imgURL}
-                    name={message.name}
-                    color="#39424e"
-                    size="50"
-                    round
-                    className={classes.messageCircle}
-                  />
-                  <div>
-                    <div className="d-flex justify-content-between align-items-center">
-                      <span className={classes.messageSender}>
-                        {message.name}
-                      </span>
-                      <span className={classes.messageTime}>
-                        {message.lastMessageTime}
-                      </span>
+              <div
+                className={classes.messageItem}
+                key={index}
+                onClick={() => handleChooseMsg(message.conversationID)}
+              >
+                <Avatar
+                  src={message.imgURL}
+                  name={message.name}
+                  color="#39424e"
+                  size="50"
+                  round
+                />
+                <div className={classes.messageContent}>
+                  <div className={classes.messageSender}>
+                    {message.name?.substring(0, 17) +
+                      (message.name.length > 17 ? " ..." : "")}
+                  </div>
+                  <div className="d-flex justify-content-between">
+                    <Text
+                      text={
+                        message.lastMessageContent?.substring(0, 15) +
+                        (message.lastMessageContent.length > 15 ? " ..." : "")
+                      }
+                      size="14px"
+                      wegiht="400"
+                    />
+                    <div className="d-flex justify-content-end">
+                      <Text
+                        text={formatTimeAgo(message.lastMessageTime)}
+                        size="12px"
+                      />
                     </div>
-                    <span className={classes.messageContent}>
-                      {message.lastMessageContent}
-                    </span>
                   </div>
                 </div>
               </div>
