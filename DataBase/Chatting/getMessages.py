@@ -12,6 +12,15 @@ def get_conversations():
         params = request.args
         get_all = int(params['all'])
         query = f"""
+                    WITH RankedMessages AS (
+                        SELECT
+                            m.conversationID,
+                            m.content AS lastMessageContent,
+                            m.sendingTime AS lastMessageTime,
+                            ROW_NUMBER() OVER (PARTITION BY m.conversationID ORDER BY m.sendingTime DESC) AS rn
+                        FROM
+                            messages m
+                    )
                     SELECT 
                         c.conversationID,
                         CASE 
@@ -22,22 +31,20 @@ def get_conversations():
                             WHEN c.user1ID = '{user_id}' THEN u2.img
                             ELSE u1.img
                         END AS imgURL,
-                        MAX(m.sendingTime) AS lastMessageTime
+                        rm.lastMessageContent,
+                        rm.lastMessageTime
                     FROM 
                         conversations c
                     JOIN 
                         user u1 ON c.user1ID = u1.universityNumber
                     JOIN 
                         user u2 ON c.user2ID = u2.universityNumber
-                    LEFT JOIN 
-                        messages m ON c.conversationID = m.conversationID
+                    LEFT JOIN RankedMessages rm ON c.conversationID = rm.conversationID AND rm.rn = 1
                     WHERE 
                         '{user_id}' IN (c.user1ID, c.user2ID)
                         AND (c.user1ID != '{user_id}' OR c.user2ID != '{user_id}')
-                    GROUP BY
-                        c.conversationID, name, imgURL
                     ORDER BY
-                        lastMessageTime DESC;
+                        rm.lastMessageTime DESC 
                  """
         if get_all == 0:
             query += " limit 10"
