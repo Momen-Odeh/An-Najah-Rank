@@ -15,6 +15,7 @@ def get_conversations():
                     WITH RankedMessages AS (
                         SELECT
                             m.conversationID,
+                            m.messageID,
                             m.content AS lastMessageContent,
                             m.sendingTime AS lastMessageTime,
                             ROW_NUMBER() OVER (PARTITION BY m.conversationID ORDER BY m.sendingTime DESC) AS rn
@@ -32,7 +33,8 @@ def get_conversations():
                             ELSE u1.img
                         END AS imgURL,
                         rm.lastMessageContent,
-                        rm.lastMessageTime
+                        rm.lastMessageTime,
+                        rm.messageID AS lastMessageID
                     FROM 
                         conversations c
                     JOIN 
@@ -53,8 +55,8 @@ def get_conversations():
         data = cursor.fetchall()
         conversations = [{'conversationID': conversation[0], 'name': conversation[1],
                           'imgURL': get_file_from_AWS(conversation[2]) if conversation[2] else None,
-                          'lastMessageContent': conversation[3], 'lastMessageTime': conversation[4]}
-                         for conversation in data]
+                          'lastMessageContent': conversation[3], 'lastMessageTime': conversation[4],
+                          'lastMessageID': conversation[5]} for conversation in data]
         cursor = connection.cursor()
         cursor.execute(f"""SELECT lastReadMessage from user WHERE universityNumber = '{user_id}' """)
         lastReadMessage = cursor.fetchone()[0]
