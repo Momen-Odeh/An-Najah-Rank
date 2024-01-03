@@ -53,7 +53,8 @@ def get_conversations():
         data = cursor.fetchall()
         conversations = [{'conversationID': conversation[0], 'name': conversation[1],
                           'imgURL': get_file_from_AWS(conversation[2]) if conversation[2] else None,
-                          'lastMessageTime': conversation[3]} for conversation in data]
+                          'lastMessageContent': conversation[3], 'lastMessageTime': conversation[4]}
+                         for conversation in data]
         cursor = connection.cursor()
         cursor.execute(f"""SELECT lastReadMessage from user WHERE universityNumber = '{user_id}' """)
         lastReadMessage = cursor.fetchone()[0]
