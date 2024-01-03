@@ -19,6 +19,7 @@ function PageLayout() {
   const classes = useStyles();
   const token = Cookies.get("token");
   const [loadingPage, setLoadingPage] = useState(true);
+  const [messageNotification, setMessageNotification] = useState([]);
   useEffect(() => {
     if (token) {
       axios
@@ -34,6 +35,11 @@ function PageLayout() {
               (n) => n.id > res?.data?.lastReadNotification
             )?.length
           );
+          return axios.get("/get-conversations", { params: { all: 0 } });
+        })
+        .then((response) => {
+          console.log("conversation for message", response.data);
+          setMessageNotification(response.data.conversations);
           setLoadingPage(false);
         })
         .catch((error) => {
@@ -70,6 +76,7 @@ function PageLayout() {
           setSocket,
           newNotifications,
           setNewNotifications,
+          messageNotification,
         }}
       >
         <div>

@@ -5,10 +5,12 @@ import useStyle from "./Style";
 import MessagesLogo from "./images/N-messages.png";
 import userContext from "../../Utils/userContext";
 import { toastInfo } from "../../Utils/toast";
+import { Link } from "react-router-dom";
+import Avatar from "react-avatar";
 const Messages = () => {
   const classes = useStyle();
   const [showMessages, setShowMessages] = useState(false);
-  const { socket } = useContext(userContext);
+  const { socket, messageNotification } = useContext(userContext);
   const [messages, setMessages] = useState([
     { id: 1, sender: "John france", time: "2 min ago", content: "Hello!" },
     {
@@ -33,6 +35,7 @@ const Messages = () => {
   //     });
   //   }
   // }, [socket]);
+  useEffect(() => {}, []);
   const handleMessagesPanel = (event) => {
     event.preventDefault();
     setShowMessages(!showMessages);
@@ -73,34 +76,37 @@ const Messages = () => {
             <h5>Messages</h5>
           </div>
           <div className={classes.OverlayContent}>
-            {messages.map((message, index) => (
+            {messageNotification.map((message, index) => (
               <div key={index} className={classes.messageItem}>
                 <div className="d-flex align-items-center">
-                  <img
-                    src={MessagesLogo}
-                    alt="msg"
+                  <Avatar
+                    src={message.imgURL}
+                    name={message.name}
+                    color="#39424e"
+                    size="50"
+                    round
                     className={classes.messageCircle}
-                  ></img>
+                  />
                   <div>
                     <div className="d-flex justify-content-between align-items-center">
                       <span className={classes.messageSender}>
-                        {message.sender}
+                        {message.name}
                       </span>
                       <span className={classes.messageTime}>
-                        {message.time}
+                        {message.lastMessageTime}
                       </span>
                     </div>
                     <span className={classes.messageContent}>
-                      {message.content}
+                      {message.lastMessageContent}
                     </span>
                   </div>
                 </div>
               </div>
             ))}
             <hr className={classes.line}></hr>
-            <a className={classes.notificationLink} href="#Messages">
+            <Link className={classes.notificationLink} to={"/chatting"}>
               Show all
-            </a>
+            </Link>
           </div>
         </div>
       </Overlay>
