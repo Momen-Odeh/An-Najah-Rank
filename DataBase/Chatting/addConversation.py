@@ -40,18 +40,21 @@ def add_conversation():
         conversation_id = cursor.fetchone()[0]
         insert_data(connection, "messages", ('conversationID', 'senderID', 'content', 'sendingTime'),
                     [conversation_id, user_id, body['messageContent'], time])
-
         cursor = connection.cursor()
+        cursor.execute(f"""SELECT messageID from messages WHERE conversationID = '{conversation_id}' AND 
+        senderID = '{user_id}' AND content = '{body['messageContent']}' AND sendingTime = '{time}'; """)
+        message_id = cursor.fetchone()[0]
         cursor.execute(f"""SELECT fullName, img from user WHERE universityNumber = '{receiver_id}';""")
         data = cursor.fetchone()
         response = {
             "name": data[0],
             "imgURL": get_file_from_AWS(data[1]) if data[1] else None,
             "time": time,
-            "conversationID": conversation_id
+            "conversationID": conversation_id,
+            "messageId": message_id,
         }
         # *************************** send message via socket io
-        handle_messages(conversation_id, time, body['messageContent'], receiver_id)
+        handle_messages(conversation_id, message_id, time, body['messageContent'], user_id)
         return response, 200
     except Exception as e:
         print(e)
@@ -79,9 +82,12 @@ def add_message():
         time = get_palestine_date_time()
         insert_data(connection, "messages", ('conversationID', 'senderID', 'content', 'sendingTime'),
                     [body['conversationId'], user_id, body['messageContent'], time])
-
+        cursor = connection.cursor()
+        cursor.execute(f"""SELECT messageID from messages WHERE conversationID = '{body['conversationId']}' AND 
+                senderID = '{user_id}' AND content = '{body['messageContent']}' AND sendingTime = '{time}'; """)
+        message_id = cursor.fetchone()[0]
         # *************************** send message via socket io
-        handle_messages(body['conversationId'], time, body['messageContent'], user_id)
+        handle_messages(body['conversationId'], message_id, time, body['messageContent'], user_id)
 
         return {'message': "done"}, 200
     except Exception as e:

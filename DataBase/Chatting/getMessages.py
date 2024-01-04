@@ -109,16 +109,16 @@ def update_last_message():
         user_id = tokenData['universityNumber']
         body = request.get_json()
         cursor = connection.cursor()
-        cursor.execute(f"""
-                            SELECT messageID from messages WHERE content = '{body['content']}' 
-                            AND sendingTime = '{body['time']}' AND conversationID = '{body['conversationID']}'; """)
-        message_id = cursor.fetchone()[0]
+        # cursor.execute(f"""
+        #                     SELECT messageID from messages WHERE content = '{body['content']}'
+        #                     AND sendingTime = '{body['time']}' AND conversationID = '{body['conversationID']}'; """)
+        # message_id = cursor.fetchone()[0]
 
         cursor.execute("""
             UPDATE user
             SET lastReadMessage = %s
             WHERE universityNumber = %s;
-        """, (message_id, user_id))
+        """, (body['lastMessageID'], user_id))
         connection.commit()
         return {'message': "done"}, 200
     except Exception as e:

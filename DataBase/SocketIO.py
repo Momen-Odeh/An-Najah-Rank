@@ -41,6 +41,7 @@ def handle_disconnect():
 def send_notification_to_user(user_university_number, notification, target):
     sockets = get_user(user_university_number)
     if sockets:
+        print("notification", notification, ", user", user_university_number)
         for socket_id in sockets:
             socketio.emit(target, notification, room=socket_id)
 

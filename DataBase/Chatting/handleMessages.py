@@ -3,7 +3,7 @@ from SocketIO import send_notification_to_user
 from fileManagment.getFileAWS import get_file_from_AWS
 
 
-def handle_messages(conversation_id, send_time, message, user_id):
+def handle_messages(conversation_id, message_id, send_time, message, user_id):
     try:
         query = f"""
                     SELECT 
@@ -20,12 +20,14 @@ def handle_messages(conversation_id, send_time, message, user_id):
         cursor.execute(f"""SELECT fullName, img from user WHERE universityNumber = '{user_id}';""")
         data = cursor.fetchone()
         notification = {
-            'conversationId': conversation_id,
-            'time': send_time,
-            'message': message,
-            'senderName': data[0],
+            'conversationID': conversation_id,
+            'lastMessageID': message_id,
+            'lastMessageTime': send_time,
+            'lastMessageContent': message,
+            'name': data[0],
             'imgURL': get_file_from_AWS(data[1]) if data[1] else None
         }
+
         send_notification_to_user(str(receiver_id), notification, 'message')
 
     except Exception as e:
