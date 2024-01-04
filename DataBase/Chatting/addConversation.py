@@ -95,7 +95,7 @@ def add_message():
         # *************************** send message via socket io
         handle_messages(body['conversationId'], message_id, time, body['messageContent'], user_id)
 
-        return {'message': "done"}, 200
+        return {'message': "done", "lastMessageID": message_id}, 200
     except Exception as e:
         print(e)
         return {'message': str(e)}, 409

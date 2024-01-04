@@ -22,6 +22,8 @@ const Chatting = () => {
     setExchangeMessagesData,
     activeConversationUsers,
     setActiveConversationUsers,
+    messageNotification,
+    setMessageNotification,
   } = useContext(userContext);
   const [message, setMessage] = useState("");
 
@@ -33,23 +35,52 @@ const Chatting = () => {
         myMessage: true,
       },
     ]);
-    setMessage("");
+
     let old;
     const newConv = ConversationsData.filter((x) => {
       if (x.conversationID === activeConversationUsers.conversationID) {
         old = x;
       } else return x;
     });
-    setConversationsData([
-      { ...old, lastMessageTime: getPalestineDateTime() },
-      ...newConv,
-    ]);
+    const time = getPalestineDateTime();
+    setConversationsData([{ ...old, lastMessageTime: time }, ...newConv]);
+    let oldMsg = null;
+    const oldData = messageNotification.filter((item) => {
+      if (item.conversationID == activeConversationUsers.conversationID) {
+        oldMsg = item;
+      } else {
+        return item;
+      }
+    });
     axios
       .post("/add-message", {
         conversationId: activeConversationUsers.conversationID,
         messageContent: message,
       })
-      .then((response) => console.log(response));
+      .then((response) => {
+        if (oldMsg) {
+          setMessageNotification([
+            {
+              ...oldMsg,
+              lastMessageTime: time,
+              lastMessageID: response.data.lastMessageID,
+              lastMessageContent: message,
+            },
+            ...oldData,
+          ]);
+        } else {
+          setMessageNotification([
+            {
+              ...old,
+              lastMessageTime: time,
+              lastMessageID: response.data.lastMessageID,
+              lastMessageContent: message,
+            },
+            ...messageNotification,
+          ]);
+        }
+      });
+    setMessage("");
   };
 
   const handleKeyPress = (event) => {

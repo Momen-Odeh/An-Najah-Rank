@@ -4,7 +4,7 @@ export const getPalestineDateTime = () => {
     year: "numeric",
     month: "numeric",
     day: "numeric",
-    hour12: false,
+    hour12: true,
     hour: "numeric",
     minute: "numeric",
     second: "numeric",

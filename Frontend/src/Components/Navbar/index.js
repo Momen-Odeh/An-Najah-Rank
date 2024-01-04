@@ -1,7 +1,6 @@
 import { Container, Nav, Navbar } from "react-bootstrap";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import useStyle from "./Style";
-import SearchBox from "../SearchBox";
 import Notification from "./Notification";
 import Messages from "./Messages";
 import UserChoices from "./UserChoices";
@@ -9,12 +8,9 @@ import { routeNames, routes } from "../../Utils/Utils";
 import Logo from "./images/logo.jpg";
 import { useContext } from "react";
 import userContext from "../../Utils/userContext";
-import { useState } from "react";
-import { useEffect } from "react";
 const Header = ({ activeTab }) => {
   const classes = useStyle();
   const navigate = useNavigate();
-  const location = useLocation();
   const { activeUser } = useContext(userContext);
   const userChoicesData = [
     { id: 1, title: "Profile", link: "/profile" },
@@ -34,14 +30,6 @@ const Header = ({ activeTab }) => {
   const homePath = routes.filter((item) => item.title === routeNames.HOME)[0]
     .path;
 
-  const [msgActive, setMsgActive] = useState(true);
-  useEffect(() => {
-    if (location.pathname.includes("/chatting")) {
-      setMsgActive(false);
-    } else {
-      setMsgActive(true);
-    }
-  }, [location.pathname]);
   return (
     <Navbar
       collapseOnSelect
@@ -118,7 +106,7 @@ const Header = ({ activeTab }) => {
         )}
         {activeUser?.email && (
           <Nav className="ml-auto d-flex flex-row ">
-            {msgActive && <Messages />}
+            <Messages />
             <Notification />
           </Nav>
         )}

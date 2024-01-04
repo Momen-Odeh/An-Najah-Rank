@@ -13,9 +13,7 @@ const formatTimeAgo = (timestamp) => {
   const year = 12 * month;
 
   if (timeDifference < minute) {
-    return Math.floor(timeDifference / second) < 1
-      ? "now"
-      : Math.floor(timeDifference / second) + " seconds ago";
+    return "1 minute ago";
   } else if (timeDifference < hour) {
     return Math.floor(timeDifference / minute) + " minutes ago";
   } else if (timeDifference < day) {
