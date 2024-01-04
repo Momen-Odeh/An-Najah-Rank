@@ -20,7 +20,17 @@ function PageLayout() {
   const token = Cookies.get("token");
   const [loadingPage, setLoadingPage] = useState(true);
   const [messageNotification, setMessageNotification] = useState([]);
+  const [lastMessageRead, setLastMessageRead] = useState(0);
   const [numberOfNewMessages, setNumberOfNewMessages] = useState(0);
+  const [ConversationsData, setConversationsData] = useState([]);
+  const [exchangeMessagesData, setExchangeMessagesData] = useState([]);
+  const [activeConversationUsers, setActiveConversationUsers] = useState({
+    myName: "",
+    myImg: "",
+    otherName: "",
+    otherImg: "",
+    conversationID: null,
+  });
   useEffect(() => {
     if (token) {
       axios
@@ -47,6 +57,7 @@ function PageLayout() {
                 Number(c.lastMessageID) > Number(response.data.lastReadMessage)
             )?.length
           );
+          setLastMessageRead(response.data.lastReadMessage);
           setLoadingPage(false);
         })
         .catch((error) => {
@@ -87,6 +98,14 @@ function PageLayout() {
           setMessageNotification,
           numberOfNewMessages,
           setNumberOfNewMessages,
+          lastMessageRead,
+          setLastMessageRead,
+          ConversationsData,
+          setConversationsData,
+          exchangeMessagesData,
+          setExchangeMessagesData,
+          activeConversationUsers,
+          setActiveConversationUsers,
         }}
       >
         <div>

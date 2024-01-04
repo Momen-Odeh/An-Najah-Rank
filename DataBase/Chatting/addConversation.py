@@ -86,6 +86,12 @@ def add_message():
         cursor.execute(f"""SELECT messageID from messages WHERE conversationID = '{body['conversationId']}' AND 
                 senderID = '{user_id}' AND content = '{body['messageContent']}' AND sendingTime = '{time}'; """)
         message_id = cursor.fetchone()[0]
+        cursor.execute("""
+            UPDATE user
+            SET lastReadMessage = %s
+            WHERE universityNumber = %s;
+        """, (message_id, user_id))
+        connection.commit()
         # *************************** send message via socket io
         handle_messages(body['conversationId'], message_id, time, body['messageContent'], user_id)
 

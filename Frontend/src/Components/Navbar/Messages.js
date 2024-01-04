@@ -11,8 +11,21 @@ import axios from "axios";
 const Messages = () => {
   const classes = useStyle();
   const [showMessages, setShowMessages] = useState(false);
-  const { messageNotification, numberOfNewMessages, setNumberOfNewMessages } =
-    useContext(userContext);
+  const {
+    socket,
+    messageNotification,
+    setMessageNotification,
+    lastMessageRead,
+    setLastMessageRead,
+    numberOfNewMessages,
+    setNumberOfNewMessages,
+    ConversationsData,
+    setConversationsData,
+    exchangeMessagesData,
+    setExchangeMessagesData,
+    activeConversationUsers,
+    setActiveConversationUsers,
+  } = useContext(userContext);
   const navigate = useNavigate();
   const ref = useRef(null);
   useEffect(() => {}, []);
@@ -36,6 +49,76 @@ const Messages = () => {
     });
     setNumberOfNewMessages(0);
   }
+
+  /********************************************************************************************** */
+  const [data, setData] = useState(null);
+  useEffect(() => {
+    if (data) {
+      if (data.conversationID == activeConversationUsers.conversationID) {
+        setExchangeMessagesData((prev) => [
+          ...prev,
+          {
+            message: data.lastMessageContent,
+            myMessage: false,
+          },
+        ]);
+      }
+      let contained = null;
+      const newData = ConversationsData.filter((x) => {
+        if (x.conversationID == data.conversationID) {
+          contained = x;
+        } else return x;
+      });
+      if (contained) {
+        setConversationsData([
+          {
+            ...contained,
+            lastMessageContent: data.lastMessageContent,
+            lastMessageTime: data.lastMessageTime,
+            lastMessageID: data.lastMessageID,
+          },
+          ...newData,
+        ]);
+      }
+      if (!contained) {
+        setConversationsData([data, ...ConversationsData]);
+      }
+      contained = null;
+      const newMessage = messageNotification.filter((x) => {
+        if (x.conversationID == data.conversationID) {
+          contained = x;
+        } else return x;
+      });
+      if (contained) {
+        setMessageNotification([
+          {
+            ...contained,
+            lastMessageContent: data.lastMessageContent,
+            lastMessageTime: data.lastMessageTime,
+            lastMessageID: data.lastMessageID,
+          },
+          ...newMessage,
+        ]);
+        console.log("contained.lastMessageID ", contained.lastMessageID);
+        if (contained.lastMessageID <= lastMessageRead) {
+          setNumberOfNewMessages(numberOfNewMessages + 1);
+        }
+      }
+      if (!contained) {
+        setMessageNotification([data, ...messageNotification]);
+        setNumberOfNewMessages(numberOfNewMessages + 1);
+      }
+    }
+  }, [data]);
+  console.log("lastMessageRead", lastMessageRead);
+  useEffect(() => {
+    if (socket) {
+      socket?.on("message", (message) => {
+        setData(message);
+      });
+    }
+  }, [socket]);
+  /********************************************************************************************** */
   return (
     <Nav.Item className={classes.messages}>
       <Nav.Link onClick={handleMessagesPanel} ref={ref}>

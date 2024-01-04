@@ -16,22 +16,14 @@ const Chatting = () => {
   const classes = UseStyle();
   const {
     activeUser,
-    socket,
-    messageNotification,
-    setMessageNotification,
-    numberOfNewMessages,
-    setNumberOfNewMessages,
+    ConversationsData,
+    setConversationsData,
+    exchangeMessagesData,
+    setExchangeMessagesData,
+    activeConversationUsers,
+    setActiveConversationUsers,
   } = useContext(userContext);
-  const [ConversationsData, setConversationsData] = useState([]);
-  const [exchangeMessagesData, setExchangeMessagesData] = useState([]);
   const [message, setMessage] = useState("");
-  const [activeConversationUsers, setActiveConversationUsers] = useState({
-    myName: "",
-    myImg: "",
-    otherName: "",
-    otherImg: "",
-    conversationID: null,
-  });
 
   const sendMessage = () => {
     setExchangeMessagesData([
@@ -181,62 +173,7 @@ const Chatting = () => {
         console.log(error);
       });
   }, []);
-  console.log("activeConversationUsers ", activeConversationUsers);
-  const [data, setData] = useState(null);
-  useEffect(() => {
-    if (data) {
-      if (data.conversationId == activeConversationUsers.conversationID) {
-        setExchangeMessagesData((prev) => [
-          ...prev,
-          {
-            message: data.message,
-            myMessage: false,
-          },
-        ]);
-      }
-      let contained = false;
-      setConversationsData(
-        ConversationsData?.map((item) => {
-          if (item.conversationID == data.conversationId) {
-            contained = true;
-            return {
-              ...item,
-              lastMessageContent: data.message,
-              lastMessageTime: data.time,
-              lastMessageID: data.messageId,
-            };
-          } else return item;
-        })
-      );
-      if (!contained) {
-        setConversationsData([data, ...ConversationsData]);
-      }
-      contained = false;
-      setMessageNotification(
-        messageNotification.map((item) => {
-          if (item.conversationID == data.conversationId) {
-            contained = true;
-            return {
-              ...item,
-              lastMessageContent: data.message,
-              lastMessageTime: data.time,
-              lastMessageID: data.messageId,
-            };
-          } else return item;
-        })
-      );
-      if (!contained) {
-        setMessageNotification([data, ...messageNotification]);
-      }
-    }
-  }, [data]);
-  useEffect(() => {
-    if (socket) {
-      socket?.on("message", (data) => {
-        setData(data);
-      });
-    }
-  }, [socket]);
+
   return (
     <Container fluid className={classes.Container}>
       <Row className={`${classes.RowContainer}`}>
