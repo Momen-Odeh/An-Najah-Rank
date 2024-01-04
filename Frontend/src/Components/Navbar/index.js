@@ -117,7 +117,7 @@ const Header = ({ activeTab }) => {
           </Nav>
         )}
         {activeUser?.email && (
-          <Nav className="ml-auto d-flex flex-row">
+          <Nav className="ml-auto d-flex flex-row ">
             {msgActive && <Messages />}
             <Notification />
           </Nav>

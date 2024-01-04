@@ -49,6 +49,10 @@ const ExchangeMessages = ({
     scrollContainerRef.current.scrollTop =
       scrollContainerRef.current.scrollHeight;
   }, [exchangeMessagesData]);
+  console.log(
+    "exchange Messages Data inside exchangeMessagesData comp: ",
+    exchangeMessagesData
+  );
   return (
     <div className={classes.ExchangeMessages} ref={scrollContainerRef}>
       {exchangeMessagesData?.map((item, index) => (

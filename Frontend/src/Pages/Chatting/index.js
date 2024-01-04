@@ -14,8 +14,14 @@ import { getPalestineDateTime } from "../../Utils/palestineDateTime";
 
 const Chatting = () => {
   const classes = UseStyle();
-  const { activeUser } = useContext(userContext);
-  const { socket } = useContext(userContext);
+  const {
+    activeUser,
+    socket,
+    messageNotification,
+    setMessageNotification,
+    numberOfNewMessages,
+    setNumberOfNewMessages,
+  } = useContext(userContext);
   const [ConversationsData, setConversationsData] = useState([]);
   const [exchangeMessagesData, setExchangeMessagesData] = useState([]);
   const [message, setMessage] = useState("");
@@ -61,6 +67,7 @@ const Chatting = () => {
   };
 
   const [loading, setLoading] = useState(false);
+  console.log("conv data", ConversationsData);
   const sendNewMessage = (email, message, setNewModal, setErrorMsg) => {
     console.log("New message: ", email, "   ", message);
     setLoading(true);
@@ -71,7 +78,7 @@ const Chatting = () => {
       })
       .then(async (response) => {
         console.log(response);
-        if (message !== undefined) {
+        if (response?.message !== undefined) {
           await chooseConversation(
             ConversationsData.filter(
               (x) => x.conversationID === response.data.conversationID
@@ -89,6 +96,7 @@ const Chatting = () => {
           ]);
           setNewModal({ show: false, email: "", message: "" });
         } else {
+          console.log("conversation data in else: ", ConversationsData);
           setConversationsData([
             {
               name: response.data.name,
@@ -120,7 +128,7 @@ const Chatting = () => {
       })
       .catch((error) => {
         console.log(error);
-        if (error.response.status === 404) {
+        if (error?.response?.status === 404) {
           setErrorMsg({
             email: "Not found email, please try again",
             message: null,
@@ -137,6 +145,7 @@ const Chatting = () => {
       .then((response) => {
         setExchangeMessagesData(response.data.messages);
         console.log(response);
+        console.log("item: ", item);
         setActiveConversationUsers({
           myName: activeUser.name,
           myImg: activeUser.image,
@@ -155,6 +164,7 @@ const Chatting = () => {
       .get("/get-conversations", { params: { all: 1 } })
       .then((response) => {
         setConversationsData(response.data.conversations);
+        console.log("response.data.conversations", response.data.conversations);
         console.log(response);
         const conversationId = sessionStorage.getItem("conversationId");
         sessionStorage.removeItem("conversationId");
@@ -171,10 +181,11 @@ const Chatting = () => {
         console.log(error);
       });
   }, []);
-
+  console.log("activeConversationUsers ", activeConversationUsers);
+  const [data, setData] = useState(null);
   useEffect(() => {
-    if (socket) {
-      socket?.on("message", (data) => {
+    if (data) {
+      if (data.conversationId == activeConversationUsers.conversationID) {
         setExchangeMessagesData((prev) => [
           ...prev,
           {
@@ -182,6 +193,47 @@ const Chatting = () => {
             myMessage: false,
           },
         ]);
+      }
+      let contained = false;
+      setConversationsData(
+        ConversationsData?.map((item) => {
+          if (item.conversationID == data.conversationId) {
+            contained = true;
+            return {
+              ...item,
+              lastMessageContent: data.message,
+              lastMessageTime: data.time,
+              lastMessageID: data.messageId,
+            };
+          } else return item;
+        })
+      );
+      if (!contained) {
+        setConversationsData([data, ...ConversationsData]);
+      }
+      contained = false;
+      setMessageNotification(
+        messageNotification.map((item) => {
+          if (item.conversationID == data.conversationId) {
+            contained = true;
+            return {
+              ...item,
+              lastMessageContent: data.message,
+              lastMessageTime: data.time,
+              lastMessageID: data.messageId,
+            };
+          } else return item;
+        })
+      );
+      if (!contained) {
+        setMessageNotification([data, ...messageNotification]);
+      }
+    }
+  }, [data]);
+  useEffect(() => {
+    if (socket) {
+      socket?.on("message", (data) => {
+        setData(data);
       });
     }
   }, [socket]);

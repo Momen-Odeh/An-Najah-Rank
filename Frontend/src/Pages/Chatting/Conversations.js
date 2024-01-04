@@ -36,6 +36,7 @@ const Conversations = ({
       );
     }
   };
+  console.log("conversation inside component: ", ConversationsData);
   return (
     <Container fluid className="p-0 m-0">
       <Row className={`${classes.newChat}  `}>

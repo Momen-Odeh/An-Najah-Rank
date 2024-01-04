@@ -20,6 +20,7 @@ function PageLayout() {
   const token = Cookies.get("token");
   const [loadingPage, setLoadingPage] = useState(true);
   const [messageNotification, setMessageNotification] = useState([]);
+  const [numberOfNewMessages, setNumberOfNewMessages] = useState(0);
   useEffect(() => {
     if (token) {
       axios
@@ -40,6 +41,12 @@ function PageLayout() {
         .then((response) => {
           console.log("conversation for message", response.data);
           setMessageNotification(response.data.conversations);
+          setNumberOfNewMessages(
+            response.data.conversations.filter(
+              (c) =>
+                Number(c.lastMessageID) > Number(response.data.lastReadMessage)
+            )?.length
+          );
           setLoadingPage(false);
         })
         .catch((error) => {
@@ -77,6 +84,9 @@ function PageLayout() {
           newNotifications,
           setNewNotifications,
           messageNotification,
+          setMessageNotification,
+          numberOfNewMessages,
+          setNumberOfNewMessages,
         }}
       >
         <div>

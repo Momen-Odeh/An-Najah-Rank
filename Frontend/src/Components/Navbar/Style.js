@@ -57,7 +57,6 @@ const useStyle = createUseStyles({
     flexDirection: "column",
     alignContent: "center",
   },
-
   notificationItem: {
     border: "1px solid #ccc",
     borderRadius: "4px",
@@ -158,6 +157,9 @@ const useStyle = createUseStyles({
     width: "100%",
     cursor: "pointer",
   },
+  messages: {
+    paddingRight: "2px",
+  },
   choiceLink: {
     margin: "5px 10px !important",
     textDecoration: "none",
@@ -236,6 +238,9 @@ const useStyle = createUseStyles({
     },
     customInputGroup: {
       display: "none",
+    },
+    messages: {
+      paddingRight: "10px",
     },
   },
   activeTab: {

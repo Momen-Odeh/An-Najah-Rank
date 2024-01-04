@@ -7,10 +7,12 @@ import { Link, useNavigate } from "react-router-dom";
 import Avatar from "react-avatar";
 import Text from "../Text";
 import formatTimeAgo from "../../Utils/formateTimeAgo";
+import axios from "axios";
 const Messages = () => {
   const classes = useStyle();
   const [showMessages, setShowMessages] = useState(false);
-  const { messageNotification } = useContext(userContext);
+  const { messageNotification, numberOfNewMessages, setNumberOfNewMessages } =
+    useContext(userContext);
   const navigate = useNavigate();
   const ref = useRef(null);
   useEffect(() => {}, []);
@@ -28,9 +30,14 @@ const Messages = () => {
     closeMessagesPanel();
     navigate("/chatting");
   };
-
+  if (showMessages && numberOfNewMessages > 0) {
+    axios.post("/update-last-message", {
+      lastMessageID: messageNotification[0]?.lastMessageID,
+    });
+    setNumberOfNewMessages(0);
+  }
   return (
-    <Nav.Item>
+    <Nav.Item className={classes.messages}>
       <Nav.Link onClick={handleMessagesPanel} ref={ref}>
         <FaComment
           size={20}
@@ -38,13 +45,15 @@ const Messages = () => {
             showMessages ? classes.clickedBtn : ""
           }`}
         />
-        <Badge
-          pill
-          variant=""
-          style={{ fontSize: "10px", padding: "3px 5px", margin: "0px 2px" }}
-        >
-          {5}
-        </Badge>
+        {numberOfNewMessages > 0 && (
+          <Badge
+            pill
+            variant=""
+            style={{ fontSize: "10px", padding: "3px 5px", margin: "0px 2px" }}
+          >
+            {numberOfNewMessages}
+          </Badge>
+        )}
       </Nav.Link>
 
       <Overlay
