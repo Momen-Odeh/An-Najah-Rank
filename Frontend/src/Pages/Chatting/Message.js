@@ -6,6 +6,7 @@ import Text from "../../Components/Text";
 
 const Message = ({ name, imgURL, message, time, myMessage, smallScreen }) => {
   const classes = useStyle();
+  console.log("message ", message);
   return (
     <Row className={classes.Message}>
       {myMessage && <Col></Col>}
@@ -16,7 +17,7 @@ const Message = ({ name, imgURL, message, time, myMessage, smallScreen }) => {
         <Avatar name={name} src={imgURL} color="#39424e" size="60" round />
       </Col>
       <Col className={`${classes.MessageBody}`} xs={"auto"}>
-        <Text text={message} />
+        <Text text={message} whiteSpace />
       </Col>
     </Row>
   );

@@ -6,6 +6,7 @@ const useStyles = createUseStyles({
     fontSize: ({ size }) => size,
     lineHeight: ({ height }) => height,
     color: ({ color }) => color,
+    whiteSpace: ({ whiteSpace }) => (whiteSpace ? "pre-wrap" : ""),
     padding: "0",
     margin: "0",
     // wordWrap: "break-word",

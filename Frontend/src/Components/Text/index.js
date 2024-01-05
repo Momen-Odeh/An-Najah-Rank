@@ -7,8 +7,16 @@ const Text = ({
   size = "16px",
   wegiht = "400",
   fontFamily = "Poppins",
+  whiteSpace = false,
 }) => {
-  const classes = useStyles({ fontFamily, color, height, size, wegiht });
+  const classes = useStyles({
+    fontFamily,
+    color,
+    height,
+    size,
+    wegiht,
+    whiteSpace,
+  });
   return <span className={classes.Text}>{text}</span>;
 };
 
