@@ -51,7 +51,13 @@ const Messages = () => {
     });
     setNumberOfNewMessages(0);
   }
-  console.log("numberOfNewMessages: ", numberOfNewMessages);
+  useEffect(() => {
+    setNumberOfNewMessages(
+      messageNotification.filter(
+        (c) => Number(c.lastMessageID) > Number(lastMessageRead)
+      )?.length
+    );
+  }, [lastMessageRead, messageNotification]);
   /********************************************************************************************** */
   const [data, setData] = useState(null);
   useEffect(() => {

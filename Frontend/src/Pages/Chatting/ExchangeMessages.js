@@ -7,6 +7,7 @@ const ExchangeMessages = ({
   exchangeMessagesData,
   setExchangeMessagesData,
   activeConversationUsers,
+  smallScreen,
 }) => {
   const classes = useStyle();
   const scrollContainerRef = useRef(null);
@@ -36,6 +37,7 @@ const ExchangeMessages = ({
                   ? activeConversationUsers.myImg
                   : activeConversationUsers.otherImg
               }
+              smallScreen={smallScreen}
             />
           </Col>
         </Row>

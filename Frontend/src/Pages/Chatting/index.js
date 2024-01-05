@@ -11,9 +11,13 @@ import userContext from "../../Utils/userContext";
 import Text from "../../Components/Text";
 import { getPalestineDateTime } from "../../Utils/palestineDateTime";
 // import activeUseStyle from "./activeStyle";
+import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 
 const Chatting = () => {
   const classes = UseStyle();
+  const [screenWidth, setScreenWidth] = useState(window.innerWidth);
+  const [fullScreen, setFullScreen] = useState(0);
+
   const {
     activeUser,
     ConversationsData,
@@ -24,7 +28,28 @@ const Chatting = () => {
     setActiveConversationUsers,
     messageNotification,
     setMessageNotification,
+    setLastMessageRead,
   } = useContext(userContext);
+  useEffect(() => {
+    if (screenWidth < 768) {
+      if (activeConversationUsers.conversationID) {
+        setFullScreen(1);
+      } else {
+        setFullScreen(2);
+      }
+    } else {
+      setFullScreen(0);
+    }
+  }, [screenWidth, activeConversationUsers]);
+  useEffect(() => {
+    const handleResize = () => {
+      setScreenWidth(window.innerWidth);
+    };
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
   const [message, setMessage] = useState("");
 
   const sendMessage = () => {
@@ -58,6 +83,7 @@ const Chatting = () => {
         messageContent: message,
       })
       .then((response) => {
+        setLastMessageRead(response.data.lastMessageID);
         if (oldMsg) {
           setMessageNotification([
             {
@@ -208,51 +234,80 @@ const Chatting = () => {
   return (
     <Container fluid className={classes.Container}>
       <Row className={`${classes.RowContainer}`}>
-        <Col className={`${classes.ConversationsCol}`}>
-          <Conversations
-            ConversationsData={ConversationsData}
-            handelSendNewMessage={sendNewMessage}
-            handelChooseConversation={chooseConversation}
-            activeConversationUsers={activeConversationUsers}
-            loading={loading}
-          />
-        </Col>
-        <Col className={`${classes.ChatCol} `}>
-          {activeConversationUsers.conversationID !== null ? (
-            <div>
-              <ExchangeMessages
-                exchangeMessagesData={exchangeMessagesData}
-                setExchangeMessagesData={setExchangeMessagesData}
-                activeConversationUsers={activeConversationUsers}
-              />
-            </div>
-          ) : (
-            <div className={classes.EmptyConversation}>
-              <div className={classes.EmptyConversationInner}>
-                <Text text={"Select a chat to start messaging"} />
-              </div>
-            </div>
-          )}
-          {activeConversationUsers.conversationID !== null && (
-            <div className={classes.InputMessageContainer}>
-              <div className={classes.InputFiledRank}>
-                <InputFiledRank
-                  placeholder={"Enter Message"}
-                  onChange={(e) => setMessage(e.target.value)}
-                  value={message}
-                  onKeyDown={handleKeyPress}
-                />
-              </div>
+        {(fullScreen === 0 || fullScreen === 2) && (
+          <Col
+            className={`${
+              fullScreen === 2
+                ? classes.ConversationsColSmall
+                : classes.ConversationsCol
+            }`}
+          >
+            <Conversations
+              ConversationsData={ConversationsData}
+              handelSendNewMessage={sendNewMessage}
+              handelChooseConversation={chooseConversation}
+              activeConversationUsers={activeConversationUsers}
+              loading={loading}
+            />
+          </Col>
+        )}
+        {fullScreen === 1 && (
+          <div
+            className={classes.arrowContainer}
+            onClick={() => {
+              setFullScreen(2);
+              setActiveConversationUsers({
+                myName: "",
+                myImg: "",
+                otherName: "",
+                otherImg: "",
+                conversationID: null,
+              });
+            }}
+          >
+            <IoIosArrowForward size={30} />
+          </div>
+        )}
+
+        {(fullScreen === 0 || fullScreen === 1) && (
+          <Col className={`${classes.ChatCol} `}>
+            {activeConversationUsers.conversationID !== null ? (
               <div>
-                <ButtonRank
-                  text={"Send"}
-                  onClick={sendMessage}
-                  disabled={message.length === 0}
+                <ExchangeMessages
+                  exchangeMessagesData={exchangeMessagesData}
+                  setExchangeMessagesData={setExchangeMessagesData}
+                  activeConversationUsers={activeConversationUsers}
+                  smallScreen={fullScreen === 1}
                 />
               </div>
-            </div>
-          )}
-        </Col>
+            ) : (
+              <div className={classes.EmptyConversation}>
+                <div className={classes.EmptyConversationInner}>
+                  <Text text={"Select a chat to start messaging"} />
+                </div>
+              </div>
+            )}
+            {activeConversationUsers.conversationID !== null && (
+              <div className={classes.InputMessageContainer}>
+                <div className={classes.InputFiledRank}>
+                  <InputFiledRank
+                    placeholder={"Enter Message"}
+                    onChange={(e) => setMessage(e.target.value)}
+                    value={message}
+                    onKeyDown={handleKeyPress}
+                  />
+                </div>
+                <div>
+                  <ButtonRank
+                    text={"Send"}
+                    onClick={sendMessage}
+                    disabled={message.length === 0}
+                  />
+                </div>
+              </div>
+            )}
+          </Col>
+        )}
       </Row>
     </Container>
   );
