@@ -62,12 +62,12 @@ const ContestView = () => {
     <Loader />
   ) : (
     <Container fluid className={classes.Container}>
-      <Row className={`${classes.Row} mb-5`}>
+      <Row className={`${classes.Row} mb-2`}>
         <Col className={`${classes.Col}`}>
           <Breadcrumbs />
         </Col>
       </Row>
-      <Row className={`${classes.Row} mb-5`}>
+      <Row className={`${classes.Row} mb-4`}>
         <Col className={`${classes.Col} ${classes.IconContainer}`}>
           <BiSolidCategory className={classes.Icon} />
           <Text

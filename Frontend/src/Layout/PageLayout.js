@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Outlet } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 import MainNavbar from "../Components/Navbar";
 import Footer from "../Components/Footer";
 import { routeNames } from "../Utils/Utils";
@@ -10,7 +10,9 @@ import axios from "axios";
 import { io } from "socket.io-client";
 import Loader from "../Components/Loader";
 import BaseURI from "../Utils/BaseURI";
+import { toastError } from "../Utils/toast";
 function PageLayout() {
+  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState(routeNames.HOME);
   const [activeUser, setActiveUser] = useState({});
   const [notifications, setNotifications] = useState([]);
@@ -61,6 +63,10 @@ function PageLayout() {
           setLoadingPage(false);
         })
         .catch((error) => {
+          if (error.message == "Network Error") {
+            toastError("No connection please try again");
+            navigate("/log-in");
+          }
           console.error(error);
           setLoadingPage(false);
         });

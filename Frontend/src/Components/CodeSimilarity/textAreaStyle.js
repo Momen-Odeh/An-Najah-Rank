@@ -14,7 +14,7 @@ const useStyles = createUseStyles({
     borderRadius: "5px",
     height: "500px",
     minWidth: "300px",
-    overflow: "scroll",
+    overflow: "auto",
     whiteSpace: "nowrap",
     // width: "100%",
 

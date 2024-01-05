@@ -183,7 +183,7 @@ const CourseDetails = ({ operation, data = null, setData }) => {
   };
   return (
     <Container fluid>
-      <Row className="mb-3 mt-5">
+      <Row className="mb-3 mt-2">
         <Col xs={"auto"} className={classes.TitleFiled}>
           <Text
             fontFamily="Open Sans"
