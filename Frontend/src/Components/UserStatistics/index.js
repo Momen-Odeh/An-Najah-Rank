@@ -13,7 +13,7 @@ const UserStatistics = ({ userStatistics }) => {
 
   let allLevel;
   let levels = [];
-  for (let i = 0; i < userStatistics.length; i++) {
+  for (let i = 0; i < userStatistics?.length; i++) {
     if (userStatistics[i].difficulty === "allDifficulty") {
       allLevel = userStatistics[i];
     } else {
@@ -49,8 +49,8 @@ const UserStatistics = ({ userStatistics }) => {
             onMouseLeave={() => setIsHovered(false)}
           >
             <CircularProgressbarWithChildren
-              value={allLevel.totalSuccessSubmition}
-              maxValue={allLevel.totalSubmition}
+              value={allLevel?.totalSuccessSubmition}
+              maxValue={allLevel?.totalSubmition}
               strokeWidth={4}
               styles={buildStyles({
                 pathColor: `#FE0000`,
@@ -61,14 +61,14 @@ const UserStatistics = ({ userStatistics }) => {
                   <Text
                     text={
                       isHovered
-                        ? `${allLevel.totalSuccessSubmition}/${allLevel.totalSubmition}`
+                        ? `${allLevel?.totalSuccessSubmition}/${allLevel?.totalSubmition}`
                         : `${
-                            allLevel.totalSuccessSubmition == 0 ||
-                            allLevel.totalSubmition == 0
+                            allLevel?.totalSuccessSubmition == 0 ||
+                            allLevel?.totalSubmition == 0
                               ? "0"
                               : (
-                                  (allLevel.totalSuccessSubmition /
-                                    allLevel.totalSubmition) *
+                                  (allLevel?.totalSuccessSubmition /
+                                    allLevel?.totalSubmition) *
                                   100
                                 ).toFixed(2)
                           }%`
@@ -90,14 +90,14 @@ const UserStatistics = ({ userStatistics }) => {
           </div>
         </Col>
         <Col className={classes.ColProgresses}>
-          {levels.map((item, index) => (
+          {levels?.map((item, index) => (
             <ProgressBarRank
               key={index}
-              difficulty={item.difficulty}
-              currentVal={item.totalSuccessSubmition}
-              maxVal={item.totalSubmition}
-              color={item.color}
-              backgroundColor={item.backgroundColor}
+              difficulty={item?.difficulty}
+              currentVal={item?.totalSuccessSubmition}
+              maxVal={item?.totalSubmition}
+              color={item?.color}
+              backgroundColor={item?.backgroundColor}
             />
           ))}
         </Col>

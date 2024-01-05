@@ -57,7 +57,6 @@ const useStyle = createUseStyles({
     flexDirection: "column",
     alignContent: "center",
   },
-
   notificationItem: {
     border: "1px solid #ccc",
     borderRadius: "4px",
@@ -69,6 +68,9 @@ const useStyle = createUseStyles({
     alignItems: "center",
     cursor: "pointer",
     order: 4,
+    "&:hover": {
+      backgroundColor: "#dddddd",
+    },
   },
   notificationText: {
     fontSize: "14px",
@@ -101,32 +103,25 @@ const useStyle = createUseStyles({
     },
   },
   messageItem: {
-    padding: "12px",
+    padding: "10px",
     backgroundColor: "#ffffff",
     marginBottom: "12px",
     borderRadius: "8px",
     boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
     display: "flex",
     alignItems: "center",
+    gap: "10px",
     width: "100%",
-  },
-  messageCircle: {
-    width: "48px",
-    height: "48px",
-    borderRadius: "50%",
-    backgroundColor: "#e4e4e4",
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    color: "#333",
-    fontWeight: "bold",
-    fontSize: "1.2rem",
-    marginRight: "12px",
+    cursor: "pointer",
+    userSelect: "none",
+    "&:hover": {
+      backgroundColor: "#dddddd",
+    },
   },
   messageSender: {
     fontWeight: "bold",
     color: "#333",
-    fontSize: "1.1rem",
+    fontSize: "16px",
   },
   messageTime: {
     marginLeft: "10px",
@@ -134,9 +129,7 @@ const useStyle = createUseStyles({
     fontSize: "0.9rem",
   },
   messageContent: {
-    marginTop: "8px",
-    fontSize: "1rem",
-    width: "100%",
+    width: "80%",
   },
   iconContainer: {
     width: "40px",
@@ -164,14 +157,18 @@ const useStyle = createUseStyles({
     width: "100%",
     cursor: "pointer",
   },
+  messages: {
+    paddingRight: "2px",
+  },
   choiceLink: {
-    margin: "10px 20px !important",
+    margin: "5px 10px !important",
     textDecoration: "none",
+    display: "flex",
     fontSize: "1.1rem",
-    color: "#576871",
     transition: "0.1s",
     "&:hover": {
       fontWeight: "bold",
+      // backgroundColor: "#F5F5F5",
     },
   },
   hoveringColor: {
@@ -214,7 +211,9 @@ const useStyle = createUseStyles({
       width: "100%",
     },
   },
-
+  logo: {
+    cursor: "pointer",
+  },
   userChoiceLarge: {
     display: "block",
   },
@@ -239,6 +238,9 @@ const useStyle = createUseStyles({
     },
     customInputGroup: {
       display: "none",
+    },
+    messages: {
+      paddingRight: "10px",
     },
   },
   activeTab: {

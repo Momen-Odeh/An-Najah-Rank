@@ -1,8 +1,7 @@
 FROM python:3.9-alpine
 
 RUN apk update && \
-    apk add --no-cache \
-    nginx
+    apk add --no-cache 
 
 WORKDIR /app
 COPY . /app
@@ -13,10 +12,8 @@ ENV PATH="/venv/bin:$PATH"
 RUN pip install --upgrade pip && \
     pip install -r requirements.txt
 
-RUN pip install gunicorn
+RUN pip install gunicorn gevent-websocket
 
-EXPOSE 80
+EXPOSE 5001
 
-COPY nginx.conf /etc/nginx/nginx.conf
-
-CMD ["sh", "-c", "gunicorn main:app --bind 127.0.0.1:5001 --workers 10 & nginx -g 'daemon off;'"]
+CMD ["gunicorn", "-w", "1", "-b", "0.0.0.0:5001","-k", "geventwebsocket.gunicorn.workers.GeventWebSocketWorker", "main:app"]

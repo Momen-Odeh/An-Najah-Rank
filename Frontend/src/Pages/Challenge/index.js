@@ -95,7 +95,7 @@ const Challenge = () => {
             <Breadcrumbs />
           </Col>
         </Row>
-        <Row className={`mb-4 ${classes.maxWidth}`}>
+        <Row className={`mb-3 mt-1 ${classes.maxWidth}`}>
           <Col>
             <TextRegister
               text={challengeData.name}

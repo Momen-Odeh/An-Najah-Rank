@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Outlet } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 import MainNavbar from "../Components/Navbar";
 import Footer from "../Components/Footer";
 import { routeNames } from "../Utils/Utils";
@@ -10,7 +10,9 @@ import axios from "axios";
 import { io } from "socket.io-client";
 import Loader from "../Components/Loader";
 import BaseURI from "../Utils/BaseURI";
+import { toastError } from "../Utils/toast";
 function PageLayout() {
+  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState(routeNames.HOME);
   const [activeUser, setActiveUser] = useState({});
   const [notifications, setNotifications] = useState([]);
@@ -19,6 +21,18 @@ function PageLayout() {
   const classes = useStyles();
   const token = Cookies.get("token");
   const [loadingPage, setLoadingPage] = useState(true);
+  const [messageNotification, setMessageNotification] = useState([]);
+  const [lastMessageRead, setLastMessageRead] = useState(0);
+  const [numberOfNewMessages, setNumberOfNewMessages] = useState(0);
+  const [ConversationsData, setConversationsData] = useState([]);
+  const [exchangeMessagesData, setExchangeMessagesData] = useState([]);
+  const [activeConversationUsers, setActiveConversationUsers] = useState({
+    myName: "",
+    myImg: "",
+    otherName: "",
+    otherImg: "",
+    conversationID: null,
+  });
   useEffect(() => {
     if (token) {
       axios
@@ -34,9 +48,25 @@ function PageLayout() {
               (n) => n.id > res?.data?.lastReadNotification
             )?.length
           );
+          return axios.get("/get-conversations", { params: { all: 0 } });
+        })
+        .then((response) => {
+          console.log("conversation for message", response.data);
+          setMessageNotification(response.data.conversations);
+          setNumberOfNewMessages(
+            response.data.conversations.filter(
+              (c) =>
+                Number(c.lastMessageID) > Number(response.data.lastReadMessage)
+            )?.length
+          );
+          setLastMessageRead(response.data.lastReadMessage);
           setLoadingPage(false);
         })
         .catch((error) => {
+          if (error.message == "Network Error") {
+            toastError("No connection please try again");
+            navigate("/log-in");
+          }
           console.error(error);
           setLoadingPage(false);
         });
@@ -70,6 +100,18 @@ function PageLayout() {
           setSocket,
           newNotifications,
           setNewNotifications,
+          messageNotification,
+          setMessageNotification,
+          numberOfNewMessages,
+          setNumberOfNewMessages,
+          lastMessageRead,
+          setLastMessageRead,
+          ConversationsData,
+          setConversationsData,
+          exchangeMessagesData,
+          setExchangeMessagesData,
+          activeConversationUsers,
+          setActiveConversationUsers,
         }}
       >
         <div>

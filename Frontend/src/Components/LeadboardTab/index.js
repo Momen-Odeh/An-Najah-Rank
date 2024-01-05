@@ -33,14 +33,18 @@ const LeadboardTab = () => {
         });
   }, [location.pathname]);
 
-  const sortedSubmissions = submissions?.slice()?.sort((a, b) => {
-    const scoreComparison = b.score - a.score;
-    if (scoreComparison === 0) {
-      return new Date(a.submissionDate) - new Date(b.submissionDate);
-    }
-    return scoreComparison;
-  });
-
+  const sortedSubmissions = submissions
+    ?.slice()
+    ?.sort((a, b) => {
+      const scoreComparison = b.score - a.score;
+      if (scoreComparison === 0) {
+        return new Date(a.submissionDate) - new Date(b.submissionDate);
+      }
+      return scoreComparison;
+    })
+    ?.map((submission, index) => {
+      return { ...submission, rank: index + 1 };
+    });
   const TableHeader = ["Rank", "Student Name", "Score", "Time"];
   let dataURI = [];
   const result = sortedSubmissions
@@ -50,7 +54,7 @@ const LeadboardTab = () => {
     ?.map((item, index) => {
       dataURI.push("/profile/" + item.studentUniversityNumber);
       return {
-        rank: index + 1,
+        rank: item.rank,
         studentName: item.studentName,
         score: item.score,
         submissionDate: item.submissionDate,

@@ -31,13 +31,19 @@ const ContestsInCourse = ({ contests, isAdmin, courseId }) => {
           </Col>
         )}
       </Row>
-      {contests?.map((item, index) => (
-        <Row className=" mt-3" key={index}>
-          <Col>
-            <ChallengeShow {...item} />
-          </Col>
-        </Row>
-      ))}
+      {contests.length === 0 ? (
+        <Container className="d-flex justify-content-center align-items-center mb-4">
+          <Text text={"Contests Not Found"} size="30px" />
+        </Container>
+      ) : (
+        contests?.map((item, index) => (
+          <Row className=" mt-3" key={index}>
+            <Col>
+              <ChallengeShow {...item} isContest />
+            </Col>
+          </Row>
+        ))
+      )}
     </Container>
   );
 };

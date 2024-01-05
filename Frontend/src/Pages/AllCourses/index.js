@@ -47,13 +47,19 @@ const AllCourse = () => {
             />
           </Col>
         </Row>
-        {userCouses.map((item, index) => (
-          <Row className={`${classes.Row} mb-4`} key={index}>
-            <Col className={`${classes.Col}`}>
-              <Course {...item} />
-            </Col>
-          </Row>
-        ))}
+        {userCouses.length === 0 ? (
+          <Container className="d-flex justify-content-center align-items-center">
+            <Text text={"Courses Not Found"} size="30px" />
+          </Container>
+        ) : (
+          userCouses.map((item, index) => (
+            <Row className={`${classes.Row} mb-4`} key={index}>
+              <Col className={`${classes.Col}`}>
+                <Course {...item} />
+              </Col>
+            </Row>
+          ))
+        )}
       </Row>
     </Container>
   );

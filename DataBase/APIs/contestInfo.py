@@ -93,6 +93,19 @@ def get_contests_info():
                     data_object[fields[i]] = record[i]
             # print()
             # print(data_object)
+            tried = fetch_results(execute_query(connection, f"""SELECT * FROM student_submissions WHERE 
+            studentUniversityNumber = '{ownerUniversityNumber}' 
+            AND challengeId = '{data_object['challenge_id']}' 
+            AND contestId = '{data_object['contest_id']}';"""), )
+
+            solved = fetch_results(execute_query(connection, f"""SELECT * FROM student_submissions WHERE 
+                        studentUniversityNumber = '{ownerUniversityNumber}' 
+                        AND challengeId = '{data_object['challenge_id']}' 
+                        AND contestId = '{data_object['contest_id']}' AND submissionResult = '100';"""), )
+
+            data_object['tried'] = True if len(tried) > 0 else False
+            data_object['solved'] = True if len(solved) > 0 else False
+
             ContestChallengesData.append(data_object)
         response_data = {
             'contest': contestData,

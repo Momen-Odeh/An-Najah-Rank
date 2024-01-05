@@ -19,6 +19,7 @@ import Contests from "../Pages/Contests";
 import Course from "../Pages/Course";
 import Settings from "../Pages/Settings";
 import Admin from "../Pages/Admin";
+import Chatting from "../Pages/Chatting";
 import SubmissionsManualMarking from "../Components/SubmissionsManualMarking";
 import CodeSimilarity from "../Components/CodeSimilarity";
 import NotFound from "../Components/NotFound";
@@ -59,6 +60,11 @@ export const routes = [
     path: "/notifications",
     title: "Notification",
     component: <AllNotification />,
+  },
+  {
+    path: "/chatting",
+    title: "Chatting",
+    component: <Chatting />,
   },
   {
     path: "/profile",

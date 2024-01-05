@@ -5,8 +5,7 @@ RUN apk update && \
     g++ \
     openjdk11 \
     nodejs \
-    npm \
-    nginx
+    npm 
 
 WORKDIR /app
 COPY . /app
@@ -19,8 +18,7 @@ RUN pip install --upgrade pip && \
 
 RUN pip install gunicorn
 
-EXPOSE 80
+EXPOSE 5000
 
-COPY nginx.conf /etc/nginx/nginx.conf
 
-CMD ["sh", "-c", "gunicorn main:app --bind 127.0.0.1:5000 --workers 10 & nginx -g 'daemon off;'"]
+CMD ["gunicorn", "-w", "1", "-b", "0.0.0.0:5000", "main:app"]

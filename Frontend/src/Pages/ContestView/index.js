@@ -30,7 +30,8 @@ const ContestView = () => {
           response.data.ContestChallenges.map((item, index) => {
             return {
               Name: item.name,
-              solved: item.challengeRate == 100,
+              solved: item.solved,
+              tried: item.tried,
               statistics: [
                 { key: "Difficulty: ", val: item.difficulty },
                 { key: "Success Rate: ", val: item.challengeRate + " %" },
@@ -61,12 +62,12 @@ const ContestView = () => {
     <Loader />
   ) : (
     <Container fluid className={classes.Container}>
-      <Row className={`${classes.Row} mb-5`}>
+      <Row className={`${classes.Row} mb-2`}>
         <Col className={`${classes.Col}`}>
           <Breadcrumbs />
         </Col>
       </Row>
-      <Row className={`${classes.Row} mb-5`}>
+      <Row className={`${classes.Row} mb-4`}>
         <Col className={`${classes.Col} ${classes.IconContainer}`}>
           <BiSolidCategory className={classes.Icon} />
           <Text
@@ -130,13 +131,19 @@ const ContestView = () => {
           />
         </Col>
       </Row>
-      {challengeContest.map((item, index) => (
-        <Row className={`${classes.Row} mb-4`} key={index}>
-          <Col className={`${classes.Col}`}>
-            <ChallengeShow {...item} />
-          </Col>
-        </Row>
-      ))}
+      {challengeContest.length === 0 ? (
+        <Container className="d-flex justify-content-center align-items-center mt-4">
+          <Text text={"Challenges Not Found"} size="30px" />
+        </Container>
+      ) : (
+        challengeContest.map((item, index) => (
+          <Row className={`${classes.Row} mb-4`} key={index}>
+            <Col className={`${classes.Col}`}>
+              <ChallengeShow {...item} />
+            </Col>
+          </Row>
+        ))
+      )}
     </Container>
   );
 };
