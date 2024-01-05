@@ -58,7 +58,7 @@ const Header = ({ activeTab }) => {
           className={classes.navCollapse}
         >
           <Nav className="me-auto">
-            {activeUser?.email && (
+            {/* {activeUser?.email && (
               <Nav.Link
                 className={`${classes.hoveringColor} ${
                   activeTab === routeNames.HOME ? classes.activeTab : ""
@@ -77,7 +77,7 @@ const Header = ({ activeTab }) => {
               >
                 Sign in
               </Nav.Link>
-            )}
+            )} */}
             {activeUser?.email && (
               <div className={classes.userChoicesSmall}>
                 {userChoicesData.map((choice, index) => (
