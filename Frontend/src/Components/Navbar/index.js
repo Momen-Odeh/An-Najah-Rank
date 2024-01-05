@@ -1,7 +1,6 @@
 import { Container, Nav, Navbar } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import useStyle from "./Style";
-import SearchBox from "../SearchBox";
 import Notification from "./Notification";
 import Messages from "./Messages";
 import UserChoices from "./UserChoices";
@@ -106,8 +105,8 @@ const Header = ({ activeTab }) => {
           </Nav>
         )}
         {activeUser?.email && (
-          <Nav className="ml-auto d-flex flex-row">
-            {/* <Messages /> */}
+          <Nav className="ml-auto d-flex flex-row ">
+            <Messages />
             <Notification />
           </Nav>
         )}

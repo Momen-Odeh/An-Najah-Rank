@@ -42,6 +42,10 @@ const Profile = () => {
       })
       .catch((error) => {
         console.log("Error :", error);
+        if (error.message == "Network Error") {
+          toastError("No connection please try again");
+          navigate("/log-in");
+        }
         if (error?.response?.status === 401) {
           // console.log(error.response);
           if (error?.response?.data.message === "invalid access") {

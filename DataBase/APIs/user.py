@@ -164,7 +164,7 @@ def updatePasswordSettings():
                                   f"SELECT * FROM `an-najah rank`.user where email = '{email}';")
                 )
                 if (check_password_hash(result[0][5], currentPassword)):
-                    return update_data(connection, 'user', ["password"], (generate_password_hash(newPassword)),
+                    return update_data(connection, 'user', ["password"], generate_password_hash(newPassword),
                                        f"( email = '{email}');")
                 else:
                     return jsonify({'message': "current password not correct."}), 422

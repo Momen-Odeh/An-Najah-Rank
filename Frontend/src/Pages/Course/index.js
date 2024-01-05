@@ -123,7 +123,7 @@ const Course = () => {
         <Breadcrumbs />
       </Row>
 
-      <Row className="m-2 mt-4 mb-4">
+      <Row className="m-2 mb-4">
         <Text
           text={details.name}
           size={"30px"}
