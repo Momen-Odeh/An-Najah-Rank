@@ -15,6 +15,7 @@ const useStyles = createUseStyles({
     transition: "0.5s",
     borderTopRightRadius: "0.375rem !important",
     borderBottomRightRadius: "0.375rem !important",
+    resize: ({ resize }) => (resize ? "" : "none"),
     border: ({ msg, BorderColor }) =>
       msg && !BorderColor ? "1px solid #e40506" : "",
     "&:focus": {

@@ -29,6 +29,7 @@ const InputFiledRank = ({
   className,
   style,
   textAlign = null,
+  resize = true,
 }) => {
   const classes = useStyles({
     msg,
@@ -37,6 +38,7 @@ const InputFiledRank = ({
     labelFontSize,
     labelFontColor,
     labelFontWeight,
+    resize,
   });
   const [showPassword, SetShowPassword] = useState(false);
   return (

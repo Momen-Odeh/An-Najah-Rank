@@ -113,8 +113,11 @@ const Chatting = () => {
   };
 
   const handleKeyPress = (event) => {
-    if (event.key === "Enter") {
-      if (message.length !== 0) sendMessage();
+    if (event.key === "Enter" && !event.shiftKey) {
+      event.preventDefault();
+      if (message.length !== 0) {
+        sendMessage();
+      }
     }
   };
 
@@ -282,9 +285,19 @@ const Chatting = () => {
 
         {(fullScreen === 0 || fullScreen === 1) &&
           (loadingMessage ? (
-            <Loader internal={true} />
+            <Col
+              className={`${
+                fullScreen === 1 ? classes.ChatColSmallScreen : classes.ChatCol
+              }`}
+            >
+              <Loader internal={true} />
+            </Col>
           ) : (
-            <Col className={`${classes.ChatCol} `}>
+            <Col
+              className={`${
+                fullScreen === 1 ? classes.ChatColSmallScreen : classes.ChatCol
+              }`}
+            >
               {activeConversationUsers.conversationID !== null ? (
                 <div>
                   <ExchangeMessages
@@ -305,6 +318,9 @@ const Chatting = () => {
                 <div className={classes.InputMessageContainer}>
                   <div className={classes.InputFiledRank}>
                     <InputFiledRank
+                      as={"textarea"}
+                      rows={1}
+                      resize={false}
                       placeholder={"Enter Message"}
                       onChange={(e) => setMessage(e.target.value)}
                       value={message}

@@ -12,6 +12,8 @@ const useStyle = createUseStyles({
   RowContainer: {
     margin: "0",
     padding: "0",
+    display: "flex",
+    flexWrap: "nowrap",
   },
   Col: {
     padding: "0",
@@ -19,7 +21,7 @@ const useStyle = createUseStyles({
   },
   ConversationsCol: {
     // border: "1px solid black",
-    maxWidth: "350px",
+    maxWidth: "37%",
   },
   ConversationsColSmall: {
     maxWidth: "100%",
@@ -28,6 +30,10 @@ const useStyle = createUseStyles({
     // border: "1px solid purple",
     padding: "0",
     margin: "0",
+    maxWidth: "63%",
+  },
+  ChatColSmallScreen: {
+    maxWidth: "100%",
   },
   newChat: {
     justifyContent: "space-between",
@@ -85,7 +91,7 @@ const useStyle = createUseStyles({
     padding: "10px",
     borderRadius: "10px",
     wordWrap: "break-word",
-    maxWidth: "70%",
+    maxWidth: "80%",
     marginTop: "8px",
   },
   MessageBodySmallScreen: {},
