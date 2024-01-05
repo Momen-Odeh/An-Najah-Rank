@@ -76,14 +76,20 @@ const ProfileMain = ({ userCouses, userStatistics }) => {
           />
         </Col>
       </Row>
-      {userCouses.map((item, index) => (
-        <Row className={`${classes.Row} mb-4`} key={index}>
-          <Col className={`${classes.Col}`}>
-            <Course {...item} />
-          </Col>
-        </Row>
-      ))}
-      {id === undefined && (
+      {userCouses.length === 0 ? (
+        <Container className="d-flex justify-content-center align-items-center mb-4">
+          <Text text={"Courses Not Found"} size="30px" />
+        </Container>
+      ) : (
+        userCouses.map((item, index) => (
+          <Row className={`${classes.Row} mb-4`} key={index}>
+            <Col className={`${classes.Col}`}>
+              <Course {...item} />
+            </Col>
+          </Row>
+        ))
+      )}
+      {id === undefined && userCouses.length > 0 && (
         <Row className={`${classes.Row} mb-3 `}>
           <Col className={`${classes.Col} ${classes.showAll}`}>
             <Link to={"/courses"} className={classes.linkShow}>

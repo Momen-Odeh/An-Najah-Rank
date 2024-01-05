@@ -131,13 +131,19 @@ const ContestView = () => {
           />
         </Col>
       </Row>
-      {challengeContest.map((item, index) => (
-        <Row className={`${classes.Row} mb-4`} key={index}>
-          <Col className={`${classes.Col}`}>
-            <ChallengeShow {...item} />
-          </Col>
-        </Row>
-      ))}
+      {challengeContest.length === 0 ? (
+        <Container className="d-flex justify-content-center align-items-center mt-4">
+          <Text text={"Challenges Not Found"} size="30px" />
+        </Container>
+      ) : (
+        challengeContest.map((item, index) => (
+          <Row className={`${classes.Row} mb-4`} key={index}>
+            <Col className={`${classes.Col}`}>
+              <ChallengeShow {...item} />
+            </Col>
+          </Row>
+        ))
+      )}
     </Container>
   );
 };
