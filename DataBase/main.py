@@ -46,15 +46,17 @@ import logging
 log_file = 'app.log'
 logging.basicConfig(filename=log_file, level=logging.DEBUG)
 
+
 @app.route('/')
 def hello_world():
-    return 'Hello World'
+    return 'Hello World: '
 
 
 @app.route('/flask', methods=['GET'])
 def index():
     # Access the token data from the request object
     return jsonify({'message': getattr(request, 'tokenData', None)})
+
 
 if __name__ == '__main__':
     socketio.run(app, debug=True, allow_unsafe_werkzeug=True, port=5001, host='0.0.0.0')
