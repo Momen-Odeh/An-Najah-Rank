@@ -22,11 +22,14 @@ def createVerificationCode(email):
             print("Update")
             update_data(connection, 'code_verification', ['code', 'TTL'], (code, TTL),f"(`email` = '{email}')")
 
-        msg =  "Hi, \n" \
-               "We just need to verify your email address before you can access An Najah Rank.\n" \
-               "Verify your email address by enter this code:\n" \
-               f"{code}\n" \
-               "Thanks! – \nThe An Najah Rank team\n"
+        msg = """
+        Hello,<br>
+        We just need to verify your email address before you can Reset An Najah Rank Password.<br>
+        Reset your password by entering this code:<br>
+        <b>{}</b><br>
+        Thanks!<br>
+        An Najah Rank team<br>
+        """.format(code)
 
         return(sendEmail(email,"An Najah Rank Verification Code",msg))
 
