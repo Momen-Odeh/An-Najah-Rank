@@ -15,12 +15,12 @@ const DataTypes = ({
   loading,
 }) => {
   return (
-    <Row>
-      <Col xs="auto">
+    <Row className="d-flex flex-column p-0 mt-2">
+      <Col xs="auto" className="mb-2">
         <Text text={name + ":"} />
       </Col>
 
-      <Form>
+      {/* <Form>
         <Form.Group className="d-flex align-items-center m-2">
           <Col xs="auto">
             <CheckRank
@@ -43,30 +43,31 @@ const DataTypes = ({
             />
           </Col>
         </Form.Group>
-      </Form>
-
-      {selectedOption === "upload" ? (
-        <Form.Group className="mb-3">
-          <InputFiledRank
-            type="file"
+      </Form> */}
+      <Col>
+        {selectedOption === "upload" ? (
+          <Form.Group className="p-0 mb-3">
+            <InputFiledRank
+              type="file"
+              name={name}
+              onChange={handleInputChange}
+              msg={msg}
+              loading={loading}
+            />
+            <Text
+              text={typeof data != "string" ? "Chosen file: " + data?.name : ""}
+            />
+          </Form.Group>
+        ) : (
+          <CustomTextarea
             name={name}
-            onChange={handleInputChange}
+            handleChange={handleInputChange}
+            text={data}
             msg={msg}
             loading={loading}
           />
-          <Text
-            text={typeof data != "string" ? "Chosen file: " + data?.name : ""}
-          />
-        </Form.Group>
-      ) : (
-        <CustomTextarea
-          name={name}
-          handleChange={handleInputChange}
-          text={data}
-          msg={msg}
-          loading={loading}
-        />
-      )}
+        )}
+      </Col>
     </Row>
   );
 };
