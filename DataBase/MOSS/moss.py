@@ -37,7 +37,7 @@ class Moss:
     server = 'moss.stanford.edu'
     port = 7690
 
-    def __init__(self, user_id=549392426, language="java"):
+    def __init__(self, user_id=53964920, language="java"):
         self.user_id = user_id
         self.options = {
             "l": "c",

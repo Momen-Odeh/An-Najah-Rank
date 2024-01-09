@@ -32,6 +32,7 @@ def getContestForCourse(id,studendCount):
                 rate = round((len(rate)/studendCount)*100, 2)
             else:
                 rate = 0
+            maxScoreVal = float(maxVal) if maxVal is not None else None
             contest = {
                 "id": row[0],
                 "name": row[1],
@@ -41,7 +42,7 @@ def getContestForCourse(id,studendCount):
                 'solved': False,
                 "statistics": [
                     {'key': 'Solved Rate: ', "val": f"{rate}%"},
-                    {'key': 'max Score: ', "val": float(maxVal)}
+                    {'key': 'max Score: ', "val": maxScoreVal} if maxScoreVal is not None else {}
                 ]
             }
             contest_objects.append(contest)

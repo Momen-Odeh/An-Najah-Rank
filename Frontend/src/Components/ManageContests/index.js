@@ -12,6 +12,7 @@ const ManageContests = ({ contests }) => {
   const [search, setSearch] = useState("");
   const header = ["Contest Name", "Contest Owner", "Start Date", "End Date"];
   const classes = useStyles();
+  console.log("contests", contests);
   return (
     <Container>
       <Row className={classes.Row}>
@@ -39,7 +40,7 @@ const ManageContests = ({ contests }) => {
           <TabTable
             TableHeader={header}
             TableData={contests
-              .map((item) => ({
+              ?.map((item) => ({
                 name: item.name,
                 ownerName: item.ownerName,
                 startDate: item.startDate,
