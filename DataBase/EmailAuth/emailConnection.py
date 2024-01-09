@@ -4,7 +4,7 @@ mail = Mail(app)
 def sendEmail(email,title,body):
     sender = "An Najah Rank"
     msg = Message(title,sender=sender,recipients=[email])
-    msg.body = body
+    msg.html = body
     try:
         mail.send(msg)
         return "Email sent successfully"

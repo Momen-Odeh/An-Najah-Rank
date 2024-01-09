@@ -32,14 +32,12 @@ def sendForgetEmail(email):
             print("Update")
             update_data(connection, 'code_verification', ['code', 'TTL'], (code, TTL),f"(`email` = '{email}')")
 
-        msg = """
-        Hello,<br>
-        We just need to verify your email address before you can Reset An Najah Rank Password.<br>
+        msg = f"""
+        <p>Hello,<br> We just need to verify your email address before you can reset your password. <br>
         Reset your password by entering this code:<br>
-        <b>{}</b><br>
-        Thanks!<br>
-        An Najah Rank team<br>
-        """.format(code)
+        <h2><strong>{code}</strong></h2>
+        Thanks!<br>An Najah Rank team</p>
+        """
 
         return(sendEmail(email,"An Najah Rank Reset Password Code",msg))
 
