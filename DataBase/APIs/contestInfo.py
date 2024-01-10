@@ -1,4 +1,4 @@
-from FlaskSetUp import app
+from FlaskSetUp import app, get_palestine_date_time
 from flask import request, jsonify
 from dataBaseConnection import execute_query, fetch_results
 from MySQL_SetUp import connection
@@ -27,7 +27,7 @@ def get_contests_info():
         cursor = connection.cursor()
         cursor.execute(query)
         contest = cursor.fetchone()
-        if(tokenData['role'] == "student" and datetime.datetime.now() < contest[3]):
+        if(tokenData['role'] == "student" and get_palestine_date_time() < contest[3].strftime('%Y-%m-%d %H:%M:%S')):
             return jsonify({"message": "Access Denied"}), 401
         contestData = {
             "id":contest[0],
