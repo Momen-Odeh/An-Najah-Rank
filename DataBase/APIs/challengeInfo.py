@@ -1,5 +1,5 @@
 from flask import jsonify, request
-from FlaskSetUp import app
+from FlaskSetUp import app, get_palestine_date_time
 from MySQL_SetUp import connection
 from dataBaseConnection import execute_query, fetch_results
 from guard.AccessChallenge import accessChallenge
@@ -29,7 +29,7 @@ def getChallenge(id):
         cursor = connection.cursor()
         cursor.execute(query)
         contest = cursor.fetchone()
-        if (tokenData['role'] == "student" and datetime.datetime.now() < contest[3]):
+        if (tokenData['role'] == "student" and get_palestine_date_time() < contest[3].strftime('%Y-%m-%d %H:%M:%S')):
             return jsonify({"message": "Access Denied"}), 401
         #
         cursor = connection.cursor()
