@@ -1,0 +1,49 @@
+<mxfile host="Electron" modified="2024-01-11T16:57:37.503Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/21.7.5 Chrome/114.0.5735.289 Electron/25.8.1 Safari/537.36" etag="69pHIj1tProNOKqJWaoO" version="21.7.5" type="device">
+  <diagram name="Page-1" id="-7S1477U917OM9wDNene">
+    <mxGraphModel dx="1016" dy="598" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="EpjUqyQN_lvLNYkFimx2-3" value="&lt;font style=&quot;font-size: 16px&quot; face=&quot;Comic Sans MS&quot;&gt;&lt;b&gt;Client&lt;/b&gt;&lt;/font&gt;" style="outlineConnect=0;gradientColor=none;fontColor=#545B64;strokeColor=#000000;fillColor=#000000;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.illustration_devices;pointerEvents=1" vertex="1" parent="1">
+          <mxGeometry x="20" y="480" width="142.81" height="104.25" as="geometry" />
+        </mxCell>
+        <mxCell id="EpjUqyQN_lvLNYkFimx2-4" value="&lt;font face=&quot;Comic Sans MS&quot;&gt;&lt;span style=&quot;font-size: 18px&quot;&gt;&lt;b&gt;Backend Server&lt;/b&gt;&lt;/span&gt;&lt;/font&gt;" style="points=[[0,0],[0.25,0],[0.5,0],[0.75,0],[1,0],[1,0.25],[1,0.5],[1,0.75],[1,1],[0.75,1],[0.5,1],[0.25,1],[0,1],[0,0.75],[0,0.5],[0,0.25]];outlineConnect=0;gradientColor=none;html=1;whiteSpace=wrap;fontSize=16;fontStyle=0;shape=mxgraph.aws4.group;grIcon=mxgraph.aws4.group_on_premise;strokeColor=#5A6C86;fillColor=none;verticalAlign=top;align=left;spacingLeft=30;fontColor=#5A6C86;dashed=0;" vertex="1" parent="1">
+          <mxGeometry x="680" y="480.01" width="249" height="130" as="geometry" />
+        </mxCell>
+        <mxCell id="EpjUqyQN_lvLNYkFimx2-5" value="" style="shape=image;verticalLabelPosition=bottom;labelBackgroundColor=#ffffff;verticalAlign=top;aspect=fixed;imageAspect=0;image=https://scontent.xx.fbcdn.net/v/t1.15752-9/414552947_3537366129926156_9164756170146976906_n.png?stp=dst-png_s320x320&amp;_nc_cat=100&amp;ccb=1-7&amp;_nc_sid=510075&amp;_nc_ohc=Rm-WSkYMiGsAX_2zQhL&amp;_nc_ad=z-m&amp;_nc_cid=0&amp;_nc_ht=scontent.xx&amp;oh=03_AdQcIUsneFpowLa6Mb3akei_8pwu6LRyO5syDup75aF-GQ&amp;oe=65C3C155;" vertex="1" parent="1">
+          <mxGeometry x="728.21" y="512.25" width="152.58" height="97.76" as="geometry" />
+        </mxCell>
+        <mxCell id="EpjUqyQN_lvLNYkFimx2-7" value="" style="endArrow=classic;html=1;rounded=0;strokeWidth=3;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="170" y="541.12" as="sourcePoint" />
+            <mxPoint x="293" y="541.12" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="EpjUqyQN_lvLNYkFimx2-8" value="" style="endArrow=classic;html=1;rounded=0;exitX=0;exitY=0.75;exitDx=0;exitDy=0;strokeWidth=3;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="289" y="561.62" as="sourcePoint" />
+            <mxPoint x="166" y="562.12" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="EpjUqyQN_lvLNYkFimx2-9" value="&lt;b&gt;&lt;font style=&quot;font-size: 16px;&quot;&gt;run/submit code&lt;/font&gt;&lt;/b&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="192" y="502.36" width="60" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="EpjUqyQN_lvLNYkFimx2-21" value="&lt;font face=&quot;Comic Sans MS&quot;&gt;&lt;span style=&quot;font-size: 18px&quot;&gt;&lt;b&gt;Database Server&lt;/b&gt;&lt;/span&gt;&lt;/font&gt;" style="points=[[0,0],[0.25,0],[0.5,0],[0.75,0],[1,0],[1,0.25],[1,0.5],[1,0.75],[1,1],[0.75,1],[0.5,1],[0.25,1],[0,1],[0,0.75],[0,0.5],[0,0.25]];outlineConnect=0;gradientColor=none;html=1;whiteSpace=wrap;fontSize=16;fontStyle=0;shape=mxgraph.aws4.group;grIcon=mxgraph.aws4.group_on_premise;strokeColor=#5A6C86;fillColor=none;verticalAlign=top;align=left;spacingLeft=30;fontColor=#5A6C86;dashed=0;" vertex="1" parent="1">
+          <mxGeometry x="310" y="480" width="249" height="130" as="geometry" />
+        </mxCell>
+        <mxCell id="EpjUqyQN_lvLNYkFimx2-22" value="" style="shape=image;verticalLabelPosition=bottom;labelBackgroundColor=#ffffff;verticalAlign=top;aspect=fixed;imageAspect=0;image=https://scontent.xx.fbcdn.net/v/t1.15752-9/414552947_3537366129926156_9164756170146976906_n.png?stp=dst-png_s320x320&amp;_nc_cat=100&amp;ccb=1-7&amp;_nc_sid=510075&amp;_nc_ohc=Rm-WSkYMiGsAX_2zQhL&amp;_nc_ad=z-m&amp;_nc_cid=0&amp;_nc_ht=scontent.xx&amp;oh=03_AdQcIUsneFpowLa6Mb3akei_8pwu6LRyO5syDup75aF-GQ&amp;oe=65C3C155;" vertex="1" parent="1">
+          <mxGeometry x="358.21000000000004" y="512.24" width="152.58" height="97.76" as="geometry" />
+        </mxCell>
+        <mxCell id="EpjUqyQN_lvLNYkFimx2-23" value="" style="endArrow=classic;html=1;rounded=0;strokeWidth=4;strokeColor=none;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="290" y="486" as="sourcePoint" />
+            <mxPoint x="290" y="386" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="EpjUqyQN_lvLNYkFimx2-24" value="&lt;b&gt;&lt;font style=&quot;font-size: 16px;&quot;&gt;when run code get all sample tes cases but whe submit get all test cases and put it in array&lt;/font&gt;&lt;/b&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="302" y="410" width="265" height="70" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
