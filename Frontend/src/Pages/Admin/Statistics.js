@@ -9,8 +9,8 @@ const Statistics = ({ topStudents }) => {
   const header = [
     "Student Name",
     "University Number",
-    "Total Submission",
-    "Total Success Submission",
+    "Total Challenges",
+    "Total Solved Challenges",
     "Rate",
   ];
   const dataURI = topStudents?.map(
