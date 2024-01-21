@@ -135,7 +135,7 @@ const VarificationCode = () => {
             />
           </Col>
         </Row>
-        {/* <Row className={`${classes.Row} mb-2`}>
+        <Row className={`${classes.Row} mb-2`}>
           <Col className={classes.Col}>
             <TextRegister
               text={"If you didn't receive a code! "}
@@ -150,9 +150,12 @@ const VarificationCode = () => {
               height="24px"
               size="16px"
               wegiht="400"
+              cursor="pointer"
+              hover
+              onClick={() => console.log("ddddddd")}
             />
           </Col>
-        </Row> */}
+        </Row>
         <Row className={`${classes.Row} `}>
           <Col className={classes.Col}>
             <AlertComponent
