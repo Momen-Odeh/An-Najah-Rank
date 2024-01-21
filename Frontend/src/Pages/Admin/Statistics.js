@@ -4,8 +4,7 @@ import { Col, Container, Row } from "react-bootstrap";
 import TabTable from "../../Components/TabTable";
 import Text from "../../Components/Text";
 import InputFiledRank from "../../Components/InputFiledRank";
-const Submissions = ({ topStudents }) => {
-  const [submissions, setSubmissions] = useState(topStudents);
+const Statistics = ({ topStudents }) => {
   const [search, setSearch] = useState("");
   const header = [
     "Student Name",
@@ -14,11 +13,11 @@ const Submissions = ({ topStudents }) => {
     "Total Success Submission",
     "Rate",
   ];
-  const dataURI = submissions.map(
+  const dataURI = topStudents?.map(
     (item) => "/profile/" + item.universityNumber
   );
-  const data = submissions
-    .map((item) => ({
+  const data = topStudents
+    ?.map((item) => ({
       name: item.name,
       universityNumber: item.universityNumber,
       totalSubmission: item.totalSubmission,
@@ -34,7 +33,7 @@ const Submissions = ({ topStudents }) => {
     <Container>
       <Row className="mt-4">
         <Col>
-          <Text text={"Submissions"} size="30px" />
+          <Text text={"Statistics"} size="30px" />
         </Col>
         <Col className="d-flex justify-content-end">
           <InputFiledRank
@@ -55,4 +54,4 @@ const Submissions = ({ topStudents }) => {
   );
 };
 
-export default Submissions;
+export default Statistics;

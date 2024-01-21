@@ -3,6 +3,7 @@ from flask import request, jsonify, send_file
 from dataBaseConnection import execute_query, fetch_results, update_data, delete_data
 from MySQL_SetUp import connection
 
+
 @app.route('/latestChallengesProfile', methods=['GET'])
 def getLastChallenges():
     try:
@@ -18,8 +19,12 @@ def getLastChallenges():
                     challenges c ON ss.challengeId = c.id
                 INNER JOIN
                     contests_challenges cc ON ss.challengeId = cc.challenge_id
+				INNER JOIN 
+					student_submissions sts ON  sts.submissionTime = 
+                    (select max(submissionTime) from student_submissions where studentUniversityNumber = 
+                    '{tokenData['universityNumber']}' )
                 WHERE
-                    ss.studentUniversityNumber = '{tokenData['universityNumber']}'
+                    ss.studentUniversityNumber = '{tokenData['universityNumber']}' 
                     GROUP BY
                     ss.challengeId,
                     ss.contestId,

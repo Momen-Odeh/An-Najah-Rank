@@ -22,6 +22,11 @@ def getUserCourses():
         else:
             userid = tokenData['universityNumber']
 
+        role = None
+        if request.args.get('id') is not None:
+            role = fetch_results(execute_query(connection, f"SELECT role FROM user WHERE universityNumber = "
+                                                           f"'{request.args.get('id')}'"))[0][0]
+
         if tokenData['role'] == 'admin' and request.args.get('id') is None:
             sql = f"""
                     SELECT 
@@ -38,7 +43,8 @@ def getUserCourses():
                     GROUP BY c.courseNumber, c.name, c.description, c.ownerUniversityNumber, c.backgroundImage
                     {limitVal};
                     """
-        elif tokenData['role'] == 'professor' and request.args.get('id') is None:
+        elif (tokenData['role'] == 'professor' and request.args.get('id') is None) or \
+                (tokenData['role'] == 'admin' and role == "professor"):
             sql = f"""
                     SELECT  c.courseNumber,
                     c.name,
@@ -89,7 +95,7 @@ def getUserCourses():
                     response["img"] = get_file_from_AWS(item[4])
                 coursesData.append(response)
 
-            return {"status":"found courses","courses":coursesData}, 200
+            return {"status": "found courses", "courses":coursesData}, 200
         else:
             return jsonify({
                 "status": "not found",

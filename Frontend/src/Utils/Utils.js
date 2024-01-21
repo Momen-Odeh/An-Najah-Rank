@@ -273,8 +273,8 @@ export const routes = [
         component: <Admin />,
       },
       {
-        path: "submissions",
-        title: "submissions",
+        path: "statistics",
+        title: "statistics",
         component: <Admin />,
       },
     ],

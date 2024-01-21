@@ -7,7 +7,7 @@ import Breadcrumbs from "../../Components/Breadcrumbs";
 import Loader from "../../Components/Loader";
 import Professors from "./Professors";
 import Students from "./Students";
-import Submissions from "./Submissions";
+import Statistics from "./Statistics";
 import axios from "axios";
 import { toastError } from "../../Utils/toast";
 import { useNavigate } from "react-router-dom";
@@ -39,10 +39,10 @@ const Admin = () => {
       urlPattern: "/admin/students",
     },
     {
-      title: "Submissions",
-      eventKey: "submissions",
-      TabComponent: <Submissions topStudents={adminData?.topStudents} />,
-      urlPattern: "/admin/submissions",
+      title: "Statistics",
+      eventKey: "Statistics",
+      TabComponent: <Statistics topStudents={adminData?.topStudents} />,
+      urlPattern: "/admin/statistics",
     },
   ];
 

@@ -8,6 +8,7 @@ import { routeNames, routes } from "../../Utils/Utils";
 import Logo from "./images/logo.jpg";
 import { useContext } from "react";
 import userContext from "../../Utils/userContext";
+import Cookies from "js-cookie";
 const Header = ({ activeTab }) => {
   const classes = useStyle();
   const navigate = useNavigate();
@@ -15,15 +16,27 @@ const Header = ({ activeTab }) => {
   const userChoicesData = [
     { id: 1, title: "Profile", link: "/profile" },
     { id: 2, title: "Settings", link: "/settings" },
+    { id: 5, title: "Admin", link: "/admin" },
     { id: 3, title: "Administration", link: "/administration/courses" },
-    { id: 4, title: "Logout", link: "log-in" },
+    { id: 4, title: "Logout", link: "/log-in" },
   ].filter((item) => {
     if (activeUser.role !== "student" && item.id === 3) {
       return item;
-    } else if (item.id !== 3) {
+    } else if (activeUser.role === "admin" && item.id === 5) {
+      return item;
+    } else if (item.id !== 3 && item.id !== 5) {
       return item;
     }
   });
+  const logOutSystem = () => {
+    const cookieNames = Object.keys(Cookies.get());
+    cookieNames.forEach((cookieName) => {
+      Cookies.remove(cookieName, { path: "/" });
+    });
+    localStorage.clear();
+    navigate("/log-in");
+    window.location.reload();
+  };
   const signInPath = routes.filter(
     (item) => item.title === routeNames.LOG_IN
   )[0].path;
@@ -85,8 +98,8 @@ const Header = ({ activeTab }) => {
                     key={index}
                     className={`${classes.hoveringColor}`}
                     onClick={() => {
-                      console.log("choice.id == 5");
-                      navigate(choice.link);
+                      if (choice.id === 4) logOutSystem();
+                      else navigate(choice.link);
                     }}
                   >
                     {choice.title}
