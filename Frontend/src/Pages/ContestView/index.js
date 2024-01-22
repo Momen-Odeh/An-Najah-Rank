@@ -14,6 +14,11 @@ import Loader from "../../Components/Loader";
 import ChallengeTabs from "../../Components/ChallengTabs";
 import TabTable from "../../Components/TabTable";
 import ChallengesInContest from "./ChallengesInContest";
+import * as XLSX from "xlsx";
+import ButtonRank from "../../Components/ButtonRank";
+import { getPalestineDateTime } from "../../Utils/palestineDateTime";
+import InputFiledRank from "../../Components/InputFiledRank";
+
 const ContestView = () => {
   const { id, contestId } = useParams();
   const [challengeContest, setChallengeContest] = useState([]);
@@ -23,14 +28,28 @@ const ContestView = () => {
   const [loadingPage, setLoadingPage] = useState(true);
   const [contestsResult, setContestsResult] = useState([]);
   const [role, setRole] = useState();
+  const [search, setSearch] = useState("");
+
+  const exportToExcel = () => {
+    const worksheet = XLSX.utils.json_to_sheet(contestsResult);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet 1");
+    XLSX.writeFile(
+      workbook,
+      `${contestInfo.name} (${getPalestineDateTime()}).xlsx`
+    );
+  };
+
   useEffect(() => {
     axios
       .get(`/contest-info`, {
         params: { courseId: id, contest_id: contestId, contestView: true },
       })
       .then((response) => {
+        let totalRes = 0;
         setChallengeContest(
           response.data.ContestChallenges.map((item, index) => {
+            totalRes += item.maxScore;
             return {
               Name: item.name,
               solved: item.solved,
@@ -50,17 +69,18 @@ const ContestView = () => {
           response.data.contestGrades.map((item) => {
             const challengeMarks = response.data.ContestChallenges.map(
               (c, index) => ({
-                [`ch${index}`]: item.challengeResults[c.challenge_id]
-                  ? item.challengeResults[c.challenge_id]
-                  : "Not Solved",
+                [`${c.name} (out of ${c.maxScore})`]:
+                  item.challengeResults[c.challenge_id] !== null
+                    ? `${item.challengeResults[c.challenge_id]}`
+                    : "Not Solved",
               })
             );
             const challengeMarksObject = Object.assign({}, ...challengeMarks);
             return {
-              UniversityNumber: item.studentId,
+              UniversityNumber: `${item.studentId}`,
               Name: item.studentName,
               ...challengeMarksObject,
-              TotalResult: item.totalResult,
+              [`TotalResult (out of ${totalRes})`]: `${item.totalResult}`,
             };
           })
         );
@@ -91,20 +111,37 @@ const ContestView = () => {
       eventKey: "Grades",
       title: "Grades",
       TabComponent: (
-        <TabTable
-          TableHeader={[
-            "University Number",
-            "Name",
-            ...challengeContest.map(
-              (c) => c.Name + `(${c.maxScoreForChallenge})`
-            ),
-            `Total Result(${challengeContest.reduce(
-              (sum, challenge) => sum + challenge.maxScoreForChallenge,
-              0
-            )})`,
-          ]}
-          TableData={contestsResult}
-        />
+        <Container fluid className="p-0 m-0">
+          <Row className="mb-3">
+            <Col className="d-flex justify-content-between">
+              <InputFiledRank
+                type="text"
+                placeholder="Type student name"
+                onChange={(e) => setSearch(e.target.value)}
+              />
+              <ButtonRank
+                text={"Export grades to excel file"}
+                onClick={exportToExcel}
+              />
+            </Col>
+          </Row>
+          <TabTable
+            TableHeader={[
+              "University Number",
+              "Name",
+              ...challengeContest.map(
+                (c) => c.Name + `(${c.maxScoreForChallenge})`
+              ),
+              `Total Result(${challengeContest.reduce(
+                (sum, challenge) => sum + challenge.maxScoreForChallenge,
+                0
+              )})`,
+            ]}
+            TableData={contestsResult?.filter((item) =>
+              item.Name?.toLowerCase().includes(search.toLowerCase())
+            )}
+          />
+        </Container>
       ),
     },
   ];
