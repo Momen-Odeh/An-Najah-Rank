@@ -4,15 +4,16 @@ import Breadcrumbs from "../../Components/Breadcrumbs";
 import Text from "../../Components/Text";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
-import ChallengeShow from "../../Components/ChallengeShow";
 import useStyles from "./style";
 import { BiSolidCategory } from "react-icons/bi";
 import { AiFillFileText } from "react-icons/ai";
-import { PiCodeBold } from "react-icons/pi";
 import { RxLapTimer } from "react-icons/rx";
 import CountDown from "../../Components/CountDown";
 import { toastError } from "../../Utils/toast";
 import Loader from "../../Components/Loader";
+import ChallengeTabs from "../../Components/ChallengTabs";
+import TabTable from "../../Components/TabTable";
+import ChallengesInContest from "./ChallengesInContest";
 const ContestView = () => {
   const { id, contestId } = useParams();
   const [challengeContest, setChallengeContest] = useState([]);
@@ -20,6 +21,8 @@ const ContestView = () => {
   const classes = useStyles();
   const navigate = useNavigate();
   const [loadingPage, setLoadingPage] = useState(true);
+  const [contestsResult, setContestsResult] = useState([]);
+  const [role, setRole] = useState();
   useEffect(() => {
     axios
       .get(`/contest-info`, {
@@ -37,11 +40,31 @@ const ContestView = () => {
                 { key: "Success Rate: ", val: item.challengeRate + " %" },
                 { key: "Max Score: ", val: item.maxScore },
               ],
+              maxScoreForChallenge: item.maxScore,
               url: `/courses/${id}/contests/${contestId}/challenges/${item.challenge_id}/problem`,
             };
           })
         );
         setContestInfo(response.data.contest);
+        setContestsResult(
+          response.data.contestGrades.map((item) => {
+            const challengeMarks = response.data.ContestChallenges.map(
+              (c, index) => ({
+                [`ch${index}`]: item.challengeResults[c.challenge_id]
+                  ? item.challengeResults[c.challenge_id]
+                  : "Not Solved",
+              })
+            );
+            const challengeMarksObject = Object.assign({}, ...challengeMarks);
+            return {
+              UniversityNumber: item.studentId,
+              Name: item.studentName,
+              ...challengeMarksObject,
+              TotalResult: item.totalResult,
+            };
+          })
+        );
+        setRole(response.data.role);
         setLoadingPage(false);
       })
       .catch((error) => {
@@ -57,6 +80,34 @@ const ContestView = () => {
         } else setLoadingPage(false);
       });
   }, []);
+
+  const tabContent = [
+    {
+      eventKey: "Challenges",
+      title: "Challenges",
+      TabComponent: <ChallengesInContest challengeContest={challengeContest} />,
+    },
+    {
+      eventKey: "Grades",
+      title: "Grades",
+      TabComponent: (
+        <TabTable
+          TableHeader={[
+            "University Number",
+            "Name",
+            ...challengeContest.map(
+              (c) => c.Name + `(${c.maxScoreForChallenge})`
+            ),
+            `Total Result(${challengeContest.reduce(
+              (sum, challenge) => sum + challenge.maxScoreForChallenge,
+              0
+            )})`,
+          ]}
+          TableData={contestsResult}
+        />
+      ),
+    },
+  ];
 
   return loadingPage ? (
     <Loader />
@@ -118,31 +169,10 @@ const ContestView = () => {
           <CountDown endDate={new Date(contestInfo.endTime)} />
         </Col>
       </Row>
-
-      <Row className={`${classes.Row} mb-3`}>
-        <Col className={`${classes.Col} ${classes.IconContainer}`}>
-          <PiCodeBold className={classes.Icon} />
-          <Text
-            text={"Challenges"}
-            size="20px"
-            fontFamily="Open Sans"
-            wegiht="600"
-            color="#0e141e"
-          />
-        </Col>
-      </Row>
-      {challengeContest.length === 0 ? (
-        <Container className="d-flex justify-content-center align-items-center mt-4">
-          <Text text={"Challenges Not Found"} size="30px" />
-        </Container>
+      {role === "professor" || role === "admin" ? (
+        <ChallengeTabs ListTabs={tabContent} />
       ) : (
-        challengeContest.map((item, index) => (
-          <Row className={`${classes.Row} mb-4`} key={index}>
-            <Col className={`${classes.Col}`}>
-              <ChallengeShow {...item} />
-            </Col>
-          </Row>
-        ))
+        <ChallengesInContest challengeContest={challengeContest} />
       )}
     </Container>
   );

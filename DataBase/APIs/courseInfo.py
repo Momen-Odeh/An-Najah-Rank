@@ -61,36 +61,37 @@ def get_course_info():
                 "universityNumber": professor[0]
             })
 
-        query = f"""
-                    SELECT u.*
-                    FROM user u
-                    JOIN student_enrollments se ON u.universityNumber = se.studentNumber
-                    WHERE se.courseNumber = {request.args.get('courseNumber')};
-                """
-        cursor = execute_query(connection, query)
-        data = fetch_results(cursor)
         students = []
-        for student in data:
-            students.append({
-                "studentName": student[2],
-                "email": student[1],
-                "registrationNumber": student[0]
-            })
+        if tokenData["role"] == "professor" or tokenData["role"] == "admin":
+            query = f"""
+                                SELECT u.*
+                                FROM user u
+                                JOIN student_enrollments se ON u.universityNumber = se.studentNumber
+                                WHERE se.courseNumber = {request.args.get('courseNumber')};
+                            """
+            cursor = execute_query(connection, query)
+            data = fetch_results(cursor)
+            for student in data:
+                students.append({
+                    "studentName": student[2],
+                    "email": student[1],
+                    "registrationNumber": student[0]
+                })
 
-        query = f"""
-                    SELECT studentNumber
-                    FROM student_enrollments se
-                    WHERE se.studentNumber NOT IN (SELECT universityNumber FROM user)
-                    AND se.courseNumber = {request.args.get('courseNumber')};
-                """
-        cursor = execute_query(connection, query)
-        data = fetch_results(cursor)
-        for student in data:
-            students.append({
-                "studentName": 'not registered in system yet',
-                "email": None,
-                "registrationNumber": student[0]
-            })
+            query = f"""
+                        SELECT studentNumber
+                        FROM student_enrollments se
+                        WHERE se.studentNumber NOT IN (SELECT universityNumber FROM user)
+                        AND se.courseNumber = {request.args.get('courseNumber')};
+                    """
+            cursor = execute_query(connection, query)
+            data = fetch_results(cursor)
+            for student in data:
+                students.append({
+                    "studentName": 'not registered in system yet',
+                    "email": None,
+                    "registrationNumber": student[0]
+                })
 
         query = f"""
                     SELECT u.*
@@ -113,6 +114,7 @@ def get_course_info():
                 "universityNumber": professor[0]
             })
         contests = getContestForCourse(request.args.get('courseNumber'),studendCount)
+
         response_data = {
             'course': courseData,
             'suggestionModerators': suggestionModerators,
