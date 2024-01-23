@@ -95,6 +95,11 @@ const LogInForm = () => {
             email: null,
             password: error.response.data.message,
           });
+          if (error.response.data.message === "your account not verified") {
+            sessionStorage.setItem("email", error.response.data.email);
+            sessionStorage.setItem("event", "register");
+            navigate("/verification-code");
+          }
         } else
           error.response?.data.message
             ? toastError(error.response.data.message)
