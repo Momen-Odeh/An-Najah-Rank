@@ -114,9 +114,20 @@ def DeleteUser():
     try:
         tokenData = getattr(request, 'tokenData', None)
         password = request.args.get('password')
-        result = fetch_results(
+        resultUser = fetch_results(
             execute_query(connection, f"SELECT * FROM `an-najah rank`.user where email = '{tokenData['email']}';"))
-        if (check_password_hash(result[0][5], password)):
+
+
+        if (check_password_hash(resultUser[0][5], password)):
+            if resultUser[0][6] is not None:
+                delete_file_from_AWS(resultUser[0][6])
+            result = fetch_results(
+                execute_query(connection,
+                f"""SELECT submissionFileKey FROM student_submissions 
+                where submissionFileKey != 'null' and studentUniversityNumber = '{resultUser[0][0]}'
+                """))
+            for x in result:
+                delete_file_from_AWS(x[0])
             return delete_data(connection, 'user', f"email = '{tokenData['email']}'")
         else:
             return jsonify({'message': "Password not correct"}), 422

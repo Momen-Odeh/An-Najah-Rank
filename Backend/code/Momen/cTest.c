@@ -1,12 +1,15 @@
-  #include <stdio.h>
-  #include <string.h>
-  #include <math.h>
-  #include <stdlib.h>
+  #include <cmath>
+  #include <cstdio>
+  #include <vector>
+  #include <iostream>
+  #include <algorithm>
+  using namespace std;
+  
   
   int main() {
-  
-      /* Enter your code here. Read input from STDIN. Print output to STDOUT */    
-      while(true)
-      printf("%d",5);
+    int x,y;
+    cin >> x >> y;
+    cout << x+y; 
       return 0;
   }
+  
