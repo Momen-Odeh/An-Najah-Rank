@@ -9,6 +9,11 @@ const useStyles = createUseStyles({
     whiteSpace: ({ whiteSpace }) => (whiteSpace ? "pre-wrap" : ""),
     padding: "0",
     margin: "0",
+    cursor: ({ cursor }) => cursor,
+    transition: "0.5s",
+    "&:hover": {
+      textDecoration: ({ hover }) => (hover ? "underline" : ""),
+    },
     // wordWrap: "break-word",
     // whiteSpace: "normal",
   },

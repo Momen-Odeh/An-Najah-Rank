@@ -43,6 +43,9 @@ from APIs.runNewTestCase import run_new_test_case
 from APIs.get_user_info import get_user_info
 from Chatting.getMessages import get_messages, get_conversations, update_last_message
 from Chatting.addConversation import add_conversation, add_message
+from EmailAuth.createVerificationCode import resendVerificationCode
+from APIs.deleteContest import delete_contests
+from APIs.deleteCourse import delete_courses
 import logging
 
 log_file = 'app.log'

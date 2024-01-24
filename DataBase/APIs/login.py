@@ -30,7 +30,7 @@ def login_user():
                                         "token": token}), 200
                     else:
                         if user_data[0][3] == "student":
-                            return jsonify({'message': "your account not verified"}), 401
+                            return jsonify({'message': "your account not verified",'email':email}), 401
                         elif user_data[0][3] == "professor":
                             return jsonify({'message': "Your request is pending approval by the admin"}), 401
                 else:

@@ -60,7 +60,7 @@ def get_professor_pending():
             query = """
                 select u.universityNumber,u.fullName,u.role,
                 count(cc.challenge_id) as totalSubmission,
-                (select count(ss.id)
+                (select  count(DISTINCT ss.courseNumber, ss.contestId, ss.challengeId)
                 from student_submissions ss
                 inner join challenges ccc on  ccc.id = ss.challengeId
                 where ss.studentUniversityNumber = se.studentNumber and ss.submissionResult = '100')as successSubmission
@@ -70,7 +70,7 @@ def get_professor_pending():
                 inner join user u on u.universityNumber = se.studentNumber
                 where u.role = 'student'
                 group by se.studentNumber
-                order by totalSubmission,successSubmission DESC
+                order by successSubmission DESC
                 limit 100
                 """
             cursor = connection.cursor()

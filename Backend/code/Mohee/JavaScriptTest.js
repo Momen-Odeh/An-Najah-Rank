@@ -1,6 +1,7 @@
 function processData(input) {
     //Enter your code here
-    console.log("fffff")
+    while(true)
+    console.log("ff")
 } 
 
 process.stdin.resume();

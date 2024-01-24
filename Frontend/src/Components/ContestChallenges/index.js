@@ -21,7 +21,7 @@ const ContestChallenges = ({ challengesData, challengesContest }) => {
   const classes = useStyles();
   const [oldChallengeId, setOldChallengeId] = useState(null);
   const [challenges, setChallenges] = useState([]);
-  const TableHeader = ["No.", "Name", "Max Score", ""];
+  const TableHeader = ["No.", "Name", "Max Score", ""]; /**/
   const [showCreateChallenge, SetShowCreateChallenge] = useState({
     value: false,
     mode: "add",

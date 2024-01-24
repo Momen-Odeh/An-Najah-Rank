@@ -33,6 +33,8 @@ const useStyle = createUseStyles({
     maxWidth: "63%",
   },
   ChatColSmallScreen: {
+    padding: "0",
+    margin: "0",
     maxWidth: "100%",
   },
   newChat: {
@@ -91,7 +93,7 @@ const useStyle = createUseStyles({
     padding: "10px",
     borderRadius: "10px",
     wordWrap: "break-word",
-    maxWidth: "80%",
+    maxWidth: "70%",
     marginTop: "8px",
   },
   MessageBodySmallScreen: {},

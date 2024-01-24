@@ -6,6 +6,7 @@ from guard.professorAccess.AccessContestProfessor import accessContestProfessor
 from guard.AccessContest import accessContest
 import datetime
 import json
+from APIs.getContestGrades import get_contests_grades
 @app.route('/contest-info', methods=['GET'])
 def get_contests_info():
     try:
@@ -107,10 +108,15 @@ def get_contests_info():
             data_object['solved'] = True if len(solved) > 0 else False
 
             ContestChallengesData.append(data_object)
+        data = []
+        if tokenData["role"] == "professor" or tokenData["role"] == "admin":
+            data = get_contests_grades(request.args.get('contest_id'), ContestChallengesData)
         response_data = {
             'contest': contestData,
             'myChallenges': myChallenges,
-            'ContestChallenges': ContestChallengesData
+            'ContestChallenges': ContestChallengesData,
+            'contestGrades': data,
+            'role': tokenData["role"]
         }
         return jsonify(response_data), 200
     except Exception as e:

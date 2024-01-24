@@ -14,6 +14,7 @@ import Text from "../Text";
 import Axios from "axios";
 import {
   validateEmail,
+  isValidProfessorEmail,
   validatePassword,
   validateUniversityNumber,
   validateFullName,
@@ -44,7 +45,11 @@ const SignUpForm = () => {
     console.log(signupValue);
     setLoading(true);
     setErrorMsg({
-      email: !validateEmail(signupValue.email) ? "Invalid Email" : null,
+      email: !validateEmail(signupValue.email)
+        ? "Invalid Email"
+        : signupValue.isProfessor && !isValidProfessorEmail(signupValue.email)
+        ? "Invalid Professor Email"
+        : null,
       fullName: !validateFullName(signupValue.fullName)
         ? "Full Names must contain at least 3 characters"
         : null,
@@ -60,6 +65,8 @@ const SignUpForm = () => {
     });
     if (
       validateEmail(signupValue.email) &&
+      ((signupValue.isProfessor && isValidProfessorEmail(signupValue.email)) ||
+        !signupValue.isProfessor) &&
       validateFullName(signupValue.fullName) &&
       validateUniversityNumber(signupValue.universityNumber) &&
       validatePassword(signupValue.password) &&

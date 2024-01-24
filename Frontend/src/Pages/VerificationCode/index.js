@@ -10,7 +10,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import AlertComponent from "../../Components/Alert";
 import Loader from "react-spinners/ClipLoader";
-import { toast } from "react-toastify";
+import { toastError, toastSuccess } from "../../Utils/toast";
 const VarificationCode = () => {
   const classes = useStyles();
   const navigate = useNavigate();
@@ -18,8 +18,20 @@ const VarificationCode = () => {
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState(null);
   const setActiveTab = useOutletContext();
+  const [resendState, setResendState] = useState(true);
+
+  const wait = () => {
+    // console.log("now");
+    setResendState(false);
+    setTimeout(() => {
+      // console.log("after 2min");
+      setResendState(true);
+    }, 120000); //2min
+  };
+
   useEffect(() => {
     setActiveTab(routeNames.LOG_IN);
+    wait();
   }, []);
   const [code, setCode] = useState("");
   const changeCode = (res) => {
@@ -67,20 +79,29 @@ const VarificationCode = () => {
           } else if (err.response.data.msg === "invalid TTL") {
             setErrorMsg("code has expired time, try again");
           } else {
-            toast.error(err.response.data.error, {
-              position: "bottom-left",
-              autoClose: 10000,
-              hideProgressBar: false,
-              closeOnClick: true,
-              pauseOnHover: true,
-              draggable: true,
-              progress: undefined,
-              theme: "light",
-            });
+            toastError(err.response.data.error);
           }
           setLoading(false);
         });
     }
+  };
+
+  const resendCode = () => {
+    console.log(sessionStorage.getItem("email"));
+    console.log(sessionStorage.getItem("event"));
+    wait();
+    axios
+      .post("/resendVerificationCode", {
+        email: sessionStorage.getItem("email"),
+        event: sessionStorage.getItem("event"),
+      })
+      .then((response) => {
+        toastSuccess("Send Email Successfully");
+        console.log(response);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
   return sessionStorage?.event ? ( //Gard for the Verification code
     <div className={classes.center}>
@@ -135,7 +156,7 @@ const VarificationCode = () => {
             />
           </Col>
         </Row>
-        {/* <Row className={`${classes.Row} mb-2`}>
+        <Row className={`${classes.Row} mb-2`}>
           <Col className={classes.Col}>
             <TextRegister
               text={"If you didn't receive a code! "}
@@ -144,15 +165,26 @@ const VarificationCode = () => {
               size="16px"
               wegiht="400"
             />
+            {/* {resendState && ( */}
             <TextRegister
               text={"Resend"}
               color="#0C21C1"
               height="24px"
               size="16px"
               wegiht="400"
+              cursor="pointer"
+              hover
+              onClick={
+                resendState
+                  ? resendCode
+                  : () => {
+                      toastError("can't send again, please wait!");
+                    }
+              }
             />
+            {/* )} */}
           </Col>
-        </Row> */}
+        </Row>
         <Row className={`${classes.Row} `}>
           <Col className={classes.Col}>
             <AlertComponent

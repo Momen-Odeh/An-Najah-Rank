@@ -6,11 +6,38 @@ import ButtonRank from "../ButtonRank";
 import TabTable from "../TabTable";
 import InputFiledRank from "../InputFiledRank";
 import useStyles from "./style";
-const ManageCourses = ({ courses }) => {
+import { BiTrash } from "react-icons/bi";
+import Text from "../Text";
+import ModalRank from "../ModalRank";
+import axios from "axios";
+const ManageCourses = ({ courses, setCourses }) => {
   const navigate = useNavigate();
   const [search, setSearch] = useState("");
-  const header = ["Course Name", "Course Owner", "Moderators"];
+  const [deleteModal, setDeleteModal] = useState({ show: false });
+  const [loading, setLoading] = useState(false);
+  const header = ["Course Name", "Course Owner", "Moderators", ""];
   const classes = useStyles();
+  const handelDeleteCourse = () => {
+    console.log(deleteModal);
+    console.log(courses[deleteModal.index]);
+
+    setLoading(true);
+    axios
+      .delete("/course_data", {
+        params: { courseId: courses[deleteModal.index].id },
+      })
+      .then((response) => {
+        console.log(response);
+        setLoading(false);
+        setCourses(courses.filter((_, fIndex) => fIndex !== deleteModal.index));
+        setDeleteModal({ ...deleteModal, show: false });
+      })
+      .catch((error) => {
+        setLoading(false);
+        setDeleteModal({ ...deleteModal, show: false });
+        console.log(error);
+      });
+  };
   return (
     <Container>
       <Row className={classes.RowCreate}>
@@ -35,10 +62,25 @@ const ManageCourses = ({ courses }) => {
           <TabTable
             TableHeader={header}
             TableData={courses
-              .map((item) => ({
+              .map((item, index) => ({
                 name: item.name,
                 owner: item.ownerName,
                 moderators: item.moderators,
+                action: (
+                  <BiTrash
+                    size={30}
+                    color="#949494"
+                    className={classes.iconColor}
+                    onClick={() =>
+                      setDeleteModal({
+                        ...deleteModal,
+                        show: true,
+                        index: index,
+                        name: item.name,
+                      })
+                    }
+                  />
+                ),
               }))
               .filter((word) =>
                 word.name?.toLowerCase().includes(search.toLowerCase())
@@ -51,6 +93,33 @@ const ManageCourses = ({ courses }) => {
           />
         </Col>
       </Row>
+      <ModalRank
+        show={deleteModal.show}
+        onHide={() => {
+          setDeleteModal({ ...deleteModal, show: false });
+        }}
+        title="Delete Course"
+        footer={
+          <ButtonRank
+            text={"Yes"}
+            hoverBackgroundColor="#0e141e"
+            onClick={() => handelDeleteCourse()}
+            disabled={loading}
+          />
+        }
+      >
+        <Text
+          text={
+            "are you sure that want to delete the contest with Name " +
+            deleteModal.name +
+            "?"
+          }
+          size="0.9em"
+          fontFamily="Open Sans"
+          wegiht="600"
+          color="#0e141e"
+        />
+      </ModalRank>
     </Container>
   );
 };

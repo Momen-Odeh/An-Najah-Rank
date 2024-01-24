@@ -220,6 +220,7 @@ const CodeEditor = () => {
     }
   };
   const handleSubmitCode = async () => {
+    context.setLoading(true);
     axios
       .post("/student-challenge-submissions", {
         code: textCode,
@@ -230,11 +231,13 @@ const CodeEditor = () => {
       })
       .then((res) => {
         const submissionId = res.data.submissionId;
+        context.setLoading(false);
         navigate(
           `/courses/${id}/contests/${contestId}/challenges/${challengeId}/submissions/${submissionId}`
         );
       })
       .catch((error) => {
+        context.setLoading(false);
         console.log(error);
         //********************************** */
         if (

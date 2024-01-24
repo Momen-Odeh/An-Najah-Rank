@@ -13,7 +13,6 @@ CORS(app)
 def hello_world():
     return 'Hello World'
 
-
 @app.route('/java', methods=['POST'])
 def applayJava():
     if request.is_json:
@@ -75,4 +74,4 @@ def applayRE():
         return jsonify({"error": "Request body must contain JSON data"}), 400
 
 if __name__ == "__main__":
-    app.run(debug=True, host='0.0.0.0', port=5000)
+    app.run(host='0.0.0.0', port=5000)

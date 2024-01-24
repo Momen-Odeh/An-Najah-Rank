@@ -29,3 +29,11 @@ export const validateUniversityNumber = (universityNumber) => {
   const patternNum = /^[-+]?\d*\.?\d*$/;
   return patternNum.test(universityNumber) && universityNumber.length >= 3;
 };
+
+export const isValidProfessorEmail = (email) => {
+  if (validateEmail(email) && email.endsWith("@najah.edu")) {
+    return true;
+  } else {
+    return false;
+  }
+};

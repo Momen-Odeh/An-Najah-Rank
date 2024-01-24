@@ -6,13 +6,47 @@ import ButtonRank from "../ButtonRank";
 import TabTable from "../TabTable";
 import InputFiledRank from "../InputFiledRank";
 import useStyles from "./style";
-const ManageContests = ({ contests }) => {
+import Text from "../Text";
+import ModalRank from "../ModalRank";
+import { BiTrash } from "react-icons/bi";
+import axios from "axios";
+const ManageContests = ({ contests, setContests }) => {
   const navigate = useNavigate();
   const { id } = useParams();
   const [search, setSearch] = useState("");
-  const header = ["Contest Name", "Contest Owner", "Start Date", "End Date"];
+  const header = [
+    "Contest Name",
+    "Contest Owner",
+    "Start Date",
+    "End Date",
+    "",
+  ];
+  const [deleteModal, setDeleteModal] = useState({ show: false });
+  const [loading, setLoading] = useState(false);
   const classes = useStyles();
   console.log("contests", contests);
+  const handelDeleteContest = () => {
+    console.log(deleteModal);
+    console.log(contests[deleteModal.index]);
+    setLoading(true);
+    axios
+      .delete("/contest", {
+        params: { contestsId: contests[deleteModal.index].id, courseId: id },
+      })
+      .then((response) => {
+        console.log(response);
+        setLoading(false);
+        setContests(
+          contests.filter((_, fIndex) => fIndex !== deleteModal.index)
+        );
+        setDeleteModal({ ...deleteModal, show: false });
+      })
+      .catch((error) => {
+        setLoading(false);
+        setDeleteModal({ ...deleteModal, show: false });
+        console.log(error);
+      });
+  };
   return (
     <Container>
       <Row className={classes.Row}>
@@ -40,11 +74,26 @@ const ManageContests = ({ contests }) => {
           <TabTable
             TableHeader={header}
             TableData={contests
-              ?.map((item) => ({
+              ?.map((item, index) => ({
                 name: item.name,
                 ownerName: item.ownerName,
                 startDate: item.startDate,
                 endDate: item.endDate,
+                action: (
+                  <BiTrash
+                    size={30}
+                    color="#949494"
+                    className={classes.iconColor}
+                    onClick={() =>
+                      setDeleteModal({
+                        ...deleteModal,
+                        show: true,
+                        index: index,
+                        name: item.name,
+                      })
+                    }
+                  />
+                ),
               }))
               .filter((word) =>
                 word.name?.toLowerCase().includes(search.toLowerCase())
@@ -59,6 +108,33 @@ const ManageContests = ({ contests }) => {
           />
         </Col>
       </Row>
+      <ModalRank
+        show={deleteModal.show}
+        onHide={() => {
+          setDeleteModal({ ...deleteModal, show: false });
+        }}
+        title="Delete Contest"
+        footer={
+          <ButtonRank
+            text={"Yes"}
+            hoverBackgroundColor="#0e141e"
+            onClick={() => handelDeleteContest()}
+            disabled={loading}
+          />
+        }
+      >
+        <Text
+          text={
+            "are you sure that want to delete the contest with Name " +
+            deleteModal.name +
+            "?"
+          }
+          size="0.9em"
+          fontFamily="Open Sans"
+          wegiht="600"
+          color="#0e141e"
+        />
+      </ModalRank>
     </Container>
   );
 };

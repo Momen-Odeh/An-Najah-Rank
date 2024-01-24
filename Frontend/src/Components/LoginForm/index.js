@@ -17,8 +17,14 @@ import { toastError } from "../../Utils/toast";
 const LogInForm = () => {
   const navigate = useNavigate();
   const [loginValue, setLoginValue] = useState({ email: "", password: "" });
-  const { setActiveUser, setNotifications, setNewNotifications } =
-    useContext(userContext);
+  const {
+    setActiveUser,
+    setNotifications,
+    setNewNotifications,
+    setLastMessageRead,
+    setNumberOfNewMessages,
+    setMessageNotification,
+  } = useContext(userContext);
   const [errorMsg, setErrorMsg] = useState({
     email: null,
     password: null,
@@ -64,6 +70,18 @@ const LogInForm = () => {
                 (n) => n.id > res.data.lastReadNotification
               )?.length
             );
+            return axios.get("/get-conversations", { params: { all: 0 } });
+          })
+          .then((response) => {
+            setMessageNotification(response.data.conversations);
+            setNumberOfNewMessages(
+              response.data.conversations.filter(
+                (c) =>
+                  Number(c.lastMessageID) >
+                  Number(response.data.lastReadMessage)
+              )?.length
+            );
+            setLastMessageRead(response.data.lastReadMessage);
           });
         navigate("/");
       } catch (error) {
@@ -77,6 +95,11 @@ const LogInForm = () => {
             email: null,
             password: error.response.data.message,
           });
+          if (error.response.data.message === "your account not verified") {
+            sessionStorage.setItem("email", error.response.data.email);
+            sessionStorage.setItem("event", "register");
+            navigate("/verification-code");
+          }
         } else
           error.response?.data.message
             ? toastError(error.response.data.message)

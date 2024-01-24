@@ -55,7 +55,7 @@ const SubmissionsManualMarking = () => {
 
   const listTabs = studentSubmissions?.map((item, index) => ({
     eventKey: item.submissionId,
-    title: "Submission " + index,
+    title: "Submission " + (studentSubmissions.length - index),
     TabComponent: <SubmissionTab submissionData={item} key={index} />,
   }));
 
