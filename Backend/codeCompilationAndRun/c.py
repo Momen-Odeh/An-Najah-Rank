@@ -20,26 +20,38 @@ def compileCCode(cFilePath,folderPath):
         return False, str(e)
 
 # Run compiled C code
-def runCCode(folderPath, input_data):
+def runCCode(folderPath, input_data, timeout=10):
     try:
         result = []
-        if(input_data):
-            for input in input_data:
-                result.append(subprocess.run([folderPath], input=input, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True))
+        if input_data:
+            for data in input_data:
+                val = subprocess.run([folderPath], input=data, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+                                     timeout=timeout, text=True)
+                if val.returncode != 0:
+                    print("Exit code:", val.returncode)
+                    print("Error message:", val.stderr)
+                    return [(False, None, f"Exit code: {val.returncode}\nError message: {val.stderr}")]
+                result.append(val)
         else:
-            result.append(subprocess.run([folderPath], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True))
+            result.append(subprocess.run([folderPath], stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=timeout,
+                                         text=True))
 
         results = [[r.returncode == 0, r.stdout, r.stderr] for r in result]
-
+        print("results", results)
         return results
     except subprocess.CalledProcessError as e:
+        print(e)
         return [(False, None, e.stderr)]
+    except subprocess.TimeoutExpired:
+        return [(False, None, "Subprocess timed out.")]
+    except Exception as e:
+        return [(False, None, e)]
 
 def compileAndRunCCode(code, input_data):
     try:
         codePath = saveCodeToFile("cTest", "c", "code/Momen", code)
         folderPath = os.path.dirname(codePath)
-        folderPath += "/output"
+        folderPath += "/output.exe"
         success, std = compileCCode(codePath, folderPath)
         if success:
             output = runCCode(folderPath, input_data)

@@ -52,7 +52,6 @@ def get_contests_grades(contest_id, challenges):
                 student_result['totalResult'] += submission_result if submission_result is not None else 0
 
             results.append(student_result)
-        print(results)
         return results
 
     except Exception as e:

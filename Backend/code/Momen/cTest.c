@@ -1,14 +1,12 @@
-  #include <cmath>
-  #include <cstdio>
-  #include <vector>
-  #include <iostream>
-  #include <algorithm>
-  using namespace std;
-  
+  #include <stdio.h>
+  #include <string.h>
+  #include <math.h>
+  #include <stdlib.h>
   
   int main() {
-      /* Enter your code here. Read input from STDIN. Print output to STDOUT */   
-      cout<<"d";
+  
+      /* Enter your code here. Read input from STDIN. Print output to STDOUT */    
+      while(true)
+      printf("%d",5);
       return 0;
   }
-  
