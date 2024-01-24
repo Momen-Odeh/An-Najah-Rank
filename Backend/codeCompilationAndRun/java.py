@@ -4,6 +4,8 @@ from codeCompilationAndRun.storeCodeFile import saveCodeToFile
 import os
 
 # --------------------------------------------------------------------------------- compile code
+
+
 def compileJavaCode(javaFilePath):
     try:
         result = subprocess.run(['javac', javaFilePath], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
@@ -18,20 +20,39 @@ def compileJavaCode(javaFilePath):
 
 
 # ---------------------------------------------------------------------------------
-def runJavaCode(folderPath, java_class_name, input_data):
+def runJavaCode(folderPath, java_class_name, input_data, timeout=10):
     try:
         result = []
         if input_data:
             for input in input_data:
-                result.append(subprocess.run(['java', '-cp', folderPath, java_class_name], input=input, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True))
+                process = subprocess.Popen(['java', '-cp', folderPath, java_class_name], stdin=subprocess.PIPE,
+                                           stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+
+                stdout, stderr = process.communicate(input=input, timeout=timeout)
+                return_code = process.returncode
+
+                result.append(subprocess.CompletedProcess(['java', '-cp', folderPath, java_class_name], return_code,
+                                                          stdout, stderr))
         else:
-            result.append(subprocess.run(['java', '-cp', folderPath, java_class_name], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True))
+            process = subprocess.Popen(['java', '-cp', folderPath, java_class_name], stdout=subprocess.PIPE,
+                                       stderr=subprocess.PIPE, text=True)
+
+            stdout, stderr = process.communicate(timeout=timeout)
+            return_code = process.returncode
+
+            result.append(subprocess.CompletedProcess(['java', '-cp', folderPath, java_class_name], return_code,
+                                                      stdout, stderr))
 
         results = [[r.returncode == 0, r.stdout, r.stderr] for r in result]
-
         return results
     except subprocess.CalledProcessError as e:
         return [(False, None, e.stderr)]
+    except subprocess.TimeoutExpired:
+        return [(False, None, "Subprocess timed out.")]
+    except Exception as e:
+        return [(False, None, str(e))]
+
+
 
 def compileAndRunJavaCode(code, input_data):
     try:
