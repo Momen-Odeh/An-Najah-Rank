@@ -110,7 +110,9 @@ const Course = () => {
     {
       title: "Manage Contests",
       eventKey: "ManageContests",
-      TabComponent: <ManageContests contests={contests} />,
+      TabComponent: (
+        <ManageContests contests={contests} setContests={setContests} />
+      ),
       urlPattern: `/administration/courses/${id}/contests`,
     },
   ];

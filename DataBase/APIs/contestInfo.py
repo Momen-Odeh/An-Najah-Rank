@@ -110,7 +110,7 @@ def get_contests_info():
             ContestChallengesData.append(data_object)
         data = []
         if tokenData["role"] == "professor" or tokenData["role"] == "admin":
-            data = get_contests_grades(data_object['contest_id'], ContestChallengesData)
+            data = get_contests_grades(request.args.get('contest_id'), ContestChallengesData)
         response_data = {
             'contest': contestData,
             'myChallenges': myChallenges,

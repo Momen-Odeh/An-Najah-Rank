@@ -9,6 +9,13 @@ const useStyles = createUseStyles({
   AddCol: {
     // backgroundColor: "red",
   },
+  iconColor: {
+    marginLeft: "10px",
+    cursor: "pointer",
+    "&:hover": {
+      color: "#4691f6 !important",
+    },
+  },
 });
 
 export default useStyles;
