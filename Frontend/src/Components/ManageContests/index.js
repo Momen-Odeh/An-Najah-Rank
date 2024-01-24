@@ -31,7 +31,7 @@ const ManageContests = ({ contests, setContests }) => {
     setLoading(true);
     axios
       .delete("/contest", {
-        params: { contestsId: contests[deleteModal.index].id },
+        params: { contestsId: contests[deleteModal.index].id, courseId: id },
       })
       .then((response) => {
         console.log(response);

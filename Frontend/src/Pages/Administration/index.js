@@ -12,16 +12,16 @@ import { useNavigate } from "react-router-dom";
 import Loader from "../../Components/Loader";
 const Administration = () => {
   const navigate = useNavigate();
-  const [data, setData] = useState({
-    courses: [],
-    challenges: [],
-  });
+
   const [loadingPage, setLoadingPage] = useState(true);
+  const [courses, setCourses] = useState([]);
+  const [challenges, setChallenges] = useState([]);
   useEffect(() => {
     axios
       .get(`/challenges-for-owner`)
       .then((res) => {
-        setData(res.data);
+        setCourses(res.data.courses);
+        setChallenges(res.data.challenges);
         setLoadingPage(false);
       })
       .catch((error) => {
@@ -42,13 +42,13 @@ const Administration = () => {
     {
       title: "Manage Courses",
       eventKey: "ManageCourses",
-      TabComponent: <ManageCourses courses={data.courses} />,
+      TabComponent: <ManageCourses courses={courses} setCourses={setCourses} />,
       urlPattern: "/administration/courses",
     },
     {
       title: "Manage Challenges",
       eventKey: "ManageChallenges",
-      TabComponent: <ManageChallenges challenges={data.challenges} />,
+      TabComponent: <ManageChallenges challenges={challenges} />,
       urlPattern: "/administration/challenges",
     },
   ];
