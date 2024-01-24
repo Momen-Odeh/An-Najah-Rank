@@ -130,12 +130,12 @@ const ContestView = () => {
               "University Number",
               "Name",
               ...challengeContest.map(
-                (c) => c.Name + `(${c.maxScoreForChallenge})`
+                (c) => c.Name + `/${c.maxScoreForChallenge}`
               ),
-              `Total Result(${challengeContest.reduce(
+              `Total Result/${challengeContest.reduce(
                 (sum, challenge) => sum + challenge.maxScoreForChallenge,
                 0
-              )})`,
+              )}`,
             ]}
             TableData={contestsResult?.filter((item) =>
               item.Name?.toLowerCase().includes(search.toLowerCase())
