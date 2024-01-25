@@ -4,6 +4,8 @@ from MySQL_SetUp import connection
 from dataBaseConnection import execute_query, fetch_results
 from guard.AccessChallenge import accessChallenge
 from guard.professorAccess.AccessChallengeProfessor import accessChallengeProfessor
+from fileManagment.getFileAWS import get_file_from_AWS
+from fileManagment.getFileContent import get_file_content
 import json
 import datetime
 @app.route('/challenge/<int:id>', methods=['GET'])
@@ -75,6 +77,14 @@ def getChallenge(id):
                             """
             stat = fetch_results(execute_query(connection, sql), )
             print(stat)
+            ##################################################################
+            languages_base_files = []
+            languages = json.loads(result[13])
+            for item in languages:
+                language, key = item["language"], item["content"]
+                code = get_file_content(key)
+                languages_base_files.append({"language": language, "content" : code, "type": item["type"]})
+            ##################################################################
             return jsonify({
                     "status": f"ok",
                     "id": result[0],
@@ -86,7 +96,7 @@ def getChallenge(id):
                     "constraints": result[6],
                     "outputFormat": result[7],
                     "challengePrivacy": True if result[12] == "public" else False,
-                    "challengeLanguage": json.loads(result[13]),
+                    "challengeLanguage": languages_base_files,
                     "tags": json.loads(result[8]),
                     "created_at": result[9],
                     "updated_at": result[10],
