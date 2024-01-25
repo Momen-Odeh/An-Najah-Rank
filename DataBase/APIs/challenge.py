@@ -3,6 +3,10 @@ from flask import request, jsonify
 import json
 from dataBaseConnection import insert_data, update_data, delete_data
 from MySQL_SetUp import connection
+from BaseCodeFiles.uploadBaseFileToAWS import upload_base_file_to_aws
+from fileManagment.deleteFileAWS import delete_file_from_AWS
+
+
 @app.route('/challenges', methods=['POST'])
 def add_challenge():
     try:
@@ -10,7 +14,15 @@ def add_challenge():
         tokenData = getattr(request, 'tokenData', None)
         ownerUniversityNumber = tokenData['universityNumber']
         converted_tags = json.dumps(data['tags'])
-        converted_languages = json.dumps(data['challengeLanguage'])
+        #############################################
+        # [{ language: "Java", type: "default", content: "" }]
+        languages_base_files = []
+        for item in data['challengeLanguage']:
+            language, code = item["language"], item["content"]
+            key = upload_base_file_to_aws(language, code)
+            languages_base_files.append({"language": language, "content": key, "type": item["type"]})
+        #############################################
+        converted_languages = json.dumps(languages_base_files)
         result = insert_data(
             connection,
             'challenges',
@@ -76,7 +88,32 @@ def update_challenge(id):
     try:
         data = request.get_json()
         converted_tags = json.dumps(data['tags'])
-        converted_languages = json.dumps(data['challengeLanguage'])
+        # converted_languages = json.dumps(data['challengeLanguage'])
+        #############################################
+
+        cursor = connection.cursor()
+        cursor.execute(f"""SELECT challengeLanguage FROM challenges WHERE id = '{id}';""")
+        result = json.loads(cursor.fetchone()[0])
+        # [{ language: "Java", type: "default", content: "" }]
+        languages_base_files = []
+        for item in data['challengeLanguage']:
+            language, code = item["language"], item["content"]
+            found_object = None
+            for obj in result:
+                if obj.get("language", "").lower() == language.lower():
+                    found_object = obj
+                    break
+            if found_object:
+                if code is not None:
+                    delete_file_from_AWS(found_object["content"])
+                    key = upload_base_file_to_aws(language, code)
+                    languages_base_files.append({"language": language, "content": key, "type": item["type"]})
+                else:
+                    languages_base_files.append(found_object)
+            else:
+                key = upload_base_file_to_aws(language, code)
+                languages_base_files.append({"language": language, "content": key, "type": item["type"]})
+        #############################################
         condition = 'id = %s'
         new_values = (
             data['name'],
@@ -88,7 +125,7 @@ def update_challenge(id):
             data['output_format'],
             converted_tags,
             "public" if data['challengePrivacy'] is True else "private",
-            converted_languages,
+            json.dumps(languages_base_files),
             id
         )
         result = update_data(
