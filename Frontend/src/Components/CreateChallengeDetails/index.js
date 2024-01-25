@@ -12,6 +12,57 @@ import useStyle from "./style";
 import LoaderRank from "../LoaderRank";
 import { toastError } from "../../Utils/toast";
 import CheckRank from "../CheckRank";
+const defaultLang = {
+  Java: `  import java.io.*;
+  import java.util.*;
+  
+  class Main {
+  
+      public static void main(String[] args) {
+          /* Enter your code here. Read input from STDIN. Print output to STDOUT. Your class should be named Solution. */
+      }
+  }`,
+  C: `  #include <stdio.h>
+  #include <string.h>
+  #include <math.h>
+  #include <stdlib.h>
+  
+  int main() {
+  
+      /* Enter your code here. Read input from STDIN. Print output to STDOUT */    
+      return 0;
+  }`,
+  "C++": `  #include <cmath>
+  #include <cstdio>
+  #include <vector>
+  #include <iostream>
+  #include <algorithm>
+  using namespace std;
+  
+  
+  int main() {
+      /* Enter your code here. Read input from STDIN. Print output to STDOUT */   
+      return 0;
+  }
+  `,
+  Python: `# Enter your code here. Read input from STDIN. Print output to STDOUT`,
+  JavaScript: `function processData(input) {
+    //Enter your code here
+} 
+
+process.stdin.resume();
+process.stdin.setEncoding("ascii");
+_input = "";
+process.stdin.on("data", function (input) {
+    _input += input;
+});
+
+process.stdin.on("end", function () {
+   processData(_input);
+});
+`,
+  regularexpression: ``,
+};
 const CreateChallengeDetails = ({ operation, data }) => {
   const [loading, setLoading] = useState(false);
   const { id } = useParams();
@@ -19,11 +70,15 @@ const CreateChallengeDetails = ({ operation, data }) => {
   const [details, setDetails] = useState({
     difficulty: "Easy",
     challengeLanguage: [
-      { language: "Java", type: "default" },
-      { language: "C", type: "default" },
-      { language: "C++", type: "default" },
-      { language: "Python", type: "default" },
-      { language: "JavaScript", type: "upload" },
+      { language: "Java", type: "default", content: defaultLang["Java"] },
+      { language: "C", type: "default", content: defaultLang["C"] },
+      { language: "C++", type: "default", content: defaultLang["C++"] },
+      { language: "Python", type: "default", content: defaultLang["Python"] },
+      {
+        language: "JavaScript",
+        type: "default",
+        content: defaultLang["JavaScript"],
+      },
     ],
     name: "",
     description: "",
@@ -34,6 +89,7 @@ const CreateChallengeDetails = ({ operation, data }) => {
     challengePrivacy: false,
     tags: [],
   });
+
   console.log("******* ====>", details);
   // const [javaBase, setJavaBase] = useState(true); //***************************************************************************************** */
   const [errorMsg, setErrorMsg] = useState({
@@ -154,6 +210,27 @@ const CreateChallengeDetails = ({ operation, data }) => {
       }
     }
   };
+
+  const handleFileInputChange = (event, language) => {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const content = e.target.result;
+        setDetails({
+          ...details,
+          challengeLanguage: details.challengeLanguage.map((item) => {
+            if (item.language === language) {
+              return { ...item, content: content };
+            }
+            return item;
+          }),
+        });
+      };
+
+      reader.readAsText(file);
+    }
+  };
   const classes = useStyle();
   return (
     <Container fluid>
@@ -215,7 +292,11 @@ const CreateChallengeDetails = ({ operation, data }) => {
                           ...details,
                           challengeLanguage: [
                             ...details.challengeLanguage,
-                            { language: item }, //*********************************** */
+                            {
+                              language: item,
+                              type: "default",
+                              content: defaultLang[item],
+                            }, //*********************************** */
                           ],
                         })
                       : setDetails({
@@ -259,9 +340,11 @@ const CreateChallengeDetails = ({ operation, data }) => {
                         return {
                           language: itemLang.language,
                           type: "default",
+                          content: defaultLang[itemLang.language],
                         };
                       else return i;
                     });
+                    console.log(arrLang);
                     setDetails({ ...details, challengeLanguage: arrLang });
                   }} /*************************************** */
                 />
@@ -277,6 +360,7 @@ const CreateChallengeDetails = ({ operation, data }) => {
                         return {
                           language: itemLang.language,
                           type: "upload",
+                          content: null,
                         };
                       else return i;
                     });
@@ -288,7 +372,12 @@ const CreateChallengeDetails = ({ operation, data }) => {
             {itemLang.type === "upload" && (
               <Row className="mt-3">
                 <Col>
-                  <InputFiledRank type={"file"} />
+                  <InputFiledRank
+                    type={"file"}
+                    onChange={(e) =>
+                      handleFileInputChange(e, itemLang.language)
+                    }
+                  />
                 </Col>
               </Row>
             )}

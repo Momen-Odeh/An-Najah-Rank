@@ -84,6 +84,7 @@ def getChallenge(id):
                 language, key = item["language"], item["content"]
                 code = get_file_content(key)
                 languages_base_files.append({"language": language, "content" : code, "type": item["type"]})
+            print(languages_base_files)
             ##################################################################
             return jsonify({
                     "status": f"ok",

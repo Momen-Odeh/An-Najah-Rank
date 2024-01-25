@@ -47,7 +47,7 @@ from EmailAuth.createVerificationCode import resendVerificationCode
 from APIs.deleteContest import delete_contests
 from APIs.deleteCourse import delete_courses
 import logging
-
+import json
 log_file = 'app.log'
 logging.basicConfig(filename=log_file, level=logging.DEBUG)
 
