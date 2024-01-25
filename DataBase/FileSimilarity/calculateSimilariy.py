@@ -7,6 +7,7 @@ from MySQL_SetUp import connection
 from AWS_SetUp import *
 from fileManagment.getFileExtention import get_file_extension
 from MOSS import moss
+import json
 
 
 
@@ -19,13 +20,30 @@ def downloadSubmitionFileAWS(submitionFileName,submitionsKeys):
         print(localFilePath)
         s3.download_file(S3_BUCKET, key, localFilePath)
 
-def similarityDataByMOSS(basePath,filesName):
-    m = moss.Moss()
-    for fileName in filesName:
-        m.addFile(basePath+"/"+fileName)
-    url = m.send(lambda file_path, display_name: print('*', end='', flush=True))
-    print("Report URL: " + url)
-    return url
+def similarityDataByMOSS(basePath,filesName,challengeId):
+    try:
+        m = moss.Moss()
+        os.makedirs("FileSimilarity/baseFile", exist_ok=True)
+        # add base file
+        sql = f""" SELECT challengeLanguage FROM challenges WHERE id = '{challengeId}'; """
+        cursor = connection.cursor()
+        cursor.execute(sql)
+        result_lang = json.loads(cursor.fetchone()[0]) # [{language:"",content:"key",type:""}]
+        # print("+++++++++++",result_lang,"++++++++++++++++")
+        for lang in result_lang:
+            localFilePath = os.path.abspath(os.path.join("FileSimilarity/baseFile", f"file.{get_file_extension(lang['content'])}"))
+            # print("+++++++++++++++++++++++++++++++++", localFilePath, "+++++++++++++++++++++++++++++++++")
+            s3.download_file(S3_BUCKET, lang['content'], localFilePath)
+            m.addBaseFile(localFilePath)
+        #
+        for fileName in filesName:
+            m.addFile(basePath+"/"+fileName)
+        url = m.send(lambda file_path, display_name: print('*', end='', flush=True))
+        print("Report URL: " + url)
+        shutil.rmtree("FileSimilarity/baseFile")
+        return url
+    except Exception as e:
+        print(e)
 
 def getSimilarityURL(contestId, challengeId):
     sql = f"""
@@ -48,7 +66,7 @@ def getSimilarityURL(contestId, challengeId):
     # ******************************************************************************************************************
     file_list = [f for f in os.listdir(submitionFileName) if os.path.isfile(os.path.join(submitionFileName, f))]
     # add files on moss generate similarity uri
-    dataURL = similarityDataByMOSS(submitionFileName,file_list)
+    dataURL = similarityDataByMOSS(submitionFileName,file_list,challengeId)
     # ************************************************ remove directory ************************************************
     shutil.rmtree(submitionFileName) #remove directory with content
     # ******************************************************************************************************************
