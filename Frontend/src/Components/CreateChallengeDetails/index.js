@@ -63,7 +63,7 @@ process.stdin.on("end", function () {
 `,
   regularexpression: ``,
 };
-const CreateChallengeDetails = ({ operation, data }) => {
+const CreateChallengeDetails = ({ operation, data, setData }) => {
   const [loading, setLoading] = useState(false);
   const { id } = useParams();
   const languages = ["Java", "C", "C++", "Python", "JavaScript", "Regex"];
@@ -283,6 +283,32 @@ const CreateChallengeDetails = ({ operation, data }) => {
             }),
           };
           await axios.put(`/challenges/${id}`, challenge);
+          setData({
+            ...details,
+            challengeLanguage: details.challengeLanguage.map((item) => {
+              const oldData = data.challengeLanguage.find(
+                (lang) => lang.language === item.language
+              );
+              if (oldData) {
+                if (
+                  oldData.type === "upload" &&
+                  item.type === "upload" &&
+                  item.content === null
+                ) {
+                  return oldData;
+                } else if (
+                  oldData.type === "default" &&
+                  item.type === "default"
+                ) {
+                  return oldData;
+                } else {
+                  return item;
+                }
+              } else {
+                return item;
+              }
+            }),
+          });
           navigate(`/administration/challenges/${id}/test-cases`);
         }
         setLoading(false);

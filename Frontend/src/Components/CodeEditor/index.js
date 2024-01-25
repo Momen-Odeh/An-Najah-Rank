@@ -10,68 +10,16 @@ import axios from "axios";
 import TestCaseProblem from "../TestCaseProblem";
 import { FaCheck } from "react-icons/fa";
 import { ImCross } from "react-icons/im";
-import BackEndURI from "../../Utils/BackEndURI";
 import { useNavigate, useParams } from "react-router-dom";
 import { toastError } from "../../Utils/toast";
 
-const defaultLang = {
-  java: `  import java.io.*;
-  import java.util.*;
-  
-  class Main {
-  
-      public static void main(String[] args) {
-          /* Enter your code here. Read input from STDIN. Print output to STDOUT. Your class should be named Solution. */
-      }
-  }`,
-  c: `  #include <stdio.h>
-  #include <string.h>
-  #include <math.h>
-  #include <stdlib.h>
-  
-  int main() {
-  
-      /* Enter your code here. Read input from STDIN. Print output to STDOUT */    
-      return 0;
-  }`,
-  cpp: `  #include <cmath>
-  #include <cstdio>
-  #include <vector>
-  #include <iostream>
-  #include <algorithm>
-  using namespace std;
-  
-  
-  int main() {
-      /* Enter your code here. Read input from STDIN. Print output to STDOUT */   
-      return 0;
-  }
-  `,
-  python: `# Enter your code here. Read input from STDIN. Print output to STDOUT`,
-  javascript: `function processData(input) {
-    //Enter your code here
-} 
-
-process.stdin.resume();
-process.stdin.setEncoding("ascii");
-_input = "";
-process.stdin.on("data", function (input) {
-    _input += input;
-});
-
-process.stdin.on("end", function () {
-   processData(_input);
-});
-`,
-  regularexpression: ``,
-};
 const choices = [
   { title: "Java", value: "java" },
   { title: "C", value: "c" },
   { title: "C++", value: "cpp" },
   { title: "Python", value: "python" },
   { title: "JavaScript", value: "javascript" },
-  { title: "Regex", value: "regularexpression" },
+  { title: "Regex", value: "Regex" },
 ];
 
 const CodeEditor = () => {
@@ -79,7 +27,8 @@ const CodeEditor = () => {
   const { id, contestId, challengeId } = useParams();
   const navigate = useNavigate();
   const [dark, setDark] = useState(false);
-  const [language, setLanguage] = useState("java");
+  const [defaultLang, setDefaultLang] = useState({});
+  const [language, setLanguage] = useState("");
   const [textCode, setTextCode] = useState("");
   const context = useContext(ChallengeContext);
   console.log("language", language);
@@ -251,6 +200,15 @@ const CodeEditor = () => {
   };
   const [loading, setLoading] = useState(true);
   useEffect(() => {
+    const defaultLangObject = {};
+    const challengeLanguage = context.challengeData.challengeLanguage;
+    for (let i = 0; i < challengeLanguage.length; i++) {
+      const item = challengeLanguage[i];
+      const cho = choices.find((ch) => ch.title === item.language);
+      defaultLangObject[cho.value] = item.content;
+    }
+    setDefaultLang(defaultLangObject);
+
     if (localStorage.getItem("challenge " + challengeId)) {
       const storedData = JSON.parse(
         localStorage.getItem("challenge " + challengeId)
@@ -260,7 +218,8 @@ const CodeEditor = () => {
       setTextCode(storedData.code);
     } else {
       const lang = choices?.filter(
-        (item) => context.challengeData.challengeLanguage[0] === item.title
+        (item) =>
+          context.challengeData.challengeLanguage[0].language === item.title
       )[0]?.value;
       setTextCode(defaultLang[lang]);
       setLanguage(lang);
@@ -292,7 +251,9 @@ const CodeEditor = () => {
           />
           <SelectionGroup
             choices={choices.filter((item) =>
-              context.challengeData.challengeLanguage.includes(item.title)
+              context.challengeData.challengeLanguage.find(
+                (lang) => lang.language === item.title
+              )
             )}
             language={{
               value: language,

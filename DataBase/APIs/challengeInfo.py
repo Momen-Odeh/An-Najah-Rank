@@ -4,10 +4,8 @@ from MySQL_SetUp import connection
 from dataBaseConnection import execute_query, fetch_results
 from guard.AccessChallenge import accessChallenge
 from guard.professorAccess.AccessChallengeProfessor import accessChallengeProfessor
-from fileManagment.getFileAWS import get_file_from_AWS
 from fileManagment.getFileContent import get_file_content
 import json
-import datetime
 @app.route('/challenge/<int:id>', methods=['GET'])
 def getChallenge(id):
     try:
