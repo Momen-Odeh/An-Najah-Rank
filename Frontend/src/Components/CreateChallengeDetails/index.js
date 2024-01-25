@@ -100,6 +100,7 @@ const CreateChallengeDetails = ({ operation, data }) => {
     constraints: null,
     outputFormat: null,
     language: null,
+    challengeLanguage: [null, null, null, null, null, null],
   });
   useEffect(() => {
     if (operation === "create") {
@@ -120,7 +121,14 @@ const CreateChallengeDetails = ({ operation, data }) => {
             }
           }
         });
-    } else if (data) setDetails(data);
+    } else if (data) {
+      setDetails({
+        ...data,
+        challengeLanguage: data.challengeLanguage.map((item) => {
+          return { ...item, content: null };
+        }),
+      });
+    }
   }, [data]);
   console.log(details);
   const navigate = useNavigate();
@@ -179,6 +187,32 @@ const CreateChallengeDetails = ({ operation, data }) => {
             details.challengeLanguage?.length > 1
           ? "Regex must be alone"
           : null,
+      challengeLanguage: details.challengeLanguage.map((item) => {
+        if (item.content === null) {
+          if (operation === "create") {
+            return "please upload a base file or choose default";
+          } else {
+            const oldData = data.challengeLanguage.find(
+              (lang) => lang.language === item.language
+            );
+            if (oldData) {
+              if (oldData.type === "default" && item.type === "default") {
+                return null;
+              } else if (
+                oldData.type === "upload" &&
+                item.type === "upload" &&
+                item.content === null
+              ) {
+                return null;
+              } else return "please upload a base file or choose default";
+            } else {
+              return "please upload a base file or choose default";
+            }
+          }
+        } else {
+          return null;
+        }
+      }),
     });
 
     if (
@@ -191,7 +225,35 @@ const CreateChallengeDetails = ({ operation, data }) => {
       ((details.challengeLanguage?.length > 0 &&
         !details.challengeLanguage.map((x) => x.language)?.includes("Regex")) || //************************* update  */
         (details.challengeLanguage.map((x) => x.language)?.includes("Regex") &&
-          details.challengeLanguage?.length === 1))
+          details.challengeLanguage?.length === 1)) &&
+      !details.challengeLanguage
+        .map((item) => {
+          if (item.content === null) {
+            if (operation === "create") {
+              return false;
+            } else {
+              const oldData = data.challengeLanguage.find(
+                (lang) => lang.language === item.language
+              );
+              if (oldData) {
+                if (oldData.type === "default" && item.type === "default") {
+                  return true;
+                } else if (
+                  oldData.type === "upload" &&
+                  item.type === "upload" &&
+                  item.content === null
+                ) {
+                  return true;
+                } else return false;
+              } else {
+                return false;
+              }
+            }
+          } else {
+            return true;
+          }
+        })
+        .includes(false)
     ) {
       setLoading(true);
       try {
@@ -199,13 +261,34 @@ const CreateChallengeDetails = ({ operation, data }) => {
           const res = await axios.post("/challenges", challenge);
           navigate(`/administration/challenges/${res.data.message}/test-cases`);
         } else {
+          challenge = {
+            ...challenge,
+            challengeLanguage: challenge.challengeLanguage.map((item) => {
+              const oldData = data.challengeLanguage.find(
+                (lang) => lang.language === item.language
+              );
+              if (oldData) {
+                if (oldData.type === "default" && item.type === "default") {
+                  return { ...item, content: null };
+                } else if (
+                  oldData.type === "upload" &&
+                  item.type === "upload" &&
+                  item.content === null
+                ) {
+                  return { ...item, content: null };
+                } else return item;
+              } else {
+                return item;
+              }
+            }),
+          };
           await axios.put(`/challenges/${id}`, challenge);
           navigate(`/administration/challenges/${id}/test-cases`);
         }
         setLoading(false);
       } catch (error) {
         console.log(error);
-        toastError(error.response.data.message);
+        toastError(error?.response?.data?.message);
         setLoading(false);
       }
     }
@@ -332,7 +415,7 @@ const CreateChallengeDetails = ({ operation, data }) => {
               <Col xs={"auto"} className="ms-3">
                 <CheckRank
                   type={"radio"}
-                  label={"Use defualt file"}
+                  label={"Use default file"}
                   checked={itemLang.type === "default"}
                   onChange={() => {
                     let arrLang = details.challengeLanguage.map((i) => {
@@ -368,6 +451,11 @@ const CreateChallengeDetails = ({ operation, data }) => {
                   }}
                 />
               </Col>
+              {errorMsg.challengeLanguage[indexLang] !== null && (
+                <span className={`${classes.msg} ms-3`}>
+                  * {errorMsg.challengeLanguage[indexLang]}
+                </span>
+              )}
             </Row>
             {itemLang.type === "upload" && (
               <Row className="mt-3">
