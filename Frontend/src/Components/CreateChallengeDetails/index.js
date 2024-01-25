@@ -18,7 +18,13 @@ const CreateChallengeDetails = ({ operation, data }) => {
   const languages = ["Java", "C", "C++", "Python", "JavaScript", "Regex"];
   const [details, setDetails] = useState({
     difficulty: "Easy",
-    challengeLanguage: ["Java", "C", "Python", "JavaScript", "C++"],
+    challengeLanguage: [
+      { language: "Java", type: "default" },
+      { language: "C", type: "default" },
+      { language: "C++", type: "default" },
+      { language: "Python", type: "default" },
+      { language: "JavaScript", type: "upload" },
+    ],
     name: "",
     description: "",
     problemStatement: "",
@@ -28,6 +34,8 @@ const CreateChallengeDetails = ({ operation, data }) => {
     challengePrivacy: false,
     tags: [],
   });
+  console.log("******* ====>", details);
+  // const [javaBase, setJavaBase] = useState(true); //***************************************************************************************** */
   const [errorMsg, setErrorMsg] = useState({
     name: null,
     description: null,
@@ -109,7 +117,9 @@ const CreateChallengeDetails = ({ operation, data }) => {
       language:
         details.challengeLanguage?.length === 0
           ? "please choose challenge languages"
-          : details.challengeLanguage?.includes("Regex") &&
+          : details.challengeLanguage
+              .map((x) => x.language)
+              ?.includes("Regex") && //************************* update  */
             details.challengeLanguage?.length > 1
           ? "Regex must be alone"
           : null,
@@ -123,8 +133,8 @@ const CreateChallengeDetails = ({ operation, data }) => {
       challenge.constraints?.length !== 0 &&
       challenge.output_format?.length !== 0 &&
       ((details.challengeLanguage?.length > 0 &&
-        !details.challengeLanguage?.includes("Regex")) ||
-        (details.challengeLanguage?.includes("Regex") &&
+        !details.challengeLanguage.map((x) => x.language)?.includes("Regex")) || //************************* update  */
+        (details.challengeLanguage.map((x) => x.language)?.includes("Regex") &&
           details.challengeLanguage?.length === 1))
     ) {
       setLoading(true);
@@ -195,7 +205,9 @@ const CreateChallengeDetails = ({ operation, data }) => {
                 <CheckRank
                   type={"checkbox"}
                   label={item}
-                  checked={details.challengeLanguage?.includes(item)}
+                  checked={details.challengeLanguage
+                    ?.map((x) => x.language)
+                    ?.includes(item)}
                   name={item}
                   onChange={(e) => {
                     e.target.checked
@@ -203,13 +215,13 @@ const CreateChallengeDetails = ({ operation, data }) => {
                           ...details,
                           challengeLanguage: [
                             ...details.challengeLanguage,
-                            item,
+                            { language: item }, //*********************************** */
                           ],
                         })
                       : setDetails({
                           ...details,
                           challengeLanguage: details.challengeLanguage.filter(
-                            (i) => i !== item
+                            (i) => i.language !== item
                           ),
                         });
                   }}
@@ -223,6 +235,67 @@ const CreateChallengeDetails = ({ operation, data }) => {
           )}
         </Col>
       </Row>
+      {/* ************************************************************************ 00000000000000000000000000000000000000000000*/}
+      {details.challengeLanguage.map((itemLang, indexLang) => (
+        <Row className="mb-3" key={indexLang}>
+          <Col xs={"auto"} className={classes.TitleFiled}>
+            <Text
+              fontFamily="Open Sans"
+              text={itemLang.language + " Base File"}
+              height={"40px"}
+              wegiht={"600"}
+            />
+          </Col>
+          <Col className={classes.ColInputFiled}>
+            <Row>
+              <Col xs={"auto"} className="ms-3">
+                <CheckRank
+                  type={"radio"}
+                  label={"Use defualt file"}
+                  checked={itemLang.type === "default"}
+                  onChange={() => {
+                    let arrLang = details.challengeLanguage.map((i) => {
+                      if (i.language === itemLang.language)
+                        return {
+                          language: itemLang.language,
+                          type: "default",
+                        };
+                      else return i;
+                    });
+                    setDetails({ ...details, challengeLanguage: arrLang });
+                  }} /*************************************** */
+                />
+              </Col>
+              <Col className="ms-3">
+                <CheckRank
+                  type={"radio"}
+                  label={"Upload base file"}
+                  checked={itemLang.type === "upload"}
+                  onChange={() => {
+                    let arrLang = details.challengeLanguage.map((i) => {
+                      if (i.language === itemLang.language)
+                        return {
+                          language: itemLang.language,
+                          type: "upload",
+                        };
+                      else return i;
+                    });
+                    setDetails({ ...details, challengeLanguage: arrLang });
+                  }}
+                />
+              </Col>
+            </Row>
+            {itemLang.type === "upload" && (
+              <Row className="mt-3">
+                <Col>
+                  <InputFiledRank type={"file"} />
+                </Col>
+              </Row>
+            )}
+          </Col>
+        </Row>
+      ))}
+      {/*  */}
       <Row className="mb-3">
         <Col xs={"auto"} className={classes.TitleFiled}>
           <Text
