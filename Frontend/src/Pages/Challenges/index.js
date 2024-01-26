@@ -23,6 +23,7 @@ const Challenges = () => {
     constraints: null,
     outputFormat: null,
     challengePrivacy: false,
+    challengeLanguage: [],
     tags: [],
   });
   const [testCasesData, setTestCasesData] = useState([]);
@@ -74,7 +75,11 @@ const Challenges = () => {
       title: "Details",
       eventKey: "Details",
       TabComponent: (
-        <CreateChallengeDetails operation={"update"} data={details} />
+        <CreateChallengeDetails
+          operation={"update"}
+          data={details}
+          setData={setDetails}
+        />
       ),
       urlPattern: `/administration/challenges/${id}/details`,
     },

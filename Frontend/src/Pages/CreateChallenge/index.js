@@ -5,27 +5,6 @@ import Text from "../../Components/Text";
 import { Container, Row } from "react-bootstrap";
 import useStyles from "./style";
 const CreateChallenge = () => {
-  const [details, setDetails] = useState({
-    difficulty: "Easy",
-    name: null,
-    description: null,
-    problemStatement: null,
-    inputFormat: null,
-    constraints: null,
-    outputFormat: null,
-    tags: [],
-  });
-
-  const handleChange = (e, nameVal = null, val = null) => {
-    if (e) {
-      const { name, value } = e.target;
-      console.log(details);
-      setDetails({ ...details, [name]: value });
-    } else {
-      setDetails({ ...details, [nameVal]: val });
-      console.log(details);
-    }
-  };
   const classes = useStyles();
   return (
     <Container fluid className={classes.Container}>
@@ -42,11 +21,7 @@ const CreateChallenge = () => {
         />
       </Row>
       <Row className="m-2">
-        <CreateChallengeDetails
-          operation={"create"}
-          details={details}
-          handleChange={handleChange}
-        />
+        <CreateChallengeDetails operation={"create"} details={null} />
       </Row>
     </Container>
   );

@@ -2,7 +2,7 @@ import subprocess
 from flask import jsonify
 from codeCompilationAndRun.storeCodeFile import saveCodeToFile
 import os
-
+import shutil
 # --------------------------------------------------------------------------------- compile code
 
 
@@ -55,16 +55,21 @@ def runJavaCode(folderPath, java_class_name, input_data, timeout=10):
 
 
 def compileAndRunJavaCode(code, input_data):
+    dir_path = "code/JavaCode"
     try:
-        codePath = saveCodeToFile("javaTest", "java", "code/Momen", code)
+        os.makedirs(dir_path, exist_ok=True)
+        codePath = saveCodeToFile("javaTest", "java", dir_path, code)
         folderPath = os.path.dirname(codePath)
         success, std = compileJavaCode(codePath)
         if success:
             output = runJavaCode(folderPath, "Main", input_data)
+            shutil.rmtree(dir_path)
             return jsonify({'output': output}), 200
         else:
+            shutil.rmtree(dir_path)
             return jsonify({'error': 'Compile time error', 'stderr': std}), 400
     except Exception as e:
+        shutil.rmtree(dir_path)
         return jsonify({'error': str(e)}), 500
 
 
