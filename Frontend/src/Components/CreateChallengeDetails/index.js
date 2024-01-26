@@ -426,78 +426,80 @@ const CreateChallengeDetails = ({ operation, data, setData }) => {
         </Col>
       </Row>
       {/* ************************************************************************ 00000000000000000000000000000000000000000000*/}
-      {details.challengeLanguage.map((itemLang, indexLang) => (
-        <Row className="mb-3" key={indexLang}>
-          <Col xs={"auto"} className={classes.TitleFiled}>
-            <Text
-              fontFamily="Open Sans"
-              text={itemLang.language + " Base File"}
-              height={"40px"}
-              wegiht={"600"}
-            />
-          </Col>
-          <Col className={classes.ColInputFiled}>
-            <Row>
-              <Col xs={"auto"} className="ms-3">
-                <CheckRank
-                  type={"radio"}
-                  label={"Use default file"}
-                  checked={itemLang.type === "default"}
-                  onChange={() => {
-                    let arrLang = details.challengeLanguage.map((i) => {
-                      if (i.language === itemLang.language)
-                        return {
-                          language: itemLang.language,
-                          type: "default",
-                          content: defaultLang[itemLang.language],
-                        };
-                      else return i;
-                    });
-                    console.log(arrLang);
-                    setDetails({ ...details, challengeLanguage: arrLang });
-                  }} /*************************************** */
-                />
-              </Col>
-              <Col className="ms-3">
-                <CheckRank
-                  type={"radio"}
-                  label={"Upload base file"}
-                  checked={itemLang.type === "upload"}
-                  onChange={() => {
-                    let arrLang = details.challengeLanguage.map((i) => {
-                      if (i.language === itemLang.language)
-                        return {
-                          language: itemLang.language,
-                          type: "upload",
-                          content: null,
-                        };
-                      else return i;
-                    });
-                    setDetails({ ...details, challengeLanguage: arrLang });
-                  }}
-                />
-              </Col>
-              {errorMsg.challengeLanguage[indexLang] !== null && (
-                <span className={`${classes.msg} ms-3`}>
-                  * {errorMsg.challengeLanguage[indexLang]}
-                </span>
-              )}
-            </Row>
-            {itemLang.type === "upload" && (
-              <Row className="mt-3">
-                <Col>
-                  <InputFiledRank
-                    type={"file"}
-                    onChange={(e) =>
-                      handleFileInputChange(e, itemLang.language)
-                    }
+      {details.challengeLanguage
+        .filter((data) => data.language !== "Regex")
+        .map((itemLang, indexLang) => (
+          <Row className="mb-3" key={indexLang}>
+            <Col xs={"auto"} className={classes.TitleFiled}>
+              <Text
+                fontFamily="Open Sans"
+                text={itemLang.language + " Base File"}
+                height={"40px"}
+                wegiht={"600"}
+              />
+            </Col>
+            <Col className={classes.ColInputFiled}>
+              <Row>
+                <Col xs={"auto"} className="ms-3">
+                  <CheckRank
+                    type={"radio"}
+                    label={"Use default file"}
+                    checked={itemLang.type === "default"}
+                    onChange={() => {
+                      let arrLang = details.challengeLanguage.map((i) => {
+                        if (i.language === itemLang.language)
+                          return {
+                            language: itemLang.language,
+                            type: "default",
+                            content: defaultLang[itemLang.language],
+                          };
+                        else return i;
+                      });
+                      console.log(arrLang);
+                      setDetails({ ...details, challengeLanguage: arrLang });
+                    }} /*************************************** */
                   />
                 </Col>
+                <Col className="ms-3">
+                  <CheckRank
+                    type={"radio"}
+                    label={"Upload base file"}
+                    checked={itemLang.type === "upload"}
+                    onChange={() => {
+                      let arrLang = details.challengeLanguage.map((i) => {
+                        if (i.language === itemLang.language)
+                          return {
+                            language: itemLang.language,
+                            type: "upload",
+                            content: null,
+                          };
+                        else return i;
+                      });
+                      setDetails({ ...details, challengeLanguage: arrLang });
+                    }}
+                  />
+                </Col>
+                {errorMsg.challengeLanguage[indexLang] !== null && (
+                  <span className={`${classes.msg} ms-3`}>
+                    * {errorMsg.challengeLanguage[indexLang]}
+                  </span>
+                )}
               </Row>
-            )}
-          </Col>
-        </Row>
-      ))}
+              {itemLang.type === "upload" && (
+                <Row className="mt-3">
+                  <Col>
+                    <InputFiledRank
+                      type={"file"}
+                      onChange={(e) =>
+                        handleFileInputChange(e, itemLang.language)
+                      }
+                    />
+                  </Col>
+                </Row>
+              )}
+            </Col>
+          </Row>
+        ))}
       {/*  */}
       <Row className="mb-3">
         <Col xs={"auto"} className={classes.TitleFiled}>
