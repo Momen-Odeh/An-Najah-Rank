@@ -1,6 +1,8 @@
 from codeCompilationAndRun.storeCodeFile import saveCodeToFile
 import subprocess
 from flask import jsonify
+import shutil
+import os
 def configJsCode(JSFilePath, input_data=None, timeout=10):
     try:
         result = []
@@ -30,11 +32,16 @@ def configJsCode(JSFilePath, input_data=None, timeout=10):
 
 
 def runJsCode(code, input_data=None):
+    dir_path = "code/JSCode"
     try:
-        codePath = saveCodeToFile("JavaScriptTest", "js", "code/Mohee", code)
+        os.makedirs(dir_path, exist_ok=True)
+        codePath = saveCodeToFile("JavaScriptTest", "js", dir_path, code)
         success, output = configJsCode(codePath, input_data)
         if success is False:
+            shutil.rmtree(dir_path)
             return jsonify({'error': 'Compile time error', 'stderr': output}), 400
+        shutil.rmtree(dir_path)
         return jsonify({'output': output})
     except Exception as e:
+        shutil.rmtree(dir_path)
         return jsonify({'error': str(e)}), 500

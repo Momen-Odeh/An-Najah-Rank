@@ -52,9 +52,10 @@ def FileSimilarity():
             "contestId":contestId,
             "filesSimilarity": result
         }
-
+        simStuId = []
         for index, f in enumerate(result["filesSimilarity"]):
             idUNV = f["fileName"].split("-")[-1]
+            simStuId.append(idUNV)
             simNumLine = f["totalNumSimilarityLine"]
             # add condition to get last file
             sql = f"""
@@ -76,7 +77,11 @@ def FileSimilarity():
                         f"studentUniversityNumber = '{idUNV}';")
         # **************************************************************************************************************
         update_data(connection, 'student_submissions', ["similarity"], (0),
-                    f"`similarity` IS NULL and `id` >= 0;")
+                    f"studentUniversityNumber NOT IN {tuple(simStuId)} "
+                    f"and contestId= '{contestId}' and challengeId = '{challengeId}'")
+
+        # update_data(connection, 'student_submissions', ["similarity"], (0),
+        #             f"`similarity` IS NULL and `id` >= 0;")
         if len(oldKey) == 0:
             return {"message": "not found contest or challenge"}, 404
         oldKey = oldKey[0][0]

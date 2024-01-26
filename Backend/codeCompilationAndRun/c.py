@@ -2,6 +2,7 @@ import subprocess
 from flask import jsonify
 from codeCompilationAndRun.storeCodeFile import saveCodeToFile
 import os
+import shutil
 # compile C code
 def compileCCode(cFilePath,folderPath):
     try:
@@ -48,15 +49,20 @@ def runCCode(folderPath, input_data, timeout=10):
         return [(False, None, e)]
 
 def compileAndRunCCode(code, input_data):
+    dir_path = "code/Ccode"
     try:
-        codePath = saveCodeToFile("cTest", "c", "code/Momen", code)
+        os.makedirs(dir_path, exist_ok=True)
+        codePath = saveCodeToFile("cTest", "c", dir_path, code)
         folderPath = os.path.dirname(codePath)
         folderPath += "/output.exe"
         success, std = compileCCode(codePath, folderPath)
         if success:
             output = runCCode(folderPath, input_data)
+            shutil.rmtree(dir_path)
             return jsonify({'output': output}), 200
         else:
+            shutil.rmtree(dir_path)
             return jsonify({'error': 'Compile time error', 'stderr': std}), 400
     except Exception as e:
+        shutil.rmtree(dir_path)
         return jsonify({'error': str(e)}), 500
