@@ -59,9 +59,15 @@ def FileSimilarity():
             simNumLine = f["totalNumSimilarityLine"]
             # add condition to get last file
             sql = f"""
-                            SELECT numberOfLines FROM student_submissions where 
-                            studentUniversityNumber = '{idUNV}';
-                            """
+                        SELECT numberOfLines
+                        FROM student_submissions
+                        WHERE studentUniversityNumber = '{idUNV}'
+                            AND courseNumber = '{courseId}'
+                            AND challengeId = '{challengeId}'
+                            AND contestId = '{contestId}'
+                        ORDER BY submissionTime DESC
+                        LIMIT 1;
+                    """
             cursor = execute_query(connection, sql)
             sqlRes = fetch_results(cursor)
             # print(sqlRes)
@@ -74,7 +80,10 @@ def FileSimilarity():
             result["filesSimilarity"][index]["numberOfLines"] = totalLine
             # make correction for the update **********************************************************************
             update_data(connection, 'student_submissions', ["similarity"], (sim),
-                        f"studentUniversityNumber = '{idUNV}';")
+                        f"""studentUniversityNumber = '{idUNV}' 
+                            AND courseNumber = '{courseId}'
+                            AND challengeId = '{challengeId}'
+                            AND contestId = '{contestId}';""")
         # **************************************************************************************************************
         update_data(connection, 'student_submissions', ["similarity"], (0),
                     f"studentUniversityNumber NOT IN {tuple(simStuId)} "
@@ -169,8 +178,14 @@ def getUserSimilarity():
 
         uId = desired_object["fileName"].split("-")[-1]
         sql = f"""
-                    SELECT submissionFileKey FROM student_submissions where
-                    studentUniversityNumber = '{uId}';
+                SELECT submissionFileKey
+                FROM student_submissions
+                WHERE studentUniversityNumber = '{uId}'
+                    AND courseNumber = '{courseId}'
+                    AND challengeId = '{challengeId}'
+                    AND contestId = '{contestId}'
+                ORDER BY submissionTime DESC
+                LIMIT 1;
             """
         cursor = execute_query(connection, sql)
         sqlRes = fetch_results(cursor)
@@ -181,9 +196,15 @@ def getUserSimilarity():
         for index,fileCNT in enumerate(desired_object["SimilarFiles"]):
             # print(fileCNT["similarFileName"].split("-")[-1])
             uId = fileCNT["similarFileName"].split("-")[-1]
-            sql = f"""
-                                SELECT submissionFileKey FROM student_submissions where
-                                studentUniversityNumber = '{uId}';
+            sql = f"""                
+                SELECT submissionFileKey
+                FROM student_submissions
+                WHERE studentUniversityNumber = '{uId}'
+                    AND courseNumber = '{courseId}'
+                    AND challengeId = '{challengeId}'
+                    AND contestId = '{contestId}'
+                ORDER BY submissionTime DESC
+                LIMIT 1;
                         """
             cursor = execute_query(connection, sql)
             sqlRes = fetch_results(cursor)
