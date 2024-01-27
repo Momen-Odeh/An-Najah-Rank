@@ -31,33 +31,33 @@ const CodeEditor = () => {
   const [language, setLanguage] = useState("");
   const [textCode, setTextCode] = useState("");
   const context = useContext(ChallengeContext);
-  console.log("language", language);
+  console?.log("language", language);
   const genrateTab = (arr) => {
-    return arr.map((item, index) => {
-      if (item.output_real !== undefined) {
+    return arr?.map((item, index) => {
+      if (item?.output_real !== undefined) {
         //correct code return result
         return {
           eventKey: "TestCase " + index,
           title: (
             <span>
               TestCase {index}{" "}
-              {item.correctAns ? (
-                <FaCheck className={`${classes.Icon} ${classes.IconPass}`} />
+              {item?.correctAns ? (
+                <FaCheck className={`${classes?.Icon} ${classes?.IconPass}`} />
               ) : (
-                <ImCross className={`${classes.Icon} ${classes.IconFail}`} />
+                <ImCross className={`${classes?.Icon} ${classes?.IconFail}`} />
               )}
             </span>
           ),
           TabComponent: (
             <TestCaseProblem
               title={
-                item.correctAns
-                  ? "Congratulations, you passed the sample test case."
-                  : "Your code did not pass this test case."
+                item?.correctAns
+                  ? "Congratulations, you passed the sample test case?."
+                  : "Your code did not pass this test case?."
               }
-              input={item.input_data}
-              outputExpect={item.output_data}
-              outputReal={item.output_real}
+              input={item?.input_data}
+              outputExpect={item?.output_data}
+              outputReal={item?.output_real}
             />
           ),
         };
@@ -68,14 +68,14 @@ const CodeEditor = () => {
           title: (
             <span>
               TestCase {index}{" "}
-              {<ImCross className={`${classes.Icon} ${classes.IconFail}`} />}
+              {<ImCross className={`${classes?.Icon} ${classes?.IconFail}`} />}
             </span>
           ),
           TabComponent: (
             <TestCaseProblem
-              title={item.errorType}
+              title={item?.errorType}
               error
-              compilerMsg={item.stderr}
+              compilerMsg={item?.stderr}
             />
           ),
         };
@@ -84,28 +84,31 @@ const CodeEditor = () => {
   };
   const handleCodeApi = async (ArrTestCases) => {
     let responseData = [];
-    context.setLoading(true);
+    context?.setLoading(true);
     return await axios
-      .post("/run_challenge_code", {
+      ?.post("/run_challenge_code", {
         code: textCode,
         language: language,
         challengeId: challengeId,
       })
-      .then((res) => {
-        responseData = res.data.dataResponse;
-        console.log(responseData);
-        if (responseData.length > 0)
+      ?.then((res) => {
+        responseData = res?.data?.dataResponse;
+        console?.log(responseData);
+        if (responseData?.length > 0)
           return ArrTestCases?.map((item, index) => {
-            console.log("Send Request");
-            console.log("Get Result", responseData[index]);
-            context.setLoading(false);
-            context.testCases.setVal({ ...context.testCases.val, show: true });
+            console?.log("Send Request");
+            console?.log("Get Result", responseData[index]);
+            context?.setLoading(false);
+            context?.testCases?.setVal({
+              ...context?.testCases?.val,
+              show: true,
+            });
             if (responseData[index][0]) {
               return {
                 ...item,
                 output_real: responseData[index][1],
                 correctAns:
-                  item.output_data.trim() == responseData[index][1].trim(),
+                  item?.output_data?.trim() == responseData[index][1]?.trim(),
               };
             } else {
               return {
@@ -116,13 +119,13 @@ const CodeEditor = () => {
             }
           });
       })
-      .catch((err) => {
-        context.setLoading(false);
-        const stderr = err.response?.data.stderr;
-        console.log("stderr: " + stderr);
-        console.log("Error Type:", "Run Time Error", "&&", "stderr:", stderr);
-        context.setLoading(false);
-        context.testCases.setVal({ ...context.testCases.val, show: true });
+      ?.catch((err) => {
+        context?.setLoading(false);
+        const stderr = err?.response?.data?.stderr;
+        console?.log("stderr: " + stderr);
+        console?.log("Error Type:", "Run Time Error", "&&", "stderr:", stderr);
+        context?.setLoading(false);
+        context?.testCases?.setVal({ ...context?.testCases?.val, show: true });
         return [
           {
             ...ArrTestCases[0],
@@ -133,13 +136,13 @@ const CodeEditor = () => {
       });
   };
   const buildTableUI = async () => {
-    const { testCases } = context.challengeData;
+    const { testCases } = context?.challengeData;
     const runTestCases = await handleCodeApi(testCases);
-    console.log("runTestCases ===== ", runTestCases);
+    console?.log("runTestCases ===== ", runTestCases);
 
     const TabsRes = genrateTab(runTestCases);
-    context.testCases.setVal({
-      ...context.testCases.val,
+    context?.testCases?.setVal({
+      ...context?.testCases?.val,
       show: true,
       tabContent: TabsRes,
     });
@@ -169,25 +172,25 @@ const CodeEditor = () => {
     }
   };
   const handleSubmitCode = async () => {
-    context.setLoading(true);
+    context?.setLoading(true);
     axios
-      .post("/student-challenge-submissions", {
+      ?.post("/student-challenge-submissions", {
         code: textCode,
         language: language,
         challengeId: challengeId,
         courseNumber: id,
         contestId: contestId,
       })
-      .then((res) => {
-        const submissionId = res.data.submissionId;
-        context.setLoading(false);
+      ?.then((res) => {
+        const submissionId = res?.data?.submissionId;
+        context?.setLoading(false);
         navigate(
           `/courses/${id}/contests/${contestId}/challenges/${challengeId}/submissions/${submissionId}`
         );
       })
-      .catch((error) => {
-        context.setLoading(false);
-        console.log(error);
+      ?.catch((error) => {
+        context?.setLoading(false);
+        console?.log(error);
         //********************************** */
         if (
           error?.response?.data?.message === "No more submissions, time ended"
@@ -201,25 +204,25 @@ const CodeEditor = () => {
   const [loading, setLoading] = useState(true);
   useEffect(() => {
     const defaultLangObject = {};
-    const challengeLanguage = context.challengeData.challengeLanguage;
-    for (let i = 0; i < challengeLanguage.length; i++) {
+    const challengeLanguage = context?.challengeData?.challengeLanguage;
+    for (let i = 0; i < challengeLanguage?.length; i++) {
       const item = challengeLanguage[i];
-      const cho = choices.find((ch) => ch.title === item.language);
-      defaultLangObject[cho.value] = item.content;
+      const cho = choices?.find((ch) => ch?.title === item?.language);
+      defaultLangObject[cho?.value] = item?.content;
     }
     setDefaultLang(defaultLangObject);
 
-    if (localStorage.getItem("challenge " + challengeId)) {
-      const storedData = JSON.parse(
-        localStorage.getItem("challenge " + challengeId)
+    if (localStorage?.getItem("challenge " + challengeId)) {
+      const storedData = JSON?.parse(
+        localStorage?.getItem("challenge " + challengeId)
       );
-      console.log(storedData.language);
-      setLanguage(storedData.language);
-      setTextCode(storedData.code);
+      console?.log(storedData?.language);
+      setLanguage(storedData?.language);
+      setTextCode(storedData?.code);
     } else {
       const lang = choices?.filter(
         (item) =>
-          context.challengeData.challengeLanguage[0].language === item.title
+          context?.challengeData?.challengeLanguage[0]?.language === item?.title
       )[0]?.value;
       setTextCode(defaultLang[lang]);
       setLanguage(lang);
@@ -227,18 +230,18 @@ const CodeEditor = () => {
     setLoading(false);
   }, []);
   if (!loading) {
-    localStorage.setItem(
+    localStorage?.setItem(
       "challenge " + challengeId,
-      JSON.stringify({
+      JSON?.stringify({
         language: language,
         code: textCode,
       })
     );
   }
   return (
-    <Container fluid className={classes.Container}>
-      <Row className={`${classes.Row} ${classes.RowSelect}`}>
-        <Col className={`${classes.Col} ${classes.ColSelect} `}>
+    <Container fluid className={classes?.Container}>
+      <Row className={`${classes?.Row} ${classes?.RowSelect}`}>
+        <Col className={`${classes?.Col} ${classes?.ColSelect} `}>
           <span>Dark mode:</span>
           <Switch
             checked={dark}
@@ -250,9 +253,9 @@ const CodeEditor = () => {
             }}
           />
           <SelectionGroup
-            choices={choices.filter((item) =>
-              context.challengeData.challengeLanguage.find(
-                (lang) => lang.language === item.title
+            choices={choices?.filter((item) =>
+              context?.challengeData?.challengeLanguage?.find(
+                (lang) => lang?.language === item?.title
               )
             )}
             language={{
@@ -266,10 +269,10 @@ const CodeEditor = () => {
         </Col>
       </Row>
       <Row>
-        <Col className={classes.Col}>
+        <Col className={classes?.Col}>
           <Editor
             height={"400px"}
-            className={classes.Editor}
+            className={classes?.Editor}
             defaultLanguage="java"
             defaultValue={defaultLang[language]}
             language={language}
@@ -282,17 +285,17 @@ const CodeEditor = () => {
           />
         </Col>
       </Row>
-      <Row className={`${classes.Row} ${classes.Buttons}`}>
-        <Col className={`${classes.Col} ${classes.ColSelect}`}>
+      <Row className={`${classes?.Row} ${classes?.Buttons}`}>
+        <Col className={`${classes?.Col} ${classes?.ColSelect}`}>
           <ButtonRank
             text={"Run Code"}
             onClick={handleRunCode}
-            disabled={context.loading}
+            disabled={context?.loading}
           />
           <ButtonRank
             text={"Submit Code"}
             onClick={handleSubmitCode}
-            disabled={context.loading}
+            disabled={context?.loading}
           />
         </Col>
       </Row>
