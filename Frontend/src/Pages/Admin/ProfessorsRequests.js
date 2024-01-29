@@ -8,7 +8,7 @@ import useStyle from "./style";
 import ModalRank from "../../Components/ModalRank";
 import ButtonRank from "../../Components/ButtonRank";
 import InputFiledRank from "../../Components/InputFiledRank";
-const ProfessorsRequests = ({ pendingProfessors }) => {
+const ProfessorsRequests = ({ pendingProfessors, setAdminData }) => {
   const classes = useStyle();
   const [professors, setProfessors] = useState(pendingProfessors);
   const [deleteModal, setDeleteModal] = useState({ show: false, index: -1 });
@@ -25,6 +25,19 @@ const ProfessorsRequests = ({ pendingProfessors }) => {
             (item) => item.universityNumber !== universityNumber
           )
         );
+        setAdminData((prev) => {
+          const data = {
+            ...prev,
+            activeProfessors: [
+              ...prev.activeProfessors,
+              professors?.filter(
+                (item) => item.universityNumber === universityNumber
+              )[0],
+            ],
+          };
+          console.log("ddd>>>>", data);
+          return data;
+        });
         setDeleteModal({ show: false });
         setLoading(false);
       })

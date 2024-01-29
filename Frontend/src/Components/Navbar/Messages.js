@@ -3,7 +3,7 @@ import { Nav, Badge, Overlay } from "react-bootstrap";
 import { FaComment } from "react-icons/fa";
 import useStyle from "./Style";
 import userContext from "../../Utils/userContext";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import Avatar from "react-avatar";
 import Text from "../Text";
 import formatTimeAgo from "../../Utils/formateTimeAgo";
@@ -29,7 +29,6 @@ const Messages = () => {
   } = useContext(userContext);
   const navigate = useNavigate();
   const ref = useRef(null);
-  useEffect(() => {}, []);
   const handleMessagesPanel = (event) => {
     event.preventDefault();
     setShowMessages(!showMessages);
@@ -118,8 +117,7 @@ const Messages = () => {
       }
     }
   }, [data]);
-  console.log("conversation data: ", ConversationsData);
-  console.log("lastMessageRead", lastMessageRead);
+
   useEffect(() => {
     if (socket) {
       socket?.on("message", (message) => {
@@ -212,9 +210,15 @@ const Messages = () => {
                 </div>
               ))}
               <hr className={classes.line}></hr>
-              <Link className={classes.notificationLink} to={"/chatting"}>
+              <div
+                className={classes.notificationLink}
+                onClick={() => {
+                  closeMessagesPanel();
+                  navigate("/chatting");
+                }}
+              >
                 Show all
-              </Link>
+              </div>
             </div>
           </div>
         </Overlay>

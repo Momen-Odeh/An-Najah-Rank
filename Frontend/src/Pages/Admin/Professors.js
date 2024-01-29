@@ -5,10 +5,11 @@ import TabTable from "../../Components/TabTable";
 import Text from "../../Components/Text";
 import InputFiledRank from "../../Components/InputFiledRank";
 const Professors = ({ activeProfessors }) => {
-  const [professors, setProfessors] = useState(activeProfessors);
   const [search, setSearch] = useState("");
-  const dataURI = professors.map((item) => "/profile/" + item.universityNumber);
-  const data = professors
+  const dataURI = activeProfessors.map(
+    (item) => "/profile/" + item.universityNumber
+  );
+  const data = activeProfessors
     .map((item) => ({
       name: item.name,
       universityNumber: item.universityNumber,

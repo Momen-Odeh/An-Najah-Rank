@@ -20,7 +20,10 @@ const Admin = () => {
       title: "Professors Requests",
       eventKey: "professors-requests",
       TabComponent: (
-        <ProfessorsRequests pendingProfessors={adminData?.pendingProfessors} />
+        <ProfessorsRequests
+          pendingProfessors={adminData?.pendingProfessors}
+          setAdminData={setAdminData}
+        />
       ),
       urlPattern: "/admin/professors-requests",
     },

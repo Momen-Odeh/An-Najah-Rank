@@ -109,6 +109,7 @@ const Notification = () => {
             <div
               className={classes.notificationLink}
               onClick={() => {
+                setShowNotification(false);
                 navigate("/notifications");
               }}
             >
