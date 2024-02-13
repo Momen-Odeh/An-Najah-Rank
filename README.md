@@ -1,2 +1,5 @@
 # An-Najah-Rank
-GP1
+One of the most important skills for any programmer is problem-solving skills, and there are many websites that can be used to train these skills. 
+At An-Najah National University, professors always strive to improve students' problem-solving skills in many subjects such as computer programming, data structures, algorithms, and object-oriented programming by assigning problem-solving assignments and quizzes using problem-solving websites. However, they face several challenges in using these websites, such as difficulty tracking student submissions, an inability to identify code similarities among students' submissions directly, and the inability to manually mark incorrect answers. Therefore, we undertook the development of this project to address these challenges head-on.
+
+We built this project by creating a web application with React JS as the frontend and Flask Python as the backend. We used Docker to containerize the application, allowing easy deployment on the cloud or any local server. Additionally, we leveraged several services from Amazon Web Services (AWS), including S3 for storage, RDS for the MySQL database engine, and EC2 for deploying the web application.
