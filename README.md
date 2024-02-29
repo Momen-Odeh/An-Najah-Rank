@@ -4,6 +4,43 @@ At An-Najah National University, professors always strive to improve students' p
 
 We built this project by creating a web application with React JS as the frontend and Flask Python as the backend. We used Docker to containerize the application, allowing easy deployment on the cloud or any local server. Additionally, we leveraged several services from Amazon Web Services (AWS), including S3 for storage, RDS for the MySQL database engine, and EC2 for deploying the web application.
 
+## Features
+  - User Features
+    - Registration
+    - Sign in
+    - Forget password
+    - Account Settings
+    - Chatting
+    - Notifications
+  - Professor Features
+    - Create course
+    - Manage courses
+    - Manage course details
+      - Manage course moderators
+      - Manage students in course
+    - Create contest
+    - Manage contests
+      - Manage contest details
+      - Manage challenges in contest
+    - Create challenge
+    - Manage challenge details
+      - Add test case to challenge
+      - Manage test cases in challenge
+    - Track students submissions
+    - manual mark for student submissions
+    - calculate similarity
+  - Student Features
+    - Access to courses
+    - run code for the challenge
+    - add submissions to the challenge
+    - show the test case status for the challenge
+  - Admin Features
+    - Manage professors requests.
+    - Manage professors
+    - Manage student
+    - Students statistics
+  - responsive design
+
 ## Tools
 - Frontend tools:
   - React JS
@@ -56,39 +93,14 @@ We built this project by creating a web application with React JS as the fronten
   - CORS policies
     
     we enable the CORS policy for the frontend address, so any received request from another address will be rejected.
-## Features
-  - User Features
-    - Registration
-    - Sign in
-    - Forget password
-    - Account Settings
-    - Chatting
-    - Notifications
-  - Professor Features
-    - Create course
-    - Manage courses
-    - Manage course details
-      - Manage course moderators
-      - Manage students in course
-    - Create contest
-    - Manage contests
-      - Manage contest details
-      - Manage challenges in contest
-    - Create challenge
-    - Manage challenge details
-      - Add test case to challenge
-      - Manage test cases in challenge
-    - Track students submissions
-    - manual mark for student submissions
-    - calculate similarity
-  - Student Features
-    - Access to courses
-    - run code for the challenge
-    - add submissions to the challenge
-    - show the test case status for the challenge
-  - Admin Features
-    - Manage professors requests.
-    - Manage professors
-    - Manage student
-    - Students statistics
+## Deployment
+![image](https://github.com/Momen-Odeh/An-Najah-Rank/assets/92532348/d1db00fd-e99f-41c1-bec1-1faebecbd8a8)
+In the deployment structure for the frontend, Nginx serves as a crucial web server, playing a key role in handling the dynamic runtime of the React application.
+
+In the database and backend deployment structure optimized for APIs, Flask serves as the foundational framework, responsible for handling application logic and dynamically generating content. Gunicorn is employed as the WSGI server, efficiently managing communication and concurrent requests through multiple worker processes. While Nginx, traditionally recognized as a reverse proxy for web applications, is considered optional in this API-centric setup, it remains a valuable component for potential load balancing and additional security measures. The refined architecture emphasizes a modular separation of concerns, with Flask managing API routes, Gunicorn overseeing WSGI interactions, and Nginx, when utilized, contributing to load balancing and potential security enhancements. This streamlined structure establishes a dependable, scalable, and secure foundation specifically designed for deploying a Flask backend focused on API functionalities in production environments, combining the strengths of Flask, Gunicorn, and Nginx for optimal performance and security.
+
+## Testing
+Testing is a critical phase in the software development lifecycle aimed at ensuring the quality, reliability, and functionality of a software product. The primary objective of testing is to identify defects or issues within the application, allowing developers to address them before the software is deployed to end-users. After implementing the project, we conduct manual testing for all features in the system to ensure that all features work correctly.
+
+
   
